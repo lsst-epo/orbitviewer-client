@@ -44,8 +44,10 @@ export const writeMessageToConsole = (logs, forceOpen: boolean = false) => {
 
 // Update Console
 const updateLog = (logs, type = 'normal', forceOpen:boolean=false) => {
+
 	const tempLogs = typeof logs === 'string' ? [logs] : logs;
 	const wrapper = document.querySelector('#console-tab [data-tab="log"]');
+
 	for (const log of tempLogs) {
 		wrapper.innerHTML += `<p class="${type}">${log}</p>`;
 	}
@@ -59,6 +61,7 @@ const updateLog = (logs, type = 'normal', forceOpen:boolean=false) => {
 };
 
 export const Log = {
+	
     log: (msg, forceOpen:boolean=false) => {
         updateLog(msg, 'normal', forceOpen);
     },
@@ -84,14 +87,14 @@ export const Log = {
 export const initLog = () => {
 	// rewriteLog();
 
-    //  Default messages
-    writeMessageToConsole(`FiL Toolkit - v${TOOL_VERSION}`);
-    writeMessageToConsole(`Powered by Threejs - v${REVISION}`);
-    writeMessageToConsole(`...`);
-    writeMessageToConsole(`${COPIES.console.initialMessage} ${USER.name}`);
+	//  Default messages
+	writeMessageToConsole(`FiL Toolkit - v${TOOL_VERSION}`);
+	writeMessageToConsole(`Powered by Threejs - v${REVISION}`);
+	writeMessageToConsole(`...`);
+	writeMessageToConsole(`${COPIES.console.initialMessage} ${USER.name}`);
 
-    // Default logs
-    Log.log(`Console ready and standing by...`);
+	// Default logs
+	Log.log(`Console ready and standing by...`);
 
 	times.addEventListener('click', () => {
 		toggleLog();

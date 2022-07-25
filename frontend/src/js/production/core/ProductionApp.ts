@@ -11,6 +11,7 @@ export class ProductionApp extends CoreApp {
 
     onDataLoaded(): void {
         super.onDataLoaded();
+        
         const demo = getEntryById('globals').data['demo'];
         this.rotSpeed = demo['rotSpeed'];
     }

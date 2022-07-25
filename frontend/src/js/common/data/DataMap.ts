@@ -7,13 +7,14 @@ function addItem(id: string, url: string) {
 }
 
 export function loadData(onComplete: Function = () => {}) {
+	
 	let loaded = 0;
 
 	// ---- Add Items -------------------------
 	addItem('globals', 'globals.json');
 	// ----------------------------------------
 
-    console.log(dataMap.length);
+  console.log(dataMap.length);
     
 
 	const onL = () => {

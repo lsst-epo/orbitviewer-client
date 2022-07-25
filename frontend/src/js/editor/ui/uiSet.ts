@@ -20,24 +20,28 @@ export class uiSet {
 		this.id = id;
 		this.updated = false;
 		this.dom = el('div', 'ui__set') as HTMLDivElement;
+	
 		this.pane = new Pane({
 			container: this.dom,
 		});
 
-        this.pane.on('change', (ev) => {
+    this.pane.on('change', (ev) => {
 			this.updated = true;			
 			if(opts.onChange) opts.onChange(ev);
 		});
 
 		if (opts.close && opts.close === true) {
+
 			const closeBtn = document.querySelector('.ui__reference.ui__close').cloneNode(true) as HTMLButtonElement;
 			closeBtn.classList.remove('ui__reference');
 			closeBtn.style.display = 'unset';
 			this.dom.appendChild(closeBtn);
+
 			closeBtn.addEventListener('click', () => {		
 				this.close();		
 				if(opts.onClose) opts.onClose();
 			});
+
 		}
 	}
 
