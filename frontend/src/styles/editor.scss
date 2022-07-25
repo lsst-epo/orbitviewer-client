@@ -1,0 +1,36 @@
+@import './common/indexes';
+@import './editor/indexes';
+
+// Partials
+@import './editor/partials/resets';
+@import './editor/partials/vars';
+@import './editor/partials/mixins';
+@import './editor/partials/fonts';
+
+@import './common/canvas';
+@import './editor/auth';
+
+@import './editor/ui/skin';
+@import './editor/ui/layout';
+@import './editor/ui/button';
+@import './editor/ui/axis-helper';
+@import './editor/ui/console';
+@import './editor/ui/loader';
+@import './editor/ui/popup';
+
+body {
+	background-color: var(--palette-0);
+}
+
+// App tweakpane
+.app-pane-wrapper {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	z-index: 10;
+
+	--scale-app-pane: 2;
+
+	transform: scale3d(var(--scale-app-pane), var(--scale-app-pane), 1);
+	transform-origin: 100% 100%;
+}

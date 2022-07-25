@@ -1,0 +1,53 @@
+.ui__button {
+	padding: 5px 10px;
+	cursor: pointer;
+	border-radius: var(--tp-element-border-radius);
+	border: 1px solid var(--white);
+	min-width: 100px;
+	text-align: center;
+
+	&:hover {
+		background-color: var(--palette-1);
+	}
+
+	&.selected {
+		background-color: var(--palette-2);
+		color: var(--palette-0);
+	}
+
+	&.disabled {
+		pointer-events: none;
+		opacity: 0.4;
+
+		* {
+			pointer-events: none;
+		}
+	}
+}
+
+.ui__button.ui_button-icon {
+	border: none;
+	min-width: unset;
+	width: 16px;
+	min-width: unset;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--palette-2);
+
+	path,
+	rect {
+		fill: currentColor;
+	}
+
+	&:hover {
+		background-color: unset;
+		color: var(--white);
+	}
+
+	&.selected {
+		background-color: unset;
+		color: var(--white);
+	}
+}

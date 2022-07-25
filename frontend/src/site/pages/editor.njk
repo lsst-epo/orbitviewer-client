@@ -1,0 +1,69 @@
+---
+layout: base
+pageTemplate: editor
+eleventyComputed:
+  title: "{{ copies.seo.editor.title }}"
+  description: "{{ copies.seo.editor.description }}"
+---
+{% from 'icons/icon.njk' import icon as icon %}
+
+{# TOP BAR #}
+<div class="ui__element ui__top-bar">
+
+  {# TOP BAR LEFT #}
+  <section class="ui__top-bar_left">
+    <p>{{ copies.seo.siteTitle }} - {{ copies.seo.title}} / {{ copies.seo.editor.title}}</p>
+  </section>
+
+  {# TOP BAR CENTER #}
+  <section class="ui__top-bar_center">
+    <button id="open-sim" class="ui__button ui_button-icon" data-button-key="KeyA+ctrlKey|metaKey">{{ icon('play', 'ui__icon',  'A + ctrl - '+ copies.menu.play ) }}</button>
+    <button id="save-data" class="ui__button ui_button-icon" data-button-key="KeyS+ctrlKey|metaKey">{{ icon('save', 'ui__icon', 'S + ctrl - '+ copies.menu.save ) }}</button>
+    {# <button id="open-vr" class="ui__button ui_button-icon" data-button-key="KeyD+ctrlKey|metaKey">{{ icon('vr', 'ui__icon', 'D + ctrl - '+ copies.menu.vr ) }}</button> #}
+  </section>
+
+  {# TOP BAR RIGHT #}
+  <section class="ui__top-bar_right">
+    <button id="globals" class="ui__button ui_button-icon selected" data-button-key="Digit1">{{ icon('gear', 'ui__icon', '1 - '+ copies.menu.settings) }}</button>
+    {# <button id="camera" class="ui__button ui_button-icon " data-button-key="Digit2">{{ icon('camera', 'ui__icon','2 - '+ copies.menu.camera) }}</button>
+    <button id="textures" class="ui__button ui_button-icon" data-button-key="Digit3">{{ icon('textures', 'ui__icon', '3 - '+ copies.menu.textures) }}</button>
+    <button id="generative" class="ui__button ui_button-icon" data-button-key="Digit4">{{ icon('generative', 'ui__icon', '4 - '+ copies.menu.generative) }}</button>
+    <button id="skybox" class="ui__button ui_button-icon" data-button-key="Digit5">{{ icon('env', 'ui__icon', '5 - '+ copies.menu.skybox) }}</button>
+    <button id="interactions" class="ui__button ui_button-icon" data-button-key="Digit6">{{ icon('interactions', 'ui__icon', '6 - '+ copies.menu.interactions) }}</button>
+    <button id="animations" class="ui__button ui_button-icon" data-button-key="Digit7">{{ icon('animations', 'ui__icon', '7 - '+ copies.menu.animations) }}</button>
+    <button id="audio" class="ui__button ui_button-icon" data-button-key="Digit8">{{ icon('audio', 'ui__icon', '8 - '+ copies.menu.audio) }}</button> #}
+    <button id="console" class="ui__button ui_button-icon" data-button-key="Digit2">{{ icon('log', 'ui__icon', '9 - '+ copies.menu.log) }}</button>
+  </section>
+
+</div>
+
+{# RIGHT BAR #}
+<div class="ui__element ui__right-bar">
+
+</div>
+
+{# AXIS #}
+
+
+
+{# <div class="ui__axis-helper"></div> #}
+
+{# CONSOLE #}
+<div id="console-tab" class="ui__element hidden ui__console" data-active="messages">
+  <button class="ui__button ui_button-icon">{{ icon('times', 'ui__icon', 'Close') }}</button>
+  <div class="console__picker">
+    <p class="tab__pane" data-picker="messages">{{ copies.console.messages }}</p>
+    <p class="tab__pane" data-picker="log">{{ copies.console.log }}</p>
+  </div>
+
+  <div class="console__tab" data-tab="messages">
+  </div>
+  <div class="console__tab" data-tab="log">
+  </div>
+
+</div>
+
+
+<button class="ui__button ui_button-icon ui__reference ui__close" style="display:none;">{{ icon('times', 'ui__icon', 'Close') }}</button>
+
+

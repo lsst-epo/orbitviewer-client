@@ -1,0 +1,16 @@
+{
+	"name": "tool-server",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"server": "node server.js",
+		"kill": "pkill node"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.18.1",
+		"express-fileupload": "^1.4.0",
+		"ip": "^1.1.8",
+		"md5": "^2.3.0"
+	}
+}

@@ -1,0 +1,51 @@
+fieldLayouts:
+  932dc7e8-1c60-4383-9fd0-703d43134cd2:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 75
+        name: Content
+        sortOrder: 1
+      -
+        elements:
+          -
+            fieldUid: 7970cd65-7a96-418a-8581-d6df4e039e6d # Plain Text
+            instructions: ''
+            label: 'Context Information'
+            required: ''
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Information
+        sortOrder: 2
+handle: default
+hasTitleField: true
+name: Default
+section: 59e08766-55d3-4cb0-8b02-b406b1ea45d8 # Objects
+sortOrder: 1
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

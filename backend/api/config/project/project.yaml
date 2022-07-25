@@ -1,0 +1,112 @@
+dateModified: 1658413332
+email:
+  fromEmail: $EMAIL_FROM_ADDRESS
+  fromName: $EMAIL_SENDER_NAME
+  replyToEmail: $EMAIL_REPLY_TO_ADDRESS
+  template: $EMAIL_HTML_EMAIL_TEMPLATE
+  transportSettings:
+    encryptionMethod: tls
+    host: $EMAIL_SMTP_HOST_NAME
+    password: $EMAIL_SMTP_PASSWORD
+    port: $EMAIL_SMTP_PORT
+    timeout: '10'
+    useAuthentication: '1'
+    username: $EMAIL_SMTP_USERNAME
+  transportType: craft\mail\transportadapters\Smtp
+meta:
+  __names__:
+    0f48338c-1c16-4600-9230-68bacb7c21e3: Text # Text
+    1a35bfab-6a39-4c03-b273-2d5e3151c335: 'Rubin Telescope Education and Public Outreach' # Rubin Telescope Education and Public Outreach
+    1e0c12ac-5dd7-4ed2-8cda-3801130b11e1: 'Gallery Item' # Gallery Item
+    1ed94e58-7078-46fb-b590-0692fbdf9c20: 'Common Name' # Common Name
+    2c2e1c6a-eb4d-44f1-9a43-8d79b326f354: ES # ES
+    3cbe4fda-03b6-4891-b0ac-892db5b17bb8: Landing # Landing
+    3df02181-c6a1-4e72-98fb-f91def384206: Entry # Entry
+    4b94ba3d-060c-4a09-b2dc-c519a4c83709: 'Cell Content' # Cell Content
+    4fe339ec-7579-46f4-a362-df6ee8de4b3c: 'Public Schema' # Public Schema
+    5ca18cb3-5a7b-4764-9e18-fc24b4cecc14: Flag # Flag
+    8ccd6c1c-8e9b-44e8-93a9-f62589fb4819: 'Site Information' # Site Information
+    8fff3c50-28ba-4af7-8166-e3d82a23ae26: Title # Title
+    9ad13bcd-637a-4757-9968-cdcc02cfd478: 'Table Row' # Table Row
+    9c14ac7e-c466-4c2d-a2fd-e19a68fc706d: Teaser # Teaser
+    59e08766-55d3-4cb0-8b02-b406b1ea45d8: Objects # Objects
+    68ce46bb-bb2f-4e55-8009-fe56a7d4493b: Header # Header
+    70ff59dd-8280-4bea-bef6-cfdf9ea4f0c2: 'Sort Options' # Sort Options
+    95b97a67-eccb-4910-b0e8-77f5860058b4: Link # Link
+    99f4a28a-48c3-49ca-bb4a-7acbb49fde30: Pages # Pages
+    380c1cbe-884e-421b-9e31-1f0dfc81e15f: 'Cell Width' # Cell Width
+    522bc2d7-fcc3-4817-a986-5c860e53351c: 'Internal Entry' # Internal Entry
+    0928ff1a-513d-41e0-acc1-606d93988618: 'Search Filters' # Search Filters
+    966a6b65-ca53-48a8-89dc-74983cd624ef: Title # Title
+    991c5031-3b97-45d8-8829-c8e0c79537a9: 'Row Title' # Row Title
+    2755abe1-7dd5-428c-a6bb-30d2bd59a362: Link # Link
+    4294fb85-8029-437c-a2e5-76bcd1a79ef1: Asset # Asset
+    5075e912-4aa1-4ce4-96b2-8868358b51e3: Header # Header
+    5548b745-642b-4b15-8f17-4ce7457689a8: Header # Header
+    7754bae8-c6eb-4fbe-882b-236621e35f2d: 'Canto DAM' # Canto DAM
+    7970cd65-7a96-418a-8581-d6df4e039e6d: 'Plain Text' # Plain Text
+    52519e78-2e53-47c5-aa84-c2345d520393: About # About
+    547128fa-4529-4483-9968-66425996b69f: EN # EN
+    9940892d-32f4-4399-acac-ab559ce1c82b: Common # Common
+    74319755-d24f-4991-a84a-0c1c031cb21e: 'Asset Link' # Asset Link
+    a5b8e4fe-87da-48fc-8156-2a2a973b29e5: URL # URL
+    a5bb0742-012f-4683-a471-874944bf3280: Image # Image
+    a27ce8af-199a-455d-8d8e-dbeb7b3f117b: About # About
+    a61323db-26ac-4898-873c-a6c6b66fcb86: Header # Header
+    acbea415-ee80-409c-90e2-90ac546820a6: Description # Description
+    af1b8590-3d8a-4eb1-90e1-60e3d7407a1a: 'Link text' # Link text
+    b882fa04-8a43-4715-a55d-b3344db891bf: 'Table Title' # Table Title
+    c9e9db12-fcdb-4b82-a8c8-eef21b3543af: 'Cell Background' # Cell Background
+    c44a71b5-f4c8-4209-8433-9878aece9aa5: Text # Text
+    c4060079-e438-4c63-8b06-77cdea857fd9: Text # Text
+    cb6a7cee-4f9e-4191-8c6d-33ccdd921fec: Text # Text
+    cbf3fbbb-2f2b-4568-a228-f8c63ff4601c: 'Row Color' # Row Color
+    cc694df6-ebfe-4e0c-b4fe-713761f100df: Text # Text
+    cee5c2f8-2801-42c2-a56c-4fe40c85b6f3: 'Site Information' # Site Information
+    d889713c-632a-4323-bb10-4b2bc53545ad: Asset # Asset
+    ddf8dce2-4fa1-43d1-b306-b34d9d97a91b: Content # Content
+    dff2a767-333e-4c9d-880c-143e1ca2aaa3: 'Row Content' # Row Content
+    e338eebb-6488-4f58-a07e-db43f28ff56b: Image # Image
+    e7913600-c914-4ab1-a9bb-abd2bdcbfb94: 'Custom Name' # Custom Name
+    ec809547-cd72-4016-92f4-e72a89d6620c: Default # Default
+    f1df2c63-97e5-49f0-8f4d-1e704d4945ac: Landing # Landing
+    f444667c-6ea1-4e0f-89b2-35b059e27bfc: Link # Link
+plugins:
+  asset-metadata:
+    edition: standard
+    enabled: true
+    schemaVersion: 3.0.0
+  neo:
+    edition: standard
+    enabled: true
+    licenseKey: ELFLTF1S74Z6RGBQHQNATGU2
+    schemaVersion: 2.13.0
+  redactor:
+    edition: standard
+    enabled: true
+    schemaVersion: 2.3.0
+  super-table:
+    edition: standard
+    enabled: true
+    schemaVersion: 2.2.1
+  typedlinkfield:
+    edition: standard
+    enabled: true
+    schemaVersion: 2.0.0
+  universal-dam-integrator:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+    settings:
+      appId: $CANTO_APP_ID
+      authEndpoint: $CANTO_AUTH_ENDPOINT
+      damVolume: cantoDam
+      retrieveAssetMetadataEndpoint: $CANTO_ASSET_ENDPOINT
+      secretKey: $CANTO_SECRET_KEY
+system:
+  edition: pro
+  live: true
+  name: 'Rubin Telescope Education and Public Outreach'
+  retryDuration: null
+  schemaVersion: 3.7.33
+  timeZone: America/Los_Angeles

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="cat">
+
+	{% include 'head.njk' %}
+
+	<script>
+		const data = {};
+		const copies = {{ copies | dump | safe }}
+	</script>
+
+	<body class="loader__in-progress">
+
+		{# Loader #}
+		<div class="site__loader"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+
+    {% block content %}
+			<main data-template="{{ pageTemplate }}">{{ content | safe }}</main>
+		{% endblock %}
+
+		<script src="{{ 'bundle/main.js' | timestamp }}"></script>
+
+	</body>
+</html>
