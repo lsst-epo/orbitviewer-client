@@ -1,41 +1,38 @@
-function main(
-  datasetId = 'bigquery-public-data.covid19_open_data',
-  tableId = 'my_table',
-  bucketName = 'my-bucket',
-  filename = 'file.json'
-) {
-  // [START bigquery_extract_table_json]
-  // Import the Google Cloud client libraries
-  const {BigQuery} = require('@google-cloud/bigquery');
-  const {Storage} = require('@google-cloud/storage');
+'use strict';
 
-  const bigquery = new BigQuery();
-  const storage = new Storage();
+function main() {
 
-  async function extractTableJSON() {
+    // Import the Google Cloud client library
+    const {BigQuery} = require('@google-cloud/bigquery');
 
-    // Location must match that of the source table.
-    const options = {
-      format: 'json',
-      location: 'US',
-    };
+    async function queryShakespeare() {
+    // Queries a public Shakespeare dataset.
 
-    // Export data from the table into a Google Cloud Storage file
-    const [job] = await bigquery
-      .dataset(datasetId)
-      .table(tableId)
-      .extract(storage.bucket(bucketName).file(filename), options);
+        // Create a client
+        const bigqueryClient = new BigQuery();
 
-    console.log(`Job ${job.id} created.`);
+        // The SQL query to run
+        const sqlQuery = `SELECT word, word_count
+            FROM \`bigquery-public-data.samples.shakespeare\`
+            WHERE corpus = @corpus
+            AND word_count >= @min_word_count
+            ORDER BY word_count DESC`;
 
-    // Check the job's status for errors
-    const errors = job.status.errors;
-    if (errors && errors.length > 0) {
-      throw errors;
+        const options = {
+        query: sqlQuery,
+        // Location must match that of the dataset(s) referenced in the query.
+        location: 'US',
+        params: {corpus: 'romeoandjuliet', min_word_count: 250},
+        };
+
+        // Run the query
+        const [rows] = await bigqueryClient.query(options);
+
+        console.log('Rows:');
+        rows.forEach(row => console.log(row));
     }
-  }
-  // [END bigquery_extract_table_json]
-  extractTableJSON();
-}
 
-main(...process.argv.slice(2));
+    queryShakespeare();
+  }
+
+main();
