@@ -1,7 +1,7 @@
 defaultPlacement: end
 enableVersioning: true
-handle: objects
-name: Objects
+handle: elements
+name: 'Solar system Elements'
 previewTargets:
   -
     __assoc__:

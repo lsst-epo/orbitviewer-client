@@ -25,16 +25,25 @@ fieldLayouts:
             title: null
             type: craft\fieldlayoutelements\EntryTitleField
             warning: null
-            width: 75
+            width: 50
+          -
+            fieldUid: 3182a473-667d-439f-9cf2-b545be5c23d3 # Fulldesignation
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
         name: Content
         sortOrder: 1
       -
         elements:
           -
-            fieldUid: 7970cd65-7a96-418a-8581-d6df4e039e6d # Plain Text
-            instructions: ''
-            label: 'Context Information'
-            required: ''
+            fieldUid: b60e78f2-8891-4212-b8c5-4f6fc62b4910 # Context Information
+            instructions: null
+            label: null
+            required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
             warning: null
@@ -44,7 +53,7 @@ fieldLayouts:
 handle: default
 hasTitleField: true
 name: Default
-section: 59e08766-55d3-4cb0-8b02-b406b1ea45d8 # Objects
+section: 59e08766-55d3-4cb0-8b02-b406b1ea45d8 # Solar system Elements
 sortOrder: 1
 titleFormat: null
 titleTranslationKeyFormat: null
