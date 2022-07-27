@@ -9,7 +9,8 @@
 		"dev": "eleventy --serve --watch",
 		"build": "cross-env ELEVENTY_ENV=production eleventy",
 		"clean": "node ./utils/clean.js",
-		"reset": "yarn clean && yarn build && yarn dev"
+		"reset": "yarn clean && yarn build && yarn dev",
+		"updateData": "node ./database/server.js"
 	},
 	"dependencies": {
 		"@jocabola/gen": "^0.0.25",
