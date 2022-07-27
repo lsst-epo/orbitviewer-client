@@ -1,0 +1,24 @@
+defaultPlacement: end
+enableVersioning: true
+handle: guidedExperiences
+name: 'Guided Experiences'
+previewTargets:
+  -
+    __assoc__:
+      -
+        - label
+        - 'Primary entry page'
+      -
+        - urlFormat
+        - '{url}'
+      -
+        - refresh
+        - '1'
+propagationMethod: all
+siteSettings:
+  547128fa-4529-4483-9968-66425996b69f: # EN
+    enabledByDefault: true
+    hasUrls: true
+    template: null
+    uriFormat: 'guided-experiences/{slug}'
+type: channel

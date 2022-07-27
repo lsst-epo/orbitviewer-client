@@ -1,0 +1,10 @@
+isPublic: false
+name: Frontend
+scope:
+  - 'sections.a27ce8af-199a-455d-8d8e-dbeb7b3f117b:read' # About
+  - 'entrytypes.52519e78-2e53-47c5-aa84-c2345d520393:read' # About
+  - 'sections.f1df2c63-97e5-49f0-8f4d-1e704d4945ac:read' # Landing
+  - 'entrytypes.3cbe4fda-03b6-4891-b0ac-892db5b17bb8:read' # Landing
+  - 'sections.59e08766-55d3-4cb0-8b02-b406b1ea45d8:read' # Solar system Elements
+  - 'entrytypes.ec809547-cd72-4016-92f4-e72a89d6620c:read' # Default
+  - 'volumes.7754bae8-c6eb-4fbe-882b-236621e35f2d:read' # Canto DAM
