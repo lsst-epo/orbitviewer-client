@@ -1,19 +1,19 @@
-columnSuffix: null
+columnSuffix: johdafaj
 contentColumnType: text
 fieldGroup: 9940892d-32f4-4399-acac-ab559ce1c82b # Common
-handle: plainText
+handle: pageContent
 instructions: ''
-name: 'Plain Text'
-searchable: true
+name: 'Page Content'
+searchable: false
 settings:
   byteLimit: null
   charLimit: null
-  code: ''
+  code: '1'
   columnType: null
-  initialRows: '4'
-  multiline: ''
-  placeholder: Text
-  uiMode: normal
+  initialRows: '8'
+  multiline: '1'
+  placeholder: null
+  uiMode: enlarged
 translationKeyFormat: null
-translationMethod: site
+translationMethod: language
 type: craft\fields\PlainText

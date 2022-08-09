@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="cat">
 
 	{% include 'head.njk' %}
-
-	<link rel="stylesheet" href="{{ 'production/bundle/main.css' }}"/>
-
 
 	<script>
 		const data = {};
@@ -13,13 +10,14 @@
 
 	<body class="loader__in-progress">
 
+		{# Loader #}
 		<div class="site__loader"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 
     {% block content %}
 			<main data-template="{{ pageTemplate }}">{{ content | safe }}</main>
 		{% endblock %}
 
-		<script src="{{ 'production/bundle/main.js' }}"></script>
+		<script src="{{ 'bundle/main.js' | timestamp }}"></script>
 
 	</body>
 </html>

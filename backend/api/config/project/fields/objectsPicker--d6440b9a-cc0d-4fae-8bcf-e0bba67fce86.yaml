@@ -1,0 +1,22 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: 3158a91c-be02-4353-9bca-6af3e59cc859 # Guided Experiences
+handle: objectsPicker
+instructions: ''
+name: 'Objects Picker'
+searchable: false
+settings:
+  allowSelfRelations: false
+  limit: ''
+  localizeRelations: false
+  selectionLabel: 'Solar system objects picker'
+  showSiteMenu: false
+  source: null
+  sources:
+    - 'section:59e08766-55d3-4cb0-8b02-b406b1ea45d8' # Solar system Elements
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Entries

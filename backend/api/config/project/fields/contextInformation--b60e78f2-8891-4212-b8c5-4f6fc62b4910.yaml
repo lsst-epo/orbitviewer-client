@@ -1,0 +1,19 @@
+columnSuffix: jxwomlzl
+contentColumnType: text
+fieldGroup: 56f784c1-2182-4a9a-9e20-2e30e7b4a2bd # Solar system Elements
+handle: contextInformation
+instructions: ''
+name: 'Context Information'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: '1'
+  columnType: null
+  initialRows: '4'
+  multiline: '1'
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: language
+type: craft\fields\PlainText

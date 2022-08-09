@@ -1,0 +1,12 @@
+{
+	"type": "service_account",
+	"project_id": "apt-reference-357612",
+	"private_key_id": "9a7b91de0dcfb7a9b438df1b8652792f3a7b5530",
+	"private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC0Dt9o3Y4AtK4R\nYxgxxnVi29vlag+jirBYGMa5gPEvR0ML4Awb43C/PZQ/Bsmoqcwn2N9U0eTcPh5P\naYam/t+fFBX8ww0P8QnVYx8wUsx40gTaHjOUzI6XScazIEi2bp6M0PI5Lv2kDNGq\n8EeNMDqn82n4G6w9YJRRR/cPms7XAeDjDjh4gh0D/Ut5ypdKTqZvkuyKxqOb/sEB\nmedm+A3W+rRWzUEquGhA+MK//4X1GExJd0HvjxkR+EedMp8Y4HohHNURoIkGTO+b\nseh7u+45GpFc9TRrgDUq+klcUBGlgHk8UnBWZZo1uP+PiwpScmR14zOWBHu6YXE4\nLpzVWFyJAgMBAAECggEAO/nwRPf3wxhsGvKNLpdSpplhh+tqRil+T/oAx+3BaOQt\n2xjIL8n01l7msI/MQFg+3s8IpTI9L3eplP4rkhi32D9Si51VDohVpDSeQPRzk5Mx\ndo401E3G+XHjs+r/DXWPboxzAsU6S5jRhkT/MHJuN1+HXtOo7dDr1p9IFnSUjV1N\nmVumtiuK69NzHgzaa8FDmTOIPgI/VxVg/V3KqQP4tATIgfnxszbxS4oQH08/WRIe\nYL2AJilmgexVxQzstXTyGR4eAJcq8I2y4MOe2t8dlHQg1meSIshfK+I2JVS+cvA8\n2uwqQZrF7DrCfg2A7B8ZPGEerl7MKBDOXA+uGne2mQKBgQDiAqrK4uvZ//c3lm+u\nczOFU6wlG9KDqXwjbNstS7oeE9OgNcSa4yi+ceWO11YMrl7IVX2tt1Ucl54xRKQE\n2Q2mcbJfHw5eUL2v3sh0FRz01RHkKeSwunPeGtGJyyjXawqrlL4O/hdpJ8rKuVDf\n9+qiWx2yZ1xIalo6La5q80/f2wKBgQDL80ERM4XgzETyWtR3RN/MY0g2nE7OMdPV\n9KOdJ55D6k2nezuAY0a3LAfU4XgSbUoLk8SoCs0s6xXQ//CYlGEOk87aoInqouH6\nTww3ykD3JOw2NhXVBpowsH9pDPrO6CDzBtBumWDL0Lspf8Cjl3Cj4OgKNM7erjtB\nHbWG+OEkawKBgGCECRG5VET1ZUpsyOaztZXDRKlYN08YirXKH9M5GpMLnn01WO9Y\nAKdLll+on8usjzd4IsKTnxoluV2K1YxocMbamPS8G3O1gTvgpLPF7Ga1sv0/0rSR\n+zcnNsJkat2LjbP2Qi++3JqAbr6h4uKySZXp2UW9lBAssrlTlr9/hmWvAoGBAICC\na3p6O551N/B5+SyZ8maoHGWEwkc8sF09hCbPQvNKXNnuVYTFiVZ74Qdrdqwtvx1i\nY+T6wWPPUXTbAHAz9qAn1Ix/4cc+ESQW0P0KbTsNQeW62LDdMyUA4ZeA/TyImdJo\ndcdqz8o9YOF6RRkPoIMygSOFOOCpal7SaIJ+qea3AoGBAN+1n9o13UQG6D99o5BQ\n4P3dgUHLwQiRvaAbesp0sXrf2vJTw/5rl4weiPMqBQhLYNYkckbK9F6R5BaU97Lt\nOz8xcPEZYXWE4Ns9dSkGWx+PYogddlsZj5SgYB2vtAcxL8nIiWGUGKajCu8KZeJv\nsKD9Kr3jr+RDYfNaJ54Pz26H\n-----END PRIVATE KEY-----\n",
+	"client_email": "my-bigquery-sa@apt-reference-357612.iam.gserviceaccount.com",
+	"client_id": "114032099425268756526",
+	"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+	"token_uri": "https://oauth2.googleapis.com/token",
+	"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+	"client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/my-bigquery-sa%40apt-reference-357612.iam.gserviceaccount.com"
+}

@@ -1,5 +1,5 @@
 fieldLayouts:
-  932dc7e8-1c60-4383-9fd0-703d43134cd2:
+  84f67ddb-6409-4d18-8544-129795a36da5:
     tabs:
       -
         elements:
@@ -25,35 +25,13 @@ fieldLayouts:
             title: null
             type: craft\fieldlayoutelements\EntryTitleField
             warning: null
-            width: 50
-          -
-            fieldUid: 3182a473-667d-439f-9cf2-b545be5c23d3 # Fulldesignation
-            instructions: null
-            label: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            warning: null
-            width: 50
+            width: 100
         name: Content
         sortOrder: 1
-      -
-        elements:
-          -
-            fieldUid: b60e78f2-8891-4212-b8c5-4f6fc62b4910 # Context Information
-            instructions: null
-            label: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            warning: null
-            width: 100
-        name: Information
-        sortOrder: 2
 handle: default
 hasTitleField: true
 name: Default
-section: 59e08766-55d3-4cb0-8b02-b406b1ea45d8 # Solar system Elements
+section: 907d717b-d9ff-4449-abbf-7c7f5823851b # Guided Experiences
 sortOrder: 1
 titleFormat: null
 titleTranslationKeyFormat: null

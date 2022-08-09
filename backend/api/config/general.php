@@ -18,6 +18,7 @@ $gcsBucketPathFormat = 'https://storage.googleapis.com/%s/';
 return [
     // Global settings
     '*' => [
+
         // Default Week Start Day (0 = Sunday, 1 = Monday...)
         'defaultWeekStartDay' => 1,
 
