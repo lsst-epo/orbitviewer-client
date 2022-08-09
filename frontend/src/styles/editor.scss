@@ -1,10 +1,11 @@
 @import './common/indexes';
+@import './common/partials/resets';
+@import './common/partials/mixins';
 @import './editor/indexes';
 
 // Partials
-@import './editor/partials/resets';
+
 @import './editor/partials/vars';
-@import './editor/partials/mixins';
 @import './editor/partials/fonts';
 
 @import './common/canvas';
