@@ -1,2 +1,14 @@
+@import './common/partials/resets';
+@import './common/partials/mixins';
 @import './common/indexes';
 @import './common/canvas';
+
+@import './production/partials/vars';
+@import './production/partials/fonts';
+
+main {
+	position: relative;
+	z-index: $mainContentIndex;
+
+	color: var(--white-0);
+}

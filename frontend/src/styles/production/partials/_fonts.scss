@@ -6,12 +6,13 @@
 	text-rendering: optimizeLegibility;
 }
 @font-face {
-	font-family: 'SourceSansPro-';
+	font-family: 'SourceSansPro';
 	src: url('../../assets/fonts/SourceSansPro-Regular.woff') format('woff');
 	font-style: normal;
 	font-weight: 400;
 	text-rendering: optimizeLegibility;
 }
+
 @font-face {
 	font-family: 'SourceSansPro';
 	src: url('../../assets/fonts/SourceSansPro-Bold.woff') format('woff');
@@ -28,5 +29,9 @@ body {
 }
 
 :root {
-	font-size: 20px;
+	--title: 2rem $font bold;
+}
+
+p {
+	font: var(--title);
 }
