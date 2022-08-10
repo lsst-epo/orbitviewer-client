@@ -1,4 +1,4 @@
-dateModified: 1660124167
+dateModified: 1660145765
 email:
   fromEmail: $EMAIL_FROM_ADDRESS
   fromName: $EMAIL_SENDER_NAME
@@ -29,6 +29,7 @@ meta:
     8ccd6c1c-8e9b-44e8-93a9-f62589fb4819: 'Site Information' # Site Information
     8fff3c50-28ba-4af7-8166-e3d82a23ae26: Title # Title
     9ad13bcd-637a-4757-9968-cdcc02cfd478: 'Table Row' # Table Row
+    9ad945a2-a807-403c-aec6-ef28c7849b73: 'Landing Logo' # Landing Logo
     9c14ac7e-c466-4c2d-a2fd-e19a68fc706d: Teaser # Teaser
     56f784c1-2182-4a9a-9e20-2e30e7b4a2bd: 'Solar system Elements' # Solar system Elements
     59e08766-55d3-4cb0-8b02-b406b1ea45d8: 'Solar system Elements' # Solar system Elements
@@ -49,6 +50,7 @@ meta:
     5548b745-642b-4b15-8f17-4ce7457689a8: Header # Header
     7242b43a-de73-46de-b5c2-234ba48a8a57: Default # Default
     7754bae8-c6eb-4fbe-882b-236621e35f2d: 'Canto DAM' # Canto DAM
+    9829e8e1-9862-44ab-902c-90a72e4a81b7: Landing # Landing
     52519e78-2e53-47c5-aa84-c2345d520393: About # About
     547128fa-4529-4483-9968-66425996b69f: EN # EN
     9940892d-32f4-4399-acac-ab559ce1c82b: Common # Common

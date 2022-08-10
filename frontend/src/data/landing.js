@@ -4,8 +4,8 @@ const getQuery = require('../../utils/getQuery');
 async function getLanding() {
   const query = `
   {
-    entries(section: "about") {
-      ...on about_about_Entry {
+    entries(section: "landing") {
+      ...on landing_landing_Entry {
         siteTitle
         siteDescription
         pageContent
