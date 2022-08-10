@@ -1,10 +1,11 @@
 {
     "minimum-stability": "dev",
     "require": {
-        "craftcms/cms": "3.7.48",
+        "craftcms/cms": "3.7.51",
+        "craftcms/element-api": "2.8.6.1",
         "craftcms/redactor": "2.10.10",
         "sebastianlenz/linkfield": "2.0.0-rc.2",
-        "spicyweb/craft-neo": "2.13.14",
+        "spicyweb/craft-neo": "2.13.15",
         "vlucas/phpdotenv": "^3.4.0"
     },
     "require-dev": {

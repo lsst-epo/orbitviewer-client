@@ -4,7 +4,7 @@ const pkj = require('./package.json');
 
 const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 const fs = require('fs');
-var fse = require('fs-extra');
+const fse = require('fs-extra');
 
 const mkdirp = require('mkdirp');
 
@@ -28,8 +28,8 @@ try {
 	}
 
 	mkdirp.sync(`uploads`);
-    mkdirp.sync(`uploads/data`);
-    // Add folders you need here
+	mkdirp.sync(`uploads/data`);
+	// Add folders you need here
 	/*mkdirp.sync(`uploads/glb`);
 	mkdirp.sync(`uploads/scene`);
 	mkdirp.sync(`uploads/textures`); */
@@ -163,9 +163,8 @@ module.exports = function (eleventyConfig) {
 
 	if (isProduction) {
 		eleventyConfig.addPassthroughCopy({ uploads: 'uploads' });
-	}
-
-	else {
+	
+	}	else {
 		console.log('Copying Uploads...');
 		fse.copySync(`${__dirname}/uploads`, `${__dirname}/public/uploads`, {
 			overwrite: true,
@@ -187,7 +186,7 @@ module.exports = function (eleventyConfig) {
 			layouts: '../base',
 			output: `public/`,
 		},
-		templateFormats: ['html', 'njk'],
+		templateFormats: ['njk'],
 		htmlTemplateEngine: 'njk',
 	};
 };
