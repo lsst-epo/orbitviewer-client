@@ -10,7 +10,7 @@ export class Landing extends Page {
 
 		btn1.addEventListener('click', (e) => {
 			e.preventDefault();
-			onChange('customize');
+			onChange('customize-orbits');
 		})
 		btn2.addEventListener('click', (e) => {
 			e.preventDefault();

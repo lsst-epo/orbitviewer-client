@@ -1,7 +1,7 @@
 import { Page } from "./Page";
 
 
-export class Customize extends Page {
+export class CustomizeOrbits extends Page {
 	addEventListeners(): void {
 	}
 }

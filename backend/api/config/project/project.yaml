@@ -1,4 +1,4 @@
-dateModified: 1660224668
+dateModified: 1660231187
 email:
   fromEmail: $EMAIL_FROM_ADDRESS
   fromName: $EMAIL_SENDER_NAME
@@ -16,12 +16,15 @@ email:
 meta:
   __names__:
     0aebf207-b8e4-46e9-9148-b9075e55a0a9: 'Landing Left Button Text' # Landing Left Button Text
+    0eccfbd3-ee20-4548-bc48-01195998260d: 'Customize Orbits' # Customize Orbits
     0f48338c-1c16-4600-9230-68bacb7c21e3: Text # Text
     1a35bfab-6a39-4c03-b273-2d5e3151c335: 'Rubin Telescope Education and Public Outreach' # Rubin Telescope Education and Public Outreach
+    1c3041a4-1be7-450a-9165-19dd3458cc69: 'Customize Orbits Button' # Customize Orbits Button
     1e0c12ac-5dd7-4ed2-8cda-3801130b11e1: 'Gallery Item' # Gallery Item
     1ed94e58-7078-46fb-b590-0692fbdf9c20: 'Common Name' # Common Name
     1f8a9fe3-0e8c-4e3f-b6ce-0e1421fe0fbb: 'Landing Center Title' # Landing Center Title
     2c2e1c6a-eb4d-44f1-9a43-8d79b326f354: ES # ES
+    2f6b435a-5a6c-4f32-b8b5-4aae301d1738: 'Customize Orbits' # Customize Orbits
     3cbe4fda-03b6-4891-b0ac-892db5b17bb8: Landing # Landing
     3df02181-c6a1-4e72-98fb-f91def384206: Entry # Entry
     4b94ba3d-060c-4a09-b2dc-c519a4c83709: 'Cell Content' # Cell Content
@@ -48,10 +51,12 @@ meta:
     2755abe1-7dd5-428c-a6bb-30d2bd59a362: Link # Link
     3158a91c-be02-4353-9bca-6af3e59cc859: 'Guided Experiences' # Guided Experiences
     3182a473-667d-439f-9cf2-b545be5c23d3: Fulldesignation # Fulldesignation
+    3400f929-2ff0-47da-8c15-40bce8b6cebf: 'Customize Orbits' # Customize Orbits
     4294fb85-8029-437c-a2e5-76bcd1a79ef1: Asset # Asset
     5075e912-4aa1-4ce4-96b2-8868358b51e3: Header # Header
     5548b745-642b-4b15-8f17-4ce7457689a8: Header # Header
     7242b43a-de73-46de-b5c2-234ba48a8a57: Default # Default
+    7559fb47-f35b-436d-aceb-300a233317b8: 'Customize Orbits Description' # Customize Orbits Description
     7754bae8-c6eb-4fbe-882b-236621e35f2d: 'Canto DAM' # Canto DAM
     9829e8e1-9862-44ab-902c-90a72e4a81b7: Landing # Landing
     52519e78-2e53-47c5-aa84-c2345d520393: About # About
@@ -64,6 +69,7 @@ meta:
     a61323db-26ac-4898-873c-a6c6b66fcb86: Header # Header
     acbea415-ee80-409c-90e2-90ac546820a6: Description # Description
     af1b8590-3d8a-4eb1-90e1-60e3d7407a1a: 'Link text' # Link text
+    b49a6e91-b631-4ade-92cc-8c3e3f6db788: 'Customize Orbits Title' # Customize Orbits Title
     b60e78f2-8891-4212-b8c5-4f6fc62b4910: 'Context Information' # Context Information
     b882fa04-8a43-4715-a55d-b3344db891bf: 'Table Title' # Table Title
     bdeb1d60-8e9f-44a7-90c3-b928e1545b75: 'Landing Right Button Text' # Landing Right Button Text

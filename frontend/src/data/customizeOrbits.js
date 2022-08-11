@@ -8,12 +8,11 @@ async function getPage() {
 
   const query = `
   {
-    entries(section: "landing") {
-      ...on landing_landing_Entry {
-        landingCenterTitle,
-        landingVersion,
-        landingLeftButtonText,
-        landingRightButtonText
+    entries(section: "customizeOrbits") {
+      ...on customizeOrbits_customizeOrbits_Entry {
+        customizeOrbitsTitle,
+        customizeOrbitsDescription,
+        customizeOrbitsButton
       }
     }
   }`;
@@ -23,10 +22,9 @@ async function getPage() {
   const d = data.data.entries[0];
 
   const formatted = {
-    title: d.landingCenterTitle,
-    version: d.landingVersion,
-    leftButton: d.landingLeftButtonText,
-    rightButton: d.landingRightButtonText
+    title: d.customizeOrbitsTitle,
+    description: d.customizeOrbitsDescription,
+    button: d.customizeOrbitsButton
   }
 
   return formatted;

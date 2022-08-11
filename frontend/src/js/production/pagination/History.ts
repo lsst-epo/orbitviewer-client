@@ -1,6 +1,6 @@
 
 import { DEV } from "../../common/core/Globals";
-import { Customize } from "../pages/Customize";
+import { CustomizeOrbits } from "../pages/CustomizeOrbits";
 import { Landing } from "../pages/Landing";
 import { Page } from "../pages/Page";
 import { get } from "../utils/Ajax";
@@ -10,7 +10,7 @@ import { TRANSITIONS, TriggerTransition } from "./TransitionManager";
 // -- LOCATION - HISTORY
 const tempPages = [
 	'landing',
-	'customize',
+	'customize-orbits',
 	'guided-experiences',
 	'about'
 ];
@@ -28,7 +28,7 @@ for(const pageSlug of tempPages){
 	if(pageSlug === 'landing'){
 		pageClass = new Landing();
 	} else if(pageSlug === 'customize'){
-		pageClass = new Customize();
+		pageClass = new CustomizeOrbits();
 	} else {
 		pageClass = new Page();
 	}

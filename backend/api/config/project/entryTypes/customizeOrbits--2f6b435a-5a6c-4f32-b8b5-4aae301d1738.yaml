@@ -1,0 +1,65 @@
+fieldLayouts:
+  d93895fc-2854-4e6f-bb32-eb0b2b6cf0ed:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 100
+          -
+            fieldUid: b49a6e91-b631-4ade-92cc-8c3e3f6db788 # Customize Orbits Title
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 7559fb47-f35b-436d-aceb-300a233317b8 # Customize Orbits Description
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 1c3041a4-1be7-450a-9165-19dd3458cc69 # Customize Orbits Button
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: customizeOrbits
+hasTitleField: false
+name: 'Customize Orbits'
+section: 3400f929-2ff0-47da-8c15-40bce8b6cebf # Customize Orbits
+sortOrder: 1
+titleFormat: '{section.name|raw}'
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

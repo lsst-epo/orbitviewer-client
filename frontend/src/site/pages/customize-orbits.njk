@@ -1,0 +1,22 @@
+---
+layout: base
+pageTemplate: customize-orbits
+---
+{# ---
+layout: base
+pageTemplate: index
+eleventyComputed:
+  title: "{{ copies.seo.title }}"
+  description: "{{ copies.seo.description }}"
+--- #}
+
+{% from 'ui/filter.njk' import filter as filter %}
+{% from 'ui/button.njk' import button as button %}
+
+<h2>{{ customizeOrbits.title }}</h2>
+<p>{{ customizeOrbits.description }}</p>
+
+{{ filter() }}
+
+{{ button('customize-orbits-button', customizeOrbits.button) }}
+

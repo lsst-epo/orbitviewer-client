@@ -1,6 +1,6 @@
 const getQuery = require('../../utils/getQuery');
 
-async function getAbout() {
+async function getPage() {
   const query = `
   {
     entries(section: "about") {
@@ -27,4 +27,4 @@ async function getAbout() {
 
 
 // export for 11ty
-module.exports = getAbout;
+module.exports = getPage;
