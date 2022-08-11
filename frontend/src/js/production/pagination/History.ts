@@ -1,6 +1,8 @@
 
 import { DEV } from "../../common/core/Globals";
-import { Page } from "../pages/Page"; 
+import { Customize } from "../pages/Customize";
+import { Landing } from "../pages/Landing";
+import { Page } from "../pages/Page";
 import { get } from "../utils/Ajax";
 import { replaceAll } from "../utils/ReplaceAll";
 import { TRANSITIONS, TriggerTransition } from "./TransitionManager";
@@ -8,6 +10,8 @@ import { TRANSITIONS, TriggerTransition } from "./TransitionManager";
 // -- LOCATION - HISTORY
 const tempPages = [
 	'landing',
+	'customize',
+	'guided-experiences',
 	'about'
 ];
 
@@ -21,9 +25,15 @@ export const PAGES = [];
 let pageClass = null;
 for(const pageSlug of tempPages){
 	
-	pageClass = new Page();
-	
-	const pageItem = {
+	if(pageSlug === 'landing'){
+		pageClass = new Landing();
+	} else if(pageSlug === 'customize'){
+		pageClass = new Customize();
+	} else {
+		pageClass = new Page();
+	}
+
+const pageItem = {
 		slug: pageSlug === 'landing' ? '' : pageSlug,
 		class: pageClass,
 		template: null,

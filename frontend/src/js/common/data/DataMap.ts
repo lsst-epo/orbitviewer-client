@@ -12,10 +12,7 @@ export function loadData(onComplete: Function = () => {}) {
 
 	// ---- Add Items -------------------------
 	addItem('globals', 'globals.json');
-	// ----------------------------------------
-
-  console.log(dataMap.length);
-    
+	// ----------------------------------------    
 
 	const onL = () => {
 		loaded++;

@@ -24,7 +24,12 @@ export class Page {
 
 	load(resolve){				
 		this.loaded = true;	
+		this.addEventListeners();
 		this.enable(resolve);
+	}
+
+	addEventListeners(){
+
 	}
 
 	onResize(){
