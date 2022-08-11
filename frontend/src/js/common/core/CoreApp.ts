@@ -72,7 +72,7 @@ export class CoreApp extends WebGLSketch {
         
         // --------------------------------------------- Hide loader
         document.body.classList.remove('loader__in-progress');
-        document.querySelector('.site__loader').remove();
+        document.querySelector('.site__loader')?.remove();
         // --------------------------------------------- Launch
         
         this.launch();

@@ -5,14 +5,11 @@
 
 	<link rel="stylesheet" href="{{ 'production/bundle/main.css' }}"/>
 
-
 	<script>
 		const data = {};
 	</script>
 
-	<body class="loader__in-progress">
-
-		<div class="site__loader"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+	<body>
 
     {% block content %}
 			<main data-template="{{ pageTemplate }}">{{ content | safe }}</main>
