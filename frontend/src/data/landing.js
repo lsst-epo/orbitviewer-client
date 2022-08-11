@@ -7,15 +7,19 @@ async function getLanding() {
     entries(section: "landing") {
       ...on landing_landing_Entry {
         siteTitle
-        siteDescription
-        pageContent
       }
     }
   }`;
 
   const data = await getQuery(query);
 
-  return data;
+  const d = data.data.entries[0];
+  
+  const formatted = {
+    title: d.siteTitle
+  }
+
+  return formatted;
 }
 
 
