@@ -1,0 +1,29 @@
+
+
+.ui__button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	font-family: $font;
+	font-weight: 900;
+	font-size: 0.8rem;
+	line-height: 1em;
+	text-align: center;
+	@include desktop {
+		font-size: 1rem;
+	}
+	
+	padding: 18px;
+	width: 100%;
+	height: calc(36px + 1em); // Dobule padding + one line of text
+
+	background-color: var(--green-1);
+	border-radius: 5px;
+
+	cursor: pointer;
+	
+	&:active {
+		background-color: var(--teal-2);
+	}
+}

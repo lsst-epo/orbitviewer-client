@@ -1,12 +1,12 @@
 @font-face {
-	font-family: 'SourceSansPro';
+	font-family: 'SourceSans';
 	src: url('../../assets/fonts/SourceSansPro-Light.woff') format('woff');
 	font-style: normal;
 	font-weight: 100;
 	text-rendering: optimizeLegibility;
 }
 @font-face {
-	font-family: 'SourceSansPro';
+	font-family: 'SourceSans';
 	src: url('../../assets/fonts/SourceSansPro-Regular.woff') format('woff');
 	font-style: normal;
 	font-weight: 400;
@@ -14,24 +14,18 @@
 }
 
 @font-face {
-	font-family: 'SourceSansPro';
+	font-family: 'SourceSans';
 	src: url('../../assets/fonts/SourceSansPro-Bold.woff') format('woff');
 	font-style: normal;
 	font-weight: 900;
 	text-rendering: optimizeLegibility;
 }
 
-$font: 'SourceSansPro', sans-serif;
+$font: 'SourceSans', sans-serif;
 
 body {
 	font-family: $font;
 	color: var(--white);
 }
 
-:root {
-	--title: 2rem $font bold;
-}
 
-p {
-	font: var(--title);
-}
