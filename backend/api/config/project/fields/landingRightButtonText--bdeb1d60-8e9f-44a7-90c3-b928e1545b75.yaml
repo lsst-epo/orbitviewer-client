@@ -1,0 +1,19 @@
+columnSuffix: aomrfiav
+contentColumnType: text
+fieldGroup: 9829e8e1-9862-44ab-902c-90a72e4a81b7 # Landing
+handle: landingRightButtonText
+instructions: ''
+name: 'Landing Right Button Text'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: ''
+  placeholder: 'Please guide me'
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

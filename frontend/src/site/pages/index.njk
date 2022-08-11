@@ -12,7 +12,18 @@ eleventyComputed:
 
 {% from 'buttons/button.njk' import button as button %}
 
+<div class="center__wrapper">
+
+    {# TODO imatge del gestor #}
+    <img src="https://picsum.photos/300/200?grayscale" alt="{{ landing.title }}"> 
+    <h1>{{ landing.title }}</h1>
+    <p>{{ landing.version }}</p>
+
+</div>
+
 <div class="buttons__wrapper">
-  {{ button('I want to explore') }}
-  {{ button('Please guide me') }}
+
+  {{ button(landing.leftButton) }}
+  {{ button(landing.rightButton) }}
+  
 </div>

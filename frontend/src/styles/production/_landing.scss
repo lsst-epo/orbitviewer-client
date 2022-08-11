@@ -1,6 +1,6 @@
-
-
+// Default page template styles
 [data-template="index"]{
+
 	width: 100%;
 	height: 100vh;
 	padding: 18px;
@@ -14,6 +14,56 @@
 	align-items: center;
   justify-content: flex-end;
 
+}
+
+// Center stuff
+[data-template="index"]{
+
+	.center__wrapper {
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 90%;
+		width: 100%;
+
+		@include desktop {
+			height: 80%;
+		}
+
+	}
+
+	.center__wrapper {
+
+		img {
+			height: 70px;
+			@include desktop {
+				height: 110px;
+			}
+		}
+
+		h1 {
+			font-size: 1.2rem;
+			margin: 60px 0;
+			text-transform: uppercase;
+			letter-spacing: 0.5rem;
+		}
+
+		p {
+			font-size: 0.8em;
+		}
+
+	}
+
+}
+
+// Bottom buttons
+[data-template="index"]{
 
 	.buttons__wrapper {
 		display: flex;
@@ -31,4 +81,5 @@
 			margin: 0 0 0 9px;
 		}
 	}
+
 }

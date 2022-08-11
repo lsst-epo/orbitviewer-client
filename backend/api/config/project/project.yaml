@@ -1,4 +1,4 @@
-dateModified: 1660145765
+dateModified: 1660224668
 email:
   fromEmail: $EMAIL_FROM_ADDRESS
   fromName: $EMAIL_SENDER_NAME
@@ -15,10 +15,12 @@ email:
   transportType: craft\mail\transportadapters\Smtp
 meta:
   __names__:
+    0aebf207-b8e4-46e9-9148-b9075e55a0a9: 'Landing Left Button Text' # Landing Left Button Text
     0f48338c-1c16-4600-9230-68bacb7c21e3: Text # Text
     1a35bfab-6a39-4c03-b273-2d5e3151c335: 'Rubin Telescope Education and Public Outreach' # Rubin Telescope Education and Public Outreach
     1e0c12ac-5dd7-4ed2-8cda-3801130b11e1: 'Gallery Item' # Gallery Item
     1ed94e58-7078-46fb-b590-0692fbdf9c20: 'Common Name' # Common Name
+    1f8a9fe3-0e8c-4e3f-b6ce-0e1421fe0fbb: 'Landing Center Title' # Landing Center Title
     2c2e1c6a-eb4d-44f1-9a43-8d79b326f354: ES # ES
     3cbe4fda-03b6-4891-b0ac-892db5b17bb8: Landing # Landing
     3df02181-c6a1-4e72-98fb-f91def384206: Entry # Entry
@@ -31,6 +33,7 @@ meta:
     9ad13bcd-637a-4757-9968-cdcc02cfd478: 'Table Row' # Table Row
     9ad945a2-a807-403c-aec6-ef28c7849b73: 'Landing Logo' # Landing Logo
     9c14ac7e-c466-4c2d-a2fd-e19a68fc706d: Teaser # Teaser
+    16e8811b-6d9d-44e1-83b2-16c02e1dcd5a: 'Landing Version' # Landing Version
     56f784c1-2182-4a9a-9e20-2e30e7b4a2bd: 'Solar system Elements' # Solar system Elements
     59e08766-55d3-4cb0-8b02-b406b1ea45d8: 'Solar system Elements' # Solar system Elements
     68ce46bb-bb2f-4e55-8009-fe56a7d4493b: Header # Header
@@ -63,6 +66,7 @@ meta:
     af1b8590-3d8a-4eb1-90e1-60e3d7407a1a: 'Link text' # Link text
     b60e78f2-8891-4212-b8c5-4f6fc62b4910: 'Context Information' # Context Information
     b882fa04-8a43-4715-a55d-b3344db891bf: 'Table Title' # Table Title
+    bdeb1d60-8e9f-44a7-90c3-b928e1545b75: 'Landing Right Button Text' # Landing Right Button Text
     c0bf4db2-5962-4328-abcd-e6a0af1fbfc5: 'Object types' # Object types
     c4ff4a71-a62a-4cb6-b445-6ae6c12381a6: 'Page Content' # Page Content
     c9e9db12-fcdb-4b82-a8c8-eef21b3543af: 'Cell Background' # Cell Background
