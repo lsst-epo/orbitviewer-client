@@ -16,11 +16,13 @@
 			<a href="/about" style="color: white; padding: 30px; border: 1px solid white;">About</a>
 		</div>
 
-    {% block content %}
-			<main data-template="{{ pageTemplate }}">
-				{{ content | safe }}
-			</main>
-		{% endblock %}
+		<div class="site__wrapper">
+			{% block content %}
+				<main data-template="{{ pageTemplate }}" class="page__content" style="opacity: 0;">
+					{{ content | safe }}
+				</main>
+			{% endblock %}
+		</div>
 
 		<script src="{{ '../production/bundle/main.js' }}"></script>
 

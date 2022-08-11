@@ -70,7 +70,7 @@ export const historyInit = () => {
 
 	LOCATION.current = page;
 	page.class.dom = document.querySelector('.page__content');	
-	page.template = page.class.dom.parentNode.getAttribute('data-template');
+	page.template = page.class.dom.getAttribute('data-template');
 
 	page.class.prepare().then(() => {		
 
@@ -91,8 +91,11 @@ export const onChange = (url:string = window.location.pathname) => {
 	}
 
 	// GET PAGE
-	LOCATION.previous = LOCATION.current;
 	const slug = replaceAll("/", "", url);
+	
+	if(slug === LOCATION.current.slug) return;
+
+	LOCATION.previous = LOCATION.current;
 	LOCATION.current = PAGES.find(page => page.slug === slug);	
 
 	// IF PAGE IS LOADED

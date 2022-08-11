@@ -29,23 +29,19 @@ export const TriggerTransition = (skip:boolean = false) => {
 	pages.to.class.active = true;
 
 	if(!!!pages.from) {
+		console.log('TRANSITION INIT');
 		InitialFadeIn();
 		return;
 	}
 
 	if(DEV) console.log('TRANSITION - From:', pages.from.template,'To:', pages.to.template);
 
-	// Aqui es fa la transició
-
-	// Fallback if nothing happens
-	console.log('No transition for this pages!', pages.from.template, pages.to.template);
-	EndTransition();
+	DefaultTransition();
 }
 
 const InitialFadeIn = (skip:boolean = false) => {
-	gsap.to('html', {
-		delay: 0.5,
-		duration: 0.3,
+	gsap.to(['html', '.page__content'], {
+		duration: 0.5,
 		autoAlpha: 1,
 		ease: 'power1.inOut',
 		onComplete: () => {
@@ -54,3 +50,28 @@ const InitialFadeIn = (skip:boolean = false) => {
 	})
 }
 
+const DefaultTransition = () => {
+	const tl = gsap.timeline({
+		paused: true,
+		defaults: {
+			duration: 0.3,
+			ease: 'power1.inOut',
+		},
+		onComplete: () => {
+			EndTransition();
+		},
+	});
+
+	tl.add('start')
+	tl.to(LOCATION.current.class.dom, {
+		autoAlpha: 1,
+	}, 'start')
+
+	if(LOCATION.previous) {
+		tl.to(LOCATION.previous.class.dom, {
+			autoAlpha: 0,
+		}, 'start')
+	}
+
+	tl.play();
+}

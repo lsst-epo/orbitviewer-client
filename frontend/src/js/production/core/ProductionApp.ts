@@ -8,7 +8,6 @@ export class ProductionApp extends CoreApp {
     constructor() {
         super();
         console.log('Production App running');
-
         historyInit();
     }
 
