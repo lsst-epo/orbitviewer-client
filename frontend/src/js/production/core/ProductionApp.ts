@@ -1,5 +1,6 @@
 import { CoreApp } from "../../common/core/CoreApp";
 import { getEntryById } from "../../common/data/DataManager";
+import { historyInit } from "../pagination/History";
 
 export class ProductionApp extends CoreApp {
     rotSpeed:number = .1;
@@ -7,6 +8,8 @@ export class ProductionApp extends CoreApp {
     constructor() {
         super();
         console.log('Production App running');
+
+        historyInit();
     }
 
     onDataLoaded(): void {

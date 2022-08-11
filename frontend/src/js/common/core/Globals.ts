@@ -3,7 +3,6 @@
  */
 export const DEV = DEV_MODE;
 export const TARGET = TARGET_MODE;
-export const COPIES = copies; // injected by 11ty
 export const TOOL_VERSION = VERSION;
 
 export const PATHS = {

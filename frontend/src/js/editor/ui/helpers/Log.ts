@@ -1,5 +1,6 @@
 import { REVISION } from 'three';
-import { COPIES, TOOL_VERSION, USER } from '../../../common/core/Globals';
+import { TOOL_VERSION, USER } from '../../../common/core/Globals';
+import { COPIES } from '../../core/GlobalsEditor';
 
 const logToggle: HTMLElement = document.querySelector('#console');
 const logItemDom: HTMLElement = document.querySelector('#console-tab');

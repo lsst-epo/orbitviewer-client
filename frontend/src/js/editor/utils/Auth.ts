@@ -1,6 +1,7 @@
-import { COPIES, DEV, SERVER_URL, TOKEN, USER } from '../../common/core/Globals';
+import { DEV, SERVER_URL, TOKEN, USER } from '../../common/core/Globals';
 import { createPopup, removePopup } from './Popup';
 import md5 = require('md5');
+import { COPIES } from '../core/GlobalsEditor';
 
 let retryCount = 0;
 
