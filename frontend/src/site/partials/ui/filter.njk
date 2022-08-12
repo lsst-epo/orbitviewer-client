@@ -1,5 +1,10 @@
-{% macro filter() %}
+{% macro filter(categories) %}
 	<ul>
-		<li>Hola</li>
+		{% for category in categories %}
+			<li>
+				<label for="{{ category.slug }}">{{ category.title }}</label>
+				<input type="checkbox" id="{{ category.slug }}" name="{{ category.slug }}" checked>
+			</li>
+		{% endfor %}
 	</ul>
 {% endmacro %}

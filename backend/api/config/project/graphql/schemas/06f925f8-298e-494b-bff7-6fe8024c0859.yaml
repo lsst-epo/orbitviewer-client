@@ -12,3 +12,6 @@ scope:
   - 'sections.59e08766-55d3-4cb0-8b02-b406b1ea45d8:read' # Solar system Elements
   - 'entrytypes.ec809547-cd72-4016-92f4-e72a89d6620c:read' # Default
   - 'volumes.7754bae8-c6eb-4fbe-882b-236621e35f2d:read' # Canto DAM
+  - 'categorygroups.c0bf4db2-5962-4328-abcd-e6a0af1fbfc5:read' # Object types
+  - 'categorygroups.0928ff1a-513d-41e0-acc1-606d93988618:read' # Search Filters
+  - 'categorygroups.70ff59dd-8280-4bea-bef6-cfdf9ea4f0c2:read' # Sort Options
