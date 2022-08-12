@@ -4,6 +4,7 @@ export class Page {
 	dom:HTMLElement = null;
 	active:boolean = false;
 	loaded:boolean = false;
+	hasUI:boolean = false;
 
 	prepare() {		
 		this.active = true;
@@ -28,6 +29,11 @@ export class Page {
 		this.loaded = true;	
 		this.addEventListeners();
 		this.addInputs();
+
+		if(this.hasUI) {
+			document.body.classList.add('ui-active');
+		} else document.body.classList.remove('ui-active');
+
 		this.enable(resolve);
 	}
 

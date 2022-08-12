@@ -13,7 +13,7 @@ export const get = (url) => {
         }
       }
     }
-
+        
     xhr.open('GET', url, true)
     xhr.send()
   })

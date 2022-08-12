@@ -2,6 +2,7 @@
 import { DEV } from "../../common/core/Globals";
 import { CustomizeOrbits } from "../pages/CustomizeOrbits";
 import { Landing } from "../pages/Landing";
+import { OrbitViewer } from "../pages/OrbitViewer";
 import { Page } from "../pages/Page";
 import { get } from "../utils/Ajax";
 import { replaceAll } from "../utils/ReplaceAll";
@@ -12,6 +13,7 @@ const tempPages = [
 	'landing',
 	'customize-orbits',
 	'guided-experiences',
+	'orbit-viewer',
 	'about'
 ];
 
@@ -27,8 +29,10 @@ for(const pageSlug of tempPages){
 	
 	if(pageSlug === 'landing'){
 		pageClass = new Landing();
-	} else if(pageSlug === 'customize'){
+	} else if(pageSlug === 'customize-orbits'){
 		pageClass = new CustomizeOrbits();
+	} else if(pageSlug === 'orbit-viewer'){
+		pageClass = new OrbitViewer();
 	} else {
 		pageClass = new Page();
 	}
@@ -103,6 +107,7 @@ export const onChange = (url:string = window.location.pathname) => {
 	// GET PAGE
 	const slug = replaceAll("/", "", url);
 	
+	
 	if(slug === LOCATION.current.slug) return;
 
 	LOCATION.previous = LOCATION.current;
@@ -112,6 +117,7 @@ export const onChange = (url:string = window.location.pathname) => {
 	if(LOCATION.current.class.loaded){
 		onRequest();
 		LOCATION.current.class.prepare();
+		
 	// OR LOAD PAGE
 	} else {		
 		get(url).then(response => {

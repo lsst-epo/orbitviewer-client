@@ -10,11 +10,11 @@ export class Landing extends Page {
 
 		btn1.addEventListener('click', (e) => {
 			e.preventDefault();
-			onChange('customize-orbits');
+			onChange('/customize-orbits');
 		})
 		btn2.addEventListener('click', (e) => {
 			e.preventDefault();
-			onChange('guided-experiences');
+			onChange('/guided-experiences');
 		})
 	}
 }
