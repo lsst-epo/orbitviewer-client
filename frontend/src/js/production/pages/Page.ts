@@ -1,3 +1,5 @@
+import { Inputs } from "../utils/inputs/Inputs";
+
 export class Page {
 	dom:HTMLElement = null;
 	active:boolean = false;
@@ -25,7 +27,12 @@ export class Page {
 	load(resolve){				
 		this.loaded = true;	
 		this.addEventListeners();
+		this.addInputs();
 		this.enable(resolve);
+	}
+
+	addInputs(){
+		new Inputs(this.dom);
 	}
 
 	addEventListeners(){

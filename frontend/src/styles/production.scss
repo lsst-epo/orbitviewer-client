@@ -7,8 +7,10 @@
 @import './production/partials/fonts';
 
 @import './production/ui/buttons';
+@import './production/ui/categories-filter';
 
 @import './production/landing';
+@import './production/customize-orbits';
 
 main {
 	position: relative;

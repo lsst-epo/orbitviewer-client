@@ -1,0 +1,77 @@
+.categories-filter {
+	margin: 0;
+	padding: 0;
+
+	li {
+		list-style: none;
+		width: 100%;
+		position: relative;
+
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+
+		margin: 0 0 20px 0;
+
+		&:last-of-type {
+			margin: 0;
+		}
+	}
+
+	input {
+		opacity: 0;
+		position: absolute;
+	}
+
+	.filter-bullet {
+		width: 30px;
+		height: 30px;
+		background-color: var(--white-0);
+		border-radius: 100%;
+
+		position: absolute;
+		left: 0;
+
+		div {
+			width: 20px;
+			height: 20px;
+
+			background-color: var(--teal-1);
+			border-radius: 100%;
+
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate3d(-50%, -50%, 0) scale3d(0, 0, 0);
+
+			transition: transform 0.2s ease-out;
+			transform-origin: center;
+		}
+	}
+
+	label {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-grow: 1;
+
+		padding: 0 0 0 45px;
+
+		font-family: $font1;
+		font-size: 1rem;
+		font-weight: 900;
+	}
+
+	svg {
+		width: 40px;
+		height: 40px;
+	}
+
+	.checked {
+		.filter-bullet div {
+			transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1);
+			transition: transform 0.1s ease-in;
+		}
+	}
+
+}
