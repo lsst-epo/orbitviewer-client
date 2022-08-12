@@ -15,10 +15,7 @@ async function getPage() {
   }`;
 
   const data = await getQuery(query);
-
   const d = data.data.categories;
-	console.log(data.data.categories);
-
 	return d;
 }
 

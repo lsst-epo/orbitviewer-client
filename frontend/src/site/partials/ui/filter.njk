@@ -1,9 +1,12 @@
+{% from 'ui/filter-icons/filter-icon.njk' import filterIcon as filterIcon %}
+
+
 {% macro filter(categories) %}
-	<ul>
+	<ul class="categories-filter">
 		{% for category in categories %}
 			<li>
-				<label for="{{ category.slug }}">{{ category.title }}</label>
 				<input type="checkbox" id="{{ category.slug }}" name="{{ category.slug }}" checked>
+				<label for="{{ category.slug }}">{{ category.title }}{{ filterIcon(category.slug, category.title ) }}</label>
 			</li>
 		{% endfor %}
 	</ul>
