@@ -13,8 +13,10 @@ eleventyComputed:
 {% from 'ui/filter.njk' import filter as filter %}
 {% from 'ui/button.njk' import button as button %}
 
-<h2>{{ customizeOrbits.title }}</h2>
-<p>{{ customizeOrbits.description }}</p>
+<div class="customize-orbits-text">
+  <h2>{{ customizeOrbits.title }}</h2>
+  <p>{{ customizeOrbits.description }}</p>
+</div>
 
 {{ filter(categories) }}
 
