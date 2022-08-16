@@ -1,0 +1,22 @@
+
+.panel {
+	position: absolute;
+	top: 0;
+	left: 0;
+
+	width: 100%;
+	max-width: 380px;
+	height: 100vh;
+
+	overflow-y: auto;
+
+	border: 1px solid white;
+	z-index: $panelIndex;
+	background-color: var(--black-0);
+
+	transform: translateX(-100%);
+
+	&.active {
+		transform: translateX(0%);
+	}
+}
