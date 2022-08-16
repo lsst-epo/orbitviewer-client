@@ -9,13 +9,14 @@ eleventyComputed:
   title: "{{ copies.seo.title }}"
   description: "{{ copies.seo.description }}"
 --- #}
+
   
 {# todo aquests dos son ui generica d'altres pàgines també #}
-<div class="ui-orbit-explorer naviagtion">
+<div class="naviagtion">
   {% include 'ui/orbit-viewer/navigation.njk' %}
 </div>
 
-<div class="ui-orbit-explorer back-button">
+<div class="back-button">
   <button onclick="window.history.back()">
     <svg viewBox="0 0 19 19" xml:space="preserve">
       <path d="M19,1.8L17.2,0L9.5,7.7L1.8,0L0,1.8l7.7,7.7L0,17.2L1.8,19l7.7-7.7l7.7,7.7l1.8-1.8	l-7.7-7.7L19,1.8z"/>
@@ -23,30 +24,32 @@ eleventyComputed:
   </button>
 </div>
 
-<div class="ui-orbit-explorer search">
+<div class="search">
+  
+  {% include 'ui/orbit-viewer/search.njk' %}
 
 </div>
 
-<div class="ui-orbit-explorer filters">
+<div class="filters">
 
 </div>
 
-<div class="ui-orbit-explorer customize-view">
+<div class="customize-view">
 
 </div>
 
-<div class="ui-orbit-explorer share">
+<div class="share">
 
 </div>
 
-<div class="ui-orbit-explorer timescale">
+<div class="timescale">
 
 </div>
 
-<div class="ui-orbit-explorer zoom-controller">
+<div class="zoom-controller">
 
 </div>
 
-<div class="ui-orbit-explorer orbit-controls">
+<div class="orbit-controls">
 
 </div>

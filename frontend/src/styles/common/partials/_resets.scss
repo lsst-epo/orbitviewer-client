@@ -5,6 +5,10 @@
 	box-sizing: border-box;
 }
 
+svg {
+	overflow: visible;
+}
+
 body {
 	margin: 0;
 	overscroll-behavior: none;
