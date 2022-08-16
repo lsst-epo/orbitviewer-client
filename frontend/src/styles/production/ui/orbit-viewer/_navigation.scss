@@ -16,4 +16,11 @@
 	svg {
 		width: 20px;
 	}
+
+	path {
+		stroke: var(--white-1);
+		stroke-width: 3;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
 }

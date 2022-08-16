@@ -10,13 +10,61 @@
 
 	overflow-y: auto;
 
-	border: 1px solid white;
 	z-index: $panelIndex;
-	background-color: var(--black-0);
 
 	transform: translateX(-100%);
+	transition: transform 0.5s ease-in-out;
+	will-change: transform;
 
 	&.active {
 		transform: translateX(0%);
+	}
+}
+
+.panel {
+	padding: 28px 34px;
+	background-color: var(--black-0);
+	
+	display: flex;
+	flex-direction: column;
+}
+
+.panel-separator {
+	padding-bottom: 15px;
+	border-bottom: 1px solid var(--white-alpha);
+}
+
+.panel-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	
+	.panel-top-content {
+		padding: 0 10px 0 0;
+		display: flex;
+		flex-direction: column;
+
+		h3 {
+			font-size: 1rem;
+			font-weight: light;
+		}
+
+		h2 {
+			font-size: 1.1rem;
+			font-weight: bold;
+		}
+	}
+
+	button {
+		flex-shrink: 0;
+		width: 25px;
+		height: 25px;
+		cursor: pointer;
+	}
+}
+
+.panel-times {
+	path {
+		fill: var(--white-0);
 	}
 }
