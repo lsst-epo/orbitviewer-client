@@ -41,6 +41,8 @@ export class Panels {
 	addListeners(){
 
 		for(const panel of this.panels){
+
+			// Panel Buttons
 			const buttons = document.querySelectorAll(`[data-panel-button="${panel.id}"]`);
 			if(buttons.length === 0) continue;
 
@@ -55,6 +57,7 @@ export class Panels {
 					}
 				})
 			}
+
 		}
 	}
 }
