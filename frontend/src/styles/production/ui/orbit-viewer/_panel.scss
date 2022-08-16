@@ -23,7 +23,7 @@
 
 .panel {
 	padding: 28px 34px;
-	background-color: var(--black-0);
+	background-color: var(--black-alpha);
 	
 	display: flex;
 	flex-direction: column;
@@ -34,11 +34,15 @@
 	border-bottom: 1px solid var(--white-alpha);
 }
 
+.panel-section {
+	padding-top: 15px;
+}
+
 .panel-top {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	
+
 	.panel-top-content {
 		padding: 0 10px 0 0;
 		display: flex;
