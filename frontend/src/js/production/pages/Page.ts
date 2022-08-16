@@ -1,5 +1,5 @@
-import { Inputs } from "../utils/inputs/Inputs";
-import { Panels } from "../utils/Panel";
+import { Inputs } from "../ui/inputs/Inputs";
+import { Panels } from "../ui/Panel";
 
 export class Page {
 	dom:HTMLElement = null;
@@ -28,18 +28,12 @@ export class Page {
 	load(resolve){				
 		this.loaded = true;	
 		this.addEventListeners();
-		this.addInputs();
-		this.addPanels();
+		
+		new Inputs(this.dom);
+		new Panels(this.dom);
+
 
 		this.enable(resolve);
-	}
-
-	addInputs(){
-		new Inputs(this.dom);
-	}
-
-	addPanels(){
-		new Panels(this.dom);
 	}
 
 	addEventListeners(){

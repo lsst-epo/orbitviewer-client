@@ -1,0 +1,22 @@
+.back-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+
+	button {
+		padding: 10px;
+		cursor: pointer;
+
+		@include desktop {
+			padding: 10px 20px;
+		}
+
+		svg {
+			width: 20px;
+		}
+
+		path {
+			fill: var(--white-0);
+		}
+	}
+}
