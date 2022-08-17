@@ -14,11 +14,96 @@
 
 	border-radius: 100%;
 
+	cursor: pointer;
+
 	svg {
 		width: 20px;
 	}
 
 	path {
 		fill: var(--white-0);
+	}
+}
+
+.distance-input {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	padding: 0 0 50px;
+	margin: 0 10px;
+
+	p {
+		font-weight: 900;
+		font-size: 1rem;
+	}
+
+	.fake-range {	
+		z-index: 0;
+		position: absolute;
+		bottom: 23px;
+		left: 50%;
+		transform: translateX(-50%);
+		
+		width: 100%;
+		height: 15px;
+		
+		border: 3px solid var(--black-2);
+		background-color: var(--white-0);
+		border-radius: 20px;
+		pointer-events: none;
+
+	}
+
+	.handle {
+		z-index: 1;
+		border: 3px solid var(--white-0);
+		background-color: var(--blue-0);
+		
+		width: 22px;
+		height: 22px;
+		
+		border-radius: 100%;
+		cursor: pointer;
+
+		position: absolute;
+		bottom: 0;
+
+		transform: translateX(-50%);
+		
+
+		&:first-of-type {
+			left: calc(8px + var(--range-1) * 100%);
+		}
+		&:last-of-type {
+			left: calc(-8px + var(--range-2) * 100%);
+		}
+
+		&:before {
+			content: '';
+			width: 5px;
+			height: 10px;
+
+			position: absolute;
+			top: 0;
+			left: 50%;
+			
+
+			transform: translate(-50%, -10px);
+			
+			background-color: var(--white-0);
+		}
+	}
+
+	input {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+
+		pointer-events: none;
+
+		opacity: 0;
+		width: 100%;
+		height: auto;
+		
 	}
 }

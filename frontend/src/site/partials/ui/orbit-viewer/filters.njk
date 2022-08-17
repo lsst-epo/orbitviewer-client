@@ -36,6 +36,19 @@
 
 	<div class="panel-section panel-separator">
 		<h3>Object characteristics</h3>
+
+		<div class="distance-input custom-input" type="double-range" style="--range-1:0;--range-2:1;">
+			<p>Near</p>
+			<p>Far</p>
+
+			<div class="fake-range"></div>
+
+			<label class="handle" for="near"></label>
+			<label class="handle" for="far"></label>
+
+			<input type="range" min="0" max="1" value="0" step="0.01" name="near">
+			<input type="range" min="0" max="1" value="1" step="0.01" name="far">
+		</div>
 	</div>
 
 </div>

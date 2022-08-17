@@ -7,8 +7,13 @@ export class Input {
 		if(!inputElement) return;
 		this.inputElement = inputElement;
 
+		this.create();
 		this.addEventListeners();
 
+	}
+
+	create(){
+		
 	}
 
 	addEventListeners(){
