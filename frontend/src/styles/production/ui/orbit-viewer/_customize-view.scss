@@ -1,0 +1,163 @@
+.customize-view {
+
+	position: absolute;
+	top: 180px;
+	left: 0;
+	padding: 0 13px;
+
+	.customize-view-icon {
+		z-index: 2;
+
+		width: 40px;
+		height: 40px;
+
+		background-color: var(--black-1);
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		border-radius: 100%;
+		cursor: pointer;
+
+		p {
+			font-size: 0.8rem;
+			font-weight: 100;
+
+			position: absolute;
+			top: 12px;
+			left: 60px;
+
+			white-space: nowrap;
+
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.2s ease-in-out;
+		}
+
+		svg {
+			width: 20px;
+			transform: translateY(5px);
+		}
+
+		svg .chev {
+			transform-origin: 50% 90%;
+			transform: rotate(0deg);
+			transition: transform 0.2s ease-in-out;
+		}
+
+		path {
+			fill: var(--white-0);
+		}
+		
+	}
+}
+
+.customize-view	ul {
+	margin: 0;
+	padding: 20px 5px;
+
+	li {
+		list-style: none;
+		width: 100%;
+		position: relative;
+
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+
+		transform: translateY(-20px);
+		opacity: 0;
+		pointer-events: none;
+
+		transition: all 0.2s ease-in-out;
+
+		margin: 0 0 25px 0;
+
+		transition-delay: 0s;
+	}
+
+	input {
+		opacity: 0;
+		position: absolute;
+	}
+
+	.filter-bullet {
+		width: 30px;
+		height: 30px;
+		background-color: var(--white-0);
+		border-radius: 100%;
+
+		position: absolute;
+		left: 0;
+
+		div {
+			width: 20px;
+			height: 20px;
+
+			background-color: var(--teal-1);
+			border-radius: 100%;
+
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate3d(-50%, -50%, 0) scale3d(0, 0, 0);
+
+			transition: transform 0.2s ease-out;
+			transform-origin: center;
+		}
+	}
+
+	label {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-grow: 1;
+
+		padding: 0 0 0 40px;
+
+		font-family: $font1;
+		font-size: 0.8rem;
+		font-weight: 900;
+
+		cursor: pointer;
+	}
+
+	svg {
+		width: 40px;
+		height: 40px;
+	}
+
+	.checked {
+		.filter-bullet div {
+			transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1);
+			transition: transform 0.1s ease-in;
+		}
+	}
+}
+
+.active.customize-view {
+	.customize-view-icon {
+		background-color: var(--blue-0);
+
+		p {
+			opacity: 1;
+		}
+
+		svg .chev {
+			transform: rotate(180deg);
+		}
+	}
+
+	li {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: unset;
+		
+		@for $i from 1 through 3 {
+			&:nth-child(3n + #{$i}) {
+				transition-delay: calc(0.05s * #{$i});
+			}
+		}
+	}
+}

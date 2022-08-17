@@ -10,4 +10,22 @@ export class OrbitViewer extends Page {
 
 		super.load(resolve)
 	}
+
+	addEventListeners(): void {
+
+		this.addCustomizeView();
+
+	}
+
+	addCustomizeView(){
+
+		const wrapper = this.dom.querySelector('.customize-view');
+
+		const btn = wrapper.querySelector('.customize-view-icon');
+		btn.addEventListener('click', () => {
+			console.log('hola');
+
+			wrapper.classList.toggle('active');
+		})
+	}
 }
