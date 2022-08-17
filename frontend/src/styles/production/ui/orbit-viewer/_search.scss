@@ -1,5 +1,6 @@
 
 .search-panel {
+	z-index: 1;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -16,15 +17,13 @@
 	pointer-events: none;
 	
 	opacity: 0;
-	transform: opacity 0.3s ease-in-out;
+	background-color: var(--black-alpha);
+	transition: opacity 0.3s ease-in-out;
 
-	&.active {
-		pointer-events: unset;
-		opacity: 1;
-	}
 }
 
 .search-input {
+	z-index: 2;
 	position: absolute;
 	top: 64px;
 	left: 0;
@@ -127,6 +126,14 @@
 }
 
 .search[data-state="1"] {
+
+	.search-panel {
+		opacity: 1;
+
+		button {
+			pointer-events: unset;
+		}
+	}
 
 	.search-lense {
 		pointer-events: none;
