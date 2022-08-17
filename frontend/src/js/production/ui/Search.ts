@@ -21,9 +21,9 @@ export class Search {
 	addEventListeners(){
 
 		const input = this.dom.querySelector('.search-text-input input');
-
-		input.addEventListener('input', () => {			
-			if(input.value !== '') this.updateState(2);
+		input.addEventListener('input', () => {						
+			if(input.value.length > 0) this.updateState(2);
+			else this.updateState(1);
 		})
 
 		const lenseButton = this.dom.querySelector('.search-lense');
