@@ -1,11 +1,11 @@
 
 
 export class Input {
-	inputElement: HTMLElement = null;
-	constructor(inputElement: HTMLElement = null){
+	dom: HTMLElement = null;
+	constructor(dom: HTMLElement = null){
 
-		if(!inputElement) return;
-		this.inputElement = inputElement;
+		if(!dom) return;
+		this.dom = dom;
 
 		this.create();
 		this.addEventListeners();
@@ -13,7 +13,7 @@ export class Input {
 	}
 
 	create(){
-		
+
 	}
 
 	addEventListeners(){
