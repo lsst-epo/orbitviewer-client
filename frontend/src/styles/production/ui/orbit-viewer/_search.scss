@@ -13,6 +13,9 @@
 	align-items: flex-end;
 
 	padding: 15px 20px;
+	@include desktop {
+		padding: 60px;
+	}
 
 	pointer-events: none;
 	
