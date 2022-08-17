@@ -106,3 +106,10 @@
 		pointer-events: none;
 	}
 }
+
+.filter-buttons {
+	margin: 20px 0;
+	button:first-of-type {
+		margin-bottom: 20px;
+	}
+}
