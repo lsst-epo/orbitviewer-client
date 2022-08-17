@@ -1,0 +1,32 @@
+.zoom-controller {
+
+	display: none;
+
+	position: absolute;
+	top: 50%;
+	right: -50%;
+	transform: translate(calc(-50% - 20px), -50%);
+	
+	padding: 14px 20px;
+	
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	div {
+		transform: rotate(90deg);
+		transform-origin: center;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	p {
+		transform: rotate(-90deg);
+		transform-origin: center;
+		font-size: 2.2rem;
+		padding: 5px;
+		font-weight: 100;
+	}
+}
