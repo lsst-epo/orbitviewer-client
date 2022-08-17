@@ -1,0 +1,24 @@
+.filters-button {
+	z-index: 2;
+	position: absolute;
+
+	width: 40px;
+	height: 40px;
+
+	background-color: var(--blue-0);
+	transform: translate(14px, 80px);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	border-radius: 100%;
+
+	svg {
+		width: 20px;
+	}
+
+	path {
+		fill: var(--white-0);
+	}
+}
