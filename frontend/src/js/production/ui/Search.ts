@@ -20,20 +20,28 @@ export class Search {
 
 	addEventListeners(){
 
-		const input = this.dom.querySelector('.search-text-input');
+		const input = this.dom.querySelector('.search-text-input input');
 
 		const lenseButton = this.dom.querySelector('.search-lense');
 		lenseButton.addEventListener('click', () => {
-			if(this.state === 0){
-				this.state = 1;
-			}
-			this.dom.setAttribute('data-state', this.state.toString());
+			this.updateState(1);
 		})
 
-		const closeButton = this.dom.querySelector('.search-reset');
-		closeButton.addEventListener('click', () => {
+		const resetButton = this.dom.querySelector('.search-reset');
+		resetButton.addEventListener('click', () => {			
 			input.value = ''
 		})
 
+		const cancelButton = this.dom.querySelector('.search-cancel');
+		cancelButton.addEventListener('click', () => {			
+			input.value = '';
+			this.updateState(0);
+		})
+
+	}
+
+	updateState(state: number = 0){
+		this.state = state;
+		this.dom.setAttribute('data-state', this.state.toString());
 	}
 }
