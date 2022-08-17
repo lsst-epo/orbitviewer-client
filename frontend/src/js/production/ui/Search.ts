@@ -22,6 +22,10 @@ export class Search {
 
 		const input = this.dom.querySelector('.search-text-input input');
 
+		input.addEventListener('input', () => {			
+			if(input.value !== '') this.updateState(2);
+		})
+
 		const lenseButton = this.dom.querySelector('.search-lense');
 		lenseButton.addEventListener('click', () => {
 			this.updateState(1);
@@ -30,6 +34,7 @@ export class Search {
 		const resetButton = this.dom.querySelector('.search-reset');
 		resetButton.addEventListener('click', () => {			
 			input.value = ''
+			this.updateState(1);
 		})
 
 		const cancelButton = this.dom.querySelector('.search-cancel');
