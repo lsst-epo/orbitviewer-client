@@ -10,9 +10,6 @@ eleventyComputed:
   description: "{{ copies.seo.description }}"
 --- #}
 
-  
-{# todo aquests dos son ui generica d'altres pàgines també #}
-
 {# NAVIGATION #}
 {% include 'ui/orbit-viewer/navigation.njk' %}
 
@@ -31,14 +28,15 @@ eleventyComputed:
 {# SHARE #}
 {% include 'ui/orbit-viewer/share.njk' %}
 
-<div class="timescale">
+{# TIME PICKER #}
+{% include 'ui/orbit-viewer/time-picker.njk' %}
 
-</div>
-
+{# ZOOM #}
 <div class="zoom-controller">
   <input type="range" min="0" max="1" step="0.01" value="0.5">
 </div>
 
+{# CONTROLS #}
 <div class="orbit-controls">
 
 </div>
