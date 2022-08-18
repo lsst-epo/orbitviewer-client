@@ -59,6 +59,6 @@ export class Search {
 
 	updateState(state: number = 0){
 		this.state = state;
-		this.dom.setAttribute('data-state', this.state.toString());
+		document.body.setAttribute('data-search-state', this.state.toString());
 	}
 }

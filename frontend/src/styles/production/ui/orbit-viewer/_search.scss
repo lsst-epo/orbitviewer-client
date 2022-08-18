@@ -133,9 +133,14 @@
 	transition: all 0.2s ease-in-out;
 }
 
-.search[data-state="1"] {
+body[data-search-state="1"] {
+
+	.search-input {
+		z-index: 6;
+	}
 
 	.search-panel {
+		z-index: 5;
 		opacity: 1;
 
 		button {
@@ -156,9 +161,14 @@
 	}
 
 }
-.search[data-state="2"] {
+body[data-search-state="2"] {
+
+	.search-input {
+		z-index: 6;
+	}
 
 	.search-panel {
+		z-index: 5;
 		opacity: 1;
 
 		button {
