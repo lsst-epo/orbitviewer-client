@@ -25,5 +25,16 @@ export class OrbitViewer extends Page {
 		btn.addEventListener('click', () => {
 			wrapper.classList.toggle('active');
 		})
+
+		document.addEventListener('keydown', (e) => {			
+
+			if(e.key != 'Escape') return;
+
+			if(!wrapper.classList.contains('active')) return;
+
+			e.preventDefault();
+
+			wrapper.classList.remove('active');
+		})
 	}
 }
