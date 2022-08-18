@@ -1,5 +1,6 @@
 {% from 'ui/button.njk' import button as button %}
 {% from 'ui/filter.njk' import filter as filter %}
+{% from 'ui/panel-times.njk' import panelTimes as panelTimes %}
 
 <button class="filters-button" data-panel-button="filters">
 
@@ -22,11 +23,7 @@
 			<h2>Customize your view</h2>
 		</div>
 
-		<button class="panel-times" data-panel-button="filters">
-			<svg viewBox="0 0 19 19" xml:space="preserve">
-				<path d="M19,1.8L17.2,0L9.5,7.7L1.8,0L0,1.8l7.7,7.7L0,17.2L1.8,19l7.7-7.7l7.7,7.7l1.8-1.8	l-7.7-7.7L19,1.8z"/>
-			</svg>
-		</button>
+		{{ panelTimes('filters') }}
 		
 	</div>
 
