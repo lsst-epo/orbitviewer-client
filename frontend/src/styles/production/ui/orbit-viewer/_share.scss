@@ -5,7 +5,7 @@
 	padding: 0 14px;
 }
 
-.share-button {
+.share-trigger {
 	z-index: 2;
 	position: absolute;
 
@@ -31,4 +31,10 @@
 	path {
 		fill: var(--white-0);
 	}
+}
+
+.share-buttons-wrapper {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
 }

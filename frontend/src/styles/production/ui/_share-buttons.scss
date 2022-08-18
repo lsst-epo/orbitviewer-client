@@ -1,0 +1,75 @@
+.share-button {
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	.icon {
+		width: 40px;
+		height: 40px;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		border-radius: 100%;
+	}
+
+	svg {
+		width: 15px;
+	}
+
+	path,
+	rect {
+		fill: var(--white-0);
+	}
+
+	p {
+		margin-top: 10px;
+		font-size: 0.5rem;
+		font-weight: 100;
+	}
+}
+
+.share-button.get-url {
+	.icon {
+		background-color: var(--teal-0);
+	}
+	svg {
+		width: 20px;
+	}
+}
+.share-button.facebook {
+	.icon {
+		background-color: #3d5a99;
+	}
+	svg {
+		width: 9px;
+		transform: translateX(-1px);
+	}
+}
+.share-button.twitter {
+	.icon {
+		background-color: #0f8fff;
+	}
+	svg {
+		width: 18px;
+	}
+}
+.share-button.snapshot {
+	.icon {
+		background-color: var(--teal-0);
+	}
+	svg {
+		width: 15px;
+	}
+}
+	.share-button.email {
+		.icon {
+			background-color: var(--teal-0);
+		}
+	svg {
+		width: 20px;
+	}
+}
