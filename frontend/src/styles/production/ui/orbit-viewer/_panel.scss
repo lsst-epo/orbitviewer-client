@@ -29,6 +29,19 @@
 	flex-direction: column;
 }
 
+.panel.panel-bottom {
+	width: 100%;
+	height: auto;
+
+	transform: translateY(100%);
+	top: unset;
+	bottom: 0;
+
+	&.active {
+		transform: translateY(0%);
+	}
+}
+
 .panel-separator {
 	padding-bottom: 15px;
 	border-bottom: 1px solid var(--white-alpha);

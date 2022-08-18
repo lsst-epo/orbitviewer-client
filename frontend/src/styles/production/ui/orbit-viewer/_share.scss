@@ -1,0 +1,34 @@
+.share {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 0 14px;
+}
+
+.share-button {
+	z-index: 2;
+	position: absolute;
+
+	width: 40px;
+	height: 40px;
+
+	background-color: var(--black-1);
+	transform: translate(0, calc(100vh - 100% - 14px));
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	border-radius: 100%;
+
+	cursor: pointer;
+
+	svg {
+		width: 20px;
+		transform: translate(-1px, 0px);
+	}
+
+	path {
+		fill: var(--white-0);
+	}
+}
