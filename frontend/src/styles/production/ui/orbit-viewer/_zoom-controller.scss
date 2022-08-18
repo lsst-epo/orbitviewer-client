@@ -1,10 +1,10 @@
 .zoom-controller {
 
-	--size: 30vh;
+	--size: 35vh;
 
 	position: absolute;
 	top: 50%;
-	right: 14px;
+	right: 16px;
 
 	transform: rotate(90deg);
 	
@@ -16,7 +16,7 @@
 	justify-content: center;
 
 	input {
-		z-index: 1;
+		z-index: 2;
 		-webkit-appearance: none;
 		
 		width: var(--size);
@@ -37,34 +37,31 @@
 		cursor: pointer;
 		pointer-events: all;
 		-webkit-appearance: none;
+		margin-top: -5px;
 	}
 
-	.fake-range {	
-		z-index: 0;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-
+	input[type=range]::-webkit-slider-runnable-track {
 		width: var(--size);
 		height: 10px;
 
 		background-color: var(--black-2);
 		border-radius: 20px;
-		pointer-events: none;
 	}
 
-	p {
+	input:before,
+	input:after {
+		display: inline-block;
 		font-size: 2.2rem;
 		font-weight: 100;
-		transform-origin: center;
+		line-height: 20px;
+		transform: translateY(-5px) rotate(-90deg);
+		padding: 0 5px;
+	}
 
-		&:nth-child(1n){
-			transform: rotate(-90deg) translateY(calc(-1 * (var(--size) * .5) - 50%));
-		}
-
-		&:nth-child(2n){
-			transform: rotate(-90deg) translateY(calc(var(--size) * .5 + 50%));
-		}
+	input:before {
+		content: '+';
+	}
+	input:after {
+		content: '-';
 	}
 }
