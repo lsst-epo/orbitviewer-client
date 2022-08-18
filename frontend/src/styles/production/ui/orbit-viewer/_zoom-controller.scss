@@ -4,7 +4,7 @@
 
 	position: absolute;
 	top: 50%;
-	right: 16px;
+	right: 20px;
 
 	transform: rotate(90deg);
 	
@@ -20,7 +20,7 @@
 		-webkit-appearance: none;
 		
 		width: var(--size);
-		height: 10px;
+		height: 15px;
 
 		position: absolute;
 		top: 50%;
@@ -37,12 +37,12 @@
 		cursor: pointer;
 		pointer-events: all;
 		-webkit-appearance: none;
-		margin-top: -5px;
+		margin-top: -3px;
 	}
 
 	input[type=range]::-webkit-slider-runnable-track {
 		width: var(--size);
-		height: 10px;
+		height: 100%;
 
 		background-color: var(--black-2);
 		border-radius: 20px;
@@ -54,7 +54,7 @@
 		font-size: 2.2rem;
 		font-weight: 100;
 		line-height: 20px;
-		transform: translateY(-5px) rotate(-90deg);
+		transform: translateY(-2px) rotate(-90deg);
 		padding: 0 5px;
 	}
 
