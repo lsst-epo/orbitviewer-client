@@ -38,6 +38,17 @@ export class Panels {
 
 	}
 
+	togglePanel(panel){
+		panel.active = !panel.active;
+
+		if(panel.active){
+			panel.panel.classList.add('active');
+		} else {
+			panel.panel.classList.remove('active');
+		}
+
+	}
+
 	addListeners(){
 
 		for(const panel of this.panels){
@@ -48,16 +59,22 @@ export class Panels {
 
 			for(const button of buttons){
 				button.addEventListener('click', () => {
-					panel.active = !panel.active;
-
-					if(panel.active){
-						panel.panel.classList.add('active');
-					} else {
-						panel.panel.classList.remove('active');
-					}
+					this.togglePanel(panel);
 				})
 			}
 
 		}
+
+		document.addEventListener('keydown', (e) => {			
+			
+			if(e.key != 'Escape') return;
+			
+			const activePanel = this.panels.find(x => x.active);
+			if(!activePanel) return;
+			
+			e.preventDefault();
+			this.togglePanel(activePanel);
+			
+		})
 	}
 }
