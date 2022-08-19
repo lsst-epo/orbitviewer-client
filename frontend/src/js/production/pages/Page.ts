@@ -6,6 +6,8 @@ export class Page {
 	active:boolean = false;
 	loaded:boolean = false;
 
+	panels:Panels;
+
 	prepare() {		
 		this.active = true;
 		return new Promise(resolve => {		
@@ -30,7 +32,7 @@ export class Page {
 		this.addEventListeners();
 		
 		new Inputs(this.dom);
-		new Panels(this.dom);
+		this.panels = new Panels(this.dom);
 
 
 		this.enable(resolve);
@@ -47,5 +49,6 @@ export class Page {
 
 	update(){
 		if(!this.active || !this.loaded) return;		
+		if(this.panels) this.panels.update();
 	}
 }

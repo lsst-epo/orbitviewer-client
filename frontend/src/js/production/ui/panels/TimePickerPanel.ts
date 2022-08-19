@@ -1,3 +1,4 @@
+import { MathUtils } from "@jocabola/math";
 import { Panel } from "./Panel";
 
 enum STATE {
@@ -17,12 +18,13 @@ export class TimePickerPanel extends Panel {
 
 	state: STATE = 0;
 
+	range: HTMLInputElement;
+	value: number = 0;
+	holding: boolean = false;
+
 
 	constructor(id){
 		super(id);
-
-		this.thumb = this.dom.querySelector('.time-picker-trigger');
-
 
 		// Date handler
 		this.date = new Date();
@@ -40,9 +42,9 @@ export class TimePickerPanel extends Panel {
 		this.state = this.active ? 1 : 0;
 
 		if(this.state > 0){
-			this.thumb.classList.add('disabled');
+			this.thumb.querySelector('.time-picker-trigger').classList.add('disabled');
 		} else {
-			this.thumb.classList.remove('disabled');
+			this.thumb.querySelector('.time-picker-trigger').classList.remove('disabled');
 		}
 	}
 
@@ -84,5 +86,35 @@ export class TimePickerPanel extends Panel {
 			this.state = 2;
 			// todo fer sortir la zona d'edit
 		})
+
+
+		this.thumb = this.dom.querySelector('.time-picker');
+
+		this.range = this.dom.querySelector('.time-picker-input input');
+
+		this.range.addEventListener('input', () => {
+			this.holding = true;
+			this.value = parseFloat(this.range.value);
+		})
+
+		this.range.addEventListener('change', () => {
+			this.holding = false;
+		})
+	}
+
+	update(){
+		if(!this.active) return;
+
+		this.value = parseFloat(this.range.value);
+		
+
+		if(!this.holding){
+			this.value = MathUtils.lerp(this.value, 0, 0.03);
+			this.range.value = this.value.toString();
+		}
+
+		this.thumb.style.transform = `translateX(${45 * this.value}%)`;
+		
+		
 	}
 }

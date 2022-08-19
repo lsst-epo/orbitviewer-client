@@ -2,8 +2,13 @@
 	overflow: visible;
 
 	p {
-		font-size: 0.7rem;
+		font-size: 0.75rem;
 		font-weight: 100;
+	}
+
+	span {
+		color: var(--white-0);
+		font-weight: 900;
 	}
 }
 
@@ -12,7 +17,6 @@
 	justify-content: center;
 
 	height: 0;
-	transform: translateY(-30px);
 }
 
 .time-picker-input input[type="range"] {
@@ -21,7 +25,7 @@
 	&::-webkit-slider-thumb {
 		width: 30px;
 		height: 30px;
-		background: rgba(255,255,255, 0.4);
+		background: rgba(255,255,255, 0);
 		cursor: pointer;
 		pointer-events: all;
 		-webkit-appearance: none;
@@ -71,7 +75,7 @@
 }
 
 .active .time-picker-trigger {
-	transform: translateY(0);
+	transform: translateY(-30px);
 }
 
 .timer-picker-description {
@@ -102,4 +106,18 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+
+	span {
+		display: inline;
+		padding: 0 0 0 10px;
+	}
+
+	div {
+		display: flex;
+	}
+
+	button {
+		margin: 0 0 0 15px;
+	}
 }
+

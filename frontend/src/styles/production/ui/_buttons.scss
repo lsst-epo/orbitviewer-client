@@ -35,3 +35,18 @@
 	background-color: transparent;
 	border: 1px solid var(--white-0);
 }
+
+.ui__button-small {
+	background-color: var(--teal-0);
+	color: var(--black-0);
+	font-size: 0.8rem;
+	line-height: 1em;
+	font-weight: 500;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	padding: 3px 10px 4px;
+	border-radius: 5px;
+}

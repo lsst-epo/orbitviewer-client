@@ -1,6 +1,6 @@
 import { CoreApp } from "../../common/core/CoreApp";
 import { getEntryById } from "../../common/data/DataManager";
-import { historyInit, LOCATION, onChange } from "../pagination/History";
+import { historyInit, LOCATION, onChange, PAGES } from "../pagination/History";
 
 export class ProductionApp extends CoreApp {
     rotSpeed:number = .1;
@@ -29,6 +29,9 @@ export class ProductionApp extends CoreApp {
     update(): void {
         super.update();
 
+        for(const page of PAGES) page.class.update();
+
         this.mesh.rotation.z = this.clock.getElapsedTime() * this.rotSpeed;
+
     }
 }

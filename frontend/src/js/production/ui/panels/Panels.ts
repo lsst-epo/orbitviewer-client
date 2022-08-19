@@ -51,4 +51,8 @@ export class Panels {
 
 
 	}
+
+	update(){	
+		for(const p of this.panels) p.update();
+	}
 }
