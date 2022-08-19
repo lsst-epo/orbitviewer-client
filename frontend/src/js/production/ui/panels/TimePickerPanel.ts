@@ -23,14 +23,38 @@ export class TimePickerPanel extends Panel {
 	value: number = 0;
 	holding: boolean = false;
 
+	subPanelApply: HTMLButtonElement;
+	subPanelCancel:HTMLButtonElement;
+
 
 	constructor(id){
 		super(id);
 
-		// Date handler
+		this.updateTimer();
+		this.reposition();
+
+	}
+
+	create(): void {
+
+		// Date 
 		this.date = new Date();
 		this.domDate = this.dom.querySelector('.time-picker-details p span');
-		this.updateTimer();
+
+		// DOM
+		this.thumb = this.dom.querySelector('.time-picker');
+		this.range = this.dom.querySelector('.time-picker-input input');
+		this.subPanel = this.dom.querySelector('.sub-panel');
+
+		// Sub Panel Stuff
+		const buttonsZone = this.dom.querySelector('.time-picker-details');
+
+		this.reset = buttonsZone.querySelector('[data-timer="reset"]');
+		this.edit = buttonsZone.querySelector('[data-timer="edit"]');
+
+		this.subPanelApply = this.subPanel.querySelector('#apply-date');
+		this.subPanelCancel = this.subPanel.querySelector('#close-edit');
+
 	}
 
 	updateTimer(){
@@ -38,14 +62,17 @@ export class TimePickerPanel extends Panel {
 	}
 
 	togglePanel(): void {
-		super.togglePanel();
 
-		this.state = this.active ? 1 : 0;
+		this.active = this.state > 0;
+		if(this.active) this.dom.classList.add('active');
+		else this.dom.classList.remove('active');
+
+		if(this.state === 2) this.subPanel.classList.add('active');
+		else this.subPanel.classList.remove('active');
 
 		if(this.state > 0){
 			this.thumb.querySelector('.time-picker-trigger').classList.add('disabled');
 		} else {
-			this.subPanel.classList.remove('active');
 			this.thumb.querySelector('.time-picker-trigger').classList.remove('disabled');
 		}
 	}
@@ -58,23 +85,19 @@ export class TimePickerPanel extends Panel {
 
 	addEventListeners(){
 
-		super.addEventListeners();
+		const buttons = document.querySelectorAll(`[data-panel-button="${this.id}"]`);
+		if(buttons.length === 0) return;
 
-		this.thumb = this.dom.querySelector('.time-picker');
-		this.range = this.dom.querySelector('.time-picker-input input');
-		this.subPanel = this.dom.querySelector('.sub-panel');
+		for(const button of buttons){
+			button.addEventListener('click', () => { 		
+				if(this.active) this.state = 0;
+				else this.state = 1;
+
+				this.togglePanel();
+			})
+		}
 
 		window.addEventListener('resize', this.reposition.bind(this));
-		this.reposition();
-
-		// States buttons
-		const buttonsZone = this.dom.querySelector('.time-picker-details');
-
-		this.reset = buttonsZone.querySelector('[data-timer="reset"]');
-		this.edit = buttonsZone.querySelector('[data-timer="edit"]');
-
-		console.log(buttonsZone);
-		
 
 		this.reset.addEventListener('click', () => {
 			console.log('Reset');
@@ -87,7 +110,7 @@ export class TimePickerPanel extends Panel {
 
 		this.edit.addEventListener('click', () => {
 			this.state = 2;
-			this.subPanel.classList.add('active');
+			this.togglePanel();
 		})
 
 
@@ -98,6 +121,18 @@ export class TimePickerPanel extends Panel {
 
 		this.range.addEventListener('change', () => {
 			this.holding = false;
+		})
+
+		this.subPanelApply.addEventListener('click', () => {
+			this.updateTimer();
+			this.state = 1;
+			this.togglePanel();
+		})
+
+		this.subPanelCancel.addEventListener('click', () => {
+			// Todo reset data
+			this.state = 1;
+			this.togglePanel();
 		})
 	}
 
