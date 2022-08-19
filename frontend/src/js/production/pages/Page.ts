@@ -1,5 +1,5 @@
 import { Inputs } from "../ui/inputs/Inputs";
-import { Panels } from "../ui/Panel";
+import { Panels } from "../ui/panels/Panels";
 
 export class Page {
 	dom:HTMLElement = null;
