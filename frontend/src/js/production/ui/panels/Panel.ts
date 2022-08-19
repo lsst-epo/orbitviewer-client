@@ -10,7 +10,13 @@ export class Panel {
 
 		this.dom = document.querySelector(`[data-panel="${id}"]`);
 
+		this.create();
+
 		this.addEventListeners();
+	}
+
+	create(){
+		
 	}
 
 	togglePanel(){		

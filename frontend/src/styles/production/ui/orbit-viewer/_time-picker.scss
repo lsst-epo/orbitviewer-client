@@ -121,3 +121,44 @@
 	}
 }
 
+.sub-panel {
+	z-index: 1;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+
+	transform: translateY(100%);
+	transition: transform 0.5s ease-in-out;
+
+	padding: 10px 15px;
+
+	background: #000;
+
+	width: 100%;
+	height: auto;
+	min-height: 100%;
+
+	&.active {
+		transform: translateY(0);
+	}
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+
+	> div {
+		padding: 10px 0;
+		width: 100%;
+	}
+
+	.buttons-wrapper {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		button {
+			max-width: calc(50% - 7px);
+		}
+	}
+}
+

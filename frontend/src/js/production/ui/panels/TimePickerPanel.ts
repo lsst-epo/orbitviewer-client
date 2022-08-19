@@ -9,6 +9,7 @@ enum STATE {
 
 export class TimePickerPanel extends Panel {
 	thumb: HTMLButtonElement;
+	subPanel: HTMLElement;
 
 	date: Date; 
 	domDate: HTMLElement;
@@ -44,6 +45,7 @@ export class TimePickerPanel extends Panel {
 		if(this.state > 0){
 			this.thumb.querySelector('.time-picker-trigger').classList.add('disabled');
 		} else {
+			this.subPanel.classList.remove('active');
 			this.thumb.querySelector('.time-picker-trigger').classList.remove('disabled');
 		}
 	}
@@ -57,6 +59,10 @@ export class TimePickerPanel extends Panel {
 	addEventListeners(){
 
 		super.addEventListeners();
+
+		this.thumb = this.dom.querySelector('.time-picker');
+		this.range = this.dom.querySelector('.time-picker-input input');
+		this.subPanel = this.dom.querySelector('.sub-panel');
 
 		window.addEventListener('resize', this.reposition.bind(this));
 		this.reposition();
@@ -80,17 +86,10 @@ export class TimePickerPanel extends Panel {
 		})
 
 		this.edit.addEventListener('click', () => {
-			console.log('Edit');
-			return;
-			
 			this.state = 2;
-			// todo fer sortir la zona d'edit
+			this.subPanel.classList.add('active');
 		})
 
-
-		this.thumb = this.dom.querySelector('.time-picker');
-
-		this.range = this.dom.querySelector('.time-picker-input input');
 
 		this.range.addEventListener('input', () => {
 			this.holding = true;
