@@ -10,6 +10,32 @@
 .time-picker {
 	display: flex;
 	justify-content: center;
+
+	height: 0;
+	transform: translateY(-30px);
+}
+
+.time-picker-input input[type="range"] {
+	-webkit-appearance: none;
+
+	&::-webkit-slider-thumb {
+		width: 30px;
+		height: 30px;
+		background: rgba(255,255,255, 0.4);
+		cursor: pointer;
+		pointer-events: all;
+		-webkit-appearance: none;
+		margin-top: -8px;
+	}
+
+	&::-webkit-slider-runnable-track {
+		width: 100%;
+		height: 12px;
+
+		background-color: var(--black-2);
+		border-radius: 20px;
+	}
+
 }
 
 .time-picker-trigger {
@@ -37,6 +63,10 @@
 
 	.clock path {
 		fill: var(--white-0);
+	}
+
+	&.disabled {
+		pointer-events: none;
 	}
 }
 
