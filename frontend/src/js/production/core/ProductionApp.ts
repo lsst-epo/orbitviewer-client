@@ -1,6 +1,7 @@
 import { CoreApp } from "../../common/core/CoreApp";
 import { getEntryById } from "../../common/data/DataManager";
 import { historyInit, LOCATION, onChange, PAGES } from "../pagination/History";
+import { initExpandableItems } from "../ui/expandable-items/ExpandableItems";
 
 export class ProductionApp extends CoreApp {
     rotSpeed:number = .1;
@@ -24,6 +25,8 @@ export class ProductionApp extends CoreApp {
             e.preventDefault();
             onChange();
         })
+
+        initExpandableItems();
     }
 
     update(): void {

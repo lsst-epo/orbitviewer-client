@@ -1,0 +1,62 @@
+{% from 'ui/filter-icons/filter-icon.njk' import filterIcon as filterIcon %}
+
+<div class="expandable-items">
+
+	{% for element in elements %}
+
+		<div class="expandable-item" data-id="{{ element.slug }}">
+
+			<button class="close-item">
+				<svg viewBox="0 0 20 20" xml:space="preserve">
+					<ellipse cx="10" cy="10" rx="10" ry="10"/>
+					<path d="M15,5.9L14.1,5L10,9.1L5.9,5L5,5.9L9.1,10L5,14.1L5.9,15l4.1-4.1l4.1,4.1l0.9-0.9	L10.9,10L15,5.9z"/>
+				</svg>
+			</button>
+
+			<div class="cover">
+				
+				<div class="picture">
+					<img src="https://picsum.photos/300/200?grayscale">
+				</div>
+
+				<div class="icon">
+					{% for category in categories %}
+						{{ filterIcon(category.slug, category.title ) }}
+					{% endfor %}
+				</div>
+			</div>
+			
+			<div class="hidden-tabs">
+
+				<section>
+					<div class="head">
+						<p>Overview</p>
+					</div>
+					<div class="content">
+
+					</div>
+				</section>
+
+				<section>
+					<div class="head">
+						<p>Context information</p>
+					</div>
+					<div class="content">
+
+					</div>
+				</section>
+
+				<section>
+					<div class="head">
+						<p>Detailed data</p>
+					</div>
+					<div class="content">
+
+					</div>
+				</section>
+			</div>
+
+		</div>
+	{% endfor %}
+
+</div>
