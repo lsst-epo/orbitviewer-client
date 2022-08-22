@@ -1,7 +1,7 @@
 import { CoreApp } from "../../common/core/CoreApp";
 import { getEntryById } from "../../common/data/DataManager";
 import { historyInit, LOCATION, onChange, PAGES } from "../pagination/History";
-import { initExpandableItems } from "../ui/expandable-items/ExpandableItems";
+import { enableExpandableItem, expandableItems, initExpandableItems } from "../ui/expandable-items/ExpandableItems";
 
 export class ProductionApp extends CoreApp {
     rotSpeed:number = .1;
@@ -27,14 +27,19 @@ export class ProductionApp extends CoreApp {
         })
 
         initExpandableItems();
+
+        enableExpandableItem('mercury')
+
     }
 
     update(): void {
         super.update();
 
         for(const page of PAGES) page.class.update();
+        for(const expandableItem of expandableItems) expandableItem.update();
 
         this.mesh.rotation.z = this.clock.getElapsedTime() * this.rotSpeed;
+        
 
     }
 }

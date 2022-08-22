@@ -24,6 +24,9 @@
 @import './production/ui/orbit-viewer/time-picker';
 @import './production/ui/orbit-viewer/orbit-controls';
 
+@import './production/ui/expandable-items/expandable-items';
+@import './production/ui/expandable-items/expandable-item';
+
 
 main {
 	z-index: $mainContentIndex;

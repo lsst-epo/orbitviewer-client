@@ -1,0 +1,33 @@
+
+.expandable-item {
+	opacity: 0;
+
+	&.visible {
+		opacity: 1;
+	}
+}
+
+.expandable-item {
+	position: absolute;
+
+	width: 0;
+	height: 0;
+
+	overflow: visible;
+}
+
+.expandable-item .item-wrapper {
+	width: 180px;
+	height: 100px;
+
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	transform: translate(-50%, -50%);
+}
+
+
+.hidden-tabs {
+	display: none;
+}

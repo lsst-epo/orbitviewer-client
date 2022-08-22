@@ -1,4 +1,4 @@
-dateModified: 1660290919
+dateModified: 1661158971
 email:
   fromEmail: $EMAIL_FROM_ADDRESS
   fromName: $EMAIL_SENDER_NAME
@@ -37,6 +37,7 @@ meta:
     9ad945a2-a807-403c-aec6-ef28c7849b73: 'Landing Logo' # Landing Logo
     9c14ac7e-c466-4c2d-a2fd-e19a68fc706d: Teaser # Teaser
     16e8811b-6d9d-44e1-83b2-16c02e1dcd5a: 'Landing Version' # Landing Version
+    53d8b6b6-280e-4d4a-adc1-2c3efcb4bd0a: 'Element Category' # Element Category
     56f784c1-2182-4a9a-9e20-2e30e7b4a2bd: 'Solar system Elements' # Solar system Elements
     59e08766-55d3-4cb0-8b02-b406b1ea45d8: 'Solar system Elements' # Solar system Elements
     68ce46bb-bb2f-4e55-8009-fe56a7d4493b: Header # Header

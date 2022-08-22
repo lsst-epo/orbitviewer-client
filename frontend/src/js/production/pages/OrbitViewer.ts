@@ -1,4 +1,5 @@
 import { Search } from "../partials/Search";
+import { enableExpandableItem } from "../ui/expandable-items/ExpandableItems";
 import { Page } from "./Page";
 
 
@@ -8,6 +9,7 @@ export class OrbitViewer extends Page {
 		new Search(this.dom);
 
 		super.load(resolve)
+
 	}
 
 	addEventListeners(): void {
