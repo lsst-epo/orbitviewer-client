@@ -47,8 +47,8 @@ export class Page {
 		console.log('Page Resize');
 	}
 
-	update(){
-		if(!this.active || !this.loaded) return;		
+	update(){		
+		if(!this.active || !this.loaded) return;				
 		if(this.panels) this.panels.update();
 	}
 }

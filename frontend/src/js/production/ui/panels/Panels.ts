@@ -52,7 +52,7 @@ export class Panels {
 
 	}
 
-	update(){	
+	update(){					
 		for(const p of this.panels) p.update();
 	}
 }

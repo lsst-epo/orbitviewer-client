@@ -78,8 +78,6 @@ export class TimePickerPanel extends Panel {
 	}
 
 	reposition(){
-		// Todo reposicionar timer
-		console.log('Reposition timer');
 
 		const r = this.thumb.getBoundingClientRect();
 		const top = window.innerHeight - r.top;
@@ -120,8 +118,7 @@ export class TimePickerPanel extends Panel {
 			this.togglePanel();
 		})
 
-
-		this.range.addEventListener('input', () => {
+		this.range.addEventListener('input', () => {			
 			this.holding = true;
 			this.value = parseFloat(this.range.value);
 		})
@@ -137,13 +134,13 @@ export class TimePickerPanel extends Panel {
 		})
 
 		this.subPanelCancel.addEventListener('click', () => {
-			// Todo reset data
 			this.state = 1;
 			this.togglePanel();
 		})
 	}
 
 	update(){
+		
 		if(!this.active) {
 			if(this.value === 0 && this.range.value === '0') return;
 		}
@@ -155,9 +152,8 @@ export class TimePickerPanel extends Panel {
 			this.value = MathUtils.lerp(this.value, 0, 0.03);
 			this.range.value = this.value.toString();
 		}
-
+		
 		this.thumb.style.transform = `translateX(${45 * this.value}%)`;
-		
-		
+				
 	}
 }

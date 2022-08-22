@@ -52,6 +52,7 @@ export class OrbitViewer extends Page {
 	}
 
 	update(): void {
+		super.update();
 		for(const expandableItem of expandableItems) expandableItem.update();
 	}
 }
