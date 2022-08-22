@@ -25,6 +25,57 @@
 	left: 50%;
 
 	transform: translate(-50%, -50%);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.expandable-item .close-item {
+	position: absolute;
+}
+
+.expandable-item .cover {
+	position: relative;
+
+	width: 100px;
+	height: 100px;
+	border-radius: 100%;
+	border: 2px solid var(--white-0);
+
+	background-position: center;
+	background-size: cover;
+
+	.icon {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translate(-50%, 50%);
+
+		display: flex;
+
+		svg {
+			width: 25px;
+			height: 25px;
+		}
+		
+	}
+
+	.icon-text {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translate(-50%, 100%);
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		text-align: center;
+
+	}
+
 }
 
 

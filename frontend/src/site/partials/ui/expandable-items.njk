@@ -15,14 +15,15 @@
 					</svg>
 				</button>
 
-				<div class="cover">
+				<div class="cover" style="background-image: url(https://picsum.photos/300/200);">
 					
-					<div class="picture">
-						<img src="https://picsum.photos/300/200">
-					</div>
-
 					<div class="icon">
-							{{ filterIcon(element.elementCategory[0].slug, element.elementCategory[0].title ) }}
+						{{ filterIcon(element.elementCategory[0].slug, element.elementCategory[0].title ) }}
+
+						<div class="icon-text">
+							<h3>{{ element.title }}</h3>
+							<p>Tap to expand</p>
+						</div>
 					</div>
 				</div>
 				
