@@ -1,7 +1,5 @@
 import { Vector2 } from "three";
 
-const wrapper = document.querySelector('.expandable-items');
-
 export class ExpandableItem {
 	dom: HTMLElement;
 
@@ -12,25 +10,53 @@ export class ExpandableItem {
 
 	position: Vector2 = new Vector2();
 
-	appended: boolean = false;
 	constructor(dom){
 		
-		this.dom = dom.cloneNode(true);
-		dom.remove();
+		this.dom = dom;
 
 		this.id = this.dom.getAttribute('data-id');
+
 				
 	}
 
 	enable(){
 		this.visible = true;
-
-		if(!this.appended){
-			wrapper.appendChild(this.dom);
-			this.appended = true;
-		}
 		
-		this.dom.classList.add('visible');
+		this.dom.classList.add('visible');		
+		
+		this.addEventListeners();
+
+	}
+
+	disable(){
+		this.visible = false;
+		this.active = false;
+		this.dom.classList.remove('visible');
+	}
+
+	showInfo(){
+		if(this.active) return;
+		if(!this.visible) return; 
+
+		this.active = true;
+		this.dom.classList.add('active');
+	}
+
+	hideInfo(){
+		this.active = false;
+		this.dom.classList.remove('active');
+	}
+
+	addEventListeners(){
+		
+		this.dom.querySelector('.close-item').addEventListener('click', () => {
+			if(!this.active) this.disable();
+			else this.hideInfo();
+		})
+
+		this.dom.querySelector('.item-wrapper .cover').addEventListener('click', () => {			
+			this.showInfo();
+		})
 
 	}
 
