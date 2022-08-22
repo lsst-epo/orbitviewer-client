@@ -10,13 +10,33 @@ export class ExpandableItem {
 
 	position: Vector2 = new Vector2();
 
+	sections:NodeListOf<HTMLElement>;
+
 	constructor(dom){
 		
 		this.dom = dom;
 
 		this.id = this.dom.getAttribute('data-id');
 
+		this.sections = this.dom.querySelectorAll('section');
+
+		this.onResize();
 				
+	}
+
+	onResize(){
+
+		for(const section of this.sections){
+			const contents = section.querySelectorAll('.content');
+			for(const content of contents) {
+				content.style.height = 'auto';
+				const r = content.getBoundingClientRect();
+				content.style.setProperty('--height', `${r.height + 20 }px`);
+				content.style.height = '';
+			}
+			
+		}
+
 	}
 
 	enable(){
@@ -32,6 +52,8 @@ export class ExpandableItem {
 		this.visible = false;
 		this.active = false;
 		this.dom.classList.remove('visible');
+		this.hideInfo();
+		
 	}
 
 	showInfo(){
@@ -40,11 +62,15 @@ export class ExpandableItem {
 
 		this.active = true;
 		this.dom.classList.add('active');
+
+		this.sections[0].classList.add('active');
+
 	}
 
 	hideInfo(){
 		this.active = false;
 		this.dom.classList.remove('active');
+		for(const section of this.sections) section.classList.remove('active');
 	}
 
 	addEventListeners(){
@@ -57,6 +83,15 @@ export class ExpandableItem {
 		this.dom.querySelector('.item-wrapper .cover').addEventListener('click', () => {			
 			this.showInfo();
 		})
+
+		for(const section of this.sections){
+			section.querySelector('.head').addEventListener('click', () => {
+				console.log('click');
+				
+				for(const section of this.sections) section.classList.remove('active');
+				section.classList.add('active');
+			})
+		}
 
 	}
 

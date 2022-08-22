@@ -1,5 +1,5 @@
 import { Search } from "../partials/Search";
-import { enableExpandableItem } from "../ui/expandable-items/ExpandableItems";
+import { enableExpandableItem, expandableItems, initExpandableItems } from "../ui/expandable-items/ExpandableItems";
 import { Page } from "./Page";
 
 
@@ -12,9 +12,21 @@ export class OrbitViewer extends Page {
 
 	}
 
+	onResize(): void {
+		
+		super.onResize();
+
+		for(const expandableItem of expandableItems) expandableItem.onResize();
+	}
+
 	addEventListeners(): void {
 
 		this.addCustomizeView();
+
+		initExpandableItems();
+
+		enableExpandableItem('mercury')
+
 		
 	}
 
@@ -37,5 +49,9 @@ export class OrbitViewer extends Page {
 
 			wrapper.classList.remove('active');
 		})
+	}
+
+	update(): void {
+		for(const expandableItem of expandableItems) expandableItem.update();
 	}
 }
