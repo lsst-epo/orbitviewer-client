@@ -8,17 +8,16 @@ async function getPage() {
 
 	const query = `
 	{
-			entries(section: "elements") {
-					... on elements_default_Entry {
+		entries(section: "elements") {
+				... on elements_default_Entry {
+						title,
+						slug,
+						elementCategory {
 							title,
-							slug,
-							elementCategory {
-								title,
-								slug
-							}					
-					}
-			}
-
+							slug
+						}					
+				}
+		}
 	}`;
 
 	const data = await getQuery(query);

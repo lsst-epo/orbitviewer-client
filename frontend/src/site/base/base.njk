@@ -6,7 +6,9 @@
 	<link rel="stylesheet" href="{{ '../production/bundle/main.css' }}"/>
 
 	<script>
-		const data = {};
+		const data = {
+			tours: {{ guidedExperiencesTours | dump | safe }}
+		};
 	</script>
 
 	<body>

@@ -6,7 +6,9 @@ scope:
   - 'sections.3400f929-2ff0-47da-8c15-40bce8b6cebf:read' # Customize Orbits
   - 'entrytypes.2f6b435a-5a6c-4f32-b8b5-4aae301d1738:read' # Customize Orbits
   - 'sections.907d717b-d9ff-4449-abbf-7c7f5823851b:read' # Guided Experiences
-  - 'entrytypes.7242b43a-de73-46de-b5c2-234ba48a8a57:read' # Default
+  - 'entrytypes.7242b43a-de73-46de-b5c2-234ba48a8a57:read' # Guided Experiences
+  - 'sections.ef474ef1-31d2-45c5-8419-cb15202ba296:read' # Guided Experiences Tours
+  - 'entrytypes.e84d2431-7574-44a8-9e23-019823b2dfc3:read' # Default
   - 'sections.f1df2c63-97e5-49f0-8f4d-1e704d4945ac:read' # Landing
   - 'entrytypes.3cbe4fda-03b6-4891-b0ac-892db5b17bb8:read' # Landing
   - 'sections.59e08766-55d3-4cb0-8b02-b406b1ea45d8:read' # Solar system Elements

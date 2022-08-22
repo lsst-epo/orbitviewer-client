@@ -1,7 +1,7 @@
 defaultPlacement: end
 enableVersioning: true
-handle: guidedExperiences
-name: 'Guided Experiences'
+handle: guidedExperiencesTours
+name: 'Guided Experiences Tours'
 previewTargets:
   -
     __assoc__:
@@ -26,4 +26,4 @@ siteSettings:
     hasUrls: false
     template: null
     uriFormat: null
-type: single
+type: channel

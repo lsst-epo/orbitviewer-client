@@ -28,9 +28,9 @@ fieldLayouts:
             width: 100
         name: Content
         sortOrder: 1
-handle: default
+handle: guidedExperiences
 hasTitleField: true
-name: Default
+name: 'Guided Experiences'
 section: 907d717b-d9ff-4449-abbf-7c7f5823851b # Guided Experiences
 sortOrder: 1
 titleFormat: null

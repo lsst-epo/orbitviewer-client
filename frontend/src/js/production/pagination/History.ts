@@ -1,12 +1,17 @@
-
 import { DEV } from "../../common/core/Globals";
 import { CustomizeOrbits } from "../pages/CustomizeOrbits";
 import { Landing } from "../pages/Landing";
 import { OrbitViewer } from "../pages/OrbitViewer";
 import { Page } from "../pages/Page";
+import { Tour } from "../pages/Tour";
 import { get } from "../utils/Ajax";
 import { replaceAll } from "../utils/ReplaceAll";
 import { TRANSITIONS, TriggerTransition } from "./TransitionManager";
+
+const tours = [];
+for(const tour of data.tours){
+	tours.push(tour.slug);
+}
 
 // -- LOCATION - HISTORY
 const tempPages = [
@@ -14,8 +19,12 @@ const tempPages = [
 	'customize-orbits',
 	'guided-experiences',
 	'orbit-viewer',
-	'about'
+	'about',
+	...tours
 ];
+
+
+
 
 export const LOCATION = {
 	current: null,
@@ -33,8 +42,10 @@ for(const pageSlug of tempPages){
 		pageClass = new CustomizeOrbits();
 	} else if(pageSlug === 'orbit-viewer'){
 		pageClass = new OrbitViewer();
-	} else {
+	} else if(pageSlug === 'guided-experiences'){
 		pageClass = new Page();
+	} else {
+		pageClass = new Tour();
 	}
 
 const pageItem = {

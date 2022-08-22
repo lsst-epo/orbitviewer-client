@@ -1,4 +1,4 @@
-dateModified: 1661158971
+dateModified: 1661182822
 email:
   fromEmail: $EMAIL_FROM_ADDRESS
   fromName: $EMAIL_SENDER_NAME
@@ -56,7 +56,7 @@ meta:
     4294fb85-8029-437c-a2e5-76bcd1a79ef1: Asset # Asset
     5075e912-4aa1-4ce4-96b2-8868358b51e3: Header # Header
     5548b745-642b-4b15-8f17-4ce7457689a8: Header # Header
-    7242b43a-de73-46de-b5c2-234ba48a8a57: Default # Default
+    7242b43a-de73-46de-b5c2-234ba48a8a57: 'Guided Experiences' # Guided Experiences
     7559fb47-f35b-436d-aceb-300a233317b8: 'Customize Orbits Description' # Customize Orbits Description
     7754bae8-c6eb-4fbe-882b-236621e35f2d: 'Canto DAM' # Canto DAM
     9829e8e1-9862-44ab-902c-90a72e4a81b7: Landing # Landing
@@ -87,9 +87,11 @@ meta:
     d889713c-632a-4323-bb10-4b2bc53545ad: Asset # Asset
     ddf8dce2-4fa1-43d1-b306-b34d9d97a91b: Content # Content
     dff2a767-333e-4c9d-880c-143e1ca2aaa3: 'Row Content' # Row Content
+    e84d2431-7574-44a8-9e23-019823b2dfc3: Default # Default
     e338eebb-6488-4f58-a07e-db43f28ff56b: Image # Image
     e7913600-c914-4ab1-a9bb-abd2bdcbfb94: 'Custom Name' # Custom Name
     ec809547-cd72-4016-92f4-e72a89d6620c: Default # Default
+    ef474ef1-31d2-45c5-8419-cb15202ba296: 'Guided Experiences Tours' # Guided Experiences Tours
     f1df2c63-97e5-49f0-8f4d-1e704d4945ac: Landing # Landing
     f444667c-6ea1-4e0f-89b2-35b059e27bfc: Link # Link
 plugins:
