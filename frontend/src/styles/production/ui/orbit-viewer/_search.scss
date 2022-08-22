@@ -135,11 +135,11 @@
 body[data-search-state="1"] {
 
 	.search-input {
-		z-index: 6;
+		z-index: #{$toFrontIndex + 1};
 	}
 
 	.search-panel {
-		z-index: 5;
+		z-index: $toFrontIndex;
 		opacity: 1;
 		pointer-events: unset;
 

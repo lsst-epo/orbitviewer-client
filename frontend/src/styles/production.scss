@@ -40,3 +40,7 @@ main {
 	height: 100vh;
 	overflow: hidden;
 }
+
+.to-front {
+	z-index: $toFrontIndex;
+}
