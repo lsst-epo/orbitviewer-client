@@ -80,7 +80,14 @@ export class TimePickerPanel extends Panel {
 	reposition(){
 		// Todo reposicionar timer
 		console.log('Reposition timer');
-		
+
+		const r = this.thumb.getBoundingClientRect();
+		const top = window.innerHeight - r.top;
+		const button = this.thumb.querySelector('button');
+		const br = button.getBoundingClientRect();
+
+		button.style.transform = `translateY(${top - br.height - 15}px)`;
+			
 	}
 
 	addEventListeners(){
@@ -137,7 +144,9 @@ export class TimePickerPanel extends Panel {
 	}
 
 	update(){
-		if(!this.active) return;
+		if(!this.active) {
+			if(this.value === 0) return;
+		}
 
 		this.value = parseFloat(this.range.value);
 		
