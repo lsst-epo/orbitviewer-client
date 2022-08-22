@@ -53,7 +53,7 @@ export class ExpandableItem {
 		this.active = false;
 		this.dom.classList.remove('visible');
 		this.hideInfo();
-		
+
 	}
 
 	showInfo(){
@@ -85,9 +85,7 @@ export class ExpandableItem {
 		})
 
 		for(const section of this.sections){
-			section.querySelector('.head').addEventListener('click', () => {
-				console.log('click');
-				
+			section.querySelector('.head').addEventListener('click', () => {				
 				for(const section of this.sections) section.classList.remove('active');
 				section.classList.add('active');
 			})

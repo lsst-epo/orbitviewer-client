@@ -60,7 +60,7 @@ export class Auth {
 							resolve('success');
 						},
 						(err) => {
-							console.log('ERROR', err);
+							console.error(err);
 							reject(err);
 						}
 					);
@@ -90,7 +90,7 @@ export class Auth {
 						console.log('Session Refresh');
 					},
 					(err) => {
-						console.log(err);
+						console.error(err);
 						window.location.reload();
 					}
 				);

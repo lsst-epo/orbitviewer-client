@@ -29,12 +29,12 @@ export const TriggerTransition = (skip:boolean = false) => {
 	pages.to.class.active = true;
 
 	if(!!!pages.from) {
-		console.log('TRANSITION INIT');
+		console.log('Init Transitions');
 		InitialFadeIn();
 		return;
 	}
 
-	if(DEV) console.log('TRANSITION - From:', pages.from.template,'To:', pages.to.template);
+	if(DEV) console.log('Page transition - From:', pages.from.template,'To:', pages.to.template);
 
 	DefaultTransition();
 }

@@ -42,7 +42,7 @@ export class menuManager {
 	static addEventListeners() {
 		// OPEN SIMULATOR BUTTON
 		document.querySelector('#open-sim').addEventListener('click', () => {
-			console.log('OPEN PRODUCTION', location.origin + '/production');
+			console.log('Open Production', location.origin + '/production');
 			window.open('/production', '_blank').focus();
 		});
 

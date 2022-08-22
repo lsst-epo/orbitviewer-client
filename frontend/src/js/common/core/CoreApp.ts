@@ -65,7 +65,7 @@ export class CoreApp extends WebGLSketch {
     }
 
     onDataLoaded() {
-        console.log('LOADED');
+        console.log('Data Loaded');
 
         const globals = getEntryById('globals').data;
         this.updateMeshSettings(globals['demo'] as DemoType);
