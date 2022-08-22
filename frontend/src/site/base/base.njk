@@ -3,11 +3,12 @@
 
 	{% include 'head.njk' %}
 
-	<link rel="stylesheet" href="{{ '../production/bundle/main.css' }}"/>
+	<link rel="stylesheet" href="{{ '/production/bundle/main.css' }}"/>
 
 	<script>
 		const data = {
-			tours: {{ guidedExperiencesTours | dump | safe }}
+			tours: {{ tours | dump | safe }},
+			guidedExperiencesTours: {{ guidedExperiencesTours | dump | safe }}
 		};
 	</script>
 
@@ -21,7 +22,7 @@
 			{% endblock %}
 		</div>
 
-		<script src="{{ '../production/bundle/main.js' }}"></script>
+		<script src="{{ '/production/bundle/main.js' }}"></script>
 
 	</body>
 </html>

@@ -1,4 +1,4 @@
-dateModified: 1661182822
+dateModified: 1661185785
 email:
   fromEmail: $EMAIL_FROM_ADDRESS
   fromName: $EMAIL_SENDER_NAME
@@ -25,6 +25,7 @@ meta:
     1f8a9fe3-0e8c-4e3f-b6ce-0e1421fe0fbb: 'Landing Center Title' # Landing Center Title
     2c2e1c6a-eb4d-44f1-9a43-8d79b326f354: ES # ES
     2f6b435a-5a6c-4f32-b8b5-4aae301d1738: 'Customize Orbits' # Customize Orbits
+    3c4d26f3-4aa2-48fd-8dd8-400929f9210e: Tours # Tours
     3cbe4fda-03b6-4891-b0ac-892db5b17bb8: Landing # Landing
     3df02181-c6a1-4e72-98fb-f91def384206: Entry # Entry
     4b94ba3d-060c-4a09-b2dc-c519a4c83709: 'Cell Content' # Cell Content
@@ -37,6 +38,7 @@ meta:
     9ad945a2-a807-403c-aec6-ef28c7849b73: 'Landing Logo' # Landing Logo
     9c14ac7e-c466-4c2d-a2fd-e19a68fc706d: Teaser # Teaser
     16e8811b-6d9d-44e1-83b2-16c02e1dcd5a: 'Landing Version' # Landing Version
+    37b1d17c-d8d5-45f3-9c15-14ef09b62add: 'Tour Picker' # Tour Picker
     53d8b6b6-280e-4d4a-adc1-2c3efcb4bd0a: 'Element Category' # Element Category
     56f784c1-2182-4a9a-9e20-2e30e7b4a2bd: 'Solar system Elements' # Solar system Elements
     59e08766-55d3-4cb0-8b02-b406b1ea45d8: 'Solar system Elements' # Solar system Elements
@@ -45,18 +47,17 @@ meta:
     95b97a67-eccb-4910-b0e8-77f5860058b4: Link # Link
     380c1cbe-884e-421b-9e31-1f0dfc81e15f: 'Cell Width' # Cell Width
     522bc2d7-fcc3-4817-a986-5c860e53351c: 'Internal Entry' # Internal Entry
-    907d717b-d9ff-4449-abbf-7c7f5823851b: 'Guided Experiences' # Guided Experiences
+    907d717b-d9ff-4449-abbf-7c7f5823851b: 'Guided Experiences Page' # Guided Experiences Page
     0928ff1a-513d-41e0-acc1-606d93988618: 'Search Filters' # Search Filters
     966a6b65-ca53-48a8-89dc-74983cd624ef: Title # Title
     991c5031-3b97-45d8-8829-c8e0c79537a9: 'Row Title' # Row Title
     2755abe1-7dd5-428c-a6bb-30d2bd59a362: Link # Link
-    3158a91c-be02-4353-9bca-6af3e59cc859: 'Guided Experiences' # Guided Experiences
     3182a473-667d-439f-9cf2-b545be5c23d3: Fulldesignation # Fulldesignation
     3400f929-2ff0-47da-8c15-40bce8b6cebf: 'Customize Orbits' # Customize Orbits
     4294fb85-8029-437c-a2e5-76bcd1a79ef1: Asset # Asset
     5075e912-4aa1-4ce4-96b2-8868358b51e3: Header # Header
     5548b745-642b-4b15-8f17-4ce7457689a8: Header # Header
-    7242b43a-de73-46de-b5c2-234ba48a8a57: 'Guided Experiences' # Guided Experiences
+    7242b43a-de73-46de-b5c2-234ba48a8a57: 'Guided Experiences Page' # Guided Experiences Page
     7559fb47-f35b-436d-aceb-300a233317b8: 'Customize Orbits Description' # Customize Orbits Description
     7754bae8-c6eb-4fbe-882b-236621e35f2d: 'Canto DAM' # Canto DAM
     9829e8e1-9862-44ab-902c-90a72e4a81b7: Landing # Landing
@@ -83,7 +84,6 @@ meta:
     cbf3fbbb-2f2b-4568-a228-f8c63ff4601c: 'Row Color' # Row Color
     cc694df6-ebfe-4e0c-b4fe-713761f100df: Text # Text
     cee5c2f8-2801-42c2-a56c-4fe40c85b6f3: 'Site Information' # Site Information
-    d6440b9a-cc0d-4fae-8bcf-e0bba67fce86: 'Objects Picker' # Objects Picker
     d889713c-632a-4323-bb10-4b2bc53545ad: Asset # Asset
     ddf8dce2-4fa1-43d1-b306-b34d9d97a91b: Content # Content
     dff2a767-333e-4c9d-880c-143e1ca2aaa3: 'Row Content' # Row Content
@@ -94,6 +94,7 @@ meta:
     ef474ef1-31d2-45c5-8419-cb15202ba296: 'Guided Experiences Tours' # Guided Experiences Tours
     f1df2c63-97e5-49f0-8f4d-1e704d4945ac: Landing # Landing
     f444667c-6ea1-4e0f-89b2-35b059e27bfc: Link # Link
+    fd26bd16-cdc1-44cf-af77-ceb7ecc98e42: Tours # Tours
 plugins:
   asset-metadata:
     edition: standard

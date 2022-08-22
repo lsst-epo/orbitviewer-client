@@ -1,7 +1,7 @@
 defaultPlacement: end
 enableVersioning: true
 handle: guidedExperiences
-name: 'Guided Experiences'
+name: 'Guided Experiences Page'
 previewTargets:
   -
     __assoc__:

@@ -10,16 +10,18 @@ async function getPage() {
 	{
 		entries(section: "guidedExperiencesTours") {
 			... on guidedExperiencesTours_default_Entry {
-				title
-				slug
+				title,
+				slug,
+				tourPicker {
+					title,
+					slug
+				}
 			}
 		}
 	}`;
 
 	const data = await getQuery(query);
-
 	const d = data.data.entries;
-
 	return d;
 }
 

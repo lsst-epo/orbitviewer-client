@@ -1,0 +1,16 @@
+---
+layout: base
+pageTemplate: guided-experiences-tours
+pagination:
+  alias: experience
+  data: guidedExperiencesTours
+  size: 1
+permalink: "{{ experience.tourPicker[0].slug + '/' + experience.slug | slug }}/"
+---
+{# 
+eleventyComputed:
+title: "{{ project.seo.title }}"
+description: "{{ project.seo.description }}"
+image: "{{ project.seo.seo_image }}" #}
+
+{# {{ guidedExperienceTour | dump | safe}} #}

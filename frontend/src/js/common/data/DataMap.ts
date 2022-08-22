@@ -1,6 +1,6 @@
 import { dataMap, loadEntry, registerDataEntry } from "./DataManager";
 
-const baseUrl = '../uploads/data/';
+const baseUrl = '/uploads/data/';
 
 function addItem(id: string, url: string) {
 	registerDataEntry(id, `${baseUrl}${url}`);

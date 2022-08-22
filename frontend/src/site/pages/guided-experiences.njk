@@ -15,7 +15,7 @@ eleventyComputed:
 <div class="guided-experiences-list">
   <h1>{{ guidedExperiences.title }}</h1>
 
-  {% for tour in guidedExperiencesTours %}
+  {% for tour in tours %}
     <a href="{{ '/' | url }}{{ tour.slug }}">
       <h3>{{ tour.title }}</h3>
     </a>

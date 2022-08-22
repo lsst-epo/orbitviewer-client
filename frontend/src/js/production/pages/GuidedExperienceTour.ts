@@ -1,7 +1,7 @@
 import { Page } from "./Page";
 
 
-export class Tour extends Page {
+export class GuidedExperienceTour extends Page {
 	constructor(){
 		super();
 

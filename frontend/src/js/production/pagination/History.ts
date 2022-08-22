@@ -1,5 +1,6 @@
 import { DEV } from "../../common/core/Globals";
 import { CustomizeOrbits } from "../pages/CustomizeOrbits";
+import { GuidedExperienceTour } from "../pages/GuidedExperienceTour";
 import { Landing } from "../pages/Landing";
 import { OrbitViewer } from "../pages/OrbitViewer";
 import { Page } from "../pages/Page";
@@ -8,10 +9,6 @@ import { get } from "../utils/Ajax";
 import { replaceAll } from "../utils/ReplaceAll";
 import { TRANSITIONS, TriggerTransition } from "./TransitionManager";
 
-const tours = [];
-for(const tour of data.tours){
-	tours.push(tour.slug);
-}
 
 // -- LOCATION - HISTORY
 const tempPages = [
@@ -20,7 +17,6 @@ const tempPages = [
 	'guided-experiences',
 	'orbit-viewer',
 	'about',
-	...tours
 ];
 
 
@@ -34,6 +30,8 @@ export const LOCATION = {
 
 export const PAGES = [];
 let pageClass = null;
+
+//  -------------------------------- Create pages
 for(const pageSlug of tempPages){
 	
 	if(pageSlug === 'landing'){
@@ -45,11 +43,46 @@ for(const pageSlug of tempPages){
 	} else if(pageSlug === 'guided-experiences'){
 		pageClass = new Page();
 	} else {
-		pageClass = new Tour();
+		pageClass = new Page();
 	}
 
-const pageItem = {
+	const pageItem = {
 		slug: pageSlug === 'landing' ? '' : pageSlug,
+		class: pageClass,
+		template: null,
+		title: null
+	}
+
+	PAGES.push(pageItem);
+}
+
+// ------------------------------------------ TOURS
+const tours = [];
+for(const tour of data.tours){
+	tours.push(tour.slug);
+}
+for(const pageSlug of tours){
+	
+	pageClass = new Tour();
+
+	const pageItem = {
+		slug: pageSlug,
+		class: pageClass,
+		template: null,
+		title: null
+	}
+
+	PAGES.push(pageItem);
+}
+
+// ------------------------------------------ Guided Experiences
+
+for(const page of data.guidedExperiencesTours){
+
+	pageClass = new GuidedExperienceTour();
+
+	const pageItem = {
+		slug: `${page.tourPicker[0].slug}/${page.slug}`,
 		class: pageClass,
 		template: null,
 		title: null
@@ -90,10 +123,15 @@ export const historyInit = () => {
 	
 	if(DEV) console.log('Site pages --> ', PAGES);
 
-	let path = replaceAll("/", "", window.location.pathname);		
+	let path = window.location.pathname;	
+	if(path.charAt(0) === '/') path = path.substring(1);
+	if(path.charAt(path.length - 1) === '/') path = path.substring(0, path.length - 1);
+
 	const page = PAGES.find(page => page.slug === path);	
 
 	LOCATION.current = page;
+	console.log(document.querySelector('.page__content'));
+	
 	page.class.dom = document.querySelector('.page__content');	
 	page.template = page.class.dom.getAttribute('data-template');
 

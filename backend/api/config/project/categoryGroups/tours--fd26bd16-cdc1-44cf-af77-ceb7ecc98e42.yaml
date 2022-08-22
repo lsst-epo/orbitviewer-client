@@ -1,5 +1,6 @@
+defaultPlacement: end
 fieldLayouts:
-  84f67ddb-6409-4d18-8544-129795a36da5:
+  27c72910-179e-4a2e-a075-8034d8e4559e:
     tabs:
       -
         elements:
@@ -23,16 +24,22 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\TitleField
             warning: null
             width: 100
         name: Content
         sortOrder: 1
-handle: guidedExperiences
-hasTitleField: true
-name: 'Guided Experiences Page'
-section: 907d717b-d9ff-4449-abbf-7c7f5823851b # Guided Experiences Page
-sortOrder: 1
-titleFormat: null
-titleTranslationKeyFormat: null
-titleTranslationMethod: site
+handle: tours
+name: Tours
+siteSettings:
+  2c2e1c6a-eb4d-44f1-9a43-8d79b326f354: # ES
+    hasUrls: true
+    template: null
+    uriFormat: 'tours/{slug}'
+  547128fa-4529-4483-9968-66425996b69f: # EN
+    hasUrls: true
+    template: null
+    uriFormat: 'tours/{slug}'
+structure:
+  maxLevels: null
+  uid: e15eab9e-edd4-433c-a835-b45264b5a10f
