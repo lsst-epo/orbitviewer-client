@@ -40,8 +40,6 @@ export class ExpandableItem {
 
 		this.position.x = window.innerWidth * .5;
 		this.position.y = window.innerHeight * .25;
-
-		console.log(window.innerWidth);
 		
 		this.dom.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0)`;
 		// todo position ha de venir d'algun lloc, css3d? 

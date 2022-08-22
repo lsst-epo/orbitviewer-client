@@ -11,7 +11,11 @@ async function getPage() {
 			entries(section: "elements") {
 					... on elements_default_Entry {
 							title,
-							slug
+							slug,
+							elementCategory {
+								title,
+								slug
+							}					
 					}
 			}
 

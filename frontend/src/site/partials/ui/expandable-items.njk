@@ -22,9 +22,7 @@
 					</div>
 
 					<div class="icon">
-						{% for category in categories %}
-							{{ filterIcon(category.slug, category.title ) }}
-						{% endfor %}
+							{{ filterIcon(element.elementCategory[0].slug, element.elementCategory[0].title ) }}
 					</div>
 				</div>
 				
