@@ -1,6 +1,6 @@
 
 {# ITEMS #}
-<div class="item {{ 'coming-soon' if experience.comingSoon == 'comingSoon' }}">
+<a class="item {{ 'coming-soon' if experience.comingSoon == 'comingSoon' }}" href="{{ tour.slug + '/' + experience.slug | slug }}">
 	
 	<div class="thumb" style="background-image: url(https://picsum.photos/200/200);"></div>
 	
@@ -18,4 +18,4 @@
 	
 	</div>
 
-</div>
+</a>

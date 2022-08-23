@@ -93,8 +93,12 @@
 	.buttons__wrapper {
 		display: flex;
 		justify-content: center;
+		flex-grow: 1;
+		align-items: flex-end;
+
+		padding-top: 50px;
+		
 		width: 100%;
-		margin: 100px 0 0 0;
 
 		@include desktop {
 			width: 520px;

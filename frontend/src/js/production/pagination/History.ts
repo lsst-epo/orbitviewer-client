@@ -5,6 +5,7 @@ import { GuidedExperienceTour } from "../pages/GuidedExperienceTour";
 import { Landing } from "../pages/Landing";
 import { OrbitViewer } from "../pages/OrbitViewer";
 import { Page } from "../pages/Page";
+import { Tours } from "../pages/Tours";
 import { get } from "../utils/Ajax";
 import { replaceAll } from "../utils/ReplaceAll";
 import { TRANSITIONS, TriggerTransition } from "./TransitionManager";
@@ -63,7 +64,7 @@ for(const tour of data.tours){
 }
 for(const pageSlug of tours){
 	
-	pageClass = new Page();
+	pageClass = new Tours();
 
 	const pageItem = {
 		slug: pageSlug,
@@ -77,7 +78,7 @@ for(const pageSlug of tours){
 
 // ------------------------------------------ Guided Experiences
 
-for(const page of data.guidedExperiencesTours){
+for(const page of data.guidedExperiencesTours){	
 
 	pageClass = new GuidedExperienceTour();
 
@@ -116,7 +117,7 @@ export const historyLinksEventListener = () => {
 			
 			link.addEventListener('click', (e) => {				
 				e.preventDefault();
-				e.stopPropagation();
+				e.stopPropagation();				
 				onChange(link.getAttribute('href'));
 			});
 		}
@@ -152,6 +153,9 @@ export const historyInit = () => {
 
 export const onChange = (url:string = window.location.pathname) => {		
 
+	console.log(url, PAGES);
+	
+
 	// CHECK IF PAGE IS LOADING
 	if(TRANSITIONS.inProgress){
 		console.log('Page transition already in progress');
@@ -159,13 +163,14 @@ export const onChange = (url:string = window.location.pathname) => {
 	}
 
 	// GET PAGE
-	const slug = replaceAll("/", "", url);
-	
-	
+	let slug = url;
+	if(slug.charAt(0) === '/') slug = slug.substring(1);
+	if(slug.charAt(slug.length - 1) === '/') slug = slug.substring(0, slug.length - 1);
+
 	if(slug === LOCATION.current.slug) return;
 
 	LOCATION.previous = LOCATION.current;
-	LOCATION.current = PAGES.find(page => page.slug === slug);	
+	LOCATION.current = PAGES.find(page => page.slug === slug);		
 
 	// IF PAGE IS LOADED
 	if(LOCATION.current.class.loaded){
@@ -173,8 +178,8 @@ export const onChange = (url:string = window.location.pathname) => {
 		LOCATION.current.class.prepare();
 		
 	// OR LOAD PAGE
-	} else {		
-		get(url).then(response => {
+	} else {				
+		get('/' + slug).then(response => {
 			onRequestNotLoaded(response) 
 		})
 	}
