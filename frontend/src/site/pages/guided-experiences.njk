@@ -12,14 +12,27 @@ eleventyComputed:
   
 {% from 'ui/button.njk' import button as button %}
 
-<div class="guided-experiences-list">
-  <h1>{{ guidedExperiences.title }}</h1>
+<h1>{{ guidedExperiences.title }}</h1>
 
-  {% for tour in tours %}
-    <a href="{{ '/' | url }}{{ tour.slug }}">
-      <h3>{{ tour.title }}</h3>
-    </a>
-  {% endfor %}
+{% for tour in tours %}
+  <a href="{{ '/' | url }}{{ tour.slug }}">
+    <h3>{{ tour.title }}</h3>
+    <div class="image" style="background-image: url(https://picsum.photos/300/200);">
+      <svg viewBox="0 0 48 66" xml:space="preserve">
+        <path d="M48,66L48,66L24,56L0,66V0h48V66z"/>
+        <text transform="matrix(1 0 0 1 24 40)" dominant-baseline="middle" text-anchor="middle">Tours</text>
+        <text class="num" transform="matrix(1 0 0 1 24 20)" dominant-baseline="middle" text-anchor="middle">7</text>
+      </svg>
+
+    </div>
+  </a>
+{% endfor %}
+
+<div class="buttons__wrapper">
+
+  {{ button('guided-experiences-button', 'Back to main screen') }}
 
 </div>
+
+
 

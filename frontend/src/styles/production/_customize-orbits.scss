@@ -9,6 +9,9 @@
 	align-items: center;
 	flex-direction: column;
 
+	height: 100vh;
+	overflow-y: auto;
+
 	@include desktop {
 		justify-content: center;
 	}

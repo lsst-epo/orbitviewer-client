@@ -1,10 +1,10 @@
 import { DEV } from "../../common/core/Globals";
 import { CustomizeOrbits } from "../pages/CustomizeOrbits";
+import { GuidedExperiences } from "../pages/GuidedExperiences";
 import { GuidedExperienceTour } from "../pages/GuidedExperienceTour";
 import { Landing } from "../pages/Landing";
 import { OrbitViewer } from "../pages/OrbitViewer";
 import { Page } from "../pages/Page";
-import { Tour } from "../pages/Tour";
 import { get } from "../utils/Ajax";
 import { replaceAll } from "../utils/ReplaceAll";
 import { TRANSITIONS, TriggerTransition } from "./TransitionManager";
@@ -41,7 +41,7 @@ for(const pageSlug of tempPages){
 	} else if(pageSlug === 'orbit-viewer'){
 		pageClass = new OrbitViewer();
 	} else if(pageSlug === 'guided-experiences'){
-		pageClass = new Page();
+		pageClass = new GuidedExperiences();
 	} else {
 		pageClass = new Page();
 	}
@@ -63,7 +63,7 @@ for(const tour of data.tours){
 }
 for(const pageSlug of tours){
 	
-	pageClass = new Tour();
+	pageClass = new Page();
 
 	const pageItem = {
 		slug: pageSlug,
@@ -130,7 +130,6 @@ export const historyInit = () => {
 	const page = PAGES.find(page => page.slug === path);	
 
 	LOCATION.current = page;
-	console.log(document.querySelector('.page__content'));
 	
 	page.class.dom = document.querySelector('.page__content');	
 	page.template = page.class.dom.getAttribute('data-template');

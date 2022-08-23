@@ -1,0 +1,104 @@
+
+[data-template="guided-experiences"] {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+
+	padding: 18px;
+
+	background-color: var(--black-0);
+
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-direction: column;
+
+	height: 100vh;
+	overflow-y: auto;
+
+	@include desktop {
+		padding: 60px;
+	}
+
+	h1 {
+		font-size: 1.2rem;
+		text-transform: uppercase;
+		letter-spacing: 0.7rem;
+		text-align: center;
+	}
+
+	a {
+		margin: 30px 0 0 0;
+		width: 100%;
+		max-width: 320px;
+		text-align: center;	
+
+		@include desktop {
+			margin: 110px 0 0 0;
+			max-width: 700px;
+		}
+	}
+
+	h3 {
+		font-weight: 900;
+		font-size: 1.2rem;
+		margin: 0 0 15px 0;
+
+		@include desktop {
+			font-size: 1.4rem;
+		}
+	}
+
+	.image {
+		border: 1px solid var(--red-0);
+		border-radius: 15px;
+		width: 100%;
+
+		background-position: center;
+		background-size: cover;
+
+		@include aspect-ratio(16,9);
+	}
+
+	svg {
+		position: absolute;
+		top: 0;
+		right: 7%;
+		width: 20%;
+		max-width: 100px;
+
+		@include desktop {
+			max-width: 50px;
+			right: 5%;
+		}
+
+		path {
+			fill: var(--red-0);
+		}
+
+		text {
+			fill: var(--white-0);
+			font-size: 01rem;
+			font-weight: 100;
+
+			&.num {
+				font-size: 1.2rem;
+				font-weight: 900;
+			}
+		}
+	}
+
+
+	.buttons__wrapper {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+		margin: 100px 0 0 0;
+
+		@include desktop {
+			width: 520px;
+		}
+	}
+
+}
