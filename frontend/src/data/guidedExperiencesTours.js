@@ -16,7 +16,8 @@ async function getPage() {
 					title,
 					slug
 				},
-				comingSoon
+				comingSoon,
+				complexity
 			}
 		}
 	}`;

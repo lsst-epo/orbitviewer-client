@@ -1,0 +1,50 @@
+
+
+.tours-filters {
+	width: 100%;
+
+	border-bottom: 1px solid var(--white-2);
+
+	padding: 15px 0;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		width: 33.33%;
+
+		cursor: pointer;
+	}
+
+	svg {
+		width: 18px;
+		margin-right: 10px;
+	}
+
+	.sort-button,
+	.filter-button {
+		path {
+			stroke: var(--white-0);
+			stroke-width: 3;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+	}
+
+	.search-button {
+		path {
+			fill: var(--white-0);
+		}
+	}
+
+	.search-button {
+		.active-search {
+			display: none;
+		}
+	}
+}
