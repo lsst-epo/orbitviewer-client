@@ -17,7 +17,23 @@ async function getPage() {
 					slug
 				},
 				comingSoon,
-				complexity
+				complexity,
+				flexible {
+					... on flexible_backgroundSlide_BlockType {
+							slideTitle
+							subTitle
+							slideContent
+							thumbnail
+					}
+					... on flexible_imageSlide_BlockType {
+							slideTitle
+							subTitle
+							slideContent
+					}
+					... on flexible_funFactSlide_BlockType {
+							slideContent
+					}
+				}
 			}
 		}
 	}`;
