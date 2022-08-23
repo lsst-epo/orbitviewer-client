@@ -15,7 +15,8 @@ async function getPage() {
 				tourPicker {
 					title,
 					slug
-				}
+				},
+				comingSoon
 			}
 		}
 	}`;

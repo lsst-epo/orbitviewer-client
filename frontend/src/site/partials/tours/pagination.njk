@@ -1,0 +1,27 @@
+{% set prev = 0 %}
+{% set next = 0 %}
+
+{% for tourItem in tours %}
+
+  {% if tour == tourItem %}
+    {% set current = loop.index0 %}
+    {% set prev = loop.index0 - 1 %}
+    {% set next = loop.index0 + 1 %}
+    {% if prev < 0 %}
+      {% set prev = loop.length - 1 %}
+    {% endif %}
+    {% if next >= loop.length %}
+      {% set next = 0 %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% set prev = tours[prev] %}
+{% set next = tours[next] %}
+
+<a href="{{ prev.slug }}" class="prev tour-pagination">
+	chev
+</a>
+<a href="{{ next.slug }}" class="next tour-pagination">
+	chev
+</a>

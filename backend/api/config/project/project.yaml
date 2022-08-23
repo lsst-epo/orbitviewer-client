@@ -1,4 +1,4 @@
-dateModified: 1661185785
+dateModified: 1661243920
 email:
   fromEmail: $EMAIL_FROM_ADDRESS
   fromName: $EMAIL_SENDER_NAME
@@ -33,6 +33,7 @@ meta:
     5ca18cb3-5a7b-4764-9e18-fc24b4cecc14: Flag # Flag
     06f925f8-298e-494b-bff7-6fe8024c0859: Frontend # Frontend
     8ccd6c1c-8e9b-44e8-93a9-f62589fb4819: 'Site Information' # Site Information
+    8e3c01b6-fbcb-466f-9335-925f168e8b40: 'Coming Soon' # Coming Soon
     8fff3c50-28ba-4af7-8166-e3d82a23ae26: Title # Title
     9ad13bcd-637a-4757-9968-cdcc02cfd478: 'Table Row' # Table Row
     9ad945a2-a807-403c-aec6-ef28c7849b73: 'Landing Logo' # Landing Logo

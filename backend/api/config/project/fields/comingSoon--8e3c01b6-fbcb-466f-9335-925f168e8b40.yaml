@@ -1,0 +1,24 @@
+columnSuffix: hvuwrjhp
+contentColumnType: text
+fieldGroup: 3c4d26f3-4aa2-48fd-8dd8-400929f9210e # Tours
+handle: comingSoon
+instructions: ''
+name: 'Coming Soon'
+searchable: false
+settings:
+  multi: true
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - 'Coming Soon'
+        -
+          - value
+          - comingSoon
+        -
+          - default
+          - ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Checkboxes

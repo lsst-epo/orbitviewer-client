@@ -7,10 +7,46 @@ pagination:
   size: 1
 permalink: "{{ tour.slug | slug }}/"
 ---
+
+{% from 'ui/button.njk' import button as button %}
+
 {# 
 eleventyComputed:
 title: "{{ project.seo.title }}"
 description: "{{ project.seo.description }}"
 image: "{{ project.seo.seo_image }}" #}
 
-{{ tour | dump | safe}}
+
+<div class="tours-header">
+  <h1>Guided experiences</h1>
+  <h3>{{ tour.title }}</h3>
+  {% include "tours/pagination.njk" %}  
+</div>
+
+<div class="tours-filters">
+  <button class="sort-button">
+    <p>Sort by</p>
+  </button>
+  <button class="filter-button">
+    <p>Filter</p>
+  </button>
+  <button class="search-button">
+    <p>Search</p>
+    <input type="text" name="tour-search">
+    <label for="tour-search">Search</label>
+  </button>
+</div>
+
+{# ACTIVE TOURS #}
+<div class="tours-list">
+  {% include "tours/loop.njk" %}
+</div>
+
+{# CONMING SOON TOURS #}
+{# <div class="tours-list tours-coming-soon">
+  {% include "tours/loop.njk" %}
+</div> #} 
+
+<div class="buttons__wrapper">
+  {{ button('tours-button', 'Back to guided experiences') }}
+</div>

@@ -1,0 +1,13 @@
+{% for experience in guidedExperiencesTours %}
+
+	{% if experience.comingSoon == 'comingSoon' %}
+
+		{% if experience.tourPicker[0].slug == tour.slug %}
+
+				{% include "tours/preview.njk" %}
+
+		{% endif %}
+
+	{% endif %} 
+
+{% endfor %}
