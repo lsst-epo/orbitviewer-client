@@ -9,6 +9,8 @@ permalink: "{{ tour.slug | slug }}/"
 ---
 
 {% from 'ui/button.njk' import button as button %}
+{% from 'tours/loop.njk' import loop as loop %}
+
 
 {# 
 eleventyComputed:
@@ -67,14 +69,15 @@ image: "{{ project.seo.seo_image }}" #}
 
 {# ACTIVE TOURS #}
 <div class="tours-list">
-  {% include "tours/loop.njk" %}
+  {{ loop(guidedExperiencesTours, tour ) }}
 </div>
 
 {# CONMING SOON TOURS #}
 <div class="tours-list tours-coming-soon">
-  {% include "tours/loop.njk" %}
+  <p>Coming soon</p>
+  {{ loop(guidedExperiencesTours, tour, true) }}
 </div>
 
-<div class="buttons__wrapper">
+<div class="tours-button buttons__wrapper">
   {{ button('tours-button', 'Back to guided experiences') }}
 </div>

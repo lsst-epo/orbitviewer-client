@@ -1,13 +1,37 @@
-{% for experience in guidedExperiencesTours %}
+{% macro loop(guidedExperiencesTours, tour, comingSoon = false) %}
 
-	{% if experience.comingSoon == 'comingSoon' %}
+{% if comingSoon %}
 
-		{% if experience.tourPicker[0].slug == tour.slug %}
+	{% for experience in guidedExperiencesTours %}
 
-				{% include "tours/preview.njk" %}
+		{% if experience.comingSoon == 'comingSoon'%} 
 
-		{% endif %}
+			{% if experience.tourPicker[0].slug == tour.slug %}
 
-	{% endif %} 
+					{% include "tours/preview.njk" %}
 
-{% endfor %}
+			{% endif %}
+
+		{% endif %} 
+
+	{% endfor %}
+
+{% else %}
+
+	{% for experience in guidedExperiencesTours %}
+
+		{% if experience.comingSoon != 'comingSoon'%} 
+
+			{% if experience.tourPicker[0].slug == tour.slug %}
+
+					{% include "tours/preview.njk" %}
+
+			{% endif %}
+
+		{% endif %} 
+
+	{% endfor %}
+
+{% endif %}
+
+{% endmacro %}
