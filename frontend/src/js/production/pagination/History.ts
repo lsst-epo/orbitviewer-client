@@ -107,7 +107,13 @@ export const historyLinksEventListener = () => {
 	const hostname = window.location.hostname;
 	
 	for(const link of links){
-		if (link.href.indexOf(hostname) || !link.hasAttribute('target')) {			
+
+		if(link.hasAttribute('data-onchange')) continue;
+
+		if (link.href.indexOf(hostname) || !link.hasAttribute('target')) {	
+			
+			link.setAttribute('data-onchange', 'true');
+			
 			link.addEventListener('click', (e) => {				
 				e.preventDefault();
 				e.stopPropagation();
@@ -186,7 +192,7 @@ const onRequest = () => {
 	document.body.classList.add(`page__${LOCATION.current.template}`);
 	
 	// RESET LOCATION
-	// Posar popstate a true si es event amb els next-prev del browser
+	historyLinksEventListener();
 	TriggerTransition(LOCATION.popstate);
 	LOCATION.popstate = false;
 }
