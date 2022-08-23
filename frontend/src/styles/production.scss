@@ -1,19 +1,25 @@
+
+// Generic
 @import './common/partials/resets';
 @import './common/partials/mixins';
 @import './common/indexes';
 @import './common/canvas';
 
+// Vars - fonts 
 @import './production/partials/vars';
 @import './production/partials/fonts';
 
+// UI
 @import './production/ui/buttons';
 @import './production/ui/categories-filter';
 @import './production/ui/share-buttons';
 
+// Full pages
 @import './production/landing';
 @import './production/customize-orbits';
 @import './production/guided-experiences';
 
+// Orbit viewer
 @import './production/ui/orbit-viewer/panel';
 @import './production/ui/orbit-viewer/navigation';
 @import './production/ui/orbit-viewer/back-button';
@@ -25,9 +31,14 @@
 @import './production/ui/orbit-viewer/time-picker';
 @import './production/ui/orbit-viewer/orbit-controls';
 
+// Orbit viewer expendable items 
 @import './production/ui/expandable-items/expandable-items';
 @import './production/ui/expandable-items/expandable-item';
 
+// Tours list page
+@import './production/tours/tours-header';
+@import './production/tours/tours-filters';
+@import './production/tours/tours-previews';
 
 main {
 	z-index: $mainContentIndex;
