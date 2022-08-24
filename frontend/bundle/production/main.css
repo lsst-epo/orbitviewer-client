@@ -1654,6 +1654,20 @@ main {
   overflow: hidden;
 }
 
+body {
+  background-color: var(--black-0);
+}
+
 .to-front, .active.customize-view {
   z-index: 14;
+}
+
+.view {
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 0.3s;
+}
+
+.page__orbit-viewer .view {
+  opacity: 1;
 }
