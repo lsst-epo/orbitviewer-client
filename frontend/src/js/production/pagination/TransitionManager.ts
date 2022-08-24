@@ -41,7 +41,7 @@ export const TriggerTransition = (skip:boolean = false) => {
 
 const InitialFadeIn = (skip:boolean = false) => {
 	gsap.to(['html', '.page__content'], {
-		duration: 0.5,
+		duration: 0.2,
 		autoAlpha: 1,
 		ease: 'power1.inOut',
 		onComplete: () => {
@@ -54,7 +54,7 @@ const DefaultTransition = () => {
 	const tl = gsap.timeline({
 		paused: true,
 		defaults: {
-			duration: 0.3,
+			duration: 0.2,
 			ease: 'power1.inOut',
 		},
 		onComplete: () => {

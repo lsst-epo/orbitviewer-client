@@ -67,12 +67,10 @@ body {
 
 .view {
 	opacity: 0;
-
-	transition-property: opacity;
-	transition-duration: 0.3s;
 }
 
-.page__orbit-viewer {
+.page__orbit-viewer,
+.page__guided-experiences-tours {
 	
 	.view {
 		opacity: 1;
