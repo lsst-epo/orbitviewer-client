@@ -28,6 +28,21 @@
 
 	text-align: center;
 
+	.center-content {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+		width: 100%;
+
+		padding: 20px;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
 	h3 {
 		font-size: 1.6rem;
 		font-weight: 900;
@@ -104,4 +119,30 @@
 
 }
 
+
+// Buttons
+[data-slide="initialSlide"]{
+	.buttons__wrapper {
+		display: flex;
+		justify-content: center;
+		flex-grow: 1;
+		align-items: flex-end;
+
+		padding-top: 50px;
+
+		width: 100%;
+
+		@include desktop {
+			width: 520px;
+		}
+
+		button {
+			margin: 0 9px 0 0;
+
+			&:last-of-type {
+				margin: 0 0 0 9px;
+			}
+		}
+	}
+}
 

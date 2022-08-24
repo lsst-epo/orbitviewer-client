@@ -7,6 +7,10 @@ pagination:
   size: 1
 permalink: "{{ experience.tourPicker[0].slug + '/' + experience.slug | slug }}/"
 ---
+
+{% from 'ui/button.njk' import button as button %}
+
+
 {# 
 eleventyComputed:
 title: "{{ project.seo.title }}"
@@ -15,20 +19,29 @@ image: "{{ project.seo.seo_image }}" #}
 
 <section class="active" data-slide="initialSlide" data-slide-index="0">
   
-    <h3>{{ experience.title }}</h3>
+    <div class="center-content">
+      <h3>{{ experience.title }}</h3>
 
-    <div class="sub-text">
-      {# TODO missing icon #}
-      <div class="duration">
-        <h4>Duration</h4>
-        <p>5m</p>
-      </div>
+      <div class="sub-text">
+        {# TODO missing icon #}
+        <div class="duration">
+          <h4>Duration</h4>
+          <p>5m</p>
+        </div>
 
-      <div class="complexity">
-        <h4>Complexity</h4>
-        <div class="{{ 'active' if experience.complexity >= 1 }}"></div><div class="{{ 'active' if experience.complexity >= 2 }}"></div><div class="{{ 'active' if experience.complexity >= 3 }}"></div><div class="{{ 'active' if experience.complexity >= 4 }}"></div><div class="{{ 'active' if experience.complexity >= 5 }}"></div>
-        <p>{% if experience.complexity < 3 %}Easy{% else %}Hard{% endif %}</p>
+        <div class="complexity">
+          <h4>Complexity</h4>
+          <div class="{{ 'active' if experience.complexity >= 1 }}"></div><div class="{{ 'active' if experience.complexity >= 2 }}"></div><div class="{{ 'active' if experience.complexity >= 3 }}"></div><div class="{{ 'active' if experience.complexity >= 4 }}"></div><div class="{{ 'active' if experience.complexity >= 5 }}"></div>
+          <p>{% if experience.complexity < 3 %}Easy{% else %}Hard{% endif %}</p>
+        </div>
       </div>
+    </div>
+
+    <div class="buttons__wrapper">
+
+      {{ button('initialSlide-0-prev', 'Back') }}
+      {{ button('initialSlide-0-next', "Let's start") }}
+
     </div>
 
 </section>
@@ -37,6 +50,15 @@ image: "{{ project.seo.seo_image }}" #}
 
   <section data-slide="{{ slide.typeHandle }}" data-slide-index="{{ loop.index }}">
     {{ slide | dump | safe}}
+
+
+    <div class="buttons__wrapper">
+      
+      {% if slide.typeHandle == 'defaultSlide' %}{{ button( slide.typeHandle + '-' + loop.index + 'share', 'Share') }}{% endif %}
+      {{ button( slide.typeHandle + '-' + loop.index + 'prev', 'Back') }}
+      {{ button( slide.typeHandle + '-' + loop.index + 'next', 'Next') }}
+
+    </div>
   </section>
 
 {% endfor %}
