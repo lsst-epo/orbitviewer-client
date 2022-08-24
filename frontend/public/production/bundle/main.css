@@ -1660,6 +1660,7 @@ body[data-search-state="2"] .search-cancel {
 [data-slide=initialSlide] {
   background-size: cover;
   background-position: center;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1667,7 +1668,7 @@ body[data-search-state="2"] .search-cancel {
   text-align: center;
 }
 [data-slide=initialSlide] h3 {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 900;
   margin-bottom: 20px;
 }
