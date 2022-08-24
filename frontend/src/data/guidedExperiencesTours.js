@@ -19,18 +19,21 @@ async function getPage() {
 				comingSoon,
 				complexity,
 				flexible {
-					... on flexible_backgroundSlide_BlockType {
+					... on flexible_introSlide_BlockType {
+							typeHandle
 							slideTitle
 							subTitle
 							slideContent
 							thumbnail
 					}
-					... on flexible_imageSlide_BlockType {
+					... on flexible_defaultSlide_BlockType {
+							typeHandle
 							slideTitle
 							subTitle
 							slideContent
 					}
 					... on flexible_funFactSlide_BlockType {
+							typeHandle
 							slideContent
 					}
 				}

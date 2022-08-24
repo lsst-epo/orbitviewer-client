@@ -13,4 +13,30 @@ title: "{{ project.seo.title }}"
 description: "{{ project.seo.description }}"
 image: "{{ project.seo.seo_image }}" #}
 
-{{ experience | dump | safe}}
+<section class="active" data-slide="initialSlide" data-slide-index="0">
+  
+    <h3>{{ experience.title }}</h3>
+
+    <div class="sub-text">
+      {# TODO missing icon #}
+      <div class="duration">
+        <h4>Duration</h4>
+        <p>5m</p>
+      </div>
+
+      <div class="complexity">
+        <h4>Complexity</h4>
+        <div class="{{ 'active' if experience.complexity >= 1 }}"></div><div class="{{ 'active' if experience.complexity >= 2 }}"></div><div class="{{ 'active' if experience.complexity >= 3 }}"></div><div class="{{ 'active' if experience.complexity >= 4 }}"></div><div class="{{ 'active' if experience.complexity >= 5 }}"></div>
+        <p>{% if experience.complexity < 3 %}Easy{% else %}Hard{% endif %}</p>
+      </div>
+    </div>
+
+</section>
+
+{% for slide in experience.flexible %}
+
+  <section data-slide="{{ slide.typeHandle }}" data-slide-index="{{ loop.index }}">
+    {{ slide | dump | safe}}
+  </section>
+
+{% endfor %}

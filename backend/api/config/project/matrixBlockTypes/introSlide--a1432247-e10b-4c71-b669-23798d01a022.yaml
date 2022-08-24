@@ -118,6 +118,6 @@ fields:
     translationKeyFormat: null
     translationMethod: none
     type: craft\fields\Lightswitch
-handle: backgroundSlide
-name: 'Background Slide'
-sortOrder: 1
+handle: introSlide
+name: 'Intro Slide'
+sortOrder: 2

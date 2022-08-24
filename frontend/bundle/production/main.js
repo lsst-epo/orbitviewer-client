@@ -24747,6 +24747,7 @@
   var OrbitViewer;
   var init_OrbitViewer = __esm({
     "src/js/production/pages/OrbitViewer.ts"() {
+      init_History();
       init_Search();
       init_ExpandableItems();
       init_Page();
@@ -24770,6 +24771,9 @@
           const btn = wrapper.querySelector(".customize-view-icon");
           btn.addEventListener("click", () => {
             wrapper.classList.toggle("active");
+          });
+          this.dom.querySelector(".back-button button").addEventListener("click", () => {
+            onChange("/");
           });
           document.addEventListener("keydown", (e) => {
             if (e.key != "Escape")

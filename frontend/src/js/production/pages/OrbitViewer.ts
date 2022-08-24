@@ -1,3 +1,4 @@
+import { onChange } from "../pagination/History";
 import { Search } from "../partials/Search";
 import { enableExpandableItem, expandableItems, initExpandableItems } from "../ui/expandable-items/ExpandableItems";
 import { Page } from "./Page";
@@ -37,6 +38,10 @@ export class OrbitViewer extends Page {
 		const btn = wrapper.querySelector('.customize-view-icon');
 		btn.addEventListener('click', () => {
 			wrapper.classList.toggle('active');
+		})
+
+		this.dom.querySelector('.back-button button').addEventListener('click', () => {
+			onChange('/');
 		})
 
 		document.addEventListener('keydown', (e) => {			

@@ -94,6 +94,6 @@ fields:
     translationKeyFormat: null
     translationMethod: language
     type: craft\fields\PlainText
-handle: imageSlide
+handle: defaultSlide
 name: 'Default Slide'
-sortOrder: 2
+sortOrder: 1

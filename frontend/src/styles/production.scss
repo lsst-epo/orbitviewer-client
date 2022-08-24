@@ -41,6 +41,9 @@
 @import './production/tours/tours-previews';
 @import './production/tours/tours-button';
 
+// Experiences
+@import './production/experiences/slides';
+
 main {
 	z-index: $mainContentIndex;
 
