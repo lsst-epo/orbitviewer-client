@@ -49,7 +49,34 @@ image: "{{ project.seo.seo_image }}" #}
 {% for slide in experience.flexible %}
 
   <section data-slide="{{ slide.typeHandle }}" data-slide-index="{{ loop.index }}">
-    {{ slide | dump | safe}}
+    
+    {% if slide.typeHandle == 'introSlide' or slide.typeHandle == 'funFactSlide' %}
+
+        <div class="media">
+          {% if slide.typeHandle == 'introSlide' %}
+            <div class="thumb" style="background-image: url(https://picsum.photos/300/300); "></div>
+          {% else %}
+            <div class="icon"></div>
+          {% endif %}
+        </div>
+
+        <div class="content">
+          {% if slide.slideTitle %}
+            <h3>{{ slide.slideTitle }}</h3>
+          {% else %}
+            <h3>Fun Fact</h3>
+          {% endif %}
+          {% if slide.subTitle %}<h4>{{ slide.subTitle }}</h4>{% endif %}
+          <p>{{ slide.slideContent }}</p>
+        </div>
+
+    {% else %}
+        <div class="content">
+          <h4>{{ slide.subTitle }}</h4>
+          <h3>{{ slide.slideTitle }}</h3>
+          <p>{{ slide.slideContent }}</p>
+        </div>
+    {% endif %}
 
 
     <div class="buttons__wrapper">

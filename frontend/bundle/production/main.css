@@ -1729,32 +1729,123 @@ body[data-search-state="2"] .search-cancel {
   background-color: var(--white-0);
 }
 
-[data-slide=introSlide] {
-  background-color: var(--teal-0);
+[data-slide=introSlide],
+[data-slide=funFactSlide],
+[data-slide=defaultSlide] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+[data-slide=introSlide] .content,
+[data-slide=funFactSlide] .content,
+[data-slide=defaultSlide] .content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 0 30px 30px;
+}
+[data-slide=introSlide] .content h3,
+[data-slide=funFactSlide] .content h3,
+[data-slide=defaultSlide] .content h3 {
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 5px;
+}
+[data-slide=introSlide] .content h4,
+[data-slide=funFactSlide] .content h4,
+[data-slide=defaultSlide] .content h4 {
+  font-weight: 900;
+  font-size: 0.9rem;
+}
+[data-slide=introSlide] .content p,
+[data-slide=funFactSlide] .content p,
+[data-slide=defaultSlide] .content p {
+  margin-top: 40px;
+  font-weight: 100;
+  font-size: 1rem;
 }
 
+[data-slide=introSlide],
 [data-slide=funFactSlide] {
-  background-color: var(--teal-0);
+  padding: 20px;
+  background-color: var(--teal-2);
+}
+[data-slide=introSlide] .icon,
+[data-slide=funFactSlide] .icon {
+  width: 65px;
+  height: 65px;
+  border-radius: 100%;
+  background-color: var(--white-0);
+}
+[data-slide=introSlide] .thumb,
+[data-slide=funFactSlide] .thumb {
+  width: 120px;
+  height: 120px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 100%;
+}
+[data-slide=introSlide] .media,
+[data-slide=funFactSlide] .media {
+  flex-grow: 2;
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  justify-content: center;
+  padding: 0 20px 20px;
+}
+
+[data-slide=funFactSlide] .media {
+  justify-content: flex-start;
+}
+
+[data-slide=defaultSlide] .content {
+  padding: 50px;
+  flex-grow: 1;
 }
 
 [data-slide=initialSlide] .buttons__wrapper {
+  flex-grow: 1;
+}
+
+[data-slide=initialSlide] .buttons__wrapper,
+[data-slide=introSlide] .buttons__wrapper,
+[data-slide=funFactSlide] .buttons__wrapper {
   display: flex;
   justify-content: center;
-  flex-grow: 1;
   align-items: flex-end;
   padding-top: 50px;
   width: 100%;
 }
 @media only screen and (min-width: 1025px) {
-  [data-slide=initialSlide] .buttons__wrapper {
+  [data-slide=initialSlide] .buttons__wrapper,
+[data-slide=introSlide] .buttons__wrapper,
+[data-slide=funFactSlide] .buttons__wrapper {
     width: 520px;
   }
 }
-[data-slide=initialSlide] .buttons__wrapper button {
+[data-slide=initialSlide] .buttons__wrapper button,
+[data-slide=introSlide] .buttons__wrapper button,
+[data-slide=funFactSlide] .buttons__wrapper button {
   margin: 0 9px 0 0;
 }
-[data-slide=initialSlide] .buttons__wrapper button:last-of-type {
+[data-slide=initialSlide] .buttons__wrapper button:last-of-type,
+[data-slide=introSlide] .buttons__wrapper button:last-of-type,
+[data-slide=funFactSlide] .buttons__wrapper button:last-of-type {
   margin: 0 0 0 9px;
+}
+
+[data-slide=defaultSlide] .buttons__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+}
+@media only screen and (min-width: 1025px) {
+  [data-slide=defaultSlide] .buttons__wrapper {
+    width: 520px;
+  }
 }
 
 main {
