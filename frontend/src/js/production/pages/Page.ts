@@ -29,13 +29,19 @@ export class Page {
 
 	load(resolve){				
 		this.loaded = true;	
+		this.onLoaded();
 		this.addEventListeners();
+
 		
 		new Inputs(this.dom);
 		this.panels = new Panels(this.dom);
 
 
 		this.enable(resolve);
+	}
+
+	onLoaded(){
+
 	}
 
 	addEventListeners(){
