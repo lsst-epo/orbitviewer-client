@@ -1,14 +1,14 @@
-# Vera Rubin – OrbitViewer
-This repo contains the structure of a FiL's toolkit instance for Vera Rubin's OrbitViewer front-end. 
+# FiL's Toolkit - Boilerplate
+This repo contains the structure of a FiL's toolkit instance. This repo is aiming at a minimum "skeleton" of the App + core server functonalities for handlig users and files.
 
 [Check this page](https://eduprtas.notion.site/Setting-up-an-ubuntu-VM-instance-from-scratch-d33174b55d9c412bad04e6a3280b26fc) for quick how-to on setting up a new virtual ubuntu machine.
 
 ## App Structure
-`CoreApp` is a WebGL App. The structure goes as follows:
+We are assuming `CoreApp` is a WebGL App. The structure goes as follows:
 
 1. `CoreApp`: Core functionalities of the app that you want to have in both editor and production mode.
 2. `EditorApp`: Editor instance of the App. This is the one where users can log in and manage contents and settings.
-3. `ProductionApp`: Production instance of the App. The main web app of the OrbitViewer.
+3. `ProductionApp`: Production instance of the App. The main of our installation, website or application.
 
 *Note: In some cases we might have a SimulatorApp as well, i.e. for installation projects.*
 

@@ -5,6 +5,7 @@
 
 	button {
 		padding: 10px;
+		cursor: pointer;
 
 		@include desktop {
 			padding: 10px 20px;
