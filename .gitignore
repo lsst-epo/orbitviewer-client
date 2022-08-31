@@ -138,8 +138,8 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/osx,node,linux,windows,visualstudiocode
 
 # custom files
-bundle
-public
+# bundle
+# public
 backups
 
 */.DS_Store
