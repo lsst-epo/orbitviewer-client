@@ -1,15 +1,56 @@
 import { WebGLSketch } from "@jocabola/gfx";
-import { CircleBufferGeometry, Mesh, MeshBasicMaterial, PlaneBufferGeometry } from "three";
-import { DemoType, ShapeType } from "../../editor/ui/sets/GlobalSettings";
+import { io } from "@jocabola/io";
+import { AmbientLight, Group, Mesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PointLight, SphereBufferGeometry } from "three";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
+import { initSunMaterial } from "../gfx/ShaderLib";
+import { initShaders } from "../gfx/shaders";
+import { VFXRenderer } from "../gfx/VFXRenderer";
+import { Planet } from "../solar/Planet";
+import { SolarClock } from "../solar/SolarClock";
+import { SolarParticles } from "../solar/SolarParticles";
+import { OrbitElements } from "../solar/SolarSystem";
+import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
+import { SunLightHelper } from "../solar/SunLightHelper";
+import { SunParticles } from "../solar/SunParticles";
 
-const CIRCLE_GEO = new CircleBufferGeometry(.5, 64);
-const RECT_GEO = new PlaneBufferGeometry(1, 1);
-const TRI_GEO = new CircleBufferGeometry(.5, 3);
+const GEO = new SphereBufferGeometry(1, 32, 32);
+
+const SETTINGS = {
+	speed: 50,
+	playing: true,
+	lastElapsedTime: 0,
+	backwards: false
+}
+
+const data = new Array<OrbitElements>();
+const dummy = new Object3D();
+
+const FILES = ["iso_elems.json", "parabolic_elems_simulated.json", "solarsystem_full_elems_100k.json"];
+const PLANETS = "planet_elems.json";
+const DWARF_PLANETS = "dwarf_planet_elems.json";
 
 export class CoreApp extends WebGLSketch {
-    mesh:Mesh;
+    controls:OrbitControls;
+    particles:SolarParticles;
+
+    solarClock:SolarClock;
+
+    planets:Group = new Group();
+    dwarfPlanets:Group = new Group();
+
+    planetPaths:Group = new Group();
+    dwarfPlanetPaths:Group = new Group();
+
+    sunLight:PointLight;
+    sunLightHelper:SunLightHelper;
+
+    ambientLight:AmbientLight;
+
+    vfx:VFXRenderer;
+    sun:Mesh;
+    sunParticles:SunParticles;
 
     constructor() {
         super(window.innerWidth, window.innerHeight, {
@@ -20,55 +61,93 @@ export class CoreApp extends WebGLSketch {
         document.body.appendChild(this.domElement);
         this.domElement.classList.add('view');
 
-        this.mesh = new Mesh(
-            RECT_GEO,
-            new MeshBasicMaterial({
-                color: 0xff0000
-            })
-        );
-
-        this.scene.add(this.mesh);
-
         this.camera.position.z = 5;
 
         window.addEventListener('resize', () =>{
             this.resize(window.innerWidth, window.innerHeight);
         });
 
+        initShaders();
+
+        this.vfx = new VFXRenderer(this.renderer, window.innerWidth, window.innerHeight);
+
+        const sun = new Mesh(
+            GEO,
+            initSunMaterial(
+                new MeshPhongMaterial({
+                    emissive: 0xff6600,
+                    emissiveIntensity: 1.5
+                })
+            )
+        );
+
+        sun.scale.setScalar(.05);
+
+        this.scene.add(sun);
+        this.sun = sun;
+        // this.renderer.physicallyCorrectLights = true;
+
+        this.sunParticles = new SunParticles(sun.scale.x+.006, sun.scale.x * .15);
+        this.scene.add(this.sunParticles.mesh);
+
+        this.scene.add(this.planets);
+        this.scene.add(this.dwarfPlanets);
+
+        this.scene.add(this.planetPaths);
+        this.scene.add(this.dwarfPlanetPaths);
+
+        this.particles = new SolarParticles(this.renderer);
+        this.scene.add(this.particles.mesh);
+
+        this.sunLight = new PointLight(0xffffff, 1, 400, 2);
+        this.scene.add(this.sunLight);
+        this.sunLightHelper = new SunLightHelper(this.sunLight, 0x999900, 0xcc0000);
+        this.sunLightHelper.visible = false;
+        this.scene.add(this.sunLightHelper);
+
+        this.ambientLight = new AmbientLight(0xffffff, 0.13);
+        this.scene.add(this.ambientLight);
+
         console.log('Core App init');
-        
-        loadData(()=> {
-            this.onDataLoaded();
+
+        io.load(`assets/data/${PLANETS}`, (res) => {
+            const d = JSON.parse(res)
+            this.createPlanets(d);
+
+            io.load(`assets/data/${DWARF_PLANETS}`, (res) => {
+                const d = JSON.parse(res);
+                this.createDwarfPlanets(d);
+
+                let loaded = 0;
+                for(const file of FILES) {
+                    io.load(`assets/data/${file}`, (res) => {
+                        const d = JSON.parse(res)
+
+                        this.buildSimWithData(d, true);
+                        loaded++;
+
+                        if(loaded === FILES.length) {
+                            loadData(()=> {
+                                this.onDataLoaded();
+                            });
+                        }
+                    });
+                }
+            });
+
         });
     }
 
-    updateMeshSettings(data:DemoType) {
-        this.mesh.material['color'].set(data.color);
-
-        const pos = data.position;
-        this.mesh.position.set(pos.x, pos.y, pos.z);
-
-        const scl = data.scale;
-        this.mesh.scale.set(scl.x, scl.y, 1);
-
-        switch(data.type) {
-            case ShapeType.TRIANGLE:
-                this.mesh.geometry = TRI_GEO;
-                break;
-            case ShapeType.RECTANGLE:
-                this.mesh.geometry = RECT_GEO;
-                break;
-            case ShapeType.CIRCLE:
-                this.mesh.geometry = CIRCLE_GEO;
-                break;
-        }
-    }
+    resize(width: number, height: number): void {
+		super.resize(width, height);
+		this.vfx.resize(width, height);
+	}
 
     onDataLoaded() {
         console.log('Data Loaded');
 
         const globals = getEntryById('globals').data;
-        this.updateMeshSettings(globals['demo'] as DemoType);
+        // this.updateMeshSettings(globals['demo'] as DemoType);
         
         // --------------------------------------------- Hide loader
         document.body.classList.remove('loader__in-progress');
@@ -78,7 +157,113 @@ export class CoreApp extends WebGLSketch {
         this.launch();
     }
 
+    createPlanets(d:Array<OrbitDataElements>) {
+		for(const el of d) {
+			const mel = mapOrbitElements(el);
+			const planet = new Planet(mel);
+
+			this.planets.add(planet);
+			this.planetPaths.add(planet.orbitPath.ellipse);
+		}
+	}
+
+	createDwarfPlanets(d:Array<OrbitDataElements>) {
+		for(const el of d) {
+			const mel = mapOrbitElements(el);
+			const planet = new Planet(mel);
+
+			this.dwarfPlanets.add(planet);
+			this.dwarfPlanetPaths.add(planet.orbitPath.ellipse);
+		}
+	}
+
+	buildSimWithData(d:Array<OrbitDataElements>, forceKeep:boolean=false) {
+		if(!forceKeep) {
+			data.splice(0, data.length);
+		}
+
+		for(const el of d) {
+			const mel = mapOrbitElements(el);
+			data.push(mel);
+		}
+
+		this.particles.data = data;
+
+		// update counts
+		/* let elliptical = 0;
+		let parabolic = 0;
+		let nearParabolic = 0;
+		let hyperbolic = 0;
+
+		for(const el of data) {
+			if(el.type == OrbitType.Elliptical) elliptical++;
+			if(el.type == OrbitType.Parabolic) parabolic++;
+			if(el.type == OrbitType.NearParabolic) nearParabolic++;
+			if(el.type == OrbitType.Hyperbolic) hyperbolic++;
+		} */
+	}
+
+	playPause() {
+		if(this.solarClock.playing) {
+			this.solarClock.pause();
+		} else {
+			this.solarClock.resume();
+		}
+	}
+
+	importData(d:Array<OrbitDataElements>) {
+		this.buildSimWithData(d);
+	}
+
+	resetClock() {
+		this.solarClock.stop();
+		this.solarClock.start();
+	}
+
     launch() {
+        this.camera.position.z = 2;
+        this.camera.position.y = 0.5;
+        this.camera.lookAt(this.scene.position);
+
+        this.controls = new OrbitControls(this.camera, this.domElement);
+
+        window.addEventListener('keydown', (evt) =>{
+            if(evt.key == ' ') this.playPause();
+        });
+
         this.start();
+        this.solarClock = new SolarClock(this.clock);
+        this.solarClock.reverse = SETTINGS.backwards;
+        this.solarClock.secsPerHour = SETTINGS.speed;
+        this.solarClock.start();
     }
+
+    update() {
+		super.update();
+		this.controls.update();
+
+		const d = this.solarClock.update();
+		
+		this.particles.update(d, this.camera as PerspectiveCamera);
+
+		if(this.sun.material['uniforms']) {
+			this.sun.material['uniforms'].time.value = this.solarClock.time;
+		}
+		
+		for(const c of this.planets.children) {
+			const p = c as Planet;
+			p.update(d);
+		}
+
+		for(const c of this.dwarfPlanets.children) {
+			const p = c as Planet;
+			p.update(d);
+		}
+
+		this.sunParticles.update(this.solarClock.time);
+	}
+
+    render(): void {
+		this.vfx.render(this.scene, this.camera);
+	}
 }

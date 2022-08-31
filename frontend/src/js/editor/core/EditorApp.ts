@@ -19,10 +19,11 @@ export class EditorApp extends CoreApp {
 
         this.globals = new GlobalSettings("globals", {
             onChange: () => {
-                this.updateMeshSettings(this.globals.settings);
+                
             }
         });
 
+        // To-Do: Update to something that makes sense.
         this.globals.import(getEntryById('globals').data['demo']);
         menuManager.add(globalsButton, this.globals);
         uiSets.push(this.globals);
