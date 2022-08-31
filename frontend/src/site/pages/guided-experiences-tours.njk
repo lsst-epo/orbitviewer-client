@@ -62,19 +62,19 @@ image: "{{ project.seo.seo_image }}" #}
 
         <div class="content">
           {% if slide.slideTitle %}
-            <h3>{{ slide.slideTitle }}</h3>
+            <h3>{{ slide.slideTitle }}</h3>
           {% else %}
             <h3>Fun Fact</h3>
           {% endif %}
-          {% if slide.subTitle %}<h4>{{ slide.subTitle }}</h4>{% endif %}
-          <p>{{ slide.slideContent }}</p>
+          {% if slide.subTitle %}<h4>{{ slide.subTitle }}</h4>{% endif %}
+          <p>{{ slide.slideContent }}</p>
         </div>
 
     {% else %}
         <div class="content">
-          <h4>{{ slide.subTitle }}</h4>
-          <h3>{{ slide.slideTitle }}</h3>
-          <p>{{ slide.slideContent }}</p>
+          <h4>{{ slide.subTitle }}</h4>
+          <h3>{{ slide.slideTitle }}</h3>
+          <p>{{ slide.slideContent }}</p>
         </div>
     {% endif %}
 
