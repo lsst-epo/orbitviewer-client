@@ -1,16 +1,17 @@
 {
-	"name": "fil-toolkit",
+	"name": "orbit-viewer",
 	"version": "0.0.1",
 	"private": true,
 	"license": "MIT",
 	"scripts": {
 		"server": "node ./server/server.js",
 		"server-kill": "pkill node",
-		"dev": "eleventy --serve --watch",
-		"build": "cross-env ELEVENTY_ENV=production eleventy",
+		"dev": "yarn glsl && eleventy --serve --watch",
+		"build": "yarn glsl && cross-env ELEVENTY_ENV=production eleventy",
 		"clean": "node ./utils/clean.js",
 		"reset": "yarn clean && yarn build && yarn dev",
-		"updateData": "node ./database/server.js"
+		"updateData": "node ./database/server.js",
+		"glsl": "node utils/gen_glsl_includes"
 	},
 	"dependencies": {
 		"@jocabola/gen": "^0.0.25",

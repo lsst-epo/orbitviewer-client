@@ -55,6 +55,8 @@ main {
 	width: 100%;
 	height: 100vh;
 	overflow: hidden;
+
+	pointer-events: none;
 }
 
 body {
@@ -71,7 +73,7 @@ body {
 
 .page__orbit-viewer,
 .page__guided-experiences-tours {
-	
+
 	.view {
 		opacity: 1;
 	}
