@@ -23,7 +23,7 @@ const welcome = () => {
 
 app.use(
 	cors({
-		origin: ['http://localhost:8080', 'https://208.113.131.135', 'https://3.239.69.253', 'http://localhost', `https://${domain}`, `http://${appIp}:8888`],
+		origin: ['http://localhost:8081', 'http://localhost:8080', 'https://208.113.131.135', 'https://3.239.69.253', 'http://localhost', `https://${domain}`, `http://${appIp}:8888`],
 	})
 );
 app.use(fileUpload());

@@ -110,17 +110,20 @@ export class CoreApp extends WebGLSketch {
 
         console.log('Core App init');
 
-        io.load(`assets/data/${PLANETS}`, (res) => {
+        console.log(window.location);
+        
+
+        io.load(window.location.origin + `/assets/data/${PLANETS}`, (res) => {
             const d = JSON.parse(res)
             this.createPlanets(d);
 
-            io.load(`assets/data/${DWARF_PLANETS}`, (res) => {
+            io.load(window.location.origin + `/assets/data/${DWARF_PLANETS}`, (res) => {
                 const d = JSON.parse(res);
                 this.createDwarfPlanets(d);
 
                 let loaded = 0;
                 for(const file of FILES) {
-                    io.load(`assets/data/${file}`, (res) => {
+                    io.load(window.location.origin + `/assets/data/${file}`, (res) => {
                         const d = JSON.parse(res)
 
                         this.buildSimWithData(d, true);
@@ -240,7 +243,7 @@ export class CoreApp extends WebGLSketch {
 
     update() {
 		super.update();
-		this.controls.update();
+		this.controls.update();        
 
 		const d = this.solarClock.update();
 		

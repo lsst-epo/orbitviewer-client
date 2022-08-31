@@ -1,7 +1,5 @@
 import { CoreApp } from "../../common/core/CoreApp";
-import { getEntryById } from "../../common/data/DataManager";
 import { historyInit, LOCATION, onChange, PAGES } from "../pagination/History";
-import { expandableItems } from "../ui/expandable-items/ExpandableItems";
 
 export class ProductionApp extends CoreApp {
 
