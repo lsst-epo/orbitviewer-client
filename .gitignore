@@ -139,7 +139,7 @@ $RECYCLE.BIN/
 
 # custom files
 bundle
-# public
+public
 backups
 
 */.DS_Store
