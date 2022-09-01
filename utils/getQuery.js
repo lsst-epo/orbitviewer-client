@@ -1,4 +1,10 @@
-const token = 'LdTQ3Q1QUtzPec_TNIAmmolWYUaevo3o'; // Todo moure a un env
+
+// Localhost
+const isLocalhost = true;
+const token = isLocalhost ? 'LdTQ3Q1QUtzPec_TNIAmmolWYUaevo3o' : 'Ma3vUfBJiY3XXmjerRcBQo5PpE3A0jxU';
+const url = isLocalhost ? 'http://localhost:8080' : 'https://orbitviewer-api-dot-skyviewer.uw.r.appspot.com';
+
+// Real deal
 
 const fetch = (...args) =>
 import('node-fetch').then(({ default: fetch }) => fetch(...args));
@@ -15,7 +21,7 @@ async function getQuery(query = null) {
 
 	try {
 		// initiate fetch
-		const queryFetch = await fetch("http://localhost:8080/api", {
+		const queryFetch = await fetch(`${url}/api`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
