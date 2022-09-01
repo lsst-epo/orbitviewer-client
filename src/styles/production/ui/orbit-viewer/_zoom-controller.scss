@@ -55,7 +55,7 @@
 		font-weight: 100;
 		line-height: 20px;
 		transform: translateY(-2px) rotate(-90deg);
-		padding: 0 5px;
+		padding: 0 var(--distance-5);
 	}
 
 	input:before {

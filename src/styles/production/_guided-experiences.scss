@@ -5,7 +5,7 @@
 	flex-direction: column;
 	align-items: center;
 
-	padding: 18px;
+	padding: var(--distance-20);
 
 	background-color: var(--black-0);
 
@@ -18,7 +18,7 @@
 	overflow-y: auto;
 
 	@include desktop {
-		padding: 60px;
+		padding: var(--distance-60);
 	}
 
 	h1 {
@@ -29,13 +29,13 @@
 	}
 
 	a {
-		margin: 30px 0 0 0;
+		margin: var(--distance-30) 0 0 0;
 		width: 100%;
 		max-width: 320px;
 		text-align: center;	
 
 		@include desktop {
-			margin: 110px 0 0 0;
+			margin: var(--distance-100) 0 0 0;
 			max-width: 700px;
 		}
 	}

@@ -45,7 +45,7 @@
 	width: 30px;
 	height: 30px;
 
-	padding: 5px;
+	padding: var(--distance-5);
 
 	transform: translate(25px, -25px);
 	transition-property: transform;
@@ -160,7 +160,7 @@
 		background-color: var(--white-1);
 		font-weight: 900;
 		font-size: 0.8rem;
-		padding: 10px;
+		padding: var(--distance-10);
 
 		display: flex;
 		justify-content: space-between;
@@ -174,7 +174,7 @@
 	.content {
 		transition-property: height, padding;
 		overflow: hidden;
-		padding: 0 10px;
+		padding: 0 var(--distance-10);
 		height: 0px;
 
 		p {
@@ -189,7 +189,7 @@
 	section.active {
 		.content {
 			border-top: 1px solid var(--white-2);
-			padding: 10px;
+			padding: var(--distance-10);
 			height: var(--height);
 
 			p {

@@ -20,7 +20,7 @@
 	background-size: cover;
 	background-position: center;
 
-	padding: 20px;
+	padding: var(--distance-20);
 
 	display: flex;
 	flex-direction: column;
@@ -36,7 +36,7 @@
 		transform: translate(-50%,-50%);
 		width: 100%;
 
-		padding: 20px;
+		padding: var(--distance-20);
 
 		display: flex;
 		flex-direction: column;
@@ -52,7 +52,7 @@
 			font-size: 2rem;
 		}
 		
-		margin-bottom: 20px;
+		margin-bottom: var(--distance-120);
 	}
 
 	.sub-text {
@@ -62,19 +62,19 @@
 		h4 {
 			font-weight: 100;
 			font-size: 1.2rem;
-			margin-bottom: 10px;
+			margin-bottom: var(--distance-10);
 		}
 
 		p {
 			font-weight: 900;
 			font-size: 1rem;
-			margin-top: 10px;
+			margin-top: var(--distance-10);
 		}
 
 		.duration {
 			position: relative;
-			padding-right: 40px;
-			margin-right: 40px;
+			padding-right: var(--distance-40);
+			margin-right: var(--distance-40);
 
 			&:after {
 				content: '';
@@ -123,12 +123,12 @@
 
 		justify-content: flex-end;
 
-		padding: 0 30px 30px;
+		padding: 0 var(--distance-30) var(--distance-30);
 
 		h3 {
 			font-size: 1.8rem;
 			font-weight: 900;
-			margin-bottom: 5px;
+			margin-bottom: var(--distance-5);
 		}
 
 		h4 {
@@ -137,7 +137,7 @@
 		}
 
 		p {
-			margin-top: 40px;
+			margin-top: var(--distance-40);
 			font-weight: 100;
 			font-size: 1rem;
 		}
@@ -146,7 +146,7 @@
 }
 [data-slide="introSlide"],
 [data-slide="funFactSlide"] {
-	padding: 20px;
+	padding: var(--distance-20);
 	background-color: var(--teal-2);
 
 	.icon {
@@ -174,7 +174,7 @@
 		align-items: flex-end;
 		width: 100%;
 		justify-content: center;
-		padding: 0 20px 20px;
+		padding: 0 var(--distance-20) var(--distance-20);
 	}
 
 }
@@ -187,7 +187,7 @@
 
 [data-slide="defaultSlide"] {
 	.content {
-		padding: 50px; 
+		padding: var(--distance-40); 
 		flex-grow: 1;
 	}
 }

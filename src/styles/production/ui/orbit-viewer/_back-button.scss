@@ -4,10 +4,10 @@
 	right: 0;
 
 	button {
-		padding: 10px;
+		padding: var(--distance-10);
 
 		@include desktop {
-			padding: 10px 20px;
+			padding: var(--distance-10) var(--distance-20);
 		}
 
 		svg {

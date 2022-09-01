@@ -22,7 +22,7 @@
 }
 
 .panel {
-	padding: 28px 34px;
+	padding: var(--distance-30);
 	background-color: var(--black-alpha);
 	
 	display: flex;
@@ -33,7 +33,7 @@
 	width: 100%;
 	height: auto;
 
-	padding: 10px 15px;
+	padding: var(--distance-10) var(--distance-15);
 
 	transform: translateY(100%);
 	top: unset;
@@ -58,17 +58,17 @@
 }
 
 .panel-separator {
-	padding-bottom: 15px;
+	padding-bottom: var(--distance-15);
 	border-bottom: 1px solid var(--white-alpha);
 }
 
 .panel-section {
-	padding-top: 15px;
+	padding-top: var(--distance-15);
 
 	h3 {
 		font-size: 1.1rem;
 		font-weight: 100;
-		margin-bottom: 10px;
+		margin-bottom: var(--distance-10);
 	}
 }
 
@@ -78,7 +78,7 @@
 	align-items: center;
 
 	.panel-top-content {
-		padding: 0 10px 0 0;
+		padding: 0 var(--distance-10) 0 0;
 		display: flex;
 		flex-direction: column;
 

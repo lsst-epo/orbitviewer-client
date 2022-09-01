@@ -110,7 +110,7 @@
 
 	span {
 		display: inline;
-		padding: 0 0 0 10px;
+		padding: 0 0 0 var(--distance-10);
 	}
 
 	div {
@@ -118,7 +118,7 @@
 	}
 
 	button {
-		margin: 0 0 0 15px;
+		margin: 0 0 0var(--distance-15);
 	}
 }
 
@@ -131,7 +131,7 @@
 	transform: translateY(100%);
 	transition: transform 0.5s ease-in-out;
 
-	padding: 10px 15px;
+	padding: var(--distance-10) var(--distance-15);
 
 	background: #000;
 
@@ -148,7 +148,7 @@
 	justify-content: space-between;
 
 	> div {
-		padding: 10px 0;
+		padding: var(--distance-10) 0;
 		width: 100%;
 	}
 
@@ -158,7 +158,7 @@
 		align-items: center;
 
 		button {
-			max-width: calc(50% - 7px);
+			max-width: calc(50% - var(--distance-5));
 		}
 	}
 }
