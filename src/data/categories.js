@@ -9,9 +9,12 @@ async function getPage() {
   const query = `
   {
     categories(group: "objectTypes") {
-			title,
-			slug
-		}
+      ... on objectTypes_Category {
+        title
+        slug
+        mainColor
+      }
+    }
   }`;
 
   const data = await getQuery(query);
