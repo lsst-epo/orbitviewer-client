@@ -16,6 +16,16 @@
 	transition: transform 0.5s ease-in-out;
 	will-change: transform;
 
+	pointer-events: all;
+
+	&:not(.active){
+		pointer-events: none;
+
+		* {
+			pointer-events: none;
+		}
+	}
+
 	&.active {
 		transform: translateX(0%);
 	}
