@@ -121,7 +121,8 @@
 		}
 
 		p {
-			@extend %title-1;
+			margin-top: var(--distance-5);
+			@extend %light-3;
 			white-space: nowrap;
 			transition-property: opacity;
 		}
@@ -129,7 +130,6 @@
 	}
 
 }
-
 
 .hidden-tabs {
 	position: absolute;
@@ -197,8 +197,6 @@
 	}
 
 }
-
-
 
 .expandable-item.visible.active {
 
