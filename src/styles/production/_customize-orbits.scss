@@ -45,7 +45,7 @@
 }
 
 .customize-orbits-text {
-	padding: 0 var(--distance-15);
+	padding: 0 var(--distance-15) var(--distance-15);
 	max-width: 810px;
 
 	@include desktop {
@@ -53,14 +53,11 @@
 	}
 
 	h2 {
-		font-size: 1rem;
-		margin: 0 0 var(--distance-10) 0;
-		text-transform: uppercase;
-		letter-spacing: 0.9rem;		
+		margin: 0 0 var(--distance-10) 0;		
+		@extend %title-1;
 		
 		@include desktop {
 			margin: 0 0 var(--distance-40) 0;
-			font-size: 1.8rem;
 		}
 	}
 

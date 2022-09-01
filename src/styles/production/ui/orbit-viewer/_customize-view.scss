@@ -21,8 +21,7 @@
 		cursor: pointer;
 
 		p {
-			font-size: 0.8rem;
-			font-weight: 100;
+			@extend %light-3;
 
 			position: absolute;
 			top: 12px;
@@ -116,9 +115,7 @@
 
 		padding: 0 0 0 var(--distance-40);
 
-		font-family: $font1;
-		font-size: 0.8rem;
-		font-weight: 900;
+		@extend %bold-3;
 
 		cursor: pointer;
 	}

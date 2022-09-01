@@ -41,13 +41,9 @@
 	}
 
 	h3 {
-		font-weight: 900;
-		font-size: 1.2rem;
 		margin: 0 0 15px 0;
 
-		@include desktop {
-			font-size: 1.4rem;
-		}
+		@extend %bold-2;
 	}
 
 	.image {
@@ -79,12 +75,11 @@
 
 		text {
 			fill: var(--white-0);
-			font-size: 01rem;
-			font-weight: 100;
-
+		
+			@extend %light-2;
+			
 			&.num {
-				font-size: 1.2rem;
-				font-weight: 900;
+				@extend %bold-2;
 			}
 		}
 	}

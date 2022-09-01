@@ -6,13 +6,9 @@
 	align-items: center;
 
 	font-family: $font1;
-	font-weight: 900;
-	font-size: 0.8rem;
-	line-height: 1em;
 	text-align: center;
-	@include desktop {
-		font-size: 1rem;
-	}
+
+	@extend %bold-3;
 	
 	padding: var(--distance-20);
 	width: 100%;
@@ -39,9 +35,8 @@
 .ui__button-small {
 	background-color: var(--teal-0);
 	color: var(--black-0);
-	font-size: 0.8rem;
-	line-height: 1em;
-	font-weight: 500;
+
+	@extend %normal-1;
 
 	display: flex;
 	justify-content: center;

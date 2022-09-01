@@ -54,8 +54,7 @@
 	}
 
 	h3 {
-		font-weight: 900;
-		font-size: 1rem;
+		@extend %bold-2;
 	}
 
 	.sub-text {
@@ -63,8 +62,7 @@
 		padding-top: var(--distance-5);
 
 		p {
-			font-weight: 900;
-			font-size: 0.8rem;
+			@extend %bold-3;
 
 			&:first-of-type {
 				position: relative;
@@ -73,7 +71,7 @@
 
 				&:after {
 					content: '';
-					height: 1rem;
+					height: 1em;
 					border-right: 1px solid var(--white-2);
 					position: absolute;
 					right: 0;

@@ -33,19 +33,12 @@
 	position: relative;
 
 	h1 {
-		font-size: 1rem;
-		text-transform: uppercase;
-		letter-spacing: 0.5rem;
+		@extend %title-1;
 	}
 
 	h3 {
-		font-weight: 900;
-		font-size: 1.2rem;
 		margin: var(--distance-5) 0 0 0;
-
-		@include desktop {
-			font-size: 1.4rem;
-		}
+		@extend %bold-2;
 	}
 
 	a {

@@ -31,4 +31,114 @@ body {
 	color: var(--white);
 }
 
+%light {
+	font-weight: 100;
+}
 
+%normal {
+	font-weight: 400;
+}
+
+%bold {
+	font-weight: 900;
+}
+
+%title-1 {
+	font-size: 1rem;
+	
+	@include desktop {
+		font-size: 1.8rem;
+	}
+
+	line-height: 1.2em;
+	letter-spacing: 0.6em;
+	text-transform: uppercase;
+}
+
+
+%light-1 {
+	font-size: 1.2rem;
+
+	@include desktop {
+		font-size: 1.4rem;
+	}
+
+	line-height: 1.2em;
+
+	@extend %light;
+}
+
+%light-2 {
+	font-size: 1rem;
+	
+	line-height: 1.2em;
+
+	@extend %light;
+}
+
+%light-3 {
+	font-size: 0.8rem;
+
+	line-height: 1.2em;
+
+	@extend %light;
+}
+
+%light-4 {
+	font-size: 0.6rem;
+
+	line-height: 1.2em;
+
+	@extend %light;
+}
+
+%normal-1 {
+	font-size: 0.8rem;
+
+	@include desktop {
+		font-size: 1rem;
+	}
+
+	line-height: 1em;
+	
+	@extend %normal;
+}
+
+%bold-1 {
+	
+	font-size: 1.8rem;
+
+	@include desktop {
+		font-size: 2rem;
+	}
+
+	line-height: 1em;
+
+	@extend %bold;
+}
+
+%bold-2 {
+	
+	font-size: 1.2rem;
+
+	@include desktop {
+		font-size: 1.4rem;
+	}
+
+	line-height: 1em;
+
+	@extend %bold;
+}
+
+%bold-3 {
+	
+	font-size: 0.8rem;
+
+	@include desktop {
+		font-size: 1rem;
+	}
+
+	line-height: 1em;
+
+	@extend %bold;
+}

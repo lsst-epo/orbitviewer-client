@@ -27,8 +27,7 @@
 
 	p {
 		margin-top: 10px;
-		font-size: 0.5rem;
-		font-weight: 100;
+		@extend %light-4;
 	}
 }
 

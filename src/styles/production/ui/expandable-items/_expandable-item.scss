@@ -116,14 +116,12 @@
 		color: var(--white-0);
 
 		h3 {
-			font-weight: 900;
-			font-size: 0.8rem;
+			@extend %bold-3;
 			transition-property: opacity;
 		}
 
 		p {
-			font-weight: 100;
-			font-size: 0.6rem;
+			@extend %title-1;
 			white-space: nowrap;
 			transition-property: opacity;
 		}
@@ -158,8 +156,9 @@
 
 	.head {
 		background-color: var(--white-1);
-		font-weight: 900;
-		font-size: 0.8rem;
+		
+		@extend %bold-3;
+
 		padding: var(--distance-10);
 
 		display: flex;
@@ -178,8 +177,7 @@
 		height: 0px;
 
 		p {
-			font-weight: 100;
-			font-size: 0.7rem;
+			@extend %light-3;
 
 			opacity: 0;
 			transition-property: opacity;

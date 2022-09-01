@@ -81,8 +81,8 @@
 
 	transition: transform 0.2s ease-in-out;
 
-	font-size: 1rem;
-	font-weight: 100;
+	@extend %light-2;
+
 	color: var(--black-0);
 
 	&::placeholder {
@@ -124,8 +124,7 @@
 }
 
 .search-cancel {
-	font-size: 1rem;
-	font-weight: 100;
+	@extend %light-2;
 
 	opacity: 0;
 

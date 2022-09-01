@@ -66,8 +66,7 @@
 	padding-top: var(--distance-15);
 
 	h3 {
-		font-size: 1.1rem;
-		font-weight: 100;
+		@extend %light-2;
 		margin-bottom: var(--distance-10);
 	}
 }
@@ -83,13 +82,11 @@
 		flex-direction: column;
 
 		h3 {
-			font-size: 1rem;
-			font-weight: 100;
+			@extend %light-2;
 		}
 
 		h2 {
-			font-size: 1.1rem;
-			font-weight: 900;
+			@extend %bold-2;
 		}
 	}
 

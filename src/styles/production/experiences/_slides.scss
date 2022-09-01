@@ -45,12 +45,7 @@
 	}
 
 	h3 {
-		font-size: 1.6rem;
-		font-weight: 900;
-
-		@include desktop {
-			font-size: 2rem;
-		}
+		@extend %bold-1;
 		
 		margin-bottom: var(--distance-120);
 	}
@@ -60,14 +55,13 @@
 		padding-top: 5px;
 
 		h4 {
-			font-weight: 100;
-			font-size: 1.2rem;
+			@extend %light-1;
+			
 			margin-bottom: var(--distance-10);
 		}
 
 		p {
-			font-weight: 900;
-			font-size: 1rem;
+			@extend %bold-2;
 			margin-top: var(--distance-10);
 		}
 
@@ -126,20 +120,19 @@
 		padding: 0 var(--distance-30) var(--distance-30);
 
 		h3 {
-			font-size: 1.8rem;
-			font-weight: 900;
+			@extend %bold-1;
+
 			margin-bottom: var(--distance-5);
 		}
 
 		h4 {
-			font-weight: 900;
-			font-size: 0.9rem;
+			@extend %bold-3;
 		}
 
 		p {
 			margin-top: var(--distance-40);
-			font-weight: 100;
-			font-size: 1rem;
+			
+			@extend %light-2;
 		}
 	}
 

@@ -2,13 +2,13 @@
 	overflow: visible;
 
 	p {
-		font-size: 0.75rem;
-		font-weight: 100;
+		@extend %light-3;
 	}
 
 	span {
 		color: var(--white-0);
-		font-weight: 900;
+		
+		@extend %bold-3;
 	}
 
 }

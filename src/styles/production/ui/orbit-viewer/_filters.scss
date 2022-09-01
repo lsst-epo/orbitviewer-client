@@ -33,8 +33,7 @@
 	margin: 0 10px;
 
 	p {
-		font-weight: 900;
-		font-size: 1rem;
+		@extend %bold-3;
 	}
 
 	.fake-range {	
