@@ -14,7 +14,7 @@ async function getPage() {
 						slug,
 						elementCategory {
 							title,
-							slug
+							slug,
 						}					
 				}
 		}

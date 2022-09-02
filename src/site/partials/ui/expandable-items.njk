@@ -18,7 +18,16 @@
 				<div class="cover" style="background-image: url(https://picsum.photos/300/200);">
 					
 					<div class="icon">
-						{{ filterIcon(element.elementCategory[0].slug, element.elementCategory[0].title ) }}
+
+						{% set cat = element.elementCategory[0] %}
+
+						{% for category in categories %}
+							{% if category.slug == cat.slug %}
+								{% set cat = category %}
+							{% endif %}
+						{% endfor %}
+
+						{{ filterIcon(cat.slug, cat.title, cat.mainColor ) }}
 
 						<div class="icon-text">
 							<h3>{{ element.title }}</h3>

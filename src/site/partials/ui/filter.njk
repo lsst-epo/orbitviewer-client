@@ -8,7 +8,7 @@
 				<input class="custom-input" type="checkbox" id="{{ category.slug }}" name="{{ category.slug }}" checked>
 				<label for="{{ category.slug }}">
 					<div class="filter-bullet"><div></div></div>
-					{{ category.title }}{{ filterIcon(category.slug, category.title ) }}</label>
+					{{ category.title }}{{ filterIcon(category.slug, category.title, category.mainColor ) }}</label>
 			</li>
 		{% endfor %}
 	</ul>
