@@ -18,7 +18,7 @@
 
 	.categories-filter {
 		margin: var(--distance-35) 0;
-		padding: 0 var(--distance-30);
+		padding: 0 var(--distance-30) var(--distance-30);
 
 		flex-grow: 1;
 		width: 100%;
@@ -69,4 +69,8 @@
 			font-size: 1.3rem;
 		}
 	}
+}
+
+.page__customize-orbits [data-template="customize-orbits"] {
+	pointer-events: all
 }

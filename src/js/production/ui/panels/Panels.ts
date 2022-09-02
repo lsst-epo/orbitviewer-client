@@ -8,6 +8,7 @@ export class Panels {
 		if(!!!dom) return;
 
 		this.dom = dom;
+		
 
 		this.createPanels();
 		this.addListeners();
@@ -29,7 +30,6 @@ export class Panels {
 			} else panel = new Panel(id);
 
 			this.panels.push(panel);
-
 		}
 
 	}

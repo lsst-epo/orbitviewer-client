@@ -108,10 +108,7 @@ export class CoreApp extends WebGLSketch {
         this.ambientLight = new AmbientLight(0xffffff, 0.13);
         this.scene.add(this.ambientLight);
 
-        console.log('Core App init');
-
-        console.log(window.location);
-        
+        console.log('Core App init');        
 
         io.load(window.location.origin + `/assets/data/${PLANETS}`, (res) => {
             const d = JSON.parse(res)
