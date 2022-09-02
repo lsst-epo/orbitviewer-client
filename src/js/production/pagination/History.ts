@@ -152,8 +152,6 @@ export const historyInit = () => {
 }
 
 export const onChange = (url:string = window.location.pathname) => {		
-
-	console.log(url, PAGES);
 	
 
 	// CHECK IF PAGE IS LOADING
