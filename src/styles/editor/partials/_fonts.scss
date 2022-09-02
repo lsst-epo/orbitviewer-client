@@ -1,47 +1,16 @@
-@font-face {
-	font-family: 'Ciutadella';
-	src: url('../../assets/fonts/Ciutadella-Regular.woff') format('woff');
-	font-style: normal;
-	font-weight: 100;
-	text-rendering: optimizeLegibility;
-}
-@font-face {
-	font-family: 'Ciutadella';
-	src: url('../../assets/fonts/Ciutadella-Medium.woff') format('woff');
-	font-style: normal;
-	font-weight: 400;
-	text-rendering: optimizeLegibility;
-}
-@font-face {
-	font-family: 'Ciutadella';
-	src: url('../../assets/fonts/Ciutadella-Bold.woff') format('woff');
-	font-style: normal;
-	font-weight: 900;
-	text-rendering: optimizeLegibility;
-}
-
-// Semibold
-// Medium
-// Light
-
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400&display=swap');
 
 $font: 'Archivo', sans-serif;
-$ipadFont: 'Ciutadella';
 
 body {
 	font-family: $font;
 	color: var(--white);
 }
 
-[gallery-mode] {
-	font-family: $ipadFont;
-}
-
 .r-1 {
 	font-size: 78px;
 	font-weight: 100;
-	line-height: 1em;
+	line-height: 1em; 
 }
 
 .r-2 {

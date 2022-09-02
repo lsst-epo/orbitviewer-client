@@ -25,8 +25,6 @@ export class OrbitViewer extends Page {
 		this.addCustomizeView();
 
 		initExpandableItems();
-
-		enableExpandableItem('mercury')
 		
 	}
 
