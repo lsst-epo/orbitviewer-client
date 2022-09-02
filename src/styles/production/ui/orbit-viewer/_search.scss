@@ -18,7 +18,6 @@
 	}
 	
 	opacity: 0;
-	pointer-events: none;
 	background-color: var(--black-alpha);
 	transition: opacity 0.3s ease-in-out;
 
@@ -193,5 +192,13 @@ body[data-search-state="2"] {
 
 	.search-cancel {
 		opacity: 1;
+	}
+}
+
+body:not([data-search-state="1"]) .search-panel {
+	pointer-events: none;
+
+	* {
+		pointer-events: none;
 	}
 }

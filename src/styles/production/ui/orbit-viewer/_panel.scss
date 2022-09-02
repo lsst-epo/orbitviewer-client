@@ -69,7 +69,7 @@
 
 .panel-separator {
 	padding-bottom: var(--distance-15);
-	border-bottom: 1px solid var(--white-alpha);
+	border-bottom: 1px solid var(--white-2);
 }
 
 .panel-section {
@@ -102,13 +102,13 @@
 
 	button {
 		flex-shrink: 0;
-		width: var(--icon-small);
-		height: var(--icon-small);
+		width: var(--icon-medium);
+		height: var(--icon-medium);
 		cursor: pointer;
 
 		&.small {
-			width: 16px;
-			height: 16px;
+			width: var(--icon-small);
+			height: var(--icon-small);
 		}
 	}
 }
