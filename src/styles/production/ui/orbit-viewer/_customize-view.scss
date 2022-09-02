@@ -8,8 +8,8 @@
 	.customize-view-icon {
 		z-index: 2;
 
-		width: 40px;
-		height: 40px;
+		width: var(--icon-big);
+		height: var(--icon-big);
 
 		background-color: var(--black-1);
 
@@ -121,8 +121,8 @@
 	}
 
 	svg {
-		width: 40px;
-		height: 40px;
+		width: var(--icon-big);
+		height: var(--icon-big);
 	}
 
 	.checked {

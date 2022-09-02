@@ -44,8 +44,8 @@
 	z-index: 2;
 	position: absolute;
 
-	width: 40px;
-	height: 40px;
+	width: var(--icon-big);
+	height: var(--icon-big);
 
 	background-color: var(--white-0);
 
@@ -103,9 +103,11 @@
 	top: 0;
 	right: var(--distance-15);
 
-	width: 40px;
+	width: var(--icon-big);
+	height: var(--icon-big);
+	
 	padding: var(--distance-10);
-	height: 40px;
+
 
 	opacity: 0;
 	transition: opacity 0.2s ease-in-out;

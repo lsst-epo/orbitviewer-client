@@ -94,8 +94,8 @@
 		transition-property: opacity;
 
 		svg {
-			width: 25px;
-			height: 25px;
+			width: var(--icon-small);
+			height: var(--icon-small);
 		}
 		
 	}

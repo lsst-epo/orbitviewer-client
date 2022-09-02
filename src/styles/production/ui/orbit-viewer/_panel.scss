@@ -102,8 +102,8 @@
 
 	button {
 		flex-shrink: 0;
-		width: 25px;
-		height: 25px;
+		width: var(--icon-small);
+		height: var(--icon-small);
 		cursor: pointer;
 
 		&.small {

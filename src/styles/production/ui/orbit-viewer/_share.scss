@@ -9,8 +9,8 @@
 	z-index: 2;
 	position: absolute;
 
-	width: 40px;
-	height: 40px;
+	width: var(--icon-big);
+	height: var(--icon-big);
 
 	background-color: var(--black-1);
 	transform: translate(0, calc(100vh - 100% - var(--distance-15)));
