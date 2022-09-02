@@ -32,7 +32,7 @@
 	padding: 0 var(--distance-15);
 	
 	width: 100%;
-	max-width: 380px;
+	max-width: var(--default-max-width);
 
 	display: flex;
 	justify-content: space-between;

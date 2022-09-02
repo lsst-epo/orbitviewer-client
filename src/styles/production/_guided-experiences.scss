@@ -31,7 +31,7 @@
 	a {
 		margin: var(--distance-30) 0 0 0;
 		width: 100%;
-		max-width: 320px;
+		max-width: var(--default-max-width);
 		text-align: center;	
 
 		@include desktop {

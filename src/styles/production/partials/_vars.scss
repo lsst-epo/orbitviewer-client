@@ -1,5 +1,7 @@
 
 :root {
+	
+	// Colors
 	--green-0: #0c4a47; 			// Button hover
 	--green-1: #12726d; 			// Button default
 	
@@ -22,6 +24,7 @@
 	--black-2: #626666; 			// Bg icones hover
 	--black-alpha: rgba(0,0,0, 0.9);
 
+	// Paddings - Margins - Spacings by default
 	--distance-5: 5px;
 	--distance-10: 10px;
 	--distance-15: 15px;
@@ -34,10 +37,13 @@
 	--distance-75: 75px;
 	--distance-100: 100px;
 
-
+	// Icons sizes
 	--icon-big: 40px;
 	--icon-medium: 25px;
 	--icon-small: 15px;
+
+	// Panels sizes
+	--default-max-width: 420px;
 }
 
 

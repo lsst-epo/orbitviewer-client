@@ -14,7 +14,7 @@
 	width: 100%;
 	height: calc(36px + 1em); // Dobule padding + one line of text
 	@include desktop {
-		max-width: 345px;
+		max-width: var(--default-max-width);
 	}
 
 	background-color: var(--green-1);
