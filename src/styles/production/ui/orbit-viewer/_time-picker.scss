@@ -43,6 +43,10 @@
 
 }
 
+.panel:not(.active) .time-picker-trigger {
+	pointer-events: all;
+}
+
 .time-picker-trigger {
 	z-index: 2;
 
