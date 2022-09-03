@@ -5,11 +5,15 @@
 
 		{# todo que aixo vingui del back #}
 		<div class="panel-top-content">
-			<h3>About</h3>
-			<h2>Settings and more</h2>
+			<h3>{{ about.description }}</h3>
+			<h2>{{ about.title }}</h2>
 		</div>
 
 		{{ panelTimes('about') }}
 
+	</div>
+
+	<div class="panel-section">
+		<p>{{ about.content }}</p>
 	</div>
 </div>
