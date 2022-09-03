@@ -1,0 +1,109 @@
+{% from 'ui/panel-times.njk' import panelTimes as panelTimes %}
+{% from 'navigation/nav-icons/nav-icon.njk' import icon as icon %}
+
+<div class="navigation">
+	<button class="navigation-button" data-panel-button="navigation">
+
+		<svg viewBox="0 0 23 17.7" xml:space="preserve">
+			<path d="M1.5,8.8h20"	/>
+			<path d="M1.5,1.5h20"	/>
+			<path d="M1.5,16.2h20" />
+		</svg>
+
+	</button>
+</div>
+
+<div class="panel" data-panel="navigation">
+
+	<div class="panel-top panel-separator">
+
+		{# todo que aixo vingui del back #}
+		<div class="panel-top-content">
+			<h3>Main menu</h3>
+			<h2>Settings and more</h2>
+		</div>
+
+		{{ panelTimes('navigation') }}
+		
+	</div>
+
+	<div class="panel-section panel-separator">
+		<h3>Settings</h3>
+
+		<ul class="menu">
+
+			<li>
+				<button data-panel-button="lang">
+					{{ icon('lang', 'Language selection') }}
+					<p>Language selection</p>
+				</button>
+			</li>
+
+			<li>
+				<button data-panel-button="share">
+					{{ icon('share', 'Share Orbit Viewer') }}
+					<p>Share Orbit Viewer</p>
+				</button>
+			</li>
+		
+			<li>
+				<a target="_blank" href="https://www.google.com/">
+					{{ icon('help', 'Help') }}
+					<p>Help</p>
+				</button>
+			</li>
+
+			<li>
+				<button data-panel-button="about">
+					{{ icon('about', 'About Orbit Viewer') }}
+					<p>About Orbit Viewer</p>
+				</button>
+			</li>
+
+			<li>
+				<a target="_blank" href="https://www.google.com/">
+					{{ icon('how', 'How to use the Orbit Viewer') }}
+					<p>How to use the Orbit Viewer</p>
+				</button>
+			</li>	
+
+		</ul>
+
+	</div>
+
+	<div class="panel-section panel-separator">
+		<h3>Quick access</h3>
+
+		<ul class="menu">
+
+			<li>
+				<a href="{{ '/guided-experiences' | url }}">
+					{{ icon('save', 'Guided Experiences') }}
+					<p>Guided Experiences</p>
+				</button>
+			</li>
+
+			<li>
+				<a target="_blank" href="https://www.google.com/">
+					{{ icon('create', 'Create my own') }}
+					<p>Create my own</p>
+				</button>
+			</li>
+
+			<li>
+				<a target="_blank" href="https://www.google.com/">
+					{{ icon('save', 'Saved objects') }}
+					<p>Saved objects</p>
+				</button>
+			</li>		
+		</ul>
+
+
+	</div>
+
+</div>
+
+{% include "navigation/about.njk" %}
+{% include "navigation/lang.njk" %}
+
+

@@ -1,0 +1,6 @@
+{% macro icon(name, alt) %}
+	<svg viewBox="0 0 20 22" xml:space="preserve">
+		<title>{{ alt }}</title>
+		{% include 'navigation/nav-icons/' + name + '.njk' %}
+	</svg>
+{% endmacro %}
