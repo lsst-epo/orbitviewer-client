@@ -23,7 +23,7 @@ export class Planet extends Object3D {
         this.add(this.mesh);
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
 
-        this.orbitPath = new EllipticalPath(_data);
+        this.orbitPath = new EllipticalPath(_data);       
 
         this.rotationSpeed = Random.randf(-1, 1);
     }

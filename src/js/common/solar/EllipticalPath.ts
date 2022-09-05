@@ -7,7 +7,7 @@ const MIN_DISTANCE = .05;
 const MIN_POINTS = 10;
 
 const LINE_MAT = initMaterial(new LineBasicMaterial({
-    color: 0x161616
+    color: 0xcccccc
 }));
 
 /**
