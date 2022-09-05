@@ -132,7 +132,9 @@
 	transition: all 0.2s ease-in-out;
 }
 
-body[data-search-state="1"] {
+
+body[data-search-state="1"],
+body[data-search-state="2"]{
 
 	.search-input {
 		z-index: #{$toFrontIndex + 1};
@@ -141,10 +143,10 @@ body[data-search-state="1"] {
 	.search-panel {
 		z-index: $toFrontIndex;
 		opacity: 1;
-		pointer-events: unset;
+		pointer-events: all;
 
 		button {
-			pointer-events: unset;
+			pointer-events: all;
 		}
 	}
 
@@ -155,6 +157,9 @@ body[data-search-state="1"] {
 	.search-cancel {
 		opacity: 1;
 	}
+
+}
+body[data-search-state="1"] {
 
 	.search-text-input {
 		transform: scaleX(1);
@@ -164,34 +169,12 @@ body[data-search-state="1"] {
 
 body[data-search-state="2"] {
 
-	.search-input {
-		z-index: 6;
-	}
-
-	.search-panel {
-		z-index: 5;
-		opacity: 1;
-		pointer-events: unset;
-
-		button {
-			pointer-events: unset;
-		}
-	}
-
-	.search-lense {
-		pointer-events: none;
-	}
-
 	.search-reset {
 		opacity: 1;
 	}
 
 	.search-text-input {
 		transform: scaleX(1);
-	}
-
-	.search-cancel {
-		opacity: 1;
 	}
 }
 
