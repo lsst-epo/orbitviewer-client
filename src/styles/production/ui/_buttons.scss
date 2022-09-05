@@ -14,7 +14,8 @@
 	width: 100%;
 	height: calc(36px + 1em); // Dobule padding + one line of text
 	@include desktop {
-		max-width: var(--default-max-width);
+		max-width: 200px;
+		padding: var(--distance-30);
 	}
 
 	background-color: var(--green-1);
@@ -32,8 +33,32 @@
 	border: 1px solid var(--white-0);
 }
 
-.ui__button.arrow-button {
-	
+// Arrows
+.button_arrow {
+	path, line {
+		fill: none;
+		stroke: var(--white-0);
+		stroke-width: 3;
+	}
+}
+.ui__button:has(.button_arrow) {
+	.button_arrow {
+		display: none;
+		@include desktop { display: flex;	}
+	}
+
+	@include desktop {
+		display: flex;
+		justify-content: space-between;
+
+		.button_arrow {
+			width: 20px;
+		}
+
+		.arrow-next {
+			order: 1;
+		}
+	}
 }
 
 .ui__button-small {
