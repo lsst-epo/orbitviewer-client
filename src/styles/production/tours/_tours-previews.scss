@@ -49,7 +49,14 @@
 
 	.sub-text {
 		display: flex;
+		align-items: center;
 		padding-top: var(--distance-5);
+
+		svg {
+			max-width: var(--icon-small);
+			max-height: var(--icon-small);
+			margin-right: var(--distance-10);
+		}
 
 		p {
 			@extend %bold-3;

@@ -9,7 +9,9 @@
 		<h3>{{ experience.title }}</h3>
 	
 		<div class="sub-text">
-			{# TODO missing icon #}
+			
+			{% include "ui/icons/stopwatch.njk" %}
+			
 			<p>5m</p>
 			
 			<p>Complexity <span class="{{ 'active' if experience.complexity >= 1 }}"></span><span class="{{ 'active' if experience.complexity >= 2 }}"></span><span class="{{ 'active' if experience.complexity >= 3 }}"></span><span class="{{ 'active' if experience.complexity >= 4 }}"></span><span class="{{ 'active' if experience.complexity >= 5 }}"></span></p>

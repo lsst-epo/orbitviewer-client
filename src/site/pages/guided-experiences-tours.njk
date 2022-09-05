@@ -20,9 +20,10 @@ image: "{{ project.seo.seo_image }}" #}
       <h3>{{ experience.title }}</h3>
 
       <div class="sub-text">
-        {# TODO missing icon #}
+        
         <div class="duration">
           <h4>Duration</h4>
+          {% include "ui/icons/stopwatch.njk" %}
           <p>5m</p>
         </div>
 

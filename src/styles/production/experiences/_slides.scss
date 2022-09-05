@@ -60,6 +60,11 @@
 			margin-bottom: var(--distance-10);
 		}
 
+		svg {
+			max-width: var(--icon-big);
+			max-height: var(--icon-big);
+		}
+
 		p {
 			@extend %bold-2;
 			margin-top: var(--distance-10);
