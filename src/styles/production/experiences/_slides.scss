@@ -56,18 +56,23 @@
 
 		h4 {
 			@extend %light-1;
-			
-			margin-bottom: var(--distance-10);
 		}
 
 		svg {
+			margin: var(--distance-15) 0;
 			max-width: var(--icon-big);
 			max-height: var(--icon-big);
 		}
 
 		p {
 			@extend %bold-2;
-			margin-top: var(--distance-10);
+		}
+
+		>div {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
 		}
 
 		.duration {
@@ -88,15 +93,24 @@
 
 		.complexity {
 			div {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			span {
 				display: inline-block;
 
 				border-radius: 100%;
 
-				width: 5px;
-				height: 5px;
+				width: 6px;
+				height: 6px;
 				background-color: var(--white-2);
 
-				margin: 0 0 0.1rem 5px;
+				margin: 0 0 0 8px;
+
+				&:first-of-type {
+					margin: 0;
+				}
 
 				&.active {
 					background-color: var(--white-0);

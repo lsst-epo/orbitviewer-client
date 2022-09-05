@@ -77,16 +77,25 @@
 				}
 			}
 
+			&:has(span){
+				display: flex;
+				align-items: center;
+			}
+
 			span {
 				display: inline-block;
 				
 				border-radius: 100%;
 
-				width: 5px;
-				height: 5px;
+				width: 6px;
+				height: 6px;
 				background-color: var(--white-2);
 
-				margin: 0 0 0 var(--distance-5);
+				margin: 0 0 0 7px;
+
+				&:first-of-type {
+					margin: 0 0 0 var(--distance-10);
+				}
 
 				&.active {
 					background-color: var(--white-0);
