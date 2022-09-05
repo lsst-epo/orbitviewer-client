@@ -20,10 +20,12 @@ export class Page {
 	}
 
 	enable(resolve){
+		this.dom.classList.remove('disabled');
 		resolve();	
 	}
 	
 	disable () {
+		this.dom.classList.add('disabled');
 		this.active = false;
 	}
 
