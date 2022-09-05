@@ -83,3 +83,8 @@ body {
 		pointer-events: none !important;
 	}
 }
+
+// Exceptions
+main[data-template="orbit-viewer"] {
+	pointer-events: none;
+}
