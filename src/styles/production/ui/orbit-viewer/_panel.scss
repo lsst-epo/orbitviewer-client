@@ -98,6 +98,24 @@
 		h2 {
 			@extend %bold-2;
 		}
+
+		&:has(svg){
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
+
+			svg {
+				height: var(--icon-big);
+				margin-right: var(--distance-10);
+			}
+
+			div {
+				padding: 0 var(--distance-10) 0 0;
+				display: flex;
+				flex-direction: column;
+			}
+
+		}
 	}
 
 	button {

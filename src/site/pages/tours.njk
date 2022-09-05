@@ -69,8 +69,11 @@ image: "{{ project.seo.seo_image }}" #}
 
 		{# todo que aixo vingui del back #}
 		<div class="panel-top-content">
-			<h3>Sort by</h3>
-			<h2>Customize tours</h2>
+      {% include "ui/icons/sort.njk" %}
+      <div>
+        <h3>Sort by</h3>
+        <h2>Customize tours</h2>
+      </div>
 		</div>
 
 		{{ panelTimes('tour-sort-' + tour.slug ) }}
