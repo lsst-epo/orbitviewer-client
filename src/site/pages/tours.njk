@@ -70,12 +70,6 @@ image: "{{ project.seo.seo_image }}" #}
   {{ loop(guidedExperiencesTours, tour ) }}
 </div>
 
-{# CONMING SOON TOURS #}
-<div class="tours-list tours-coming-soon">
-  <p>Coming soon</p>
-  {{ loop(guidedExperiencesTours, tour, true) }}
-</div>
-
 <div class="tours-button buttons__wrapper">
 
   <button data-button="tours-button" class="ui__button">
