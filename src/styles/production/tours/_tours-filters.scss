@@ -26,19 +26,18 @@
 		margin-right: 10px;
 	}
 
-	.sort-button,
-	.filter-button {
-		path {
-			stroke: var(--white-0);
-			stroke-width: 3;
-			stroke-linecap: round;
-			stroke-linejoin: round;
+	.sort-button {
+		rect {
+			fill: var(--white-0);
 		}
 	}
 
 	.search-button {
+		p {
+			color: var(--teal-0)
+		}
 		path {
-			fill: var(--white-0);
+			fill: var(--teal-0);
 		}
 	}
 

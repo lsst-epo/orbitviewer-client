@@ -37,12 +37,12 @@ image: "{{ project.seo.seo_image }}" #}
     <div class="buttons__wrapper">
 
       <button data-button="initialSlide-0-prev" class="ui__button">
-        {% include "ui/button/arrow-prev.njk" %}
+        {% include "ui/icons/arrow-prev.njk" %}
         <p>Back</p>
       </button>
 
       <button data-button="initialSlide-0-next" class="ui__button">
-        {% include "ui/button/arrow-next.njk" %}
+        {% include "ui/icons/arrow-next.njk" %}
         <p>Let's start</p>
       </button>
 
@@ -92,12 +92,12 @@ image: "{{ project.seo.seo_image }}" #}
       {% endif %}
 
       <button data-button="{{ slide.typeHandle + '-' + loop.index + 'prev' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' }}">
-        {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/button/arrow-prev.njk" %}{% endif %}
+        {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/icons/arrow-prev.njk" %}{% endif %}
         <p>Back</p>
       </button>
 
       <button data-button="{{ slide.typeHandle + '-' + loop.index + 'next' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' }}">
-        {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/button/arrow-next.njk" %}{% endif %}
+        {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/icons/arrow-next.njk" %}{% endif %}
         <p>Next</p>
       </button>
 
