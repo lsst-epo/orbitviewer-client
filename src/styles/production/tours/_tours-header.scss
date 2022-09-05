@@ -15,6 +15,7 @@
 	flex-direction: column;
 
 	height: 100vh;
+	height: var(--doc-height);
 	overflow-y: auto;
 
 	@include desktop {
@@ -28,7 +29,15 @@
 	padding: 0 var(--distance-30) var(--distance-15);
 	width: 100%;
 
-	border-bottom: 1px solid var(--white-2);
+	@include device {
+		border-bottom: 1px solid var(--white-2);
+	}
+
+	@include desktop {
+		padding: 0 var(--distance-30);
+		margin: 0 var(--distance-60);
+		width: calc(100% - var(--distance-60) * 2)
+	}
 
 	position: relative;
 
@@ -39,6 +48,10 @@
 	h3 {
 		margin: var(--distance-5) 0 0 0;
 		@extend %bold-2;
+
+		@include desktop {
+			margin: var(--distance-30) 0 0 0;
+		}
 	}
 
 	a {
@@ -58,11 +71,19 @@
 	
 
 	svg {
-		width: 15px;
+		width: var(--icon-small);
+
+		@include desktop {
+			width: var(--icon-medium);
+		}
 
 		path {
 			stroke: var(--white-0);
 			stroke-width: 4;
+
+			@include desktop {
+				stroke-width: 2;
+			}
 		}
 	}
 

@@ -4,7 +4,10 @@
 
 			{% if experience.tourPicker[0].slug == tour.slug %}
 
+				<a href="{{ tour.slug + '/' + experience.slug | slug }}">
 					{% include "tours/preview.njk" %}
+					{% include "tours/vertical-preview.njk" %}
+				</a>
 
 			{% endif %}
 

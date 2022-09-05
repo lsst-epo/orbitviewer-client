@@ -6,11 +6,21 @@
 	justify-content: center;
 	align-items: flex-start;
 
-	border-bottom: 1px solid var(--white-2);
+	@include device {
+		border-bottom: 1px solid var(--white-2);
+	}
+
+	@include desktop {
+		flex-direction: row;
+		overflow-x: auto;
+		flex-grow: 3;
+		align-items: center;
+	}
+
 	padding: var(--distance-30) 0;
 }
 
-.tours-list .item {
+.tour-preview-item {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -18,6 +28,10 @@
 	margin-bottom: var(--distance-30); 
 
 	padding: 0 var(--distance-20);
+
+	@include desktop {
+		display: none;
+	}
 
 	&:last-of-type {
 		margin-bottom: 0;
@@ -35,6 +49,7 @@
 		border-radius: 100%;
 		
 		margin-right: var(--distance-15);
+
 	}
 
 	.text {
@@ -51,6 +66,7 @@
 		display: flex;
 		align-items: center;
 		padding-top: var(--distance-5);
+
 
 		svg {
 			max-width: var(--icon-small);
@@ -104,4 +120,95 @@
 		}
 	}
 
+}
+
+.tour-preview-vertical-item {
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	h3 {
+		@extend %bold-1;
+
+		margin-bottom: var(--distance-120);
+	}
+
+	.sub-text {
+		display: flex;
+		padding-top: 5px;
+
+		h4 {
+			@extend %light-1;
+		}
+
+		svg {
+			margin: var(--distance-15) 0;
+			max-width: var(--icon-big);
+			max-height: var(--icon-big);
+		}
+
+		p {
+			@extend %bold-2;
+		}
+
+		>div {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.duration {
+			position: relative;
+			padding-right: var(--distance-40);
+			margin-right: var(--distance-40);
+
+			&:after {
+				content: '';
+				height: 100%;
+				border-right: 2px solid var(--white-0);
+				position: absolute;
+				right: 0;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+		}
+
+		.complexity {
+			div {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			span {
+				display: inline-block;
+
+				border-radius: 100%;
+
+				width: 6px;
+				height: 6px;
+				background-color: var(--white-2);
+
+				margin: 0 0 0 8px;
+
+				&:first-of-type {
+					margin: 0;
+				}
+
+				&.active {
+					background-color: var(--white-0);
+				}
+			}
+		}
+	}
+}
+
+.tours-list .vertical-item {
+	display: none;
+	
+	@include desktop {
+		display: flex;
+	}
 }

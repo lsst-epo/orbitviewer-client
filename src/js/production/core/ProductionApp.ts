@@ -11,8 +11,20 @@ export class ProductionApp extends CoreApp {
 
     }
 
+    setDeviceHeight(){        
+        const doc = document.documentElement
+        doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
+    }
+
+    resize(width: number, height: number): void {
+        super.resize(width, height);
+        this.setDeviceHeight();
+    }
+
     onDataLoaded(): void {
         super.onDataLoaded();
+
+        this.setDeviceHeight();
         
         // const demo = getEntryById('globals').data['demo'];
 

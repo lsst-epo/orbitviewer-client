@@ -47,11 +47,11 @@
 }
 
 // --------------------------------------------- 100vh fallback
-@mixin height($total) {
-	height: calc(#{$total} * 1vh);
-	height: calc(var(--vh, 1vh) * #{$total});
-}
-@mixin min-height($total) {
-	min-height: calc(#{$total} * 1vh);
-	min-height: calc(var(--vh, 1vh) * #{$total});
-}
+// @mixin height($total) {
+// 	height: calc(#{$total} * 1vh);
+// 	height: calc(var(--vh, 1vh) * #{$total});
+// }
+// @mixin min-height($total) {
+// 	min-height: calc(#{$total} * 1vh);
+// 	min-height: calc(var(--vh, 1vh) * #{$total});
+// }

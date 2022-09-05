@@ -1,13 +1,20 @@
 .tours-filters {
 	width: 100%;
 
-	border-bottom: 1px solid var(--white-2);
-
-	padding: var(--distance-15);
+	@include device {
+		border-bottom: 1px solid var(--white-2);
+	}
 
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+
+	padding: var(--distance-15);
+	@include desktop {
+		padding: var(--distance-30);
+
+		max-width: var(--default-max-width);
+	}
 
 	button {
 		display: flex;
