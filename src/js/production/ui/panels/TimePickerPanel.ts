@@ -52,8 +52,8 @@ export class TimePickerPanel extends Panel {
 		this.reset = buttonsZone.querySelector('[data-timer="reset"]');
 		this.edit = buttonsZone.querySelector('[data-timer="edit"]');
 
-		this.subPanelApply = this.subPanel.querySelector('#apply-date');
-		this.subPanelCancel = this.subPanel.querySelector('#close-edit');
+		this.subPanelApply = this.subPanel.querySelector('[data-button="apply-date"]');
+		this.subPanelCancel = this.subPanel.querySelector('[data-button="close-edit"]');
 
 	}
 

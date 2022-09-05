@@ -8,9 +8,6 @@ pagination:
 permalink: "{{ experience.tourPicker[0].slug + '/' + experience.slug | slug }}/"
 ---
 
-{% from 'ui/button.njk' import button as button %}
-
-
 {# 
 eleventyComputed:
 title: "{{ project.seo.title }}"
@@ -39,8 +36,13 @@ image: "{{ project.seo.seo_image }}" #}
 
     <div class="buttons__wrapper">
 
-      {{ button('initialSlide-0-prev', 'Back') }}
-      {{ button('initialSlide-0-next', "Let's start") }}
+      <button data-button="initialSlide-0-prev" class="ui__button">
+        <p>Back</p>
+      </button>
+
+      <button data-button="initialSlide-0-next" class="ui__button">
+        <p>Let's start</p>
+      </button>
 
     </div>
 
@@ -81,11 +83,22 @@ image: "{{ project.seo.seo_image }}" #}
 
     <div class="buttons__wrapper">
       
-      {% if slide.typeHandle == 'defaultSlide' %}{{ button( slide.typeHandle + '-' + loop.index + 'share', 'Share') }}{% endif %}
-      {{ button( slide.typeHandle + '-' + loop.index + 'prev', 'Back') }}
-      {{ button( slide.typeHandle + '-' + loop.index + 'next', 'Next') }}
+      {% if slide.typeHandle == 'defaultSlide' %}
+        <button data-button="{{ slide.typeHandle + '-' + loop.index + 'share' }}" class="ui__button">
+          <p>Share</p>
+        </button>
+      {% endif %}
+
+      <button data-button="{{ slide.typeHandle + '-' + loop.index + 'prev' }}" class="ui__button">
+        <p>Back</p>
+      </button>
+
+      <button data-button="{{ slide.typeHandle + '-' + loop.index + 'next' }}" class="ui__button">
+        <p>Next</p>
+      </button>
 
     </div>
+
   </section>
 
 {% endfor %}

@@ -1,8 +1,8 @@
-{% from 'ui/button.njk' import button as button %}
 {% from 'ui/filter.njk' import filter as filter %}
 {% from 'ui/panel-times.njk' import panelTimes as panelTimes %}
 
 <div class="filters">
+	
 	<button class="filters-button" data-panel-button="filters">
 
 		<svg viewBox="0 0 22 17.1" xml:space="preserve">
@@ -12,6 +12,7 @@
 		</svg>
 
 	</button>
+
 </div>
 
 <div class="panel" data-panel="filters">
@@ -52,10 +53,19 @@
 	</div>
 
 	<div class="panel-section">
+
 		<div class="filter-buttons">
-			{{ button('filters-apply', 'Apply Filter') }}
-			{{ button('filters-reset', 'Reset Filter', 'ghost-button') }}
+
+			<button data-button="filters-apply" class="ui__button">
+				<p>Apply Filter</p>
+			</button>
+
+			<button data-button="filters-reset" class="ui__button ghost-button">
+				<p>Reset Filter</p>
+			</button>
+
 		</div>
+
 	</div>
 
 </div>

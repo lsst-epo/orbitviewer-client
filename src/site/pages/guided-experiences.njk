@@ -10,8 +10,6 @@ eleventyComputed:
   description: "{{ copies.seo.description }}"
 --- #}
   
-{% from 'ui/button.njk' import button as button %}
-
 <h1>{{ guidedExperiences.title }}</h1>
 
 {% for tour in tours %}
@@ -30,7 +28,9 @@ eleventyComputed:
 
 <div class="buttons__wrapper">
 
-  {{ button('guided-experiences-button', 'Back to main screen') }}
+  <button data-button="guided-experiences-button" class="ui__button">
+    <p>Back to main screen</p>
+  </button>
 
 </div>
 

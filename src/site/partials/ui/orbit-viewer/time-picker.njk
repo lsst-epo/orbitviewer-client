@@ -1,7 +1,4 @@
 {% from 'ui/panel-times.njk' import panelTimes as panelTimes %}
-{% from 'ui/button.njk' import button as button %}
-
-
 
 <div class="panel panel-bottom-center" data-panel="time-picker">
 
@@ -80,10 +77,19 @@
 
 			</div>
 		</div>
+
 		<div class="buttons-wrapper">
-			{{ button('apply-date', 'Go to date', 'grey-button') }}
-			{{ button('close-edit', 'Cancel', 'ghost-button') }}
+
+			<button data-button="apply-date" class="ui__button grey-button">
+				<p>Go to date</p>
+			</button>
+
+			<button data-button="close-edit" class="ui__button ghost-button">
+				<p>Cancel</p>
+			</button>
+
 		</div>
+		
 	</div>
 
 </div>

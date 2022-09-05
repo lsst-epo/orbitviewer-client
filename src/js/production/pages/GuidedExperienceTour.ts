@@ -41,7 +41,7 @@ export class GuidedExperienceTour extends Page {
 			const buttons = slide.dom.querySelectorAll('.buttons__wrapper button');
 
 			for( const button of buttons){
-				const id = button.getAttribute('id');
+				const id = button.getAttribute('data-button');
 				const type = id.includes('prev') ? 'prev' : id.includes('next') ? 'next' : 'share';
 
 				button.addEventListener('click', () => {
