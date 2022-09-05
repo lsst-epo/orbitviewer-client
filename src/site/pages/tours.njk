@@ -81,13 +81,68 @@ image: "{{ project.seo.seo_image }}" #}
 	</div>
 
 	<div class="panel-section panel-separator">
+    
     <h3>Release characteristics</h3>
+
+    <ul>
+      
+      <li>
+        <input class="custom-input" type="radio" id="sort-new" name="sort-radio" value="new">
+        <label for="sort-new"><div class="sort-bullet"><div></div></div>Newer first</label>
+      </li>
+      
+      <li>
+        <input class="custom-input" type="radio" id="sort-old" name="sort-radio" value="old">
+        <label for="sort-old"><div class="sort-bullet"><div></div></div>Older first</label>
+      </li>
+    
+    </ul>
+
   </div>
 
   <div class="panel-section">
+    
     <h3>Tour's characteristics</h3>
+
+    <ul>
+
+      <li>
+        <input class="custom-input" type="radio" id="sort-less-duration" name="sort-radio" value="less-duration">
+        <label for="sort-less-duration"><div class="sort-bullet"><div></div></div>Less duration first</label>
+      </li>
+      
+      <li>
+        <input class="custom-input" type="radio" id="sort-more-duration" name="sort-radio" value="more-duration">
+        <label for="sort-more-duration"><div class="sort-bullet"><div></div></div>More duration first</label>
+      </li>
+
+      <li>
+        <input class="custom-input" type="radio" id="sort-less-complexity" name="sort-radio" value="less-complexity">
+        <label for="sort-less-complexity"><div class="sort-bullet"><div></div></div>Less complexity first</label>
+      </li>
+
+      <li>
+        <input class="custom-input" type="radio" id="sort-more-complexity" name="sort-radio" value="more-complexity">
+        <label for="sort-more-complexity"><div class="sort-bullet"><div></div></div>More complexity first</label>
+      </li>
+    
+    </ul>
+
+  </div>
+
+  <div class="sort-buttons">
+
+    <button data-button="sort-apply" class="ui__button">
+      <p>Apply Sort</p>
+    </button>
+
+    <button data-button="sort-reset" class="ui__button ghost-button">
+      <p>Reset Sort</p>
+    </button>
 
   </div>
 
 
 </div>
+
+

@@ -103,8 +103,13 @@
 }
 
 .filter-buttons {
-	margin: 20px 0;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	
+	margin: var(--distance-20) 0;
 	button:first-of-type {
-		margin-bottom: 20px;
+		margin-bottom: var(--distance-20);
 	}
 }

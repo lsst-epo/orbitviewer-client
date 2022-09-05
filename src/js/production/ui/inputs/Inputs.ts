@@ -1,5 +1,6 @@
 import { Checkbox } from "./Checkbox";
 import { DoubleRange } from "./DoubleRange";
+import { Radio } from "./Radio";
 
 
 
@@ -16,6 +17,7 @@ export class Inputs {
 			const type = el.getAttribute('type');
 
 			if(type === 'checkbox') new Checkbox(el)
+			if(type === 'radio') new Radio(el)
 			if(type === 'double-range') new DoubleRange(el)
 			
 		}

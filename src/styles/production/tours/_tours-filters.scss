@@ -1,11 +1,9 @@
-
-
 .tours-filters {
 	width: 100%;
 
 	border-bottom: 1px solid var(--white-2);
 
-	padding: var(--distance-15) 0;
+	padding: var(--distance-15);
 
 	display: flex;
 	justify-content: space-between;
@@ -13,12 +11,16 @@
 
 	button {
 		display: flex;
-		justify-content: center;
+		justify-content: flex-start;
 		align-items: center;
 
-		width: 33.33%;
+		width: 50%;
 
 		cursor: pointer;
+
+		&:last-of-type {
+			justify-content: flex-end;
+		}
 	}
 
 	svg {
