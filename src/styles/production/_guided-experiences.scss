@@ -57,7 +57,7 @@
 		@include aspect-ratio(16,9);
 	}
 
-	svg {
+	.image svg {
 		position: absolute;
 		top: 0;
 		right: 7%;

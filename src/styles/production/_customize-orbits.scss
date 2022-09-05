@@ -19,6 +19,9 @@
 	.categories-filter {
 		margin: var(--distance-35) 0;
 		padding: 0 var(--distance-30) var(--distance-30);
+		@include desktop {
+			padding: 0 var(--distance-10) var(--distance-30);
+		}
 
 		flex-grow: 1;
 		width: 100%;

@@ -11,7 +11,11 @@
 		justify-content: flex-start;
 		align-items: center;
 
-		margin: 0 0 20px 0;
+		margin: 0 0 var(--distance-20) 0;
+
+		@include desktop {
+			padding: 0 var(--distance-20);
+		}
 
 		@include device {
 			&:last-of-type {
@@ -56,6 +60,8 @@
 		justify-content: space-between;
 		align-items: center;
 		flex-grow: 1;
+
+		position: relative;
 
 		padding: 0 0 0 var(--distance-40);
 
