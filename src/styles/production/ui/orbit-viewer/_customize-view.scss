@@ -152,7 +152,7 @@
 	li {
 		opacity: 1;
 		transform: translateY(0);
-		pointer-events: unset;
+		pointer-events: all;
 		
 		@for $i from 1 through 3 {
 			&:nth-child(3n + #{$i}) {
