@@ -35,8 +35,8 @@ export class ZoomRange extends Input {
 		if(this.changing){
 
 			const value = MathUtils.map(this.value, 0, 1, CONTROLS.min, CONTROLS.max);
-			CONTROLS.orbit.minDistance = value - 0.0001;
-			CONTROLS.orbit.maxDistance = value + 0.0001;
+			CONTROLS.orbit.minDistance = value - 0.0000001;
+			CONTROLS.orbit.maxDistance = value + 0.0000001;
 
 			return;
 		}
