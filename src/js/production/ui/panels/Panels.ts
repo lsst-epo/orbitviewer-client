@@ -31,11 +31,12 @@ export class Panels {
 			else panel = new Panel(id);
 
 			this.panels.push(panel);
-		}
+		}		
 
-console.log(this.panels);
-		
+	}
 
+	onResize(){
+		for(const p of this.panels) p.onResize();
 	}
 
 	addListeners(){
@@ -52,7 +53,6 @@ console.log(this.panels);
 			activePanel.togglePanel();
 
 		})
-
 
 	}
 

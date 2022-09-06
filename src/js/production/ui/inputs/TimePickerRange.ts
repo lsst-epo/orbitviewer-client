@@ -24,10 +24,6 @@ export class TimePickerRange extends Input {
 		this.value = this.dom.valueAsNumber;
 		CLOCK_SETTINGS.backwards = this.value < 0;
 		CLOCK_SETTINGS.speed = Math.abs(this.value) * CLOCK_SETTINGS.maxSpeed;
-
-		console.log(this.value, CLOCK_SETTINGS.speed);
-		
-
 		
 	}
 

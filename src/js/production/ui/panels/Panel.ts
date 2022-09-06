@@ -48,6 +48,10 @@ export class Panel {
 
 	}
 
+	onResize(){
+		
+	}
+
 	update(){
 		if(!this.active) return;
 	}

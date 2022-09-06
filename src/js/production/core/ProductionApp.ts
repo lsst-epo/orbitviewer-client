@@ -9,6 +9,7 @@ export class ProductionApp extends CoreApp {
 
         historyInit();
 
+        this.resize();
     }
 
     setDeviceHeight(){        
@@ -25,17 +26,15 @@ export class ProductionApp extends CoreApp {
         else doc.classList.add('device')
     }
 
-    resize(width: number, height: number): void {
+    resize(width: number = window.innerWidth, height: number = window.innerHeight): void {
         super.resize(width, height);
         this.setDeviceHeight();
         this.setDeviceType();
+        for(const page of PAGES) page.class.onResize();
     }
 
     onDataLoaded(): void {
         super.onDataLoaded();
-
-        this.setDeviceHeight();
-        this.setDeviceType();
         
         // const demo = getEntryById('globals').data['demo'];
 
@@ -43,7 +42,7 @@ export class ProductionApp extends CoreApp {
             LOCATION.popstate = true;
             e.preventDefault();
             onChange();
-        })
+        });
 
     }
 
