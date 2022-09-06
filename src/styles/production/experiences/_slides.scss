@@ -58,19 +58,19 @@
 		padding: 0 var(--distance-30) var(--distance-30);
 
 		h3 {
-			@extend %bold-1;
+			@include bold-1;
 
 			margin-bottom: var(--distance-5);
 		}
 
 		h4 {
-			@extend %bold-3;
+			@include bold-3;
 		}
 
 		p {
 			margin-top: var(--distance-40);
 			
-			@extend %light-2;
+			@include light-2;
 		}
 	}
 

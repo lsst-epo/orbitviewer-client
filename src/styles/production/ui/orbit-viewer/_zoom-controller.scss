@@ -52,7 +52,7 @@
 	input:after {
 		display: inline-block;
 		
-		@extend %light-1;
+		@include light-1;
 		font-size: 2rem;
 
 		transform: translateY(-0.5em) rotate(-90deg);

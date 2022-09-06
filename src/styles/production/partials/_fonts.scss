@@ -31,20 +31,8 @@ body {
 	color: var(--white);
 }
 
-%light {
-	font-weight: 100;
-	line-height: 1.5em;
-}
 
-%normal {
-	font-weight: 400;
-}
-
-%bold {
-	font-weight: 900;
-}
-
-%title-1 {
+@mixin title-1 {
 	font-size: 1rem;
 	
 	@include desktop {
@@ -57,7 +45,7 @@ body {
 }
 
 
-%light-1 {
+@mixin light-1 {
 	font-size: 1.2rem;
 
 	@include desktop {
@@ -65,28 +53,32 @@ body {
 	}
 
 
-	@extend %light;
+	font-weight: 100;
+	line-height: 1.5em;
 }
 
-%light-2 {
+@mixin light-2 {
 	font-size: 1rem;
 	
-	@extend %light;
+	font-weight: 100;
+	line-height: 1.5em;
 }
 
-%light-3 {
+@mixin light-3 {
 	font-size: 0.8rem;
 
-	@extend %light;
+	font-weight: 100;
+	line-height: 1.5em;
 }
 
-%light-4 {
+@mixin light-4 {
 	font-size: 0.6rem;
 
-	@extend %light;
+	font-weight: 100;
+	line-height: 1.5em;
 }
 
-%normal-1 {
+@mixin normal-1 {
 	font-size: 0.8rem;
 
 	@include desktop {
@@ -95,10 +87,10 @@ body {
 
 	line-height: 1em;
 	
-	@extend %normal;
+	font-weight: 400;
 }
 
-%bold-1 {
+@mixin bold-1 {
 	
 	font-size: 1.8rem;
 
@@ -108,10 +100,10 @@ body {
 
 	line-height: 1em;
 
-	@extend %bold;
+	font-weight: 900;
 }
 
-%bold-2 {
+@mixin bold-2 {
 	
 	font-size: 1.2rem;
 
@@ -121,10 +113,10 @@ body {
 
 	line-height: 1em;
 
-	@extend %bold;
+	font-weight: 900;
 }
 
-%bold-3 {
+@mixin bold-3 {
 	
 	font-size: 0.9rem;
 
@@ -134,5 +126,5 @@ body {
 
 	line-height: 1em;
 
-	@extend %bold;
+	font-weight: 900;
 }

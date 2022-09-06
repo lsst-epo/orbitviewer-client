@@ -41,7 +41,7 @@
 
 		margin: 0 0 var(--distance-20) 0;
 
-		@extend %bold-3;
+		@include bold-3;
 
 		@include device {
 			&:last-of-type {

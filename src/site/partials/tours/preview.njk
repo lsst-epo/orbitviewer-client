@@ -10,14 +10,21 @@
 	
 		<div class="sub-text">
 			
-			{% include "ui/icons/stopwatch.njk" %}
+			<div class="duration">
+				<h4>Duration</h4>
+				{% include "ui/icons/stopwatch.njk" %}
+				<p>5m</p>
+			</div>
 			
-			<p>5m</p>
-			
-			<p>Complexity <span class="{{ 'active' if experience.complexity >= 1 }}"></span><span class="{{ 'active' if experience.complexity >= 2 }}"></span><span class="{{ 'active' if experience.complexity >= 3 }}"></span><span class="{{ 'active' if experience.complexity >= 4 }}"></span><span class="{{ 'active' if experience.complexity >= 5 }}"></span></p>
+			<div class="complexity">
+				<h4>Complexity</h4>
+				<div><span class="{{ 'active' if experience.complexity >= 1 }}"></span><span class="{{ 'active' if experience.complexity >= 2 }}"></span><span class="{{ 'active' if experience.complexity >= 3 }}"></span><span class="{{ 'active' if experience.complexity >= 4 }}"></span><span class="{{ 'active' if experience.complexity >= 5 }}"></span></div>
+				<p>{% if experience.complexity < 3 %}Easy{% else %}Hard{% endif %}</p>
+			</div>
 
 		</div>
 	
 	</div>
 
 </div>
+

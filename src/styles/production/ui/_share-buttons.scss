@@ -27,7 +27,7 @@
 
 	p {
 		margin-top: 10px;
-		@extend %light-4;
+		@include light-4;
 	}
 }
 

@@ -45,7 +45,7 @@
 
 		position: relative;
 
-		@extend %bold-3;
+		@include bold-3;
 
 		cursor: pointer;
 	}

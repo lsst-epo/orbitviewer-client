@@ -65,7 +65,7 @@
 
 		padding: 0 0 0 var(--distance-40);
 
-		@extend %bold-3;
+		@include bold-3;
 		
 		cursor: pointer;
 	}

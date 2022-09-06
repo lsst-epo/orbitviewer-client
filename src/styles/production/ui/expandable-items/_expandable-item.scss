@@ -112,13 +112,13 @@
 		color: var(--white-0);
 
 		h3 {
-			@extend %bold-3;
+			@include bold-3;
 			transition-property: opacity;
 		}
 
 		p {
 			margin-top: var(--distance-5);
-			@extend %light-3;
+			@include light-3;
 			white-space: nowrap;
 			transition-property: opacity;
 		}
@@ -153,7 +153,7 @@
 	.head {
 		background-color: var(--white-1);
 		
-		@extend %bold-3;
+		@include bold-3;
 
 		padding: var(--distance-10);
 
@@ -172,7 +172,7 @@
 		height: 0px;
 
 		p {
-			@extend %light-3;
+			@include light-3;
 
 			opacity: 0;
 			transition-property: opacity;

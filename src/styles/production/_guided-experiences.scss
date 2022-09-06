@@ -44,7 +44,7 @@
 	h3 {
 		margin: 0 0 15px 0;
 
-		@extend %bold-2;
+		@include bold-2;
 	}
 
 	.image {
@@ -77,10 +77,10 @@
 		text {
 			fill: var(--white-0);
 		
-			@extend %light-2;
+			@include light-2;
 			
 			&.num {
-				@extend %bold-2;
+				@include bold-2;
 			}
 		}
 	}

@@ -58,7 +58,7 @@
 
 	h2 {
 		margin: 0 0 var(--distance-10) 0;		
-		@extend %title-1;
+		@include title-1;
 		
 		@include desktop {
 			margin: 0 0 var(--distance-40) 0;

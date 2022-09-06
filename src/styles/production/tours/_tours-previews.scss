@@ -1,41 +1,8 @@
-.tours-list {
-	width: 100%;
-
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: flex-start;
-
-	@include device {
-		border-bottom: 1px solid var(--white-2);
-	}
-
-	@include desktop {
-		flex-direction: row;
-		overflow-x: auto;
-		flex-grow: 3;
-		align-items: center;
-	}
-
-	padding: var(--distance-30) 0;
-}
 
 .tour-preview-item {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
-	margin-bottom: var(--distance-30); 
-
-	padding: 0 var(--distance-20);
-
-	@include desktop {
-		display: none;
-	}
-
-	&:last-of-type {
-		margin-bottom: 0;
-	}
 
 	.thumb {
 		width: 50px;
@@ -59,7 +26,7 @@
 	}
 
 	h3 {
-		@extend %bold-2;
+		@include bold-2;
 	}
 
 	.sub-text {
@@ -67,108 +34,35 @@
 		align-items: center;
 		padding-top: var(--distance-5);
 
-
 		svg {
 			max-width: var(--icon-small);
 			max-height: var(--icon-small);
-			margin-right: var(--distance-10);
+			margin: 0 var(--distance-10) 0 0;
 		}
-
-		p {
-			@extend %bold-3;
-
-			&:first-of-type {
-				position: relative;
-				padding-right: var(--distance-20);
-				margin-right: var(--distance-20);
-
-				&:after {
-					content: '';
-					height: 1em;
-					border-right: 1px solid var(--white-2);
-					position: absolute;
-					right: 0;
-					top: 50%;
-					transform: translateY(-50%);
-				}
-			}
-
-			&:has(span){
-				display: flex;
-				align-items: center;
-			}
-
-			span {
-				display: inline-block;
-				
-				border-radius: 100%;
-
-				width: 6px;
-				height: 6px;
-				background-color: var(--white-2);
-
-				margin: 0 0 0 7px;
-
-				&:first-of-type {
-					margin: 0 0 0 var(--distance-10);
-				}
-
-				&.active {
-					background-color: var(--white-0);
-				}
-			}
-		}
-	}
-
-}
-
-.tour-preview-vertical-item {
-
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-
-	h3 {
-		@extend %bold-1;
-
-		margin-bottom: var(--distance-120);
-	}
-
-	.sub-text {
-		display: flex;
-		padding-top: 5px;
 
 		h4 {
-			@extend %light-1;
-		}
-
-		svg {
-			margin: var(--distance-15) 0;
-			max-width: var(--icon-big);
-			max-height: var(--icon-big);
+			@include light-2;
 		}
 
 		p {
-			@extend %bold-2;
-		}
-
-		>div {
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			align-items: center;
+			@include bold-3;
 		}
 
 		.duration {
 			position: relative;
-			padding-right: var(--distance-40);
-			margin-right: var(--distance-40);
+			padding-right: var(--distance-20);
+			margin-right: var(--distance-20);
+
+			display: flex;
+
+			h4 {
+				display: none;			
+			}
 
 			&:after {
 				content: '';
-				height: 100%;
-				border-right: 2px solid var(--white-0);
+				height: 1em;
+				border-right: 1px solid var(--white-2);
 				position: absolute;
 				right: 0;
 				top: 50%;
@@ -177,38 +71,97 @@
 		}
 
 		.complexity {
-			div {
-				display: flex;
-				justify-content: center;
-				align-items: center;
+			display: flex;
+			align-items: center;
+
+			p {
+				display: none;
 			}
-			span {
-				display: inline-block;
+		}
 
-				border-radius: 100%;
+		span {
+			display: inline-block;
+			
+			border-radius: 100%;
 
-				width: 6px;
-				height: 6px;
-				background-color: var(--white-2);
+			width: 6px;
+			height: 6px;
+			background-color: var(--white-2);
 
-				margin: 0 0 0 8px;
+			margin: 0 0 0 7px;
 
-				&:first-of-type {
-					margin: 0;
-				}
+			&:first-of-type {
+				margin: 0 0 0 var(--distance-10);
+			}
 
-				&.active {
-					background-color: var(--white-0);
-				}
+			&.active {
+				background-color: var(--white-0);
 			}
 		}
 	}
+	
+
 }
 
-.tours-list .tour-preview-vertical-item{
-	display: none;
-	
-	@include desktop {
-		display: flex;
+.desktop .tours-list .tour-preview-item,
+[data-template="guided-experiences-tours"] .tour-preview-item {
+	flex-direction: column;
+
+	h3 {
+		@include bold-1;
+		margin-bottom: var(--distance-120);
 	}
+
+	.thumb {
+		width: 150px;
+		height: 150px;
+		margin: 0 0 var(--distance-30);
+	}
+
+	.text {
+		align-items: center;
+	}
+
+	.sub-text {
+
+		align-items: stretch;
+		margin: var(--distance-10) 0 0;
+
+		svg {
+			margin: var(--distance-15) 0;
+			max-width: var(--icon-big);
+			max-height: var(--icon-big);
+		}
+		
+		h4 {
+			@include light-1;
+		}
+
+		p {
+			@include bold-2;
+		}
+
+		.duration,
+		.complexity {
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.duration {
+			h4 {
+				display: inline-block;
+			}
+		}
+
+		.complexity {
+			p {
+				display: inline-block;
+			}
+		}
+
+
+	}
+
 }
+

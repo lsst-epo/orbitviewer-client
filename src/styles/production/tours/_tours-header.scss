@@ -42,12 +42,12 @@
 	position: relative;
 
 	h1 {
-		@extend %title-1;
+		@include title-1;
 	}
 
 	h3 {
 		margin: var(--distance-5) 0 0 0;
-		@extend %bold-2;
+		@include bold-2;
 
 		@include desktop {
 			margin: var(--distance-30) 0 0 0;

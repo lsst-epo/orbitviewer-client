@@ -30,7 +30,7 @@
 	margin: 0 10px;
 
 	p {
-		@extend %bold-3;
+		@include bold-3;
 	}
 
 	.fake-range {	

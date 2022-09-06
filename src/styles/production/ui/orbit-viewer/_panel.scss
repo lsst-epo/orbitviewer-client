@@ -77,7 +77,7 @@
 	padding-top: var(--distance-15);
 
 	h3 {
-		@extend %light-2;
+		@include light-2;
 		margin-bottom: var(--distance-10);
 	}
 }
@@ -93,11 +93,11 @@
 		flex-direction: column;
 
 		h3 {
-			@extend %light-2;
+			@include light-2;
 		}
 
 		h2 {
-			@extend %bold-2;
+			@include bold-2;
 		}
 
 		&:has(svg){

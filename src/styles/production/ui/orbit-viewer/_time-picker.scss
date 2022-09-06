@@ -2,13 +2,13 @@
 	overflow: visible;
 
 	p {
-		@extend %light-3;
+		@include light-3;
 	}
 
 	span {
 		color: var(--white-0);
 		
-		@extend %bold-3;
+		@include bold-3;
 	}
 
 }

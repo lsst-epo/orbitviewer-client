@@ -16,15 +16,26 @@ export class ProductionApp extends CoreApp {
         doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
     }
 
+    setDeviceType(){        
+        const doc = document.documentElement;
+        doc.classList.remove('desktop', 'device');
+        
+        // 1024 same in media queries
+        if(window.innerWidth > 1024) doc.classList.add('desktop');
+        else doc.classList.add('device')
+    }
+
     resize(width: number, height: number): void {
         super.resize(width, height);
         this.setDeviceHeight();
+        this.setDeviceType();
     }
 
     onDataLoaded(): void {
         super.onDataLoaded();
 
         this.setDeviceHeight();
+        this.setDeviceType();
         
         // const demo = getEntryById('globals').data['demo'];
 

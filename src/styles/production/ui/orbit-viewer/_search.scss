@@ -80,7 +80,7 @@
 
 	transition: transform 0.2s ease-in-out;
 
-	@extend %light-2;
+	@include light-2;
 
 	color: var(--black-0);
 
@@ -125,7 +125,7 @@
 }
 
 .search-cancel {
-	@extend %light-2;
+	@include light-2;
 
 	opacity: 0;
 
