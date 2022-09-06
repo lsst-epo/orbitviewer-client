@@ -13,7 +13,9 @@ const pages = {
 
 export const EndTransition = () => {
 	TRANSITIONS.inProgress = false;
-	if(pages.from) pages.from.class.disable();		
+	if(pages.from) {
+		pages.from.class.disable();		
+	}
 	// navigationUpdate();
 }
 

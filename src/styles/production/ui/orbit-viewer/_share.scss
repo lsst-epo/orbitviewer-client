@@ -2,18 +2,19 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	padding: 0 14px;
+	padding: 0 var(--distance-15);
 }
 
 .share-trigger {
 	z-index: 2;
 	position: absolute;
 
-	width: 40px;
-	height: 40px;
+	width: var(--icon-big);
+	height: var(--icon-big);
 
 	background-color: var(--black-1);
-	transform: translate(0, calc(100vh - 100% - 14px));
+	transform: translate(0, calc(100vh - 100% - var(--distance-15)));
+	transform: translate(0, calc(var(--doc-height) - 100% - var(--distance-15)));
 
 	display: flex;
 	justify-content: center;

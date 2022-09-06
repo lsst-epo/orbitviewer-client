@@ -7,6 +7,7 @@ export class Page {
 	loaded:boolean = false;
 
 	panels:Panels;
+	inputs:Inputs;
 
 	prepare() {		
 		this.active = true;
@@ -20,10 +21,12 @@ export class Page {
 	}
 
 	enable(resolve){
+		this.dom.classList.remove('disabled');
 		resolve();	
 	}
 	
 	disable () {
+		this.dom.classList.add('disabled');
 		this.active = false;
 	}
 
@@ -33,7 +36,7 @@ export class Page {
 		this.addEventListeners();
 
 		
-		new Inputs(this.dom);
+		this.inputs = new Inputs(this.dom);
 		this.panels = new Panels(this.dom);
 
 
@@ -51,10 +54,13 @@ export class Page {
 	onResize(){
 		if(!this.active) return;
 		console.log('Page Resize');
+
+		this.panels.onResize();
 	}
 
 	update(){		
 		if(!this.active || !this.loaded) return;				
 		if(this.panels) this.panels.update();
+		if(this.inputs) this.inputs.update();
 	}
 }

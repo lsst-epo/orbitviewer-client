@@ -1,5 +1,7 @@
 
 :root {
+	
+	// Colors
 	--green-0: #0c4a47; 			// Button hover
 	--green-1: #12726d; 			// Button default
 	
@@ -7,8 +9,8 @@
 	--blue-1: #0f8fff; 			// Fletxetes ui, borders
 	--blue-2: #bde0ff;				// Bg icones hover
 
-	--teal-0: #058b8c; 			// Crec que només per les icones de share?
-	--teal-1: #009fa1;
+	--teal-0: #009fa1;			// Crec que només per les icones de share?
+	--teal-1: #058b8c;
 	--teal-2: #0c4a47;				// Icones actives clicked
 
 	--red-0: #ed4c4c; 				// Banderoles
@@ -21,4 +23,27 @@
 	--black-1: #2b3234; 			// Bg icones // Algunes icones en clicked
 	--black-2: #626666; 			// Bg icones hover
 	--black-alpha: rgba(0,0,0, 0.9);
+
+	// Paddings - Margins - Spacings by default
+	--distance-5: 5px;
+	--distance-10: 10px;
+	--distance-15: 15px;
+	--distance-20: 20px;
+	--distance-25: 25px;
+	--distance-30: 30px;
+	--distance-40: 40px;
+	--distance-60: 60px;
+	--distance-65: 65px;
+	--distance-75: 75px;
+	--distance-100: 100px;
+
+	// Icons sizes
+	--icon-big: 40px;
+	--icon-medium: 25px;
+	--icon-small: 15px;
+
+	// Panels sizes
+	--default-max-width: 420px;
 }
+
+

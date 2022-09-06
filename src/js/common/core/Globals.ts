@@ -21,3 +21,17 @@ export const USER = {
 export const TOKEN = {
 	value: localStorage.getItem('fil-token'),
 };
+
+export const CONTROLS = {
+	min: 0.5,
+	max: 150,
+	orbit: null
+}
+
+export const CLOCK_SETTINGS = {
+	speed: 0,
+  maxSpeed: 1000,
+	playing: true,
+	lastElapsedTime: 0,
+	backwards: false,
+}

@@ -32,3 +32,99 @@ body {
 }
 
 
+@mixin title-1 {
+	font-size: 1rem;
+	
+	@include desktop {
+		font-size: 1.2rem;
+	}
+
+	line-height: 1.2em;
+	letter-spacing: 0.6em;
+	text-transform: uppercase;
+}
+
+
+@mixin light-1 {
+	font-size: 1.2rem;
+
+	@include desktop {
+		font-size: 1.4rem;
+	}
+
+
+	font-weight: 100;
+	line-height: 1.5em;
+}
+
+@mixin light-2 {
+	font-size: 1rem;
+	
+	font-weight: 100;
+	line-height: 1.5em;
+}
+
+@mixin light-3 {
+	font-size: 0.8rem;
+
+	font-weight: 100;
+	line-height: 1.5em;
+}
+
+@mixin light-4 {
+	font-size: 0.6rem;
+
+	font-weight: 100;
+	line-height: 1.5em;
+}
+
+@mixin normal-1 {
+	font-size: 0.8rem;
+
+	@include desktop {
+		font-size: 1rem;
+	}
+
+	line-height: 1em;
+	
+	font-weight: 400;
+}
+
+@mixin bold-1 {
+	
+	font-size: 1.8rem;
+
+	@include desktop {
+		font-size: 2rem;
+	}
+
+	line-height: 1em;
+
+	font-weight: 900;
+}
+
+@mixin bold-2 {
+	
+	font-size: 1.2rem;
+
+	@include desktop {
+		font-size: 1.4rem;
+	}
+
+	line-height: 1em;
+
+	font-weight: 900;
+}
+
+@mixin bold-3 {
+	
+	font-size: 0.9rem;
+
+	@include desktop {
+		font-size: 1rem;
+	}
+
+	line-height: 1em;
+
+	font-weight: 900;
+}

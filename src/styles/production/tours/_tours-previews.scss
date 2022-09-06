@@ -1,36 +1,5 @@
-.tours-list {
-	width: 100%;
 
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-
-	border-bottom: 1px solid var(--white-2);
-	padding: 30px 0;
-
-	&.tours-coming-soon {
-		padding: calc(50px + 1rem) 0 20px;
-		
-		pointer-events: none;
-		
-		position: relative;
-
-		>p {
-			position: absolute;
-			top: 0;
-			left: 0;
-		
-			padding: 20px;
-		}
-
-		.item {
-			opacity: 0.5;
-		}
-	}
-}
-
-.tours-list .item {
+.tour-preview-item {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -39,12 +8,15 @@
 		width: 50px;
 		height: 50px;
 
+		flex-shrink: 0;
+
 		background-position: center;
 		background-size: cover;
 
 		border-radius: 100%;
 		
-		margin-right: 15px;
+		margin-right: var(--distance-15);
+
 	}
 
 	.text {
@@ -54,50 +26,142 @@
 	}
 
 	h3 {
-		font-weight: 900;
-		font-size: 1rem;
+		@include bold-2;
 	}
 
 	.sub-text {
 		display: flex;
-		padding-top: 5px;
+		align-items: center;
+		padding-top: var(--distance-5);
+
+		svg {
+			max-width: var(--icon-small);
+			max-height: var(--icon-small);
+			margin: 0 var(--distance-10) 0 0;
+		}
+
+		h4 {
+			@include light-2;
+		}
 
 		p {
-			font-weight: 900;
-			font-size: 0.8rem;
+			@include bold-3;
+		}
 
-			&:first-of-type {
-				position: relative;
-				padding-right: 20px;
-				margin-right: 20px;
+		.duration {
+			position: relative;
+			padding-right: var(--distance-20);
+			margin-right: var(--distance-20);
 
-				&:after {
-					content: '';
-					height: 1rem;
-					border-right: 1px solid var(--white-2);
-					position: absolute;
-					right: 0;
-					top: 50%;
-					transform: translateY(-50%);
-				}
+			display: flex;
+
+			h4 {
+				display: none;			
 			}
 
-			span {
-				display: inline-block;
-				
-				border-radius: 100%;
+			&:after {
+				content: '';
+				height: 1em;
+				border-right: 1px solid var(--white-2);
+				position: absolute;
+				right: 0;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+		}
 
-				width: 5px;
-				height: 5px;
-				background-color: var(--white-2);
+		.complexity {
+			display: flex;
+			align-items: center;
 
-				margin: 0 0 0.1rem 5px;
+			p {
+				display: none;
+			}
+		}
 
-				&.active {
-					background-color: var(--white-0);
-				}
+		span {
+			display: inline-block;
+			
+			border-radius: 100%;
+
+			width: 6px;
+			height: 6px;
+			background-color: var(--white-2);
+
+			margin: 0 0 0 7px;
+
+			&:first-of-type {
+				margin: 0 0 0 var(--distance-10);
+			}
+
+			&.active {
+				background-color: var(--white-0);
 			}
 		}
 	}
+	
 
 }
+
+.desktop .tours-list .tour-preview-item,
+[data-template="guided-experiences-tours"] .tour-preview-item {
+	flex-direction: column;
+
+	h3 {
+		@include bold-1;
+		margin-bottom: var(--distance-120);
+	}
+
+	.thumb {
+		width: 150px;
+		height: 150px;
+		margin: 0 0 var(--distance-30);
+	}
+
+	.text {
+		align-items: center;
+	}
+
+	.sub-text {
+
+		align-items: stretch;
+		margin: var(--distance-10) 0 0;
+
+		svg {
+			margin: var(--distance-15) 0;
+			max-width: var(--icon-big);
+			max-height: var(--icon-big);
+		}
+		
+		h4 {
+			@include light-1;
+		}
+
+		p {
+			@include bold-2;
+		}
+
+		.duration,
+		.complexity {
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.duration {
+			h4 {
+				display: inline-block;
+			}
+		}
+
+		.complexity {
+			p {
+				display: inline-block;
+			}
+		}
+
+
+	}
+
+}
+

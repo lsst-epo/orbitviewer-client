@@ -1,5 +1,6 @@
 import { Panel } from "./Panel";
 import { TimePickerPanel } from "./TimePickerPanel";
+import { TourSortPanel } from "./TourSortPanel";
 
 export class Panels {
 	dom: HTMLElement;
@@ -8,6 +9,7 @@ export class Panels {
 		if(!!!dom) return;
 
 		this.dom = dom;
+		
 
 		this.createPanels();
 		this.addListeners();
@@ -24,14 +26,17 @@ export class Panels {
 			if(!!!item) continue;
 
 			let panel = null
-			if(id === 'time-picker') {
-				panel = new TimePickerPanel(id);
-			} else panel = new Panel(id);
+			if(id === 'time-picker') panel = new TimePickerPanel(id);
+			else if(id.includes('tour-sort')) panel = new TourSortPanel(id);
+			else panel = new Panel(id);
 
 			this.panels.push(panel);
+		}		
 
-		}
+	}
 
+	onResize(){
+		for(const p of this.panels) p.onResize();
 	}
 
 	addListeners(){
@@ -48,7 +53,6 @@ export class Panels {
 			activePanel.togglePanel();
 
 		})
-
 
 	}
 

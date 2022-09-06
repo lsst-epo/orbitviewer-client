@@ -5,7 +5,7 @@ import { EllipticalPath } from "./EllipticalPath";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 
 const GEO = new SphereBufferGeometry(1, 32, 16);
-const MAT = getPlanetMaterialInstance(new TextureLoader().load('assets/textures/fake-earth.jpg'), 0x3333ff);
+const MAT = getPlanetMaterialInstance(new TextureLoader().load(window.location.origin + '/assets/textures/fake-earth.jpeg'), 0x3333ff);
 
 export class Planet extends Object3D {
     mesh:Mesh;
@@ -23,7 +23,7 @@ export class Planet extends Object3D {
         this.add(this.mesh);
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
 
-        this.orbitPath = new EllipticalPath(_data);
+        this.orbitPath = new EllipticalPath(_data);       
 
         this.rotationSpeed = Random.randf(-1, 1);
     }

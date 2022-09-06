@@ -5,7 +5,7 @@
 	flex-direction: column;
 	align-items: center;
 
-	padding: 18px;
+	padding: var(--distance-20);
 
 	background-color: var(--black-0);
 
@@ -15,10 +15,11 @@
 	flex-direction: column;
 
 	height: 100vh;
+	height: var(--doc-height);
 	overflow-y: auto;
 
 	@include desktop {
-		padding: 60px;
+		padding: var(--distance-60);
 	}
 
 	h1 {
@@ -29,25 +30,21 @@
 	}
 
 	a {
-		margin: 30px 0 0 0;
+		margin: var(--distance-30) 0 0 0;
 		width: 100%;
-		max-width: 320px;
+		max-width: var(--default-max-width);
 		text-align: center;	
 
 		@include desktop {
-			margin: 110px 0 0 0;
+			margin: var(--distance-100) 0 0 0;
 			max-width: 700px;
 		}
 	}
 
 	h3 {
-		font-weight: 900;
-		font-size: 1.2rem;
 		margin: 0 0 15px 0;
 
-		@include desktop {
-			font-size: 1.4rem;
-		}
+		@include bold-2;
 	}
 
 	.image {
@@ -61,7 +58,7 @@
 		@include aspect-ratio(16,9);
 	}
 
-	svg {
+	.image svg {
 		position: absolute;
 		top: 0;
 		right: 7%;
@@ -79,12 +76,11 @@
 
 		text {
 			fill: var(--white-0);
-			font-size: 01rem;
-			font-weight: 100;
-
+		
+			@include light-2;
+			
 			&.num {
-				font-size: 1.2rem;
-				font-weight: 900;
+				@include bold-2;
 			}
 		}
 	}

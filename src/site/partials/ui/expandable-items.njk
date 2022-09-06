@@ -9,16 +9,22 @@
 			<div class="item-wrapper">
 
 				<button class="close-item">
-					<svg viewBox="0 0 20 20" xml:space="preserve">
-						<ellipse cx="10" cy="10" rx="10" ry="10"/>
-						<path d="M15,5.9L14.1,5L10,9.1L5.9,5L5,5.9L9.1,10L5,14.1L5.9,15l4.1-4.1l4.1,4.1l0.9-0.9	L10.9,10L15,5.9z"/>
-					</svg>
+					{% include "ui/icons/times-circle.njk" %}
 				</button>
 
 				<div class="cover" style="background-image: url(https://picsum.photos/300/200);">
 					
 					<div class="icon">
-						{{ filterIcon(element.elementCategory[0].slug, element.elementCategory[0].title ) }}
+
+						{% set cat = element.elementCategory[0] %}
+
+						{% for category in categories %}
+							{% if category.slug == cat.slug %}
+								{% set cat = category %}
+							{% endif %}
+						{% endfor %}
+
+						{{ filterIcon(cat.slug, cat.title, cat.mainColor ) }}
 
 						<div class="icon-text">
 							<h3>{{ element.title }}</h3>

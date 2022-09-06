@@ -11,7 +11,6 @@ eleventyComputed:
 --- #}
 
 {% from 'ui/filter.njk' import filter as filter %}
-{% from 'ui/button.njk' import button as button %}
 
 <div class="customize-orbits-text">
   <h2>{{ customizeOrbits.title }}</h2>
@@ -20,5 +19,7 @@ eleventyComputed:
 
 {{ filter(categories) }}
 
-{{ button('customize-orbits-button', customizeOrbits.button) }}
+<button data-button="customize-orbits-button" class="ui__button {{ classes }}">
+  <p>{{ customizeOrbits.button }}</p>
+</button>
 

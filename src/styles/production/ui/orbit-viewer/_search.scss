@@ -12,13 +12,12 @@
 	justify-content: center;
 	align-items: flex-end;
 
-	padding: 15px 20px;
+	padding: var(--distance-15) var(--distance-20);
 	@include desktop {
-		padding: 60px;
+		padding: var(--distance-60);
 	}
 	
 	opacity: 0;
-	pointer-events: none;
 	background-color: var(--black-alpha);
 	transition: opacity 0.3s ease-in-out;
 
@@ -30,10 +29,10 @@
 	top: 64px;
 	left: 0;
 	
-	padding: 0 14px;
+	padding: 0 var(--distance-15);
 	
 	width: 100%;
-	max-width: 380px;
+	max-width: var(--default-max-width);
 
 	display: flex;
 	justify-content: space-between;
@@ -44,8 +43,8 @@
 	z-index: 2;
 	position: absolute;
 
-	width: 40px;
-	height: 40px;
+	width: var(--icon-big);
+	height: var(--icon-big);
 
 	background-color: var(--white-0);
 
@@ -77,12 +76,12 @@
 	transform-origin: 20px 50%;
 
 	flex-grow: 1;
-	padding: 0 15px;
+	padding: 0 var(--distance-15);
 
 	transition: transform 0.2s ease-in-out;
 
-	font-size: 1rem;
-	font-weight: 100;
+	@include light-2;
+
 	color: var(--black-0);
 
 	&::placeholder {
@@ -90,7 +89,7 @@
 	}
 
 	input {
-		padding: 0 35px;
+		padding: 0 var(--distance-30);
 		height: 40px;
 		border-radius: 0 40px 40px 0;
 		background-color: var(--white-0);
@@ -101,11 +100,13 @@
 .search-reset {
 	position: absolute;
 	top: 0;
-	right: 15px;
+	right: var(--distance-15);
 
-	width: 40px;
-	padding: 10px;
-	height: 40px;
+	width: var(--icon-big);
+	height: var(--icon-big);
+	
+	padding: var(--distance-10);
+
 
 	opacity: 0;
 	transition: opacity 0.2s ease-in-out;
@@ -124,15 +125,16 @@
 }
 
 .search-cancel {
-	font-size: 1rem;
-	font-weight: 100;
+	@include light-2;
 
 	opacity: 0;
 
 	transition: all 0.2s ease-in-out;
 }
 
-body[data-search-state="1"] {
+
+body[data-search-state="1"],
+body[data-search-state="2"]{
 
 	.search-input {
 		z-index: #{$toFrontIndex + 1};
@@ -141,10 +143,10 @@ body[data-search-state="1"] {
 	.search-panel {
 		z-index: $toFrontIndex;
 		opacity: 1;
-		pointer-events: unset;
+		pointer-events: all;
 
 		button {
-			pointer-events: unset;
+			pointer-events: all;
 		}
 	}
 
@@ -155,6 +157,9 @@ body[data-search-state="1"] {
 	.search-cancel {
 		opacity: 1;
 	}
+
+}
+body[data-search-state="1"] {
 
 	.search-text-input {
 		transform: scaleX(1);
@@ -164,24 +169,6 @@ body[data-search-state="1"] {
 
 body[data-search-state="2"] {
 
-	.search-input {
-		z-index: 6;
-	}
-
-	.search-panel {
-		z-index: 5;
-		opacity: 1;
-		pointer-events: unset;
-
-		button {
-			pointer-events: unset;
-		}
-	}
-
-	.search-lense {
-		pointer-events: none;
-	}
-
 	.search-reset {
 		opacity: 1;
 	}
@@ -189,8 +176,12 @@ body[data-search-state="2"] {
 	.search-text-input {
 		transform: scaleX(1);
 	}
+}
 
-	.search-cancel {
-		opacity: 1;
+body:not([data-search-state="1"]) .search-panel {
+	pointer-events: none;
+
+	* {
+		pointer-events: none;
 	}
 }

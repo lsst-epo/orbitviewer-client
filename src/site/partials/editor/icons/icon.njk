@@ -1,0 +1,6 @@
+{% macro icon(name, class, alt) %}
+	<svg class="{{ class }}" viewBox="0 0 15 15" xml:space="preserve">
+		<title>{{ alt }}</title>
+		{% include 'editor/icons/' + name + '.njk' %}
+	</svg>
+{% endmacro %}

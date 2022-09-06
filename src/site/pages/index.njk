@@ -10,8 +10,6 @@ eleventyComputed:
   description: "{{ copies.seo.description }}"
 --- #}
 
-{% from 'ui/button.njk' import button as button %}
-
 <div class="center__wrapper">
 
     {# TODO imatge del gestor #}
@@ -23,7 +21,12 @@ eleventyComputed:
 
 <div class="buttons__wrapper">
 
-  {{ button('landing-button-left', landing.leftButton) }}
-  {{ button('landing-button-right', landing.rightButton) }}
+  <button data-button="landing-button-left" class="ui__button">
+    <p>{{ landing.leftButton }}</p>
+  </button>
+
+  <button data-button="landing-button-right" class="ui__button">
+    <p>{{ landing.rightButton }}</p>
+  </button>
 
 </div>

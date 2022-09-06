@@ -109,9 +109,9 @@ export const historyLinksEventListener = () => {
 	
 	for(const link of links){
 
-		if(link.hasAttribute('data-onchange')) continue;
+		if(link.hasAttribute('data-onchange') || link.hasAttribute('target')) continue;
 
-		if (link.href.indexOf(hostname) || !link.hasAttribute('target')) {	
+		if (link.href.indexOf(hostname)) {	
 			
 			link.setAttribute('data-onchange', 'true');
 			
@@ -152,8 +152,6 @@ export const historyInit = () => {
 }
 
 export const onChange = (url:string = window.location.pathname) => {		
-
-	console.log(url, PAGES);
 	
 
 	// CHECK IF PAGE IS LOADING

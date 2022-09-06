@@ -16,7 +16,6 @@ async function getPage() {
 					title,
 					slug
 				},
-				comingSoon,
 				complexity,
 				flexible {
 					... on flexible_introSlide_BlockType {

@@ -1,6 +1,6 @@
 // Default page template styles
 [data-template="customize-orbits"] {
-	padding: 18px;
+	padding: var(--distance-20);
 
 	background-color: var(--black-0);
 
@@ -10,6 +10,7 @@
 	flex-direction: column;
 
 	height: 100vh;
+	height: var(--doc-height);
 	overflow-y: auto;
 
 	@include desktop {
@@ -17,8 +18,11 @@
 	}
 
 	.categories-filter {
-		margin: 35px 0;
-		padding: 0 15px;
+		margin: var(--distance-35) 0;
+		padding: 0 var(--distance-30) var(--distance-30);
+		@include desktop {
+			padding: 0 var(--distance-10) var(--distance-30);
+		}
 
 		flex-grow: 1;
 		width: 100%;
@@ -32,7 +36,7 @@
 
 			li {
 				width: 50%;
-				max-width: 320px;
+				max-width: var(--default-max-width);
 			}
 		}
 	}
@@ -45,22 +49,19 @@
 }
 
 .customize-orbits-text {
-	padding: 0 15px;
+	padding: 0 var(--distance-15) var(--distance-15);
 	max-width: 810px;
 
 	@include desktop {
-		padding: 0 15px 30px;
+		padding: 0 var(--distance-15) var(--distance-30);
 	}
 
 	h2 {
-		font-size: 1rem;
-		margin: 0 0 10px 0;
-		text-transform: uppercase;
-		letter-spacing: 0.9rem;		
+		margin: 0 0 var(--distance-10) 0;		
+		@include title-1;
 		
 		@include desktop {
-			margin: 0 0 40px 0;
-			font-size: 1.8rem;
+			margin: 0 0 var(--distance-40) 0;
 		}
 	}
 
@@ -72,4 +73,8 @@
 			font-size: 1.3rem;
 		}
 	}
+}
+
+.page__customize-orbits [data-template="customize-orbits"] {
+	pointer-events: all
 }

@@ -3,13 +3,13 @@
 	position: absolute;
 	top: 175px;
 	left: 0;
-	padding: 0 13px;
+	padding: 0 var(--distance-15);
 
 	.customize-view-icon {
 		z-index: 2;
 
-		width: 40px;
-		height: 40px;
+		width: var(--icon-big);
+		height: var(--icon-big);
 
 		background-color: var(--black-1);
 
@@ -21,8 +21,7 @@
 		cursor: pointer;
 
 		p {
-			font-size: 0.8rem;
-			font-weight: 100;
+			@include light-3;
 
 			position: absolute;
 			top: 12px;
@@ -55,7 +54,7 @@
 
 .customize-view	ul {
 	margin: 0;
-	padding: 20px 5px;
+	padding: var(--distance-20) var(--distance-5);
 
 	li {
 		list-style: none;
@@ -72,7 +71,7 @@
 
 		transition: all 0.2s ease-in-out;
 
-		margin: 0 0 25px 0;
+		margin: 0 0 var(--distance-25) 0;
 
 		transition-delay: 0s;
 	}
@@ -114,18 +113,16 @@
 		align-items: center;
 		flex-grow: 1;
 
-		padding: 0 0 0 40px;
+		padding: 0 0 0 var(--distance-40);
 
-		font-family: $font1;
-		font-size: 0.8rem;
-		font-weight: 900;
+		@include bold-3;
 
 		cursor: pointer;
 	}
 
 	svg {
-		width: 40px;
-		height: 40px;
+		width: var(--icon-big);
+		height: var(--icon-big);
 	}
 
 	.checked {
@@ -155,7 +152,7 @@
 	li {
 		opacity: 1;
 		transform: translateY(0);
-		pointer-events: unset;
+		pointer-events: all;
 		
 		@for $i from 1 through 3 {
 			&:nth-child(3n + #{$i}) {

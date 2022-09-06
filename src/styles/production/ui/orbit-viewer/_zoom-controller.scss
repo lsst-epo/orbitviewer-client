@@ -4,9 +4,9 @@
 
 	position: absolute;
 	top: 50%;
-	right: 20px;
+	right: 15px;
 
-	transform: rotate(90deg);
+	// transform: rotate(90deg);
 	
 	width: 0;
 	height: 0;
@@ -23,9 +23,13 @@
 		height: 15px;
 
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
+		top: 0;
+		left: 0;
+
+		transform-origin: 0 50%;
+		transform: rotate(270deg) translate(-50%, -50%);
+		
+		pointer-events: all;
 	}
 
 	input[type=range]::-webkit-slider-thumb {
@@ -46,22 +50,25 @@
 
 		background-color: var(--black-2);
 		border-radius: 20px;
+		pointer-events: all;
 	}
 
 	input:before,
 	input:after {
 		display: inline-block;
-		font-size: 2.2rem;
-		font-weight: 100;
-		line-height: 20px;
-		transform: translateY(-2px) rotate(-90deg);
-		padding: 0 5px;
+		pointer-events: none;
+		
+		@include light-1;
+		font-size: 2rem;
+
+		transform: translateY(-0.5em) rotate(-90deg);
+		padding: 0 var(--distance-5);
 	}
 
-	input:before {
+	input:after {
 		content: '+';
 	}
-	input:after {
+	input:before {
 		content: '-';
 	}
 }

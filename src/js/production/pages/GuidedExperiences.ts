@@ -5,10 +5,8 @@ import { Page } from "./Page";
 export class GuidedExperiences extends Page {
 	addEventListeners(): void {
 		super.addEventListeners();
-
-		console.log('hola');
 		
-		this.dom.querySelector('#guided-experiences-button').addEventListener('click', () => {
+		this.dom.querySelector('[data-button="guided-experiences-button"]').addEventListener('click', () => {
 			onChange('/');
 		})
 	}

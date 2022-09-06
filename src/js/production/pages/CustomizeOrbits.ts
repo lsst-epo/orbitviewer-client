@@ -10,7 +10,7 @@ export class CustomizeOrbits extends Page {
 	}
 
 	addBackButton(){
-		const btn = this.dom.querySelector('#customize-orbits-button');
+		const btn = this.dom.querySelector('[data-button="customize-orbits-button"]');
 
 		btn.addEventListener('click', (e) => {
 			e.preventDefault();

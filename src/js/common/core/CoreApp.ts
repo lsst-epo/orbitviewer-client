@@ -14,15 +14,9 @@ import { OrbitElements } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
+import { CLOCK_SETTINGS, CONTROLS } from "./Globals";
 
 const GEO = new SphereBufferGeometry(1, 32, 32);
-
-const SETTINGS = {
-	speed: 50,
-	playing: true,
-	lastElapsedTime: 0,
-	backwards: false
-}
 
 const data = new Array<OrbitElements>();
 const dummy = new Object3D();
@@ -32,7 +26,6 @@ const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
 
 export class CoreApp extends WebGLSketch {
-    controls:OrbitControls;
     particles:SolarParticles;
 
     solarClock:SolarClock;
@@ -108,10 +101,7 @@ export class CoreApp extends WebGLSketch {
         this.ambientLight = new AmbientLight(0xffffff, 0.13);
         this.scene.add(this.ambientLight);
 
-        console.log('Core App init');
-
-        console.log(window.location);
-        
+        console.log('Core App init');        
 
         io.load(window.location.origin + `/assets/data/${PLANETS}`, (res) => {
             const d = JSON.parse(res)
@@ -228,7 +218,10 @@ export class CoreApp extends WebGLSketch {
         this.camera.position.y = 0.5;
         this.camera.lookAt(this.scene.position);
 
-        this.controls = new OrbitControls(this.camera, this.domElement);
+        // Init controls
+        CONTROLS.orbit = new OrbitControls(this.camera, this.domElement);
+        CONTROLS.orbit.minDistance = CONTROLS.min;
+        CONTROLS.orbit.maxDistance = CONTROLS.max;
 
         window.addEventListener('keydown', (evt) =>{
             if(evt.key == ' ') this.playPause();
@@ -236,15 +229,17 @@ export class CoreApp extends WebGLSketch {
 
         this.start();
         this.solarClock = new SolarClock(this.clock);
-        this.solarClock.reverse = SETTINGS.backwards;
-        this.solarClock.secsPerHour = SETTINGS.speed;
         this.solarClock.start();
     }
 
     update() {
 		super.update();
-		this.controls.update();        
 
+		CONTROLS.orbit.update();     
+
+
+        if(CLOCK_SETTINGS.backwards !== this.solarClock.reverse) this.solarClock.reverse = CLOCK_SETTINGS.backwards;
+         if(CLOCK_SETTINGS.speed !== this.solarClock.secsPerHour)this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
 		const d = this.solarClock.update();
 		
 		this.particles.update(d, this.camera as PerspectiveCamera);

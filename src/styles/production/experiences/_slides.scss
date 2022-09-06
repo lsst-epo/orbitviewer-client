@@ -20,7 +20,7 @@
 	background-size: cover;
 	background-position: center;
 
-	padding: 20px;
+	padding: var(--distance-20);
 
 	display: flex;
 	flex-direction: column;
@@ -36,76 +36,8 @@
 		transform: translate(-50%,-50%);
 		width: 100%;
 
-		padding: 20px;
-
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+		padding: var(--distance-20);
 	}
-
-	h3 {
-		font-size: 1.6rem;
-		font-weight: 900;
-
-		@include desktop {
-			font-size: 2rem;
-		}
-		
-		margin-bottom: 20px;
-	}
-
-	.sub-text {
-		display: flex;
-		padding-top: 5px;
-
-		h4 {
-			font-weight: 100;
-			font-size: 1.2rem;
-			margin-bottom: 10px;
-		}
-
-		p {
-			font-weight: 900;
-			font-size: 1rem;
-			margin-top: 10px;
-		}
-
-		.duration {
-			position: relative;
-			padding-right: 40px;
-			margin-right: 40px;
-
-			&:after {
-				content: '';
-				height: 100%;
-				border-right: 2px solid var(--white-0);
-				position: absolute;
-				right: 0;
-				top: 50%;
-				transform: translateY(-50%);
-			}
-		}
-
-		.complexity {
-			div {
-				display: inline-block;
-
-				border-radius: 100%;
-
-				width: 5px;
-				height: 5px;
-				background-color: var(--white-2);
-
-				margin: 0 0 0.1rem 5px;
-
-				&.active {
-					background-color: var(--white-0);
-				}
-			}
-		}
-	}
-
 }
 
 [data-slide="introSlide"],
@@ -123,30 +55,29 @@
 
 		justify-content: flex-end;
 
-		padding: 0 30px 30px;
+		padding: 0 var(--distance-30) var(--distance-30);
 
 		h3 {
-			font-size: 1.8rem;
-			font-weight: 900;
-			margin-bottom: 5px;
+			@include bold-1;
+
+			margin-bottom: var(--distance-5);
 		}
 
 		h4 {
-			font-weight: 900;
-			font-size: 0.9rem;
+			@include bold-3;
 		}
 
 		p {
-			margin-top: 40px;
-			font-weight: 100;
-			font-size: 1rem;
+			margin-top: var(--distance-40);
+			
+			@include light-2;
 		}
 	}
 
 }
 [data-slide="introSlide"],
 [data-slide="funFactSlide"] {
-	padding: 20px;
+	padding: var(--distance-20);
 	background-color: var(--teal-2);
 
 	.icon {
@@ -174,7 +105,7 @@
 		align-items: flex-end;
 		width: 100%;
 		justify-content: center;
-		padding: 0 20px 20px;
+		padding: 0 var(--distance-30) var(--distance-20);
 	}
 
 }
@@ -187,7 +118,7 @@
 
 [data-slide="defaultSlide"] {
 	.content {
-		padding: 50px; 
+		padding: var(--distance-40); 
 		flex-grow: 1;
 	}
 }
@@ -235,7 +166,7 @@
 		width: 100%;
 
 		@include desktop {
-			width: 520px;
+			width: 700px;
 		}
 	}
 }

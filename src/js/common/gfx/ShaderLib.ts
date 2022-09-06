@@ -69,7 +69,7 @@ export const COMP_SP_NORMAL = new ShaderMaterial({
 });
 
 export const initSunMaterial = (sunMat:MeshPhongMaterial): MeshPhongMaterial => {
-    console.log('sunmat')
+
     sunMat.onBeforeCompile = (shader:Shader) => {
         let vs = shader.vertexShader;
         let fs = shader.fragmentShader;

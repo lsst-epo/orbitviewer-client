@@ -34,8 +34,6 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
-	pointer-events: none;
 }
 
 .expandable-item .close-item {
@@ -45,12 +43,11 @@
 	width: 30px;
 	height: 30px;
 
-	padding: 5px;
+	padding: var(--distance-5);
 
 	transform: translate(25px, -25px);
 	transition-property: transform;
 
-	pointer-events: all;
 	cursor: pointer;
 	
 	svg {
@@ -77,10 +74,9 @@
 	background-position: center;
 	background-size: cover;
 
-	pointer-events: all;
 	cursor: pointer;
 
-	transition-property: border-radius width height;
+	transition-property: border-radius, width, height;
 
 
 	.icon {
@@ -94,8 +90,8 @@
 		transition-property: opacity;
 
 		svg {
-			width: 25px;
-			height: 25px;
+			width: var(--icon-medium);
+			height: var(--icon-medium);
 		}
 		
 	}
@@ -116,14 +112,13 @@
 		color: var(--white-0);
 
 		h3 {
-			font-weight: 900;
-			font-size: 0.8rem;
+			@include bold-3;
 			transition-property: opacity;
 		}
 
 		p {
-			font-weight: 100;
-			font-size: 0.6rem;
+			margin-top: var(--distance-5);
+			@include light-3;
 			white-space: nowrap;
 			transition-property: opacity;
 		}
@@ -131,7 +126,6 @@
 	}
 
 }
-
 
 .hidden-tabs {
 	position: absolute;
@@ -158,28 +152,27 @@
 
 	.head {
 		background-color: var(--white-1);
-		font-weight: 900;
-		font-size: 0.8rem;
-		padding: 10px;
+		
+		@include bold-3;
+
+		padding: var(--distance-10);
 
 		display: flex;
 		justify-content: space-between;
 
 		transition-property: border;
 
-		pointer-events: all;
 		cursor: pointer;
 	}
 
 	.content {
 		transition-property: height, padding;
 		overflow: hidden;
-		padding: 0 10px;
+		padding: 0 var(--distance-10);
 		height: 0px;
 
 		p {
-			font-weight: 100;
-			font-size: 0.7rem;
+			@include light-3;
 
 			opacity: 0;
 			transition-property: opacity;
@@ -189,7 +182,7 @@
 	section.active {
 		.content {
 			border-top: 1px solid var(--white-2);
-			padding: 10px;
+			padding: var(--distance-10);
 			height: var(--height);
 
 			p {
@@ -199,8 +192,6 @@
 	}
 
 }
-
-
 
 .expandable-item.visible.active {
 
@@ -224,5 +215,17 @@
 	.hidden-tabs {
 		opacity: 1;
 		transition-delay: 0.2s;
+
+		.head {
+			pointer-events: all;
+		}
+	}
+}
+
+.expandable-item.visible {
+
+	.close-item,
+	.cover{
+		pointer-events: all;
 	}
 }

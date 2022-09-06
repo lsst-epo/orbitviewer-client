@@ -2,11 +2,11 @@
 	z-index: 2;
 	position: absolute;
 
-	width: 40px;
-	height: 40px;
+	width: var(--icon-big);
+	height: var(--icon-big);
 
 	background-color: var(--blue-0);
-	transform: translate(14px, 80px);
+	transform: translate(var(--distance-15), 80px);
 
 	display: flex;
 	justify-content: center;
@@ -20,21 +20,17 @@
 		width: 20px;
 	}
 
-	path {
-		fill: var(--white-0);
-	}
 }
 
 .distance-input {
 	position: relative;
 	display: flex;
 	justify-content: space-between;
-	padding: 0 0 50px;
+	padding: 0 0 var(--distance-60);
 	margin: 0 10px;
 
 	p {
-		font-weight: 900;
-		font-size: 1rem;
+		@include bold-3;
 	}
 
 	.fake-range {	
@@ -107,8 +103,13 @@
 }
 
 .filter-buttons {
-	margin: 20px 0;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	
+	margin: var(--distance-20) 0;
 	button:first-of-type {
-		margin-bottom: 20px;
+		margin-bottom: var(--distance-20);
 	}
 }

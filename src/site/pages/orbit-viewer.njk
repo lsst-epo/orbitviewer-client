@@ -11,7 +11,7 @@ eleventyComputed:
 --- #}
 
 {# NAVIGATION #}
-{% include 'ui/orbit-viewer/navigation.njk' %}
+{% include 'navigation/navigation.njk' %}
 
 {# BACK #}
 {% include 'ui/orbit-viewer/back-button.njk' %}
@@ -33,7 +33,7 @@ eleventyComputed:
 
 {# ZOOM #}
 <div class="zoom-controller">
-  <input type="range" min="0" max="1" step="0.01" value="0.5">
+  <input class="custom-input" data-zoom="1" type="range" min="0" max="1" step="0.00001" value="0.5">
 </div>
 
 {# CONTROLS #}
