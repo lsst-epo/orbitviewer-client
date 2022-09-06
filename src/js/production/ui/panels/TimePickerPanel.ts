@@ -141,7 +141,6 @@ export class TimePickerPanel extends Panel {
 	}
 
 	update(){
-		return;
 
 		if(!this.active) {
 			if(this.value === 0 && this.range.valueAsNumber === 0) return;
@@ -152,10 +151,10 @@ export class TimePickerPanel extends Panel {
 
 		if(!this.holding){
 			this.value = MathUtils.lerp(this.value, 0, 0.1);
-			this.range.value = this.value.toString();
+			// this.range.value = this.value.toString();
 		}
 		
-		this.thumb.style.transform = `translateX(${45 * this.value}%)`;
+		this.thumb.style.transform = `translateX(${50 * this.value}%)`;
 				
 	}
 }
