@@ -1,6 +1,6 @@
 
 // Localhost
-const isLocalhost = true;
+const isLocalhost = false;
 const token = isLocalhost ? 'LdTQ3Q1QUtzPec_TNIAmmolWYUaevo3o' : 'Ma3vUfBJiY3XXmjerRcBQo5PpE3A0jxU';
 const url = isLocalhost ? 'http://localhost:8080' : 'https://orbitviewer-api-dot-skyviewer.uw.r.appspot.com';
 
