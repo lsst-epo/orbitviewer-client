@@ -1,6 +1,7 @@
 import { Checkbox } from "./Checkbox";
 import { DoubleRange } from "./DoubleRange";
 import { Radio } from "./Radio";
+import { Range } from "./Range";
 
 
 
@@ -19,6 +20,7 @@ export class Inputs {
 			if(type === 'checkbox') new Checkbox(el)
 			if(type === 'radio') new Radio(el)
 			if(type === 'double-range') new DoubleRange(el)
+			if(type === 'range') new Range(el)
 			
 		}
 
