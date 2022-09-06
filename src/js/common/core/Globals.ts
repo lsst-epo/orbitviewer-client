@@ -21,3 +21,9 @@ export const USER = {
 export const TOKEN = {
 	value: localStorage.getItem('fil-token'),
 };
+
+export const CONTROLS = {
+	min: 0.5,
+	max: 100,
+	orbit: null
+}

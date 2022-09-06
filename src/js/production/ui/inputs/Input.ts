@@ -19,4 +19,8 @@ export class Input {
 	addEventListeners(){
 		
 	}
+
+	update(){
+		
+	}
 }

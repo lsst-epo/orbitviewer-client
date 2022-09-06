@@ -14,6 +14,7 @@ import { OrbitElements } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
+import { CONTROLS } from "./Globals";
 
 const GEO = new SphereBufferGeometry(1, 32, 32);
 
@@ -32,7 +33,6 @@ const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
 
 export class CoreApp extends WebGLSketch {
-    controls:OrbitControls;
     particles:SolarParticles;
 
     solarClock:SolarClock;
@@ -225,7 +225,10 @@ export class CoreApp extends WebGLSketch {
         this.camera.position.y = 0.5;
         this.camera.lookAt(this.scene.position);
 
-        this.controls = new OrbitControls(this.camera, this.domElement);
+        // Init controls
+        CONTROLS.orbit = new OrbitControls(this.camera, this.domElement);
+        CONTROLS.orbit.minDistance = CONTROLS.min;
+        CONTROLS.orbit.maxDistance = CONTROLS.max;
 
         window.addEventListener('keydown', (evt) =>{
             if(evt.key == ' ') this.playPause();
@@ -240,7 +243,8 @@ export class CoreApp extends WebGLSketch {
 
     update() {
 		super.update();
-		this.controls.update();        
+
+		CONTROLS.orbit.update();     
 
 		const d = this.solarClock.update();
 		

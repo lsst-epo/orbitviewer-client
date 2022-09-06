@@ -7,6 +7,7 @@ export class Page {
 	loaded:boolean = false;
 
 	panels:Panels;
+	inputs:Inputs;
 
 	prepare() {		
 		this.active = true;
@@ -35,7 +36,7 @@ export class Page {
 		this.addEventListeners();
 
 		
-		new Inputs(this.dom);
+		this.inputs = new Inputs(this.dom);
 		this.panels = new Panels(this.dom);
 
 
@@ -58,5 +59,6 @@ export class Page {
 	update(){		
 		if(!this.active || !this.loaded) return;				
 		if(this.panels) this.panels.update();
+		if(this.inputs) this.inputs.update();
 	}
 }

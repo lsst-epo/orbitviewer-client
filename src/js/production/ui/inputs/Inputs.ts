@@ -1,12 +1,14 @@
 import { Checkbox } from "./Checkbox";
 import { DoubleRange } from "./DoubleRange";
+import { Input } from "./Input";
 import { Radio } from "./Radio";
-import { Range } from "./Range";
+import { ZoomRange } from "./ZoomRange";
 
 
 
 export class Inputs {
 	dom: HTMLElement = null;
+	inputs:Array<Input> = [];
 	constructor(dom: HTMLElement = null){
 
 		if(!dom) return;
@@ -17,12 +19,23 @@ export class Inputs {
 			const el = input as HTMLElement;
 			const type = el.getAttribute('type');
 
-			if(type === 'checkbox') new Checkbox(el)
-			if(type === 'radio') new Radio(el)
-			if(type === 'double-range') new DoubleRange(el)
-			if(type === 'range') new Range(el)
+			let item = null;
+
+			if(type === 'checkbox') item = new Checkbox(el)
+			if(type === 'radio') item = new Radio(el)
+			if(type === 'double-range') item = new DoubleRange(el)
+			if(type === 'range') {
+				if(el.hasAttribute('data-zoom')) item = new ZoomRange(el)
+			}
+
+			if(item) this.inputs.push(item);
 			
 		}
 
+	}
+
+	update(){		
+		if(this.inputs.length === 0) return
+		for(const input of this.inputs) input.update();
 	}
 }
