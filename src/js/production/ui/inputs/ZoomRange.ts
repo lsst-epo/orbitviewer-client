@@ -1,5 +1,4 @@
 import { MathUtils } from "@jocabola/math";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CONTROLS } from "../../../common/core/Globals";
 import { Input } from "./Input";
 
@@ -34,9 +33,7 @@ export class ZoomRange extends Input {
 		// If it's changing update controls with new value
 		if(this.changing){
 
-			const value = MathUtils.map(this.value, 0, 1, CONTROLS.min, CONTROLS.max);
-			console.log(value);
-			
+			const value = MathUtils.map(this.value, 0, 1, CONTROLS.min, CONTROLS.max);			
 			CONTROLS.orbit.minDistance = value - 0.0000000000001;
 			CONTROLS.orbit.maxDistance = value + 0.0000000000001;
 
