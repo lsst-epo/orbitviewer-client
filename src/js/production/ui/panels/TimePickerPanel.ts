@@ -108,9 +108,9 @@ export class TimePickerPanel extends Panel {
 			console.log('Reset');
 			return;
 			
-			this.state = 1;
-			this.date = new Date();
-			this.updateTimer();
+			// this.state = 1;
+			// this.date = new Date();
+			// this.updateTimer();
 		})
 
 		this.edit.addEventListener('click', () => {
@@ -118,14 +118,15 @@ export class TimePickerPanel extends Panel {
 			this.togglePanel();
 		})
 
-		this.range.addEventListener('input', () => {			
-			this.holding = true;
-			this.value = parseFloat(this.range.value);
-		})
+		// this.range.addEventListener('input', () => {			
+		// 	this.holding = true;
+		// 	this.value = this.range.valueAsNumber;
+		// 	console.log(this.value);
+		// })
 
-		this.range.addEventListener('change', () => {
-			this.holding = false;
-		})
+		// this.range.addEventListener('change', () => {
+		// 	this.holding = false;
+		// })
 
 		this.subPanelApply.addEventListener('click', () => {
 			this.updateTimer();
@@ -140,16 +141,17 @@ export class TimePickerPanel extends Panel {
 	}
 
 	update(){
-		
+		return;
+
 		if(!this.active) {
-			if(this.value === 0 && this.range.value === '0') return;
+			if(this.value === 0 && this.range.valueAsNumber === 0) return;
 		}
 
 		this.value = parseFloat(this.range.value);
 		
 
 		if(!this.holding){
-			this.value = MathUtils.lerp(this.value, 0, 0.03);
+			this.value = MathUtils.lerp(this.value, 0, 0.1);
 			this.range.value = this.value.toString();
 		}
 		

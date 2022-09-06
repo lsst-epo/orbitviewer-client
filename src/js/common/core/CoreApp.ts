@@ -14,16 +14,9 @@ import { OrbitElements } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
-import { CONTROLS } from "./Globals";
+import { CLOCK_SETTINGS, CONTROLS } from "./Globals";
 
 const GEO = new SphereBufferGeometry(1, 32, 32);
-
-const SETTINGS = {
-	speed: 50,
-	playing: true,
-	lastElapsedTime: 0,
-	backwards: false
-}
 
 const data = new Array<OrbitElements>();
 const dummy = new Object3D();
@@ -236,8 +229,6 @@ export class CoreApp extends WebGLSketch {
 
         this.start();
         this.solarClock = new SolarClock(this.clock);
-        this.solarClock.reverse = SETTINGS.backwards;
-        this.solarClock.secsPerHour = SETTINGS.speed;
         this.solarClock.start();
     }
 
@@ -246,6 +237,9 @@ export class CoreApp extends WebGLSketch {
 
 		CONTROLS.orbit.update();     
 
+
+        if(CLOCK_SETTINGS.backwards !== this.solarClock.reverse) this.solarClock.reverse = CLOCK_SETTINGS.backwards;
+         if(CLOCK_SETTINGS.speed !== this.solarClock.secsPerHour)this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
 		const d = this.solarClock.update();
 		
 		this.particles.update(d, this.camera as PerspectiveCamera);
