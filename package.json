@@ -15,7 +15,7 @@
 	},
 	"dependencies": {
 		"@jocabola/gen": "^0.0.25",
-		"@jocabola/gfx": "^0.4.79",
+		"@jocabola/gfx": "^0.4.91",
 		"@jocabola/io": "^0.3.54",
 		"@jocabola/math": "^0.2.42",
 		"@jocabola/phy": "^0.1.74",
@@ -23,7 +23,7 @@
 		"gsap": "^3.10.3",
 		"https": "^1.0.0",
 		"md5": "^2.3.0",
-		"three": "^0.143.0"
+		"three": "^0.144.0"
 	},
 	"devDependencies": {
 		"@11ty/eleventy": "^1.0.1",

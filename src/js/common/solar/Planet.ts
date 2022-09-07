@@ -1,11 +1,11 @@
 import { Random } from "@jocabola/math";
-import { Mesh, Object3D, SphereBufferGeometry, TextureLoader } from "three";
+import { Mesh, Object3D, SphereGeometry, TextureLoader } from "three";
 import { getPlanetMaterialInstance } from "../gfx/ShaderLib";
 import { EllipticalPath } from "./EllipticalPath";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 
-const GEO = new SphereBufferGeometry(1, 32, 16);
-const MAT = getPlanetMaterialInstance(new TextureLoader().load(window.location.origin + '/assets/textures/fake-earth.jpeg'), 0x3333ff);
+const GEO = new SphereGeometry(1, 32, 16);
+const MAT = getPlanetMaterialInstance(new TextureLoader().load(window.location.origin + '/assets/textures/fake-earth.jpg'), 0x3333ff);
 
 export class Planet extends Object3D {
     mesh:Mesh;

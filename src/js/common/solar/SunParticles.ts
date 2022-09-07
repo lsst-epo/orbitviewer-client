@@ -1,11 +1,11 @@
-import { AdditiveBlending, Color, Mesh, ShaderMaterial, SphereBufferGeometry } from "three";
+import { AdditiveBlending, Color, Mesh, ShaderMaterial, SphereGeometry } from "three";
 
 import frag from '../../../glsl/lib/sun_particles/sunp.frag';
 import vert from '../../../glsl/lib/sun_particles/sunp.vert';
 
 const MAX = 1024;
 
-const SEED = new SphereBufferGeometry(1, 32, 32);
+const SEED = new SphereGeometry(1, 32, 32);
 
 export const P_MAT = new ShaderMaterial({
     vertexShader: vert,

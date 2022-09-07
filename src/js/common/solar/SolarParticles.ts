@@ -8,12 +8,12 @@
 
 import { FboUtils } from "@jocabola/gfx";
 import { MathUtils } from "@jocabola/math";
-import { Color, InstancedMesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PlaneBufferGeometry, Vector3, WebGLMultipleRenderTargets, WebGLRenderer } from "three";
+import { Color, InstancedMesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Vector3, WebGLMultipleRenderTargets, WebGLRenderer } from "three";
 import { COMP_SP_NORMAL, initMaterial } from "../gfx/ShaderLib";
 import { calculateOrbit, OrbitElements } from "./SolarSystem";
 
 const MAX = 32000;
-const GEO = new PlaneBufferGeometry();
+const GEO = new PlaneGeometry();
 const MAT = initMaterial(new MeshPhongMaterial({
     shininess: 0,
     emissive: 0xffffff,

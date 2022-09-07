@@ -1,6 +1,6 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
-import { AmbientLight, Group, Mesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PointLight, SphereBufferGeometry } from "three";
+import { AmbientLight, Group, Mesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PointLight, SphereGeometry } from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
@@ -16,7 +16,7 @@ import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
 import { CLOCK_SETTINGS, CONTROLS } from "./Globals";
 
-const GEO = new SphereBufferGeometry(1, 32, 32);
+const GEO = new SphereGeometry(1, 32, 32);
 
 const data = new Array<OrbitElements>();
 const dummy = new Object3D();

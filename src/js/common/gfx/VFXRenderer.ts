@@ -37,7 +37,12 @@ export class VFXRenderer {
         this.sceneRT.texture[ 0 ].name = 'diffuse';
         this.sceneRT.texture[ 1 ].name = 'glow';
 
-        this.glow = new BlurPass(this.sceneRT.texture[1],w, h, .7, 1, 4, 2);
+        this.glow = new BlurPass(this.sceneRT.texture[1],w, h, {
+            scale: .7,
+            radius: 1,
+            iterations: 4,
+            quality: 2
+        });
     }
 
     resize(width:number, height:number) {
