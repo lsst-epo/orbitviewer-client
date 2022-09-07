@@ -1,6 +1,6 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
-import { AmbientLight, Group, Mesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PointLight, SphereGeometry } from "three";
+import { AmbientLight, Clock, Group, Mesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PointLight, SphereGeometry } from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
@@ -25,10 +25,12 @@ const FILES = ["iso_elems.json", "parabolic_elems_simulated.json", "solarsystem_
 const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
 
+export const solarClock = new SolarClock(new Clock());
+
 export class CoreApp extends WebGLSketch {
     particles:SolarParticles;
 
-    solarClock:SolarClock;
+    solarClock:SolarClock = solarClock;
 
     planets:Group = new Group();
     dwarfPlanets:Group = new Group();
@@ -228,7 +230,7 @@ export class CoreApp extends WebGLSketch {
         });
 
         this.start();
-        this.solarClock = new SolarClock(this.clock);
+        this.solarClock = solarClock;
         this.solarClock.start();
     }
 
