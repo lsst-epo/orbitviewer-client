@@ -1,10 +1,10 @@
 module.exports = {
 	seo: {
-		siteTitle: 'FiL Toolkit',
-		title: 'Boilerplate',
+		siteTitle: 'Vera Rubin',
+		title: 'OrbitViewer',
 		description: 'by FiL Studio',
 		production: {
-			title: 'Production App',
+			title: 'Web App',
 			description: 'by FiL Studio',
 		},
 		editor: {

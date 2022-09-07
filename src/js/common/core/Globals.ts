@@ -30,7 +30,7 @@ export const CONTROLS = {
 
 export const CLOCK_SETTINGS = {
 	speed: 0,
-  maxSpeed: 1000,
+  	maxSpeed: 1000,
 	playing: true,
 	lastElapsedTime: 0,
 	backwards: false,

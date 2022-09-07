@@ -232,14 +232,17 @@ export class CoreApp extends WebGLSketch {
         this.solarClock.start();
     }
 
+    clockChanged():boolean {
+        return (CLOCK_SETTINGS.speed !== this.solarClock.secsPerHour);
+    }
+
     update() {
 		super.update();
 
-		CONTROLS.orbit.update();     
+		CONTROLS.orbit.update();
 
 
-        if(CLOCK_SETTINGS.backwards !== this.solarClock.reverse) this.solarClock.reverse = CLOCK_SETTINGS.backwards;
-         if(CLOCK_SETTINGS.speed !== this.solarClock.secsPerHour)this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
+        if(this.clockChanged())this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
 		const d = this.solarClock.update();
 		
 		this.particles.update(d, this.camera as PerspectiveCamera);

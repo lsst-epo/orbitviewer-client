@@ -1,3 +1,4 @@
+import { MathUtils } from "@jocabola/math";
 import { Clock } from "three";
 import { SolarTimeManager } from "./SolarTime";
 
@@ -10,11 +11,11 @@ const HRSPSEC = 60*60*1000;
 export class SolarClock {
     private iClock:Clock;
     private date:Date;
-    private backwards:boolean = false;
     private paused:boolean = false;
     private started:boolean = false
     private elapsedTime:number = 0;
     private speed:number = 1;
+    private targetSpeed:number = 1;
 
     /**
      * 
@@ -24,20 +25,6 @@ export class SolarClock {
         this.iClock = clock;
         this.date = new Date();
         this.iClock.stop();
-    }
-
-    /**
-     * Simulation goes backwards in time if set to true
-     */
-    set reverse(value:boolean) {
-        this.backwards = value;
-    }
-
-    /**
-     * Simulation goes backwards in time if set to true
-     */
-     get reverse(): boolean {
-        return this.backwards;
     }
 
     /**
@@ -51,9 +38,9 @@ export class SolarClock {
      * Sets the number of hours equivalent per second.
      * 0 means real-time, 1 one hour per second, 2 two hours per second, etc.
      */
-    set secsPerHour(value:number) {
-        const v = Math.max(0, value);
-        this.speed = v;
+    set secsPerHour(speed:number) {
+        // const v = Math.max(0, value);
+        this.targetSpeed = speed;
     }
 
     /**
@@ -61,7 +48,7 @@ export class SolarClock {
      * 0 means real-time, 1 one hour per second, 2 two hours per second, etc.
      */
     get secsPerhour():number {
-        return this.speed;
+        return this.targetSpeed;
     }
 
     /**
@@ -80,10 +67,18 @@ export class SolarClock {
         if(this.started) return;
         this.elapsedTime = 0;
         this.date = date;
-        this.iClock.stop();
         this.iClock.start();
         this.paused = false;
         this.started = true;
+    }
+
+    /**
+     * Starts internal clock
+     * 
+     * @param date - The date where the simulation needs to be set. Default: now
+     */
+    setDate(date:Date=new Date()) {
+        this.date = date;
     }
 
     /**
@@ -114,7 +109,6 @@ export class SolarClock {
         if(!this.paused) return;
         this.paused = false;
         this.iClock.start();
-        this.iClock.elapsedTime = this.elapsedTime;
     }
 
     /**
@@ -123,17 +117,21 @@ export class SolarClock {
      * @returns current MJD
      */
     update(): number {
-        const date = new Date();
+        const dt = this.iClock.getDelta();
+
         if(!this.paused && this.iClock.running) {
             this.elapsedTime = this.iClock.getElapsedTime();
         }
-        if(this.backwards) {
-            date.setTime(this.date.getTime() - this.elapsedTime * this.speed * HRSPSEC);
-        } else {
-            date.setTime(this.date.getTime() + this.elapsedTime * this.speed * HRSPSEC);
-        }
 
-        return SolarTimeManager.getMJDonDate(date);
+        if(Math.abs(this.targetSpeed-this.speed) < .01) {
+            this.speed = this.targetSpeed;
+        } else {
+            this.speed = MathUtils.lerp(this.speed, this.targetSpeed, .16);
+        }
+        
+        this.date.setTime(this.date.getTime() + dt * 1000 + this.speed * HRSPSEC * dt);
+
+        return SolarTimeManager.getMJDonDate(this.date);
     }
 
 }
