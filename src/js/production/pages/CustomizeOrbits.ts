@@ -11,7 +11,8 @@ export class CustomizeOrbits extends Page {
 
 	addBackButton(){
 		const btn = this.dom.querySelector('[data-button="customize-orbits-button"]');
-
+		if(!!!btn) return;
+		
 		btn.addEventListener('click', (e) => {
 			e.preventDefault();
 			onChange('/orbit-viewer');

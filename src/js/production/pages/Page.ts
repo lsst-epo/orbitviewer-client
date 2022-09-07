@@ -52,10 +52,10 @@ export class Page {
 	}
 
 	onResize(){
-		if(!this.active) return;
+		if(!this.active || !this.loaded) return;
 		console.log('Page Resize');
 
-		this.panels.onResize();
+		if(this.panels) this.panels.onResize();
 	}
 
 	update(){		
