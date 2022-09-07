@@ -9,9 +9,7 @@ enum STATE {
 }
 
 const checkLength = (num:number) : string => {
-
 	const number: string = (num < 10 ? `0${num}` : num).toString();
-
 	return number;
 }
 
@@ -113,13 +111,9 @@ export class TimePickerPanel extends Panel {
 		}
 
 
-		this.reset.addEventListener('click', () => {
-			console.log('Reset');
-			return;
-			
-			// this.state = 1;
-			// this.date = new Date();
-			// this.updateTimer();
+		this.reset.addEventListener('click', () => {	
+			solarClock.setDate();
+			this.range.value = '0';
 		})
 
 		this.edit.addEventListener('click', () => {
@@ -168,10 +162,7 @@ export class TimePickerPanel extends Panel {
 
 		// Update date
 		const date = formatDate(solarClock.currentDate);
-		this.domDate.innerText = date;
-
-		console.log(date);
-		
+		this.domDate.innerText = date;		
 				
 	}
 }
