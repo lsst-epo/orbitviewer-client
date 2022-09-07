@@ -61,24 +61,37 @@
 
 	height: 0;
 
-	.time-picker-icon {
-		width: var(--icon-big);
-		height: var(--icon-big);
+	transform: translate(0, -30px);
 
-		background-color: var(--black-1);
+	&, * { pointer-events: none;}
+
+	.time-picker-icon {
+		width: 100%;
+		height: var(--icon-big);
 
 		display: flex;
 		justify-content: center;
 		align-items: center;
 
+	}
+
+	.bg {
+		width: var(--icon-big);
+		height: var(--icon-big);
+
+		background-color: var(--black-1);
 		border-radius: 100%;
 
-		cursor: pointer;
-	
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+
 	}
 
 	svg {
 		width: 20px;
+		z-index: 1;
 	}
 
 	path {
