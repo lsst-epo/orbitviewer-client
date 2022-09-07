@@ -35,6 +35,13 @@ export class SolarClock {
     }
 
     /**
+     * Get Date
+     */
+    get currentDate():Date {
+        return this.date;
+    }
+
+    /**
      * Sets the number of hours equivalent per second.
      * 0 means real-time, 1 one hour per second, 2 two hours per second, etc.
      */
