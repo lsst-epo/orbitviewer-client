@@ -8,6 +8,7 @@ enum STATE {
 }
 
 export class TimePickerPanel extends Panel {
+	orbitButton: HTMLButtonElement;
 	thumb: HTMLButtonElement;
 	subPanel: HTMLElement;
 
@@ -31,7 +32,6 @@ export class TimePickerPanel extends Panel {
 		super(id);
 
 		this.updateTimer();
-		this.reposition();
 
 	}
 
@@ -42,7 +42,8 @@ export class TimePickerPanel extends Panel {
 		this.domDate = this.dom.querySelector('.time-picker-details p span');
 
 		// DOM
-		this.thumb = this.dom.querySelector('.time-picker');
+		this.orbitButton = document.querySelector(`.time-picker`);
+		this.thumb = this.dom.querySelector('.time-picker-icon');
 		this.range = this.dom.querySelector('.time-picker-input input');
 		this.subPanel = this.dom.querySelector('.sub-panel');
 
@@ -70,22 +71,8 @@ export class TimePickerPanel extends Panel {
 		if(this.state === 2) this.subPanel.classList.add('active');
 		else this.subPanel.classList.remove('active');
 
-		if(this.state > 0){
-			this.thumb.querySelector('.time-picker-trigger').classList.add('disabled');
-		} else {
-			this.thumb.querySelector('.time-picker-trigger').classList.remove('disabled');
-		}
-	}
-
-	reposition(){
-
-		const r = this.thumb.getBoundingClientRect();
-		const top = window.innerHeight - r.top;
-		const button = this.thumb.querySelector('button');
-		const br = button.getBoundingClientRect();
-
-		button.style.transform = `translateY(${top - br.height - 15}px)`;
-			
+		if(this.state > 0) this.orbitButton.classList.add('hidden');
+		else this.orbitButton.classList.remove('hidden');
 	}
 
 	addEventListeners(){
@@ -102,7 +89,6 @@ export class TimePickerPanel extends Panel {
 			})
 		}
 
-		window.addEventListener('resize', this.reposition.bind(this));
 
 		this.reset.addEventListener('click', () => {
 			console.log('Reset');

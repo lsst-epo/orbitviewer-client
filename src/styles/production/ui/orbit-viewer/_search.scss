@@ -179,9 +179,7 @@ body[data-search-state="2"] {
 }
 
 body:not([data-search-state="1"]) .search-panel {
-	pointer-events: none;
-
-	* {
+	&, * {
 		pointer-events: none;
 	}
 }

@@ -1,6 +1,11 @@
 
 // Localhost
-const isLocalhost = false;
+const env = process.env.ELEVENTY_ENV ? process.env.ELEVENTY_ENV.split(':') : [];
+const isLocalhost = env.indexOf('localhost') > -1;
+
+// console.log(isLocalhost);
+
+// const isLocalhost = true;
 const token = isLocalhost ? 'LdTQ3Q1QUtzPec_TNIAmmolWYUaevo3o' : 'Ma3vUfBJiY3XXmjerRcBQo5PpE3A0jxU';
 const url = isLocalhost ? 'http://localhost:8080' : 'https://orbitviewer-api-dot-skyviewer.uw.r.appspot.com';
 

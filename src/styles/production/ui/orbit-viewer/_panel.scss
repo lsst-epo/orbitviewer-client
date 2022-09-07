@@ -20,9 +20,8 @@
 	pointer-events: all;
 
 	&:not(.active){
-		pointer-events: none;
 
-		* {
+		&, * {
 			pointer-events: none;
 		}
 	}

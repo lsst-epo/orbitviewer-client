@@ -81,8 +81,7 @@ body {
 }
 
 .page__content.disabled {
-	pointer-events: none !important;
-	* {
+	&, * {
 		pointer-events: none !important;
 	}
 }
