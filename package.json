@@ -7,6 +7,7 @@
 		"server": "node ./server/server.js",
 		"server-kill": "pkill node",
 		"dev": "yarn glsl && eleventy --serve --watch",
+		"dev-local": "yarn glsl && cross-env ELEVENTY_ENV=localhost eleventy --serve --watch",
 		"build": "yarn glsl && cross-env ELEVENTY_ENV=production eleventy",
 		"clean": "node ./utils/clean.js",
 		"reset": "yarn clean && yarn build && yarn dev",
