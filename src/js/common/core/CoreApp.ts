@@ -243,7 +243,6 @@ export class CoreApp extends WebGLSketch {
 
 		CONTROLS.orbit.update();
 
-
         if(this.clockChanged())this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
 		const d = this.solarClock.update();
 		

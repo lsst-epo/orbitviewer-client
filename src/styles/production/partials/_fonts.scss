@@ -90,6 +90,18 @@ body {
 	font-weight: 400;
 }
 
+@mixin normal-2 {
+	font-size: 0.6rem;
+
+	@include desktop {
+		font-size: 0.8rem;
+	}
+
+	line-height: 1em;
+	
+	font-weight: 400;
+}
+
 @mixin bold-1 {
 	
 	font-size: 1.8rem;
