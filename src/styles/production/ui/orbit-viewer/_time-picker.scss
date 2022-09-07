@@ -32,11 +32,7 @@
 			width: 20px;
 		}
 
-		.chevs { 
-			display: none;
-		}
-
-		.clock path {
+		path {
 			fill: var(--white-0);
 		}
 
@@ -59,11 +55,35 @@
 
 }
 
-.time-picker-icon {
+.time-picker-icon-wrapper {
 	display: flex;
 	justify-content: center;
 
 	height: 0;
+
+	.time-picker-icon {
+		width: var(--icon-big);
+		height: var(--icon-big);
+
+		background-color: var(--black-1);
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		border-radius: 100%;
+
+		cursor: pointer;
+	
+	}
+
+	svg {
+		width: 20px;
+	}
+
+	path {
+		fill: var(--white-0);
+	}
 }
 
 .time-picker-input input[type="range"] {

@@ -32,7 +32,6 @@ export class TimePickerPanel extends Panel {
 		super(id);
 
 		this.updateTimer();
-		this.reposition();
 
 	}
 
@@ -76,17 +75,6 @@ export class TimePickerPanel extends Panel {
 		else this.orbitButton.classList.remove('hidden');
 	}
 
-	reposition(){
-
-		const r = this.thumb.getBoundingClientRect();
-		const top = window.innerHeight - r.top;
-		const svg = this.thumb.querySelector('svg');
-		const br = svg.getBoundingClientRect();
-
-		svg.style.transform = `translateY(${top - br.height - 15}px)`;
-			
-	}
-
 	addEventListeners(){
 
 		const buttons = document.querySelectorAll(`[data-panel-button="${this.id}"]`);
@@ -101,7 +89,6 @@ export class TimePickerPanel extends Panel {
 			})
 		}
 
-		window.addEventListener('resize', this.reposition.bind(this));
 
 		this.reset.addEventListener('click', () => {
 			console.log('Reset');
