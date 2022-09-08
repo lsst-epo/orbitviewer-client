@@ -16,8 +16,10 @@ const env = process.env.ELEVENTY_ENV ? process.env.ELEVENTY_ENV.split(':') : [];
 const isProduction = env.indexOf('production') > -1;
 
 if (!isProduction) {
-	console.log('Running server...');
+	console.log(`${fil}Running server...`);
 	exec('node ./server/server.js');
+
+	mkdirp.sync('src/data/_cache');
 }
 
 try {
@@ -78,7 +80,7 @@ const buildJS = (target, resolve, reject) => {
 const buildCSS = (target) => {
 	const OUT_CSS = `bundle/${target}/main.css`;
 
-	console.log(`Building ${target}.css ...`);
+	console.log(`${fil}Building ${target}.css ...`);
 
 	const result = sass.compile(`src/styles/${target}.scss`);
 	postcss([autoprefixer])
@@ -165,7 +167,7 @@ module.exports = function (eleventyConfig) {
 		eleventyConfig.addPassthroughCopy({ uploads: 'uploads' });
 	
 	}	else {
-		console.log('Copying Uploads...');
+		console.log(`${fil}Copying Uploads...`);
 		fse.copySync(`${__dirname}/uploads`, `${__dirname}/public/uploads`, {
 			overwrite: true,
 			recursive: true

@@ -2,6 +2,7 @@ const fs = require('fs');
 
 try {
 	fs.rmSync('public', { recursive: true });
+	fs.rmSync('src/data/_cache', { recursive: true });
 } catch (e) {}
 
 try {

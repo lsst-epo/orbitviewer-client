@@ -1,4 +1,5 @@
 const getQuery = require('../../utils/getQuery');
+const useCache = require('../../utils/cache.js');
 
 
 async function getPage() {
@@ -24,4 +25,9 @@ async function getPage() {
 
 
 // export for 11ty
-module.exports = getPage;
+// module.exports = getPage;
+
+
+module.exports = async () => {
+  return useCache(getPage, 'categories.json');
+}
