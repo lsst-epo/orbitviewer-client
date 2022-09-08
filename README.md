@@ -30,7 +30,7 @@ Following scripts are available:
 1. `yarn server` to launch back-end server only.
 2. `yarn build` to build production-ready code.
 3. `yarn dev` to launch dev mode environment.
-4. `yarn clean` to clean all temp generated files.
+4. `yarn clean` to clean all temp generated files & clean data cache.
 
 When developing you can use the following urls: `http://localhost:8080/editor` for the editor app, and `http://localhost:8080/production` for the production one.
 
