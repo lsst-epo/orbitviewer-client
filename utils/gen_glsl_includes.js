@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fil = `\u001b[1;35m[fil] `;
 
 const SRC = `${__dirname}/../src/glsl/includes/`;
 const ext = ['glsl', 'vert', 'frag'];
@@ -26,8 +27,8 @@ function parse(path) {
 
 parse(SRC);
 
-console.log(`Found ${files.length} glsl files to include.`);
-console.log('Generating glsl TS lib file...');
+console.log(`${fil}Found ${files.length} glsl files to include.`);
+console.log(`${fil}Generating glsl TS lib file...`);
 
 const basePath = "../../../glsl/includes/";
 const filename = __dirname + "/../src/js/common/gfx/shaders.ts";
@@ -73,5 +74,3 @@ content += `
 }`;
 
 fs.writeFileSync(filename, content, {encoding: 'utf-8'});
-
-console.log('Done');

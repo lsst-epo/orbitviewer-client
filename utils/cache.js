@@ -10,7 +10,9 @@ const fil = `\u001b[1;35m[fil] `;
  */
 module.exports = async function(getData, cacheFilename) {
   // Check if the environment variable is set.
-  const isServing = process.env.ELEVENTY_SERVE === 'true';
+  const env = process.env.ELEVENTY_ENV ? process.env.ELEVENTY_ENV.split(':') : [];
+  const isServing = env.indexOf('production') === -1;
+
   const cacheFilePath = path.resolve(__dirname, '../src/data/_cache/' + cacheFilename);
   let dataInCache = null;
 
@@ -23,11 +25,11 @@ module.exports = async function(getData, cacheFilename) {
 
   // If no cached version is available, we execute the function.
   if (!dataInCache) {
-    console.log(`${fil}Save data to cache: ${cacheFilename}`);
     const result = await getData();
 
     // If the website is being served, then we write the data to the cache.
     if (isServing) {
+      console.log(`${fil}Save data to cache: ${cacheFilename}`);
       // Write data to cache.
       fs.writeJSON(cacheFilePath, result, err => {
         if (err) {console.error(err)}

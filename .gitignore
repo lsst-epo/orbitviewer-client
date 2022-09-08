@@ -141,6 +141,7 @@ $RECYCLE.BIN/
 bundle
 public
 backups
+_cache
 
 */.DS_Store
 */node_modules
