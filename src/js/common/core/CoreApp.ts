@@ -7,6 +7,7 @@ import { loadData } from "../data/DataMap";
 import { initSunMaterial } from "../gfx/ShaderLib";
 import { initShaders } from "../gfx/shaders";
 import { VFXRenderer } from "../gfx/VFXRenderer";
+import { TRAJ_LINE_MAT } from "../solar/EllipticalPath";
 import { Planet } from "../solar/Planet";
 import { SolarClock } from "../solar/SolarClock";
 import { SolarParticles } from "../solar/SolarParticles";
@@ -263,6 +264,10 @@ export class CoreApp extends WebGLSketch {
 		}
 
 		this.sunParticles.update(this.solarClock.time);
+
+        if(TRAJ_LINE_MAT.shader) {
+            TRAJ_LINE_MAT.shader.uniforms.time.value = performance.now() * .001;
+        }
 	}
 
     render(): void {

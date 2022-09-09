@@ -1,14 +1,15 @@
 import { BufferAttribute, BufferGeometry, Line, LineBasicMaterial, Vector3 } from "three";
 import { initMaterial } from "../gfx/ShaderLib";
+import { TrajectoryMaterial } from "../gfx/TrajectoryMaterial";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 import { SolarTimeManager } from "./SolarTime";
 
 const MIN_DISTANCE = .05;
 const MIN_POINTS = 10;
 
-const LINE_MAT = initMaterial(new LineBasicMaterial({
-    color: 0xcccccc
-}));
+export const TRAJ_LINE_MAT = new TrajectoryMaterial({
+    color: 0x333333
+});
 
 /**
  * Elliptical Path
@@ -46,14 +47,18 @@ export class EllipticalPath {
         // console.log(this.pts);
 
         const pos = [];
+        const weight = [];
+        let k = 0;
 
         for(const p of this.pts) {
             pos.push(p.x, p.y, p.z);
+            weight.push(k++/this.pts.length);
         }
 
         // close
         const p = this.pts[0];
         pos.push(p.x, p.y, p.z);
+        weight.push(1);
         
         const geo = new BufferGeometry();
         geo.setAttribute(
@@ -64,6 +69,14 @@ export class EllipticalPath {
             )
         );
 
-        this.ellipse = new Line(geo, LINE_MAT);
+        geo.setAttribute(
+            'weight',
+            new BufferAttribute(
+                new Float32Array(weight),
+                1
+            )
+        );
+
+        this.ellipse = new Line(geo, TRAJ_LINE_MAT);
     }
 }
