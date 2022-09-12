@@ -36,12 +36,10 @@ export const CLOCK_SETTINGS = {
 	backwards: false,
 }
 
-
 export const VISUAL_SETTINGS = {
-	current: 'medium',
+	current: 'low',
 	low: 10000,
 	medium: 32000,
 	high: 50000,
 	ultra: 200000
-	
 }
