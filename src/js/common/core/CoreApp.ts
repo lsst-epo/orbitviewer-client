@@ -118,7 +118,7 @@ export class CoreApp extends WebGLSketch {
                 getSolarSystemElements().then((res) => {
                     
                     const d = res.mpcorb;
-                    this.buildSimWithData(d, true);
+                    this.buildSimWithData(d);
                     
                     loadData(()=> {
                         this.onDataLoaded();

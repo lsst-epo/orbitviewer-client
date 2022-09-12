@@ -35,3 +35,13 @@ export const CLOCK_SETTINGS = {
 	lastElapsedTime: 0,
 	backwards: false,
 }
+
+
+export const VISUAL_SETTINGS = {
+	current: 'medium',
+	low: 10000,
+	medium: 32000,
+	high: 50000,
+	ultra: 200000
+	
+}
