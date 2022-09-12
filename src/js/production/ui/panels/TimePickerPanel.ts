@@ -27,7 +27,8 @@ export class TimePickerPanel extends Panel {
 	holding: boolean = false;
 
 	subPanelApply: HTMLButtonElement;
-	subPanelCancel:HTMLButtonElement;
+	subPanelCancel: HTMLButtonElement;
+	subPanelInput: HTMLInputElement;
 	
 	constructor(id){
 		super(id);
@@ -54,11 +55,21 @@ export class TimePickerPanel extends Panel {
 
 		this.subPanelApply = this.subPanel.querySelector('[data-button="apply-date"]');
 		this.subPanelCancel = this.subPanel.querySelector('[data-button="close-edit"]');
-
+		this.subPanelInput = this.subPanel.querySelector('input[type="date"]');
 	}
 
 	updateTimer(){
 
+		if(!!!this.subPanelInput.valueAsDate) {
+			console.log('No Date');
+			return;
+		}
+
+		const date = new Date(this.subPanelInput.valueAsDate);
+		solarClock.setDate(date);
+
+		this.state = 1;
+		this.togglePanel();		
 	}
 
 	togglePanel(): void {
@@ -111,8 +122,6 @@ export class TimePickerPanel extends Panel {
 
 		this.subPanelApply.addEventListener('click', () => {
 			this.updateTimer();
-			this.state = 1;
-			this.togglePanel();
 		})
 
 		this.subPanelCancel.addEventListener('click', () => {
