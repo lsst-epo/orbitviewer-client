@@ -1,30 +1,12 @@
 import { MathUtils } from "@jocabola/math";
 import { solarClock } from "../../../common/core/CoreApp";
+import { formatDate } from "../../utils/Dates";
 import { Panel } from "./Panel";
 
 enum STATE {
 	HIDDEN,
 	ACTIVE,
 	EDIT
-}
-
-const checkLength = (num:number) : string => {
-	const number: string = (num < 10 ? `0${num}` : num).toString();
-	return number;
-}
-
-const formatDate = (date:Date) => {
-
-	const y = checkLength(date.getFullYear());
-	const m = checkLength(date.getMonth() + 1);
-	const d = checkLength(date.getDate());
-	const h = checkLength(date.getHours());
-	const min = checkLength(date.getMinutes());
-	const s = checkLength(date.getSeconds());
-
-	const formattedDate = `${m}/${d}/${y} - ${h}:${min}:${s}`;
-
-	return formattedDate;
 }
 
 export class TimePickerPanel extends Panel {
@@ -47,13 +29,9 @@ export class TimePickerPanel extends Panel {
 	subPanelApply: HTMLButtonElement;
 	subPanelCancel:HTMLButtonElement;
 	
-
-
 	constructor(id){
 		super(id);
-
 		this.updateTimer();
-
 	}
 
 	create(): void {
@@ -94,6 +72,7 @@ export class TimePickerPanel extends Panel {
 
 		if(this.state > 0) this.orbitButton.classList.add('hidden');
 		else this.orbitButton.classList.remove('hidden');
+
 	}
 
 	addEventListeners(){
@@ -109,7 +88,6 @@ export class TimePickerPanel extends Panel {
 				this.togglePanel();
 			})
 		}
-
 
 		this.reset.addEventListener('click', () => {	
 			solarClock.setDate();
@@ -141,6 +119,7 @@ export class TimePickerPanel extends Panel {
 			this.state = 1;
 			this.togglePanel();
 		})
+
 	}
 
 	update(){
@@ -151,14 +130,12 @@ export class TimePickerPanel extends Panel {
 
 		this.value = parseFloat(this.range.value);
 		
-
 		if(!this.holding){
 			this.value = MathUtils.lerp(this.value, 0, 0.1);
 			// this.range.value = this.value.toString();
 		}
 		
 		this.thumb.style.transform = `translateX(${50 * this.value}%)`;
-
 
 		// Update date
 		const date = formatDate(solarClock.currentDate);
