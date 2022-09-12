@@ -4,6 +4,7 @@ import { AmbientLight, Clock, Group, Mesh, MeshPhongMaterial, Object3D, Perspect
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
+import { getSolarSystemElements } from "../data/GetData";
 import { initSunMaterial } from "../gfx/ShaderLib";
 import { initShaders } from "../gfx/shaders";
 import { VFXRenderer } from "../gfx/VFXRenderer";
@@ -105,6 +106,7 @@ export class CoreApp extends WebGLSketch {
         this.scene.add(this.ambientLight);
 
         console.log('Core App init');        
+        
 
         io.load(window.location.origin + `/assets/data/${PLANETS}`, (res) => {
             const d = JSON.parse(res)
@@ -114,21 +116,16 @@ export class CoreApp extends WebGLSketch {
                 const d = JSON.parse(res);
                 this.createDwarfPlanets(d);
 
-                let loaded = 0;
-                for(const file of FILES) {
-                    io.load(window.location.origin + `/assets/data/${file}`, (res) => {
-                        const d = JSON.parse(res)
-
-                        this.buildSimWithData(d, true);
-                        loaded++;
-
-                        if(loaded === FILES.length) {
-                            loadData(()=> {
-                                this.onDataLoaded();
-                            });
-                        }
+                getSolarSystemElements().then((res) => {
+                    
+                    const d = res.mpcorb;
+                    this.buildSimWithData(d);
+                    
+                    loadData(()=> {
+                        this.onDataLoaded();
                     });
-                }
+                });
+                
             });
 
         });
