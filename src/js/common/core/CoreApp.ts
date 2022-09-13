@@ -214,8 +214,8 @@ export class CoreApp extends WebGLSketch {
 	}
 
     launch() {
-        this.camera.position.z = 2;
-        this.camera.position.y = 0.5;
+        this.camera.position.z = 10;
+        this.camera.position.y = 3;
         this.camera.lookAt(this.scene.position);
 
         // Init controls
