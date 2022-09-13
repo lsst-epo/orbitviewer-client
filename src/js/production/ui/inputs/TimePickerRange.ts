@@ -1,3 +1,4 @@
+import { MathUtils } from "@jocabola/math";
 import { CLOCK_SETTINGS } from "../../../common/core/Globals";
 import { Input } from "./Input";
 
@@ -18,8 +19,6 @@ export class TimePickerRange extends Input {
 	}
 
 	update(){
-			
-		// if(!this.changing) return;
 
 		this.value = this.dom.valueAsNumber;
 		// CLOCK_SETTINGS.backwards = this.value < 0;

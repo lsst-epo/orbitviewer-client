@@ -34,6 +34,8 @@ export class TimePickerPanel extends Panel {
 
 	tl: GSAPTimeline;
 	tlPlayed: boolean = false;
+
+	tlClock: GSAPTimeline;
 	
 	constructor(id){
 		super(id);
@@ -63,6 +65,7 @@ export class TimePickerPanel extends Panel {
 		this.subPanelInput = this.subPanel.querySelector('input[type="date"]');
 
 		this.createTl();
+		this.createClockTl();
 	}
 
 	createTl(){
@@ -73,7 +76,18 @@ export class TimePickerPanel extends Panel {
 		this.tl.timeScale(1.2);
 
 		const wrapper = this.dom.querySelector('.time-picker-input svg');
-		
+	
+		// Set all paths to alpha 0
+		const paths = wrapper.querySelectorAll('path');
+		for(const path of paths) {
+			gsap.set(path, { autoAlpha: 0 })
+		}
+
+		// Range tween
+		gsap.set(this.range, { scaleX: 0, transformOrigin: 'center' });
+		this.tl.add(gsap.to(this.range, { scaleX: 1, duration: 3, ease: 'expo.out' }), 0);
+
+		// Create chevron tweens
 		const past = wrapper.querySelectorAll('[class^="past"]');
 		const future = wrapper.querySelectorAll('[class^="future"]');
 
@@ -112,6 +126,21 @@ export class TimePickerPanel extends Panel {
 		
 
 		
+	}
+
+	createClockTl(){
+
+		const busques = this.dom.querySelectorAll('.time-picker-icon-wrapper svg g path');
+		this.tlClock = gsap.timeline({ paused: true });
+
+		gsap.set(busques[0], { transformOrigin: '50% 100%', rotate: -800 });
+		gsap.set(busques[1], { transformOrigin: '20% 20%', rotate: -200 });
+
+		this.tlClock
+			.to(busques[0],{ rotate: 800, ease: 'linear' }, 0)
+			.to(busques[1],{ rotate: 200, ease: 'linear' }, 0)
+	
+
 	}
 
 	animationPlay(){
@@ -216,6 +245,7 @@ export class TimePickerPanel extends Panel {
 
 		this.value = parseFloat(this.range.value);
 		
+		
 		if(!this.holding){
 			this.value = MathUtils.lerp(this.value, 0, 0.1);
 			// this.range.value = this.value.toString();
@@ -226,6 +256,9 @@ export class TimePickerPanel extends Panel {
 		// Update date
 		const date = formatDate(solarClock.currentDate);
 		this.domDate.innerText = date;		
+
+		// Update clock animation
+		this.tlClock.progress(MathUtils.map(this.value, -1, 1, 0, 1))
 				
 	}
 }
