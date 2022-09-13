@@ -160,6 +160,18 @@ export class TimePickerPanel extends Panel {
 
 	}
 
+	dateInputReset(){
+
+		setTimeout(() => {
+			const items = this.subPanel.querySelectorAll('.date-item h4');
+			items[0].innerText = 'DD';
+			items[1].innerText = 'MM';
+			items[2].innerText = 'YY';
+		}, 500);
+
+
+	}
+
 	updateTimer(){
 
 		if(!!!this.subPanelInput.valueAsDate) {
@@ -186,9 +198,9 @@ export class TimePickerPanel extends Panel {
 		if(this.state > 0) this.orbitButton.classList.add('hidden');
 		else this.orbitButton.classList.remove('hidden');
 
-		console.log(this.state);
 		if(this.state === 1) this.animationPlay();
 		if(this.state === 0) this.animationReset();
+		if(this.state !== 2) this.dateInputReset();
 		
 	}
 
@@ -244,7 +256,6 @@ export class TimePickerPanel extends Panel {
 		}
 
 		this.value = parseFloat(this.range.value);
-		
 		
 		if(!this.holding){
 			this.value = MathUtils.lerp(this.value, 0, 0.1);
