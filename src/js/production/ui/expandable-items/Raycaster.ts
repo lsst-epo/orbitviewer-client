@@ -30,17 +30,14 @@ export const initRaycaster = () => {
 		if(RAYCASTER.watch.length === 0) return;
 		const intersects = RAYCASTER.instance.intersectObjects(RAYCASTER.watch);
 
-		console.log(intersects);
+		console.log(intersects[0]);
+
 		
 		// RAYCASTER.instersects = intersects.length > 0 ? intersects[0] : null;
 	})
 }
 
 export const updateRaycasterWatch = (elements:Array<Object3D>) => {
-
-	console.log(RAYCASTER.watch);
-	
-
 	RAYCASTER.watch = [...elements, ...RAYCASTER.watch];
 }
 
