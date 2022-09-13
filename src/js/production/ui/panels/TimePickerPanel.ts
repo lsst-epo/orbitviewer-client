@@ -1,4 +1,6 @@
 import { MathUtils } from "@jocabola/math";
+import { isMobile } from "@jocabola/utils";
+import gsap from "gsap/all";
 import { solarClock } from "../../../common/core/CoreApp";
 import { formatDate } from "../../utils/Dates";
 import { Panel } from "./Panel";
@@ -29,6 +31,9 @@ export class TimePickerPanel extends Panel {
 	subPanelApply: HTMLButtonElement;
 	subPanelCancel: HTMLButtonElement;
 	subPanelInput: HTMLInputElement;
+
+	tl: GSAPTimeline;
+	tlPlayed: boolean = false;
 	
 	constructor(id){
 		super(id);
@@ -56,6 +61,74 @@ export class TimePickerPanel extends Panel {
 		this.subPanelApply = this.subPanel.querySelector('[data-button="apply-date"]');
 		this.subPanelCancel = this.subPanel.querySelector('[data-button="close-edit"]');
 		this.subPanelInput = this.subPanel.querySelector('input[type="date"]');
+
+		this.createTl();
+	}
+
+	createTl(){
+		this.tl = gsap.timeline({
+			paused: true
+		});
+
+		this.tl.timeScale(1.2);
+
+		const wrapper = this.dom.querySelector('.time-picker-input svg');
+		
+		const past = wrapper.querySelectorAll('[class^="past"]');
+		const future = wrapper.querySelectorAll('[class^="future"]');
+
+		for(let i = 0; i<=2; i++){
+
+			const ii = i + 1;
+
+			const distance = isMobile() ? 40 : 60;
+			const defaultOffset = 7;
+
+			const pastTween = gsap.to(past[i].querySelectorAll('path'), {
+				x: (index, element) => {
+					const offset = defaultOffset * index;
+					return (distance * ii) + offset
+				},
+				autoAlpha: 1,
+				ease: 'expo.out',
+				duration: 1.5,
+				stagger: 0.2
+			})
+			const futureTween = gsap.to(future[i].querySelectorAll('path'), {
+				x: (index, element) => {
+					const offset = defaultOffset * index;
+					return -(distance * ii) - offset
+				},
+				autoAlpha: 1,
+				ease: 'expo.out',
+				duration: 1.5,
+				stagger: 0.2
+			})
+
+			this.tl.add(pastTween, 0.5 * ii)
+			this.tl.add(futureTween, 0.5 * ii)
+
+		}
+		
+
+		
+	}
+
+	animationPlay(){
+		if(this.tlPlayed) return;
+		this.tlPlayed = true;
+
+		this.tl.pause();
+		this.tl.progress(0);
+
+		this.tl.play();
+
+	}
+
+	animationReset(){
+		if(!this.tlPlayed) return;
+		this.tlPlayed = false;
+
 	}
 
 	updateTimer(){
@@ -84,6 +157,10 @@ export class TimePickerPanel extends Panel {
 		if(this.state > 0) this.orbitButton.classList.add('hidden');
 		else this.orbitButton.classList.remove('hidden');
 
+		console.log(this.state);
+		if(this.state === 1) this.animationPlay();
+		if(this.state === 0) this.animationReset();
+		
 	}
 
 	addEventListeners(){

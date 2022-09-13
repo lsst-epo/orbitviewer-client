@@ -172,7 +172,7 @@
 
 	p {
 		position: absolute;
-		top: 0;
+		top: -5px;
 		left: 0;
 	}
 
@@ -183,6 +183,24 @@
 
 	input {
 		width: 100%;
+	}
+
+	svg {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -4px);
+		
+		width: 100%;
+		height: auto;
+		max-height: 20px;
+
+		overflow: visible;
+		pointer-events: none;
+	}
+
+	path {
+		fill: var(--white-1)
 	}
 }
 
