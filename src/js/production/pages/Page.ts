@@ -22,10 +22,20 @@ export class Page {
 
 	enable(resolve){
 		this.dom.classList.remove('disabled');
+		this.show();
 		resolve();	
+	}
+
+	show(){
+
+	}
+
+	hide(){
+
 	}
 	
 	disable () {
+		this.hide();
 		this.dom.classList.add('disabled');
 		this.active = false;
 	}
@@ -35,10 +45,8 @@ export class Page {
 		this.onLoaded();
 		this.addEventListeners();
 
-		
 		this.inputs = new Inputs(this.dom);
 		this.panels = new Panels(this.dom);
-
 
 		this.enable(resolve);
 	}

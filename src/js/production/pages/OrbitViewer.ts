@@ -1,6 +1,7 @@
 import { onChange } from "../pagination/History";
 import { Search } from "../partials/Search";
 import { enableExpandableItem, expandableItems, initExpandableItems } from "../ui/expandable-items/ExpandableItems";
+import { RAYCASTER } from "../ui/expandable-items/Raycaster";
 import { Page } from "./Page";
 
 
@@ -11,6 +12,13 @@ export class OrbitViewer extends Page {
 
 		super.load(resolve)
 
+	}
+
+	show(): void {
+		RAYCASTER.active = true;
+	}
+	hide(): void {
+		RAYCASTER.active = false;
 	}
 
 	onResize(): void {

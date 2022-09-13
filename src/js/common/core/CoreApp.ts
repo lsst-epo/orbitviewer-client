@@ -2,6 +2,7 @@ import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
 import { AmbientLight, Clock, Group, Mesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PointLight, SphereGeometry } from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/expandable-items/Raycaster";
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/GetData";
@@ -65,6 +66,8 @@ export class CoreApp extends WebGLSketch {
         });
 
         initShaders();
+        
+        initRaycaster();
 
         this.vfx = new VFXRenderer(this.renderer, window.innerWidth, window.innerHeight);
 
@@ -157,6 +160,8 @@ export class CoreApp extends WebGLSketch {
 
 			this.planets.add(planet);
 			this.planetPaths.add(planet.orbitPath.ellipse);
+
+            updateRaycasterWatch([planet]);
 		}
 	}
 
@@ -167,7 +172,10 @@ export class CoreApp extends WebGLSketch {
 
 			this.dwarfPlanets.add(planet);
 			this.dwarfPlanetPaths.add(planet.orbitPath.ellipse);
+
+            updateRaycasterWatch([planet]);
 		}
+
 	}
 
 	buildSimWithData(d:Array<OrbitDataElements>, forceKeep:boolean=false) {
@@ -238,6 +246,8 @@ export class CoreApp extends WebGLSketch {
 
     update() {
 		super.update();
+
+        updateRaycaster(this.camera);
 
 		CONTROLS.orbit.update();
 
