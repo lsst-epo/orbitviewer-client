@@ -5,8 +5,8 @@
 	<ul class="categories-filter">
 		{% for category in categories %}
 			<li>
-				<input class="custom-input" type="checkbox" id="{{ category.slug }}" name="{{ category.slug }}" checked>
-				<label for="{{ category.slug }}">
+				<label>
+					<input class="custom-input" type="checkbox" name="{{ category.slug }}" checked>
 					<div class="filter-bullet"><div></div></div>
 					{{ category.title }}{{ filterIcon(category.slug, category.title, category.mainColor ) }}</label>
 			</li>

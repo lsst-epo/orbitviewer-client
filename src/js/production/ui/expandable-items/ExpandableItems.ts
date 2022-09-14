@@ -6,6 +6,9 @@ export const initExpandableItems = () => {;
 
 	const items = document.querySelectorAll('.expandable-item');
 
+	console.log(items);
+	
+
 	// Fake add name
 	let i = 0;
 
