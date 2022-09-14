@@ -15,6 +15,8 @@ export class ExpandableItem {
 
 	sections:NodeListOf<HTMLElement>;
 
+	tmp: Vector3 = new Vector3();
+
 	constructor(dom){
 		
 		this.dom = dom;
@@ -106,11 +108,10 @@ export class ExpandableItem {
 		if(!this.visible) return;
 		if(!!!this.ref) return;
 
-		const tmp = new Vector3();
-		tmp.copy(this.ref.position)
-		tmp.y -= this.ref.mesh.scale.y;
+		this.tmp.copy(this.ref.position)
+		this.tmp.y -= this.ref.mesh.scale.y;
 
-		this.container.position.copy(tmp);	
+		this.container.position.copy(this.tmp);	
 
 	}
 }
