@@ -11,8 +11,6 @@ export class RecentDiscoveries extends Checkbox {
 		const bg = this.dom.parentElement.querySelector('svg .rd-bg');
 		const exc = this.dom.parentElement.querySelector('svg .rd-exclamation');
 
-
-
 		gsap.set([bg, exc], {
 			scale: 0,
 			transformOrigin: 'center'
@@ -39,8 +37,6 @@ export class RecentDiscoveries extends Checkbox {
 				duration: 2,
 				ease: 'power1.out'
 			}, 'start')
-
-
 
 	}
 }

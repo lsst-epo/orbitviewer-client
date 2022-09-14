@@ -4,14 +4,17 @@ export class Checkbox extends Input {
 	tl: GSAPTimeline;
 
 	addEventListeners(): void {
-		this.checkState();		
+		this.checkState(false);		
 
 		this.dom.addEventListener('change', (e) => {
 			this.checkState();
 		})
 	}
 
-	checkState(){
+	checkState(playAnimation:boolean = true){
+
+		if(!playAnimation && this.tl) this.tl.progress(1);
+
 		const parent = this.dom.parentElement;
 		const el = this.dom as HTMLInputElement;
 
@@ -19,11 +22,8 @@ export class Checkbox extends Input {
 
 		if(checked){
 			parent.classList.add('checked')
-
-			console.log('click', this.tl);
 			
-
-			if(this.tl) this.tl.play(0);
+			if(this.tl && playAnimation) this.tl.play(0);
 		} else {
 			parent.classList.remove('checked')
 		}
