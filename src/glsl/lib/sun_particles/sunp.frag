@@ -16,13 +16,16 @@ void main () {
     float d = 1.0 - distance(st, vec2(0.)); */
     #include <fresnel_frag>
     fresnelTerm = smoothstep(.5, 1.0, fresnelTerm);
-    float f = fbm(vec4(vPosition * 120.0, time * .8), 5);
+    float f = fbm(vec4(vPosition * 60.0, time * .8), 5);
     f = smoothstep(-1., 1., f);
     float mask = snoise(vec4(vPosition * 1.25, time * .1));
-    f *= smoothstep(-1., 1., mask);
+    f *= smoothstep(-.25, 1., mask);
     float alpha = fresnelTerm*f;
     if(alpha < .1) discard;
-    vec3 col = mix(color1, color2, mask) * 2.8;// * (1.0-fresnelTerm);
-    gGlow = vec4(col*fresnelTerm, alpha);//vec4(color*f, f);
+    vec3 col = mix(color1, color2, mask) * 6.8;// * (1.0-fresnelTerm);
+    col *= fresnelTerm;
+
+    col *= (1.0 - smoothstep(.96, 1.0, fresnelTerm));
+    gGlow = vec4(col*(1.0-fresnelTerm), alpha);//vec4(color*f, f);
     gl_FragColor = vec4(col*fresnelTerm, alpha*.15);
 }

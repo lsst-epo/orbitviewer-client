@@ -12,7 +12,7 @@ export const P_MAT = new ShaderMaterial({
     fragmentShader: frag,
     uniforms: {
         amp: {
-            value: 1
+            value: 100
         },
         time: {
             value: 0
