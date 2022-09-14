@@ -7,6 +7,7 @@ import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/GetData";
 import { initSunMaterial } from "../gfx/ShaderLib";
 import { initShaders } from "../gfx/shaders";
+import { SunMaterial } from "../gfx/SunMaterial";
 import { VFXRenderer } from "../gfx/VFXRenderer";
 import { TRAJ_LINE_MAT } from "../solar/EllipticalPath";
 import { Planet } from "../solar/Planet";
@@ -70,12 +71,10 @@ export class CoreApp extends WebGLSketch {
 
         const sun = new Mesh(
             GEO,
-            initSunMaterial(
-                new MeshPhongMaterial({
-                    emissive: 0xff6600,
-                    emissiveIntensity: 1.5
-                })
-            )
+            new SunMaterial({
+                emissive: 0xff6600,
+                emissiveIntensity: 1.5
+            })
         );
 
         sun.scale.setScalar(.05);
