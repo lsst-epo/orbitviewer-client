@@ -33,4 +33,10 @@ export class SunMaterial extends MeshPhongMaterial {
         this.shaderRef = shader;
         // sunMat['uniforms'] = shader.uniforms;
     }
+
+    update(time:number) {
+        if(!this.shaderRef) return;
+        const u = this.shaderRef.uniforms;
+        u.time.value = time;
+    }
 }

@@ -39,7 +39,7 @@ export class VFXRenderer {
 
         this.glow = new BlurPass(this.sceneRT.texture[1],w, h, {
             scale: .25,
-            radius: 2,
+            radius: 1,
             iterations: 8,
             quality: 0
         });

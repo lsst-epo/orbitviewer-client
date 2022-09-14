@@ -8,7 +8,6 @@ import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../prod
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/GetData";
-import { initSunMaterial } from "../gfx/ShaderLib";
 import { initShaders } from "../gfx/shaders";
 import { SunMaterial } from "../gfx/SunMaterial";
 import { VFXRenderer } from "../gfx/VFXRenderer";
@@ -273,9 +272,8 @@ export class CoreApp extends WebGLSketch {
 		
 		this.particles.update(d, this.camera as PerspectiveCamera);
 
-		if(this.sun.material['uniforms']) {
-			this.sun.material['uniforms'].time.value = this.solarClock.time;
-		}
+        const sunMat = this.sun.material as SunMaterial;
+		sunMat.update(this.solarClock.time);
 		
 		for(const c of this.planets.children) {
 			const p = c as Planet;
@@ -295,7 +293,7 @@ export class CoreApp extends WebGLSketch {
 	}
 
     render(): void {
-        css2D.render(this.camera);	
+        css2D.render(this.camera as PerspectiveCamera);	
 		this.vfx.render(this.scene, this.camera);
 	}
 }
