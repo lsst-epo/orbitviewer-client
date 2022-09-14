@@ -1,6 +1,7 @@
 import { Checkbox } from "./Checkbox";
 import { DateInput } from "./DateInput";
 import { DoubleRange } from "./DoubleRange";
+import { RecentDiscoveries } from "./filters/RecentDiscoveries";
 import { Input } from "./Input";
 import { Radio } from "./Radio";
 import { TimePickerRange } from "./TimePickerRange";
@@ -23,7 +24,10 @@ export class Inputs {
 
 			let item = null;
 
-			if(type === 'checkbox') item = new Checkbox(el)
+			if(type === 'checkbox') {
+				if(el.getAttribute('name') === 'recent-discoveries') item = new RecentDiscoveries(el);
+				else item = new Checkbox(el)
+			}
 			if(type === 'radio') item = new Radio(el)
 			if(type === 'double-range') item = new DoubleRange(el)
 			if(type === 'range') {

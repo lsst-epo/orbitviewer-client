@@ -50,7 +50,7 @@ const raycasterClick = () => {
 
 const clickedElement = (element:any) => {
 
-	const item = expandableItems.find(x => x.name === element.name);
+	const item = expandableItems.find(x => x.name === element.name);	
 
 	if(!item) {
 		console.log('No expandable item by this name:', element.name);
