@@ -11,16 +11,3 @@ export const initExpandableItems = () => {;
 	}
 
 }
-
-export const enableExpandableItem = (id: string) => {
-
-	const item = expandableItems.find(x => x.id === id);
-	
-	if(!item){
-		console.error('No expandable item with this id:', id);
-		return;
-	}
-
-	item.enable();
-
-}

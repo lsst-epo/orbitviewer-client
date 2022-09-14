@@ -2,6 +2,7 @@ import { PerspectiveCamera } from "three";
 import { OrthographicCamera } from "three";
 import { Object3D } from "three";
 import { Raycaster } from "three";
+import { expandableItems } from "./ExpandableItems";
 
 
 export const RAYCASTER = {
@@ -25,17 +26,48 @@ export const initRaycaster = () => {
 	})
 
 	// Raycaster Click
-	document.addEventListener('click', (ev) => {	
-		if(!RAYCASTER.active) return;
-		if(RAYCASTER.watch.length === 0) return;
-		const intersects = RAYCASTER.instance.intersectObjects(RAYCASTER.watch);
-
-		console.log(intersects[0]);
-
-		
-		// RAYCASTER.instersects = intersects.length > 0 ? intersects[0] : null;
+	document.addEventListener('click', () => {	
+		raycasterClick();
 	})
 }
+
+const raycasterClick = () => {
+
+	if(!RAYCASTER.active) return;
+	if(RAYCASTER.watch.length === 0) return;
+
+	const intersects = RAYCASTER.instance.intersectObjects(RAYCASTER.watch);
+	if(!intersects || intersects.length === 0) return;
+	
+	for(const element of RAYCASTER.watch){
+		
+		if(element.mesh === intersects[0].object){
+			clickedElement(element);
+			return;
+		}
+	}	
+}
+
+const clickedElement = (element:any) => {
+
+
+	// Force item for testing purposes
+	const item = expandableItems[0];
+	// const item = expandableItems.find(x => x.id === element.name);
+
+	if(!item) {
+		console.log('No expandable item by this name:', element.name);
+		return
+	}
+
+	for(const _item of expandableItems){
+		if(_item.active) _item.disable();
+	}
+	
+	item.enable();
+
+}
+
 
 export const updateRaycasterWatch = (elements:Array<Object3D>) => {
 	RAYCASTER.watch = [...elements, ...RAYCASTER.watch];

@@ -19,6 +19,8 @@ export class Planet extends Object3D {
         super();
 
         this.data = _data;        
+        this.name = _data.id;
+        
 
         this.material = new PlanetMaterial({
             shininess: 0,
