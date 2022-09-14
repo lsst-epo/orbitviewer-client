@@ -49,8 +49,8 @@ export class SunParticles {
 
     update(time:number) {
         P_MAT.uniforms.time.value = time;
-        this.mesh.rotation.y = time * .05;
-        this.mesh.rotation.x = time * .06;
-        this.mesh.rotation.z = -time * .04;
+        this.mesh.rotation.y = time * .015;
+        this.mesh.rotation.x = time * .026;
+        this.mesh.rotation.z = -time * .014;
     }
 }

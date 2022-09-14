@@ -6,5 +6,6 @@ uniform sampler2D tGlow;
 
 void main () {
     vec4 scene = texture2D(tScene, vUv);
-    gl_FragColor = scene + vec4(texture2D(tGlow, vUv).rgb, 1.0);
+    vec4 glow = texture2D(tGlow, vUv);
+    gl_FragColor = scene + vec4(glow.rgb * 1.5 * glow.a, glow.a);
 }

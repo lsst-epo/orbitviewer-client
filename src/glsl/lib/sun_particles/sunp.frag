@@ -22,7 +22,7 @@ void main () {
     f *= smoothstep(-1., 1., mask);
     float alpha = fresnelTerm*f;
     if(alpha < .1) discard;
-    vec3 col = mix(color1, color2, mask) * 1.8;// * (1.0-fresnelTerm);
+    vec3 col = mix(color1, color2, mask) * 2.8;// * (1.0-fresnelTerm);
     gGlow = vec4(col*fresnelTerm, alpha);//vec4(color*f, f);
-    gl_FragColor = vec4(col*fresnelTerm, alpha*.25);
+    gl_FragColor = vec4(col*fresnelTerm, alpha*.15);
 }

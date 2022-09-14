@@ -38,10 +38,10 @@ export class VFXRenderer {
         this.sceneRT.texture[ 1 ].name = 'glow';
 
         this.glow = new BlurPass(this.sceneRT.texture[1],w, h, {
-            scale: .7,
-            radius: 1,
-            iterations: 4,
-            quality: 2
+            scale: .25,
+            radius: 2,
+            iterations: 8,
+            quality: 0
         });
     }
 
