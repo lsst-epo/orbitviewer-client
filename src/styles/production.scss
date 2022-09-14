@@ -62,6 +62,10 @@ main {
 
 body {
 	background-color: var(--black-0);
+
+	&.raycaster-click {
+		cursor: pointer;
+	}
 }
 
 .to-front {
