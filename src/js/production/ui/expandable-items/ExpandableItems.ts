@@ -6,21 +6,20 @@ export const initExpandableItems = () => {;
 
 	const items = document.querySelectorAll('.expandable-item');
 
+	// Fake add name
+	let i = 0;
+
 	for(const item of items){	
+
+		item.setAttribute('data-name', `fake-${i}`)
+		
 		expandableItems.push(new ExpandableItem(item));
+
+		i++;
 	}
 
 }
 
-export const enableExpandableItem = (id: string) => {
-
-	const item = expandableItems.find(x => x.id === id);
-	
-	if(!item){
-		console.error('No expandable item with this id:', id);
-		return;
-	}
-
-	item.enable();
-
+export const resizeExpandableItems = () => {
+	for(const expandableItem of expandableItems) expandableItem.onResize();
 }

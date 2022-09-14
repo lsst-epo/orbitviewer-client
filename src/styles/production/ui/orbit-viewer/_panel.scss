@@ -9,6 +9,8 @@
 	height: 100vh;
 	height: var(--doc-height);
 
+	border: var(--panels-border);
+
 	overflow-y: auto;
 
 	z-index: $panelIndex;

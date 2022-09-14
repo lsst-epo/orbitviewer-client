@@ -46,8 +46,6 @@ export class EllipticalPath {
             this.pts.push(curr.clone());
         }
 
-        // console.log(this.pts);
-
         const pos = [];
         const weight = [];
         const selected = [];

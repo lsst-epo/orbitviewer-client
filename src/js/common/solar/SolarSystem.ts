@@ -107,7 +107,6 @@ export function keplerCalc(el:OrbitElements, d:number, target:Vector3= new Vecto
             E0 = E1;
             E1 = E0 - ( E0 - e * Math.sin(E0) - M ) / ( 1 - e * Math.cos(E0) );
         }
-        if(iterations > 6) console.log(e, iterations);
         E = E1;
     }
 
@@ -172,23 +171,17 @@ export function hyperbolicCalc(el:OrbitElements, d:number, target:Vector3) {
     const a = el.a;
     const dT = el.Tp;//JD2MJD(el.Tp);
 
-    // console.log(el.Tp);
-
     const M = DEG_TO_RAD * (d-dT) / (-a)**1.5;
 
     let F0 = M;
     let F1 = ( M + e * ( F0 * Math.cosh(F0) - Math.sinh(F0) ) ) / ( e * Math.cosh(F0) - 1 );
     let iterations = 1;
 
-    // console.log(( e * Math.cosh(F0) - 1 ));
-    // console.log(e, M + e * ( F0 * Math.cosh(F0) - Math.sinh(F0) ));
-
     while(Math.abs(F1-F0) > E_CONVERGENCE_THRESHOLD) {
         iterations++;
         F0 = F1;
         F1 = ( M + e * ( F0 * Math.cosh(F0) - Math.sinh(F0) ) ) / ( e * Math.cosh(F0) - 1 );
     }
-    // if(iterations > 6) console.log(e, iterations);
     const F = F1;
     
 

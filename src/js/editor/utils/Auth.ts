@@ -87,7 +87,7 @@ export class Auth {
 				this.sendRequest(
 					values,
 					(res) => {
-						console.log('Session Refresh');
+
 					},
 					(err) => {
 						console.error(err);

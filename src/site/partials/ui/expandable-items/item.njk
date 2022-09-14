@@ -1,10 +1,6 @@
-{% from 'ui/filter-icons/filter-icon.njk' import filterIcon as filterIcon %}
-
-<div class="expandable-items">
-
-	{% for element in solarSystemElements %}
-
-		<div class="expandable-item" data-id="{{ element.slug }}">
+		{# <div class="expandable-item" data-id="{{ element.slug }}"> #}
+		{# Fake id #}
+		<div class="expandable-item" data-name="">
 
 			<div class="item-wrapper">
 
@@ -66,6 +62,4 @@
 			</div>
 
 		</div>
-	{% endfor %}
-
-</div>
+		

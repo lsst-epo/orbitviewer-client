@@ -1,5 +1,6 @@
 import { CoreApp } from "../../common/core/CoreApp";
 import { historyInit, LOCATION, onChange, PAGES } from "../pagination/History";
+import { updateRaycaster } from "../ui/expandable-items/Raycaster";
 
 export class ProductionApp extends CoreApp {
 
@@ -43,8 +44,10 @@ export class ProductionApp extends CoreApp {
             e.preventDefault();
             onChange();
         });
-
+     
+      
     }
+
 
     update(): void {
         super.update();

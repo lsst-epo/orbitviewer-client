@@ -20,10 +20,11 @@
 	<div class="panel-section time-picker-input-wrapper">
 
 		<div class="time-picker-input">
+			
 			<p>Past</p>		
 			<p>Future</p>
 			<input type="range" min="-1" max="1" step="0.00001" class="custom-input" data-timer="1">
-			{# {% include "ui/icons/time-picker-chevs.njk" %} #}
+			{% include "ui/icons/time-picker-chevs.njk" %}
 
 		</div>
 
@@ -47,26 +48,43 @@
 	</div>
 
 	<div class="sub-panel">
-		<div>
-			<div class="input-wrapper">
+		<div class="input-wrapper date-picker custom-input" data-date="1">
 
-					<input type="date">
+				<input type="date">
 
-			</div>
-			<div>
+				<div class="date-item">
+					<p>Day</p>
+					<h4>DD</h4>
+				</div>
+				<div class="date-item">
+					<p>Month</p>
+					<h4>MM</h4>
+				</div>
+				<div class="date-item">
+					<p>Year</p>
+					<h4>YY</h4>
+				</div>
 
-			</div>
+				{# <div class="date-item">
+					<p>Hour</p>
+					<h4>HH</h4>
+				</div>
+				<div class="date-item">
+					<p>Min.</p>
+					<h4>MM</h4>
+				</div>
+				<div class="date-item">
+					<p>Sec.</p>
+					<h4>SS</h4>
+				</div> #}
+
 		</div>
 
 		<div class="buttons-wrapper">
 
-			<button data-button="apply-date" class="ui__button grey-button">
-				<p>Go to date</p>
-			</button>
+			<button data-button="apply-date" class="ui__button grey-button">Go to date</button>
 
-			<button data-button="close-edit" class="ui__button ghost-button">
-				<p>Cancel</p>
-			</button>
+			<button data-button="close-edit" class="ui__button ghost-button">Cancel</button>
 
 		</div>
 		

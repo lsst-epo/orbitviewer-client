@@ -2,6 +2,9 @@ import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
 import { AmbientLight, Clock, Group, Mesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PointLight, SphereGeometry } from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { css2D } from "../../production/ui/expandable-items/Css2D";
+import { expandableItems, initExpandableItems, resizeExpandableItems } from "../../production/ui/expandable-items/ExpandableItems";
+import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/expandable-items/Raycaster";
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/GetData";
@@ -66,6 +69,11 @@ export class CoreApp extends WebGLSketch {
         });
 
         initShaders();
+        
+        initRaycaster();
+
+        css2D.init(window.innerWidth, window.innerHeight);
+        initExpandableItems();
 
         this.vfx = new VFXRenderer(this.renderer, window.innerWidth, window.innerHeight);
 
@@ -132,6 +140,8 @@ export class CoreApp extends WebGLSketch {
 
     resize(width: number, height: number): void {
 		super.resize(width, height);
+        css2D.setSize(width, height);
+        resizeExpandableItems();
 		this.vfx.resize(width, height);
 	}
 
@@ -150,23 +160,39 @@ export class CoreApp extends WebGLSketch {
     }
 
     createPlanets(d:Array<OrbitDataElements>) {
+
+        // Overwrite name so we can create fake items
+        let i = 0;
+
 		for(const el of d) {
 			const mel = mapOrbitElements(el);
-			const planet = new Planet(mel);
 
+            d.fulldesignation = `fake-${i}`;
+			const planet = new Planet(d.fulldesignation, mel);
+
+            const expandableItem = expandableItems.find(x => x.name === planet.name);
+            if(expandableItem) expandableItem.ref = planet;
+            
 			this.planets.add(planet);
 			this.planetPaths.add(planet.orbitPath.ellipse);
+
+            updateRaycasterWatch([planet]);
+
+            i++;
 		}
 	}
 
 	createDwarfPlanets(d:Array<OrbitDataElements>) {
 		for(const el of d) {
 			const mel = mapOrbitElements(el);
-			const planet = new Planet(mel);
+			const planet = new Planet(d.fulldesignation, mel);
 
 			this.dwarfPlanets.add(planet);
 			this.dwarfPlanetPaths.add(planet.orbitPath.ellipse);
+
+            updateRaycasterWatch([planet]);
 		}
+
 	}
 
 	buildSimWithData(d:Array<OrbitDataElements>, forceKeep:boolean=false) {
@@ -213,8 +239,8 @@ export class CoreApp extends WebGLSketch {
 	}
 
     launch() {
-        this.camera.position.z = 2;
-        this.camera.position.y = 0.5;
+        this.camera.position.z = 10;
+        this.camera.position.y = 3;
         this.camera.lookAt(this.scene.position);
 
         // Init controls
@@ -237,6 +263,8 @@ export class CoreApp extends WebGLSketch {
 
     update() {
 		super.update();
+
+        updateRaycaster(this.camera);
 
 		CONTROLS.orbit.update();
 
@@ -267,6 +295,7 @@ export class CoreApp extends WebGLSketch {
 	}
 
     render(): void {
+        css2D.render(this.camera);	
 		this.vfx.render(this.scene, this.camera);
 	}
 }

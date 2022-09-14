@@ -1,4 +1,5 @@
 import { Checkbox } from "./Checkbox";
+import { DateInput } from "./DateInput";
 import { DoubleRange } from "./DoubleRange";
 import { Input } from "./Input";
 import { Radio } from "./Radio";
@@ -29,6 +30,8 @@ export class Inputs {
 				if(el.hasAttribute('data-zoom')) item = new ZoomRange(el)
 				if(el.hasAttribute('data-timer')) item = new TimePickerRange(el)
 			}
+			if(el.hasAttribute('data-date')) item = new DateInput(el);
+
 
 			if(item) this.inputs.push(item);
 			

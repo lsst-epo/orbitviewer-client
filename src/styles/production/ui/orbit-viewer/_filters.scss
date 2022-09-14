@@ -6,7 +6,9 @@
 	height: var(--icon-big);
 
 	background-color: var(--blue-0);
-	transform: translate(var(--distance-15), 80px);
+	transform: translateX(var(--distance-15));
+	top: 120px;
+	left: 0;
 
 	display: flex;
 	justify-content: center;
