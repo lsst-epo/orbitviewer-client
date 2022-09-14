@@ -11,6 +11,10 @@ float intensity = max(dot(vNormalW,L), 0.0);
     fresCol = mix(fresCol, sunCol, spec);
 // }
 
+#ifdef FRESNEL_SELECTED
+fresCol = mix(fresCol, vec3(1.) * fresnelTerm, selected);
+#endif
+
 outgoingLight = mix(outgoingLight, outgoingLight + fresCol, fresnelTerm);
 
 #include <envmap_fragment>

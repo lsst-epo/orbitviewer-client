@@ -2,5 +2,6 @@
 
 uniform float time;
 in float vWeight;
+in float vSelected;
 
 layout(location = 1) out vec4 gGlow;

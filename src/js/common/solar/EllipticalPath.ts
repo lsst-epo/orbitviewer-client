@@ -1,11 +1,13 @@
-import { BufferAttribute, BufferGeometry, Line, LineBasicMaterial, Vector3 } from "three";
-import { initMaterial } from "../gfx/ShaderLib";
+import { BufferAttribute, BufferGeometry, Color, Line, Vector3 } from "three";
 import { TrajectoryMaterial } from "../gfx/TrajectoryMaterial";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 import { SolarTimeManager } from "./SolarTime";
 
 const MIN_DISTANCE = .05;
 const MIN_POINTS = 10;
+
+/* const defaultColor = new Color(0x333333);
+const selectedColor = new Color(0xcccccc); */
 
 export const TRAJ_LINE_MAT = new TrajectoryMaterial({
     color: 0x333333
@@ -48,17 +50,20 @@ export class EllipticalPath {
 
         const pos = [];
         const weight = [];
+        const selected = [];
         let k = 0;
 
         for(const p of this.pts) {
             pos.push(p.x, p.y, p.z);
             weight.push(k++/this.pts.length);
+            selected.push(0);
         }
 
         // close
         const p = this.pts[0];
         pos.push(p.x, p.y, p.z);
         weight.push(1);
+        selected.push(0);
         
         const geo = new BufferGeometry();
         geo.setAttribute(
@@ -77,6 +82,27 @@ export class EllipticalPath {
             )
         );
 
+        geo.setAttribute(
+            'selected',
+            new BufferAttribute(
+                new Float32Array(selected),
+                1
+            )
+        );
+
         this.ellipse = new Line(geo, TRAJ_LINE_MAT);
+    }
+
+    set selected(value:boolean) {
+        const selected = this.ellipse.geometry.attributes.selected;
+
+        const arr = selected.array as Float32Array;
+        const v = value ? 1 : 0;
+
+        for(let i=0; i<selected.count; i++) {
+            arr[i] = v;
+        }
+
+        selected.needsUpdate = true;
     }
 }

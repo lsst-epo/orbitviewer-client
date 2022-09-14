@@ -2,3 +2,6 @@
 
 attribute float weight;
 out float vWeight;
+
+attribute float selected;
+out float vSelected;

@@ -8,7 +8,9 @@ diffuseColor.a *= material.transmissionAlpha + 0.1;
 
 float w = smoothstep(-1., 1., sin(vWeight*PI*2.0+time));
 
-pc_fragColor = vec4( outgoingLight * w, diffuseColor.a );
+outgoingLight = mix(outgoingLight * w, vec3(.9), vSelected);
+
+pc_fragColor = vec4( outgoingLight, diffuseColor.a );
 
 #ifdef EMISSIVE
 #if defined( USE_COLOR ) || defined( USE_INSTANCING_COLOR )
