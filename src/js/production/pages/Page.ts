@@ -61,8 +61,6 @@ export class Page {
 
 	onResize(){
 		if(!this.active || !this.loaded) return;
-		console.log('Page Resize');
-
 		if(this.panels) this.panels.onResize();
 	}
 

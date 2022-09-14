@@ -1,28 +1,33 @@
-import { Vector2 } from "three";
+import { Object3D } from "three";
+import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { css2D } from "./Css2D";
 
 export class ExpandableItem {
 	dom: HTMLElement;
+	container: CSS2DObject;
+	ref: Object3D;
 
-	id: string;
+	name: string;
 
 	visible: boolean = false;
 	active: boolean = false;
-
-	position: Vector2 = new Vector2();
 
 	sections:NodeListOf<HTMLElement>;
 
 	constructor(dom){
 		
 		this.dom = dom;
-
-		this.id = this.dom.getAttribute('data-id');
+		this.container = new CSS2DObject(this.dom);
+		css2D.add(this.container);
+		
+		this.name = this.dom.getAttribute('data-name');		
 
 		this.sections = this.dom.querySelectorAll('section');
 
 		this.onResize();
 				
 	}
+
 
 	onResize(){
 
@@ -40,8 +45,8 @@ export class ExpandableItem {
 	}
 
 	enable(){
-		this.visible = true;
-		
+		this.visible = true;		
+
 		this.dom.classList.add('visible');		
 		
 		this.addEventListeners();
@@ -96,12 +101,7 @@ export class ExpandableItem {
 	update(){
 		if(!this.visible) return;
 
+		this.container.position.copy(this.ref.position);
 
-		this.position.x = window.innerWidth * .5;
-		this.position.y = window.innerHeight * .25;
-		
-		this.dom.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0)`;
-		// todo position ha de venir d'algun lloc, css3d? 
-		
 	}
 }

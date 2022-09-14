@@ -42,7 +42,6 @@ export const SaveFile = (name: string, path: string, format: string, file, callb
 };
 
 export const SaveJSON = (path, json, callback = (success) => {}) => {
-	console.log('Saving ', path);
 	
 	const data = {
 		token: TOKEN.value,

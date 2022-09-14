@@ -1,6 +1,6 @@
 import { onChange } from "../pagination/History";
 import { Search } from "../partials/Search";
-import { expandableItems, initExpandableItems } from "../ui/expandable-items/ExpandableItems";
+import { expandableItems } from "../ui/expandable-items/ExpandableItems";
 import { RAYCASTER } from "../ui/expandable-items/Raycaster";
 import { Page } from "./Page";
 
@@ -21,18 +21,9 @@ export class OrbitViewer extends Page {
 		RAYCASTER.active = false;
 	}
 
-	onResize(): void {
-		
-		super.onResize();
-
-		for(const expandableItem of expandableItems) expandableItem.onResize();
-	}
-
 	addEventListeners(): void {
 
 		this.addCustomizeView();
-
-		initExpandableItems();
 		
 	}
 

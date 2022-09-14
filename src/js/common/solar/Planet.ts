@@ -15,13 +15,12 @@ export class Planet extends Object3D {
     private _selected:boolean = false;
     material:PlanetMaterial;
 
-    constructor(_data:OrbitElements) {
+    constructor(name: string, _data:OrbitElements) {
         super();
 
         this.data = _data;        
-        this.name = _data.id;
+        this.name = name;
         
-
         this.material = new PlanetMaterial({
             shininess: 0,
             map: TEX

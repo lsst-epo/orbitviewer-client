@@ -66,11 +66,11 @@ export class GuidedExperienceTour extends Page {
 	}
 
 	share(){
-		console.log('Share click');
+
 	}
 
 	prev(){
-		console.log('Prev click');
+
 		if(this.activeSlide === 0){
 			const slug = this.slides[0].dom.getAttribute('data-parent-slug');
 			onChange(slug)
@@ -82,7 +82,7 @@ export class GuidedExperienceTour extends Page {
 	}
 
 	next(){
-		console.log('Next click');
+
 		this.activeSlide++;
 
 		if(this.activeSlide >= this.slides.length) this.activeSlide = 0;

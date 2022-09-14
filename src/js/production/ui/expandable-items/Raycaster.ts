@@ -50,24 +50,20 @@ const raycasterClick = () => {
 
 const clickedElement = (element:any) => {
 
-
-	// Force item for testing purposes
-	const item = expandableItems[0];
-	// const item = expandableItems.find(x => x.id === element.name);
+	const item = expandableItems.find(x => x.name === element.name);
 
 	if(!item) {
 		console.log('No expandable item by this name:', element.name);
 		return
 	}
-
+	
 	for(const _item of expandableItems){
-		if(_item.active) _item.disable();
+		if(_item.visible) _item.disable();
 	}
 	
 	item.enable();
 
 }
-
 
 export const updateRaycasterWatch = (elements:Array<Object3D>) => {
 	RAYCASTER.watch = [...elements, ...RAYCASTER.watch];
@@ -79,7 +75,6 @@ export const updateRaycaster = (camera:PerspectiveCamera | OrthographicCamera ) 
 	if(RAYCASTER.watch.length === 0) return;	
 
 	RAYCASTER.instance.setFromCamera(POINTER, camera);
-
 
 }
 

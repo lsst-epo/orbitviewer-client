@@ -175,7 +175,6 @@ export class TimePickerPanel extends Panel {
 	updateTimer(){
 
 		if(!!!this.subPanelInput.valueAsDate) {
-			console.log('No Date');
 			return;
 		}
 
@@ -227,16 +226,6 @@ export class TimePickerPanel extends Panel {
 			this.state = 2;
 			this.togglePanel();
 		})
-
-		// this.range.addEventListener('input', () => {			
-		// 	this.holding = true;
-		// 	this.value = this.range.valueAsNumber;
-		// 	console.log(this.value);
-		// })
-
-		// this.range.addEventListener('change', () => {
-		// 	this.holding = false;
-		// })
 
 		this.subPanelApply.addEventListener('click', () => {
 			this.updateTimer();

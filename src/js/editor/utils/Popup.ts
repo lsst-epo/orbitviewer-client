@@ -5,9 +5,7 @@ let popup = null;
 export const createPopup = (title:string = null, withTimes:boolean = true, timesCallback:Function = () => {}) => {
 
 	if(popup) {
-		console.log('Popup already active');
 		removePopup();
-		console.log('Previous popup removed');
 	}
 
 	popup = el('div', 'popup');

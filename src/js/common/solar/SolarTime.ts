@@ -23,8 +23,6 @@ class SolarTime {
         this._d = 367*y - 7 * ( y + (m+9)/12 ) / 4 - 3 * ( ( y + (m-9)/7 ) / 100 + 1 ) / 4 + 275*m/9 + D - 730515
         this._d += UT/24.0;
 
-        // console.log(D, m, y);
-
         timerEl.innerHTML = `${d}`;
 
         return this._d;
