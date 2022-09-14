@@ -70,8 +70,10 @@ export class TimePickerPanel extends Panel {
 
 	createTl(){
 		this.tl = gsap.timeline({
-			paused: true
+			paused: true,
 		});
+
+		this.tl.addLabel('start', 0.5)
 
 		this.tl.timeScale(1.2);
 
@@ -85,7 +87,7 @@ export class TimePickerPanel extends Panel {
 
 		// Range tween
 		gsap.set(this.range, { scaleX: 0, transformOrigin: 'center' });
-		this.tl.add(gsap.to(this.range, { scaleX: 1, duration: 3, ease: 'expo.out' }), 0);
+		this.tl.add(gsap.to(this.range, { scaleX: 1, duration: 2, ease: 'expo.out' }), 'start');
 
 		// Create chevron tweens
 		const past = wrapper.querySelectorAll('[class^="past"]');
@@ -96,31 +98,46 @@ export class TimePickerPanel extends Panel {
 			const ii = i + 1;
 
 			const distance = isMobile() ? 40 : 60;
-			const defaultOffset = 7;
+			const initialOffset = 20;
+			const distanceBetweenChevrons = 7;
+
+			gsap.set(past[i].querySelectorAll('path'), {
+				x: (index, element) => {
+					const offset = distanceBetweenChevrons * index;
+					return (distance * ii) + offset - initialOffset;
+				},
+			})
+			gsap.set(future[i].querySelectorAll('path'), {
+				x: (index, element) => {
+					const offset = distanceBetweenChevrons * index;
+					return -(distance * ii) - offset + initialOffset;
+				},
+			})
 
 			const pastTween = gsap.to(past[i].querySelectorAll('path'), {
 				x: (index, element) => {
-					const offset = defaultOffset * index;
+					const offset = distanceBetweenChevrons * index;
 					return (distance * ii) + offset
 				},
 				autoAlpha: 1,
 				ease: 'expo.out',
 				duration: 1.5,
-				stagger: 0.2
+				stagger: 0.1
 			})
 			const futureTween = gsap.to(future[i].querySelectorAll('path'), {
 				x: (index, element) => {
-					const offset = defaultOffset * index;
+					const offset = distanceBetweenChevrons * index;
 					return -(distance * ii) - offset
 				},
 				autoAlpha: 1,
 				ease: 'expo.out',
 				duration: 1.5,
-				stagger: 0.2
+				stagger: 0.1
 			})
 
-			this.tl.add(pastTween, 0.5 * ii)
-			this.tl.add(futureTween, 0.5 * ii)
+			const start = 0.2 * ii;
+			this.tl.add(pastTween, `start+=${start}`)
+			this.tl.add(futureTween, `start+=${start}`)
 
 		}
 		
@@ -140,7 +157,6 @@ export class TimePickerPanel extends Panel {
 			.to(busques[0],{ rotate: 800, ease: 'linear' }, 0)
 			.to(busques[1],{ rotate: 200, ease: 'linear' }, 0)
 	
-
 	}
 
 	animationPlay(){
