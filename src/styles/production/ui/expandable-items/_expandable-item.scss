@@ -1,6 +1,15 @@
 
 .expandable-item {
 	opacity: 0;
+	transition-property: opacity;
+	transition-duration: 0.25s;
+	transition-timing-function: ease-in-out;
+
+	&:not(.visible){
+		&, & * {
+			pointer-events: none;
+		}
+	}
 
 	&.visible {
 		opacity: 1;
