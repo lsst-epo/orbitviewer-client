@@ -1,3 +1,4 @@
+import { Vector3 } from "three";
 import { Object3D } from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { css2D } from "./Css2D";
@@ -48,6 +49,8 @@ export class ExpandableItem {
 		this.visible = true;		
 
 		this.dom.classList.add('visible');		
+
+		this.ref.selected = true;
 		
 		this.addEventListeners();
 
@@ -57,6 +60,7 @@ export class ExpandableItem {
 		this.visible = false;
 		this.active = false;
 		this.dom.classList.remove('visible');
+		this.ref.selected = false;
 		this.hideInfo();
 
 	}
@@ -100,8 +104,13 @@ export class ExpandableItem {
 
 	update(){
 		if(!this.visible) return;
+		if(!!!this.ref) return;
 
-		this.container.position.copy(this.ref.position);
+		const tmp = new Vector3();
+		tmp.copy(this.ref.position)
+		tmp.y -= this.ref.mesh.scale.y;
+
+		this.container.position.copy(tmp);	
 
 	}
 }
