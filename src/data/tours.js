@@ -4,21 +4,29 @@ const useCache = require('../../utils/cache.js');
 
 async function getPage() {
 
-  // todo
-  // landingLogo, quan arregli lo de les imatges
+  const data = {};
 
-  const query = `
-  {
-    categories(group: "tours") {
-			title,
-			slug
-		}
-  }`;
+  const content = `
+      title
+      slug
+  `;
 
-  const data = await getQuery(query);
-  const d = data.data.categories;
-	return d;
+  for(let i = 1; i <= 2; i++){
+    const query = `
+    {
+      categories(group: "tours", siteId: "${i}") {
+        ${content}
+      }
+    }`;
+
+    const d = await getQuery(query);
+    data[i === 1 ? 'en' : 'es'] = d.data.categories;
+
+  }
+
+  return data;
 }
+
 
 
 // export for 11ty
