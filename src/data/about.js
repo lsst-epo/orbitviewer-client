@@ -6,9 +6,9 @@ async function getPage() {
   {
     entries(section: "about") {
 			...on about_about_Entry {
-				siteTitle
-				siteDescription
-				pageContent
+				menuTitle 
+				menuSubtitle
+				text
 			}
 		}
   }`;
@@ -18,9 +18,9 @@ async function getPage() {
   const d = data.data.entries[0];
   
   const formatted = {
-    title: d.siteTitle,
-		description: d.siteDescription,
-		content: d.pageContent
+    title: d.menuTitle,
+		description: d.menuSubtitle,
+		content: d.text
   }
 
   return formatted;
