@@ -1,11 +1,17 @@
 import { Random } from "@jocabola/math";
-import { Mesh, Object3D, SphereGeometry, TextureLoader } from "three";
+import { ColorRepresentation, Mesh, Object3D, SphereGeometry, TextureLoader } from "three";
 import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { EllipticalPath } from "./EllipticalPath";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 
 export const PLANET_GEO = new SphereGeometry(1, 32, 16);
-const TEX = new TextureLoader().load(window.location.origin + '/assets/textures/fake-earth.jpg');
+const tLoader = new TextureLoader();
+const TEX = tLoader.load(window.location.origin + '/assets/textures/fake-earth.jpg');
+
+export type PlanetOptions = {
+    color?:ColorRepresentation;
+    mapURL?:string;
+}
 
 export class Planet extends Object3D {
     mesh:Mesh;
@@ -15,15 +21,16 @@ export class Planet extends Object3D {
     private _selected:boolean = false;
     material:PlanetMaterial;
 
-    constructor(name: string, _data:OrbitElements) {
+    constructor(name: string, _data:OrbitElements, opts:PlanetOptions={}) {
         super();
 
         this.data = _data;        
         this.name = name;
         
         this.material = new PlanetMaterial({
+            color: opts.color ? opts.color : 0xffffff,
             shininess: 0,
-            map: TEX
+            map: opts.mapURL ? tLoader.load(opts.mapURL) : null
         }, {
             fresnelColor: 0x3333ff
         });
