@@ -23,6 +23,7 @@ export const initRaycaster = () => {
 	window.addEventListener('pointermove', (e) => {
 		POINTER.x = ( e.clientX / window.innerWidth ) * 2 - 1;
 		POINTER.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+		checkIntersects();
 	})
 
 	// Raycaster Click
@@ -31,17 +32,29 @@ export const initRaycaster = () => {
 	})
 }
 
+const checkIntersects = () => {
+
+	const intersects = RAYCASTER.instance.intersectObjects(RAYCASTER.watch);
+	if(!intersects || intersects.length === 0) {
+		document.body.classList.remove('raycaster-click');
+		return false
+	}
+	document.body.classList.add('raycaster-click');
+
+	return intersects[0];
+}
+
 const raycasterClick = () => {
 
 	if(!RAYCASTER.active) return;
 	if(RAYCASTER.watch.length === 0) return;
 
-	const intersects = RAYCASTER.instance.intersectObjects(RAYCASTER.watch);
-	if(!intersects || intersects.length === 0) return;
+	const intersects = checkIntersects();
+	if(!intersects) return
 	
 	for(const element of RAYCASTER.watch){
 		
-		if(element.mesh === intersects[0].object){
+		if(element.mesh === intersects.object){
 			clickedElement(element);
 			return;
 		}
