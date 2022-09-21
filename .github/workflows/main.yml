@@ -11,10 +11,13 @@
     mirror_job:
       runs-on: ubuntu-latest
       steps:
-      - uses: actions/checkout@v3
-      - uses: vafleite/repository-mirroring-action@1.2
+      - uses: ThamognyaKodi/mirror-git-repo@0.0.1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.MIRROR_SSH_PRIVATE_KEY }}
+          EMAIL: ${{ github.event.pusher.email }}
+          NAME: ${{ github.event.pusher.name }}
+          BRANCH_FOR_DESTINATION_REPO: "main"
+          BRANCH_ON_SOURCE_REPO: "main"
         with:
-          target_repo_url:
-            git@github.com:FiL-Studio/orbitviewr-client.git
-          ssh_private_key:                                # <-- use 'secrets' to pass credential information.
-            ${{ secrets.MIRROR_SSH_PRIVATE_KEY }}
+          source-repo: "git@github.com:FiL-Studio/Vera-Rubin.git"
+          destination-repo: "git@github.com:FiL-Studio/orbitviewr-client.git"
