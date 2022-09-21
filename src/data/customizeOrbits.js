@@ -11,9 +11,16 @@ async function getPage() {
   {
     entries(section: "customizeOrbits") {
       ...on customizeOrbits_customizeOrbits_Entry {
-        customizeOrbitsTitle,
-        customizeOrbitsDescription,
+        customizeOrbitsTitle
+        customizeOrbitsDescription
         customizeOrbitsButton
+        localized {
+          ...on customizeOrbits_customizeOrbits_Entry  {
+            customizeOrbitsTitle,
+            customizeOrbitsDescription,
+            customizeOrbitsButton
+          }
+        }
       }
     }
   }`;

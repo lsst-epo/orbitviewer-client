@@ -9,6 +9,13 @@ async function getPage() {
 				menuTitle 
 				menuSubtitle
 				text
+        localized {
+          ... on about_about_Entry {
+              menuTitle
+              menuSubtitle
+              text
+          }
+        }
 			}
 		}
   }`;

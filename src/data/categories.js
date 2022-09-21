@@ -14,6 +14,11 @@ async function getPage() {
         title
         slug
         mainColor
+        localized {
+          ... on objectTypes_Category {
+            title
+          }
+        }
       }
     }
   }`;
