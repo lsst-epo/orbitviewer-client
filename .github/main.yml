@@ -1,9 +1,0 @@
-- name: "Automatic Repository Mirror"
-  on: [push, delete]
-    branches:
-      - main
-    jobs:
-      mirror:
-        runs-on: ubuntu-latest
-          steps:
-            run: git push -u git@github.com:FiL-Studio/orbitviewr-client.git main

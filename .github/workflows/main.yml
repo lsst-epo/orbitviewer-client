@@ -1,0 +1,13 @@
+- name: "Automatic Repository Mirror"
+  on: push
+    branches: [ "main" ]
+
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+  jobs:
+    mirror:
+      runs-on: ubuntu-latest
+        steps:
+         - uses: actions/checkout@v3
+          run: git push -u git@github.com:FiL-Studio/orbitviewr-client.git main
