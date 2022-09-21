@@ -4,7 +4,7 @@ import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { EllipticalPath } from "./EllipticalPath";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 
-const GEO = new SphereGeometry(1, 32, 16);
+export const PLANET_GEO = new SphereGeometry(1, 32, 16);
 const TEX = new TextureLoader().load(window.location.origin + '/assets/textures/fake-earth.jpg');
 
 export class Planet extends Object3D {
@@ -28,7 +28,7 @@ export class Planet extends Object3D {
             fresnelColor: 0x3333ff
         });
 
-        this.mesh = new Mesh(GEO, this.material);
+        this.mesh = new Mesh(PLANET_GEO, this.material);
         this.mesh.scale.multiplyScalar(.02);
         this.add(this.mesh);
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));

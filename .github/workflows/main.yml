@@ -1,4 +1,4 @@
-- name: "Automatic Repository Mirror"
+  name: "Automatic Repository Mirror"
   on: 
     push:
       branches:
@@ -10,9 +10,9 @@
   jobs:
     mirror_job:
       runs-on: ubuntu-18.04
-      steps:                                              # <-- must use actions/checkout@v1 before mirroring!
-      - uses: actions/checkout@v1
-      - uses: pixta-dev/repository-mirroring-action@v1
+      steps:
+      - uses: actions/checkout@v3
+      - uses: vafleite/repository-mirroring-action@1.2
         with:
           target_repo_url:
             git@github.com:FiL-Studio/orbitviewr-client.git
