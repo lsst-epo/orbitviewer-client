@@ -1,21 +1,11 @@
----
-layout: base
-pageTemplate: index
----
-{# ---
-layout: base
-pageTemplate: index
-eleventyComputed:
-  title: "{{ copies.seo.title }}"
-  description: "{{ copies.seo.description }}"
---- #}
 
 <div class="center__wrapper">
 
     {# TODO imatge del gestor #}
-    <img src="/assets/ceres-lorem.jpeg" alt="{{ landing.title }}"> 
+    {{ landing | dump }}
+    {# <img src="/assets/ceres-lorem.jpeg" alt="{{ landing.en.title }}"> 
     <h1>{{ landing.title }}</h1>
-    <p>{{ landing.version }}</p>
+    <p>{{ landing.version }}</p> #}
 
 </div>
 

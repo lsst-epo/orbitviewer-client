@@ -1,18 +1,148 @@
 ---
 layout: base
-templateClass: tours
-permalink: "tours/{{ tours.slug.current | slug }}/"
+pageTemplate: tours
 pagination:
-  alias: tours
-  data: tours
+  alias: tour
+  data: tours.en
   size: 1
+permalink: "{{ tour.slug | slug }}/"
 ---
-{# ---
-layout: base
-pageTemplate: index
-eleventyComputed:
-  title: "{{ copies.seo.title }}"
-  description: "{{ copies.seo.description }}"
---- #}
+{% from 'tours/loop.njk' import loop as loop %}
+{% from 'ui/panel-times.njk' import panelTimes as panelTimes %}
 
-<p>HOLA</p>
+
+{# 
+eleventyComputed:
+title: "{{ project.seo.title }}"
+description: "{{ project.seo.description }}"
+image: "{{ project.seo.seo_image }}" #}
+
+
+<div class="tours-header">
+  <h1>Guided experiences</h1>
+  <h3>{{ tour.title }}</h3>
+  {% include "tours/pagination.njk" %}  
+</div>
+
+<div class="tours-filters">
+  
+  <button class="sort-button" data-panel-button="tour-sort-{{ tour.slug }}">
+    
+    {% include "ui/icons/sort.njk" %}
+
+    <p>Sort by</p>
+  </button>
+  
+  <button class="search-button">
+
+    {% include "ui/icons/lense.njk" %}
+    <p>Search</p>
+
+    <div class="active-search">
+      <input type="text" name="tour-search">
+      <label for="tour-search">Search</label>
+    </div>
+
+  </button>
+
+</div>
+
+{# ACTIVE TOURS #}
+<div class="tours-list">
+  {{ loop(guidedExperiencesTours, tour ) }}
+</div>
+
+<div class="tours-button buttons__wrapper">
+
+  <button data-button="tours-button" class="ui__button button_max-size">
+    {% include "ui/icons/arrow-prev.njk" %}
+    <p>Back to guided experiences</p>
+  </button>
+
+</div>
+
+
+{# Filter PANEL #}
+<div class="panel" data-panel="tour-sort-{{ tour.slug }}">
+
+	<div class="panel-top panel-separator">
+
+		{# todo que aixo vingui del back #}
+		<div class="panel-top-content">
+      {% include "ui/icons/sort.njk" %}
+      <div>
+        <h3>Sort by</h3>
+        <h2>Customize tours</h2>
+      </div>
+		</div>
+
+		{{ panelTimes('tour-sort-' + tour.slug ) }}
+
+	</div>
+
+	<div class="panel-section panel-separator">
+    
+    <h3>Release characteristics</h3>
+
+    <ul>
+      
+      <li>
+        <input class="custom-input" type="radio" id="sort-new" name="sort-radio" value="new">
+        <label for="sort-new"><div class="sort-bullet"><div></div></div>Newer first</label>
+      </li>
+      
+      <li>
+        <input class="custom-input" type="radio" id="sort-old" name="sort-radio" value="old">
+        <label for="sort-old"><div class="sort-bullet"><div></div></div>Older first</label>
+      </li>
+    
+    </ul>
+
+  </div>
+
+  <div class="panel-section">
+    
+    <h3>Tour's characteristics</h3>
+
+    <ul>
+
+      <li>
+        <input class="custom-input" type="radio" id="sort-less-duration" name="sort-radio" value="less-duration">
+        <label for="sort-less-duration"><div class="sort-bullet"><div></div></div>Less duration first</label>
+      </li>
+      
+      <li>
+        <input class="custom-input" type="radio" id="sort-more-duration" name="sort-radio" value="more-duration">
+        <label for="sort-more-duration"><div class="sort-bullet"><div></div></div>More duration first</label>
+      </li>
+
+      <li>
+        <input class="custom-input" type="radio" id="sort-less-complexity" name="sort-radio" value="less-complexity">
+        <label for="sort-less-complexity"><div class="sort-bullet"><div></div></div>Less complexity first</label>
+      </li>
+
+      <li>
+        <input class="custom-input" type="radio" id="sort-more-complexity" name="sort-radio" value="more-complexity">
+        <label for="sort-more-complexity"><div class="sort-bullet"><div></div></div>More complexity first</label>
+      </li>
+    
+    </ul>
+
+  </div>
+
+  <div class="sort-buttons">
+
+    <button data-button="sort-apply" class="ui__button">
+      <p>Apply Sort</p>
+    </button>
+
+    <button data-button="sort-reset" class="ui__button ghost-button">
+      <p>Reset Sort</p>
+    </button>
+
+  </div>
+
+
+</div>
+
+

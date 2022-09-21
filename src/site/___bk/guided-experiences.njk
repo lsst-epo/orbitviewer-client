@@ -1,11 +1,6 @@
 ---
 layout: base
-templateClass: guided-experiences
-permalink: "guided-experiences/{{ experiences.slug.current | slug }}/"
-pagination:
-  alias: experiences
-  data: experiences
-  size: 1
+pageTemplate: guided-experiences
 ---
 {# ---
 layout: base
@@ -14,5 +9,32 @@ eleventyComputed:
   title: "{{ copies.seo.title }}"
   description: "{{ copies.seo.description }}"
 --- #}
+  
+<h1>{{ guidedExperiences.title }}</h1>
 
-<p>HOLA</p>
+{% for tour in tours %}
+  <a href="{{ '/' | locale_url }}{{ tour.slug }}">
+    <h3>{{ tour.title }}</h3>
+    <div class="image" style="background-image: url(/assets/ceres-lorem.jpeg);">
+
+      <svg viewBox="0 0 48 66" xml:space="preserve">
+        <path d="M48,66L48,66L24,56L0,66V0h48V66z"/>
+        <text transform="matrix(1 0 0 1 24 40)" dominant-baseline="middle" text-anchor="middle">Tours</text>
+        <text class="num" transform="matrix(1 0 0 1 24 20)" dominant-baseline="middle" text-anchor="middle">7</text>
+      </svg>
+
+    </div>
+  </a>
+{% endfor %}
+
+<div class="buttons__wrapper">
+
+  <button data-button="guided-experiences-button" class="ui__button button_max-size">
+    {% include "ui/icons/arrow-prev.njk" %}
+    <p>Back to main screen</p>
+  </button>
+
+</div>
+
+
+

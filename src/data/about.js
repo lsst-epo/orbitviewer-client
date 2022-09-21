@@ -25,13 +25,10 @@ async function getPage() {
     data[i === 1 ? 'en' : 'es'] = d.data.entries[0];
 
   }
-  console.log(data);
+
   return data;
 }
 
-
-// export for 11ty
-// module.exports = getPage;
 
 module.exports = async () => {
   return useCache(getPage, 'about.json');

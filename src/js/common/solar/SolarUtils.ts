@@ -47,9 +47,7 @@ export function mapOrbitElements(dEl:OrbitDataElements):OrbitElements {
         Tp: dEl.tperi,
         type: getOrbitType(dEl),
         category: getCategory(dEl)
-    }
-    console.log(el);
-    
+    }    
     return el;
 }
 

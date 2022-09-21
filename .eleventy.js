@@ -3,6 +3,8 @@ const { exec } = require('child_process');
 const pkj = require('./package.json');
 
 const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
+const i18n = require("eleventy-plugin-i18n");
+
 const fs = require('fs');
 const fse = require('fs-extra');
 
@@ -14,6 +16,7 @@ const targets = ['production', 'editor'];
 
 const env = process.env.ELEVENTY_ENV ? process.env.ELEVENTY_ENV.split(':') : [];
 const isProduction = env.indexOf('production') > -1;
+
 
 if (!isProduction) {
 	console.log(`${fil}Running server...`);
@@ -155,6 +158,14 @@ module.exports = function (eleventyConfig) {
 		ghostMode: false,
 	});
 
+	console.log(i18n);
+	eleventyConfig.addPlugin(i18n, {
+		defaultLanguage: "en",
+		fallbackLocales: {
+			'*': 'en'
+		}
+	});
+
 	eleventyConfig.setWatchJavaScriptDependencies(false);
 
 	eleventyConfig.addNunjucksFilter('timestamp', (src) => {
@@ -179,6 +190,21 @@ module.exports = function (eleventyConfig) {
 		path[`bundle/${target}`] = `${target}/bundle`;
 		eleventyConfig.addPassthroughCopy(path);
 	}
+
+	eleventyConfig.setBrowserSyncConfig({
+		callbacks: {
+			ready: function (err, bs) {
+				bs.addMiddleware('*', (req, res) => {
+					if (req.url === '/') {
+						res.writeHead(302, {
+							location: '/en/'
+						});
+						res.end();
+					}
+				});
+			}
+		}
+	});
 
 	return {
 		dir: {
