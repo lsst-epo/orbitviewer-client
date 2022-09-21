@@ -52,9 +52,15 @@ async function getPage() {
 
   const data = await getQuery(query);
 
-	console.log(data.data.globalSets);
+	let formatted = {};
+	for(const subItem of data.data.globalSets){
 
-  return data.data.globalSets;
+		for(const key in subItem){
+			formatted[key] = subItem[key];
+		}
+	}
+
+  return formatted;
 }
 
 
