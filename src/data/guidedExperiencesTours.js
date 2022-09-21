@@ -51,7 +51,6 @@ async function getPage() {
 
   }
 
-	console.log(data.en[0].tourPicker);
   return data;
 }
 

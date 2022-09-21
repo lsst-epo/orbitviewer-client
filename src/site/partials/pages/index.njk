@@ -2,21 +2,20 @@
 <div class="center__wrapper">
 
     {# TODO imatge del gestor #}
-    {{ landing | dump }}
-    {# <img src="/assets/ceres-lorem.jpeg" alt="{{ landing.en.title }}"> 
-    <h1>{{ landing.title }}</h1>
-    <p>{{ landing.version }}</p> #}
+    <img src="/assets/ceres-lorem.jpeg" alt="{{ landing[lang].landingCenterTitle }}"> 
+    <h1>{{ landing[lang].landingCenterTitle}}</h1>
+    <p>{{ landing[lang].landingVersion }}</p>
 
 </div>
 
 <div class="buttons__wrapper">
 
-  <button data-button="landing-button-left" class="ui__button">
-    <p>{{ landing.leftButton }}</p>
-  </button>
+  <a href="{{ '/' + lang + '/customize-orbits' | url }}" class="ui__button">
+    <p>{{ landing[lang].landingLeftButtonText }}</p>
+  </a>
 
-  <button data-button="landing-button-right" class="ui__button">
-    <p>{{ landing.rightButton }}</p>
-  </button>
+  <a href="{{ '/' + lang + '/customize-orbits' | url }}" class="ui__button">
+    <p>{{ landing[lang].landingRightButtonText }}</p>
+  </a>
 
 </div>

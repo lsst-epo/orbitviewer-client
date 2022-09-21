@@ -131,8 +131,14 @@ export const historyInit = () => {
 	if(DEV) console.log('Site pages --> ', PAGES);
 
 	let path = window.location.pathname;	
+	
+	path = path.replace('/es/', '');
+	path = path.replace('/en/', '');
+	
 	if(path.charAt(0) === '/') path = path.substring(1);
 	if(path.charAt(path.length - 1) === '/') path = path.substring(0, path.length - 1);
+
+	
 
 	const page = PAGES.find(page => page.slug === path);	
 
