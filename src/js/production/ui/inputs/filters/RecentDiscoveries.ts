@@ -12,7 +12,7 @@ export class RecentDiscoveries extends Checkbox {
 
 		gsap.set([bg, exc], {
 			scale: 0.7,
-			autoAlph: 0.5,
+			autoAlpha: 0.5,
 			transformOrigin: 'center'
 		})
 

@@ -7,11 +7,11 @@ import { VISUAL_SETTINGS } from "../core/Globals";
 const FILES = ["iso_elems.json", "parabolic_elems_simulated.json", "solarsystem_full_elems_100k.json"];
 
 const solarSystemElementsLimit = VISUAL_SETTINGS[VISUAL_SETTINGS.current];
-const solarSystemElementsURL = `https://hasura-e3g4rcii3q-uc.a.run.app/api/rest/orbit-elements/`;
+const solarSystemElementsURL = `https://hasura-e3g4rcii3q-uc.a.run.app/api/rest`;
 
 export async function getSolarSystemElements(limit:number = solarSystemElementsLimit) {
 	
-	const url = `${solarSystemElementsURL}${limit}`;
+	const url = `${solarSystemElementsURL}/orbit-elements/${limit}`;	
 
 	const response = await fetch(url, {
 		headers: {
