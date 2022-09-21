@@ -1,5 +1,6 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
+import { TextureLoader } from "three";
 import { AmbientLight, Clock, Group, Mesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PointLight, SphereGeometry } from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { css2D } from "../../production/ui/expandable-items/Css2D";
@@ -111,7 +112,13 @@ export class CoreApp extends WebGLSketch {
         this.ambientLight = new AmbientLight(0xffffff, 0.13);
         this.scene.add(this.ambientLight);
 
-        console.log('Core App init');        
+        console.log('Core App init');
+
+        // background
+        const tex = new TextureLoader().load('/assets/textures/8k_stars.jpg', (t) => {
+            this.vfx.bg = t;
+            this.vfx.needsBGUpdate = true;
+        });
         
 
         io.load(window.location.origin + `/assets/data/${PLANETS}`, (res) => {
@@ -296,6 +303,6 @@ export class CoreApp extends WebGLSketch {
 
     render(): void {
         css2D.render(this.camera as PerspectiveCamera);	
-		this.vfx.render(this.scene, this.camera);
+		this.vfx.render(this.scene, this.camera as PerspectiveCamera);
 	}
 }

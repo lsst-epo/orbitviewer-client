@@ -6,7 +6,7 @@ diffuseColor.a = 1.0;
 diffuseColor.a *= material.transmissionAlpha + 0.1;
 #endif
 
-float w = smoothstep(-1., 1., sin(vWeight*PI*2.0+time));
+float w = smoothstep(-1., 1., sin(vWeight*PI*2.0-time));
 
 outgoingLight = mix(outgoingLight * w, vec3(.9), vSelected);
 
