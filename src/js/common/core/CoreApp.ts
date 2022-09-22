@@ -13,10 +13,10 @@ import { initShaders } from "../gfx/shaders";
 import { SunMaterial } from "../gfx/SunMaterial";
 import { VFXRenderer } from "../gfx/VFXRenderer";
 import { TRAJ_LINE_MAT } from "../solar/EllipticalPath";
-import { Planet } from "../solar/Planet";
+import { Planet, PLANET_SCALE } from "../solar/Planet";
 import { SolarClock } from "../solar/SolarClock";
 import { SolarParticles } from "../solar/SolarParticles";
-import { OrbitElements } from "../solar/SolarSystem";
+import { KM2AU, OrbitElements, SUN_RADIUS } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
@@ -85,7 +85,7 @@ export class CoreApp extends WebGLSketch {
             })
         );
 
-        sun.scale.setScalar(.05);
+        sun.scale.setScalar(SUN_RADIUS * KM2AU * PLANET_SCALE * .2);
 
         this.scene.add(sun);
         this.sun = sun;
@@ -103,13 +103,13 @@ export class CoreApp extends WebGLSketch {
         this.particles = new SolarParticles(this.renderer);
         this.scene.add(this.particles.mesh);
 
-        this.sunLight = new PointLight(0xffffff, 1, 400, 2);
+        this.sunLight = new PointLight(0xffffff, .5, 400, 2);
         this.scene.add(this.sunLight);
         this.sunLightHelper = new SunLightHelper(this.sunLight, 0x999900, 0xcc0000);
         this.sunLightHelper.visible = false;
         this.scene.add(this.sunLightHelper);
 
-        this.ambientLight = new AmbientLight(0xffffff, 0.13);
+        this.ambientLight = new AmbientLight(0xffffff, 0.03);
         this.scene.add(this.ambientLight);
 
         console.log('Core App init');

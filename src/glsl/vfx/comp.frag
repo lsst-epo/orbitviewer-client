@@ -11,7 +11,7 @@ void main () {
     vec4 scene = texture2D(tScene, vUv);
     vec4 glow = texture2D(tGlow, vUv);
 
-    float alpha = step(.01, (scene.r+scene.g+scene.b) / 3.0);
+    float alpha = step(.001, (scene.r+scene.g+scene.b) / 3.0);
 
     vec3 color = mix(bg.rgb, scene.rgb, alpha);
     color += glow.rgb * glowStrength * glow.a;

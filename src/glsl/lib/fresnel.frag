@@ -1,6 +1,6 @@
 #include <fresnel_frag>
 
-vec3 sunCol = vec3(1., .6, 0.) * fresnelTerm;
+vec3 sunCol = vec3(1., .6, 0.) * fresnelTerm * sunIntensity;
 vec3 L = normalize(vec3(0.) - vPositionW);
 vec3 e = normalize(cameraPosition);
 float intensity = max(dot(vNormalW,L), 0.0);

@@ -1,11 +1,13 @@
-import { Random } from "@jocabola/math";
+import { MathUtils, Random } from "@jocabola/math";
 import { ColorRepresentation, Mesh, Object3D, SphereGeometry, TextureLoader } from "three";
 import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { EllipticalPath } from "./EllipticalPath";
-import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
+import { calculateOrbitByType, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";
 
 export const PLANET_GEO = new SphereGeometry(1, 32, 32);
 const tLoader = new TextureLoader();
+
+export const PLANET_SCALE = 200;
 
 export type PlanetOptions = {
     color?:ColorRepresentation;
@@ -33,18 +35,35 @@ export class Planet extends Object3D {
 
         this.data = _data;        
         this.name = name;
-        
+
+        let fresnelWidth = .005;
+        let sunIntensity = .5;
+
+        if(this.type !== undefined) {
+            // console.log(PlanetRadiusMap[this.type] * KM2AU);
+            const scl = PlanetRadiusMap[this.type] * KM2AU * PLANET_SCALE;
+            console.log(scl, this.type);
+            this.scale.multiplyScalar(scl);
+            // correct fresnel
+            const s = MathUtils.smoothstep(0, 0.234, scl);
+            fresnelWidth = MathUtils.lerp(fresnelWidth, fresnelWidth*10, s);
+            sunIntensity = MathUtils.lerp(.5, .05, s);
+            
+        } else {
+            this.scale.multiplyScalar(.01);
+        }
+
         this.material = new PlanetMaterial({
             color: opts.color ? opts.color : 0xffffff,
             shininess: 0,
             map: opts.mapURL ? tLoader.load(opts.mapURL) : null
         }, {
-            fresnelColor: 0x3333ff,
-            fresnelWidth: .015
+            fresnelColor: 0x000033,
+            fresnelWidth: fresnelWidth,
+            sunIntensity: sunIntensity
         });
 
         this.mesh = new Mesh(PLANET_GEO, this.material);
-        this.mesh.scale.multiplyScalar(.02);
         this.add(this.mesh);
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
 
@@ -91,4 +110,15 @@ export const PlanetIdMap = {
     'Saturn Barycenter (6)': PlanetType.SATURN,
     'Uranus Barycenter (7)': PlanetType.URANUS,
     'Neptune Barycenter (8)': PlanetType.NEPTUNE
+}
+
+export const PlanetRadiusMap = {
+    'mercury': 2440,
+    'venus': 6052,
+    'earth': 6371,
+    'mars': 3390,
+    'jupiter': 69911,
+    'saturn': 58232,
+    'uranus': 25360,
+    'neptune': 24620
 }
