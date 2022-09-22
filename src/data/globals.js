@@ -12,7 +12,8 @@ async function getPage() {
 		'filters',
 		'share',
 		'datepicker',
-		'search'
+		'search',
+		'customize'
 	]
 
   const content = `
@@ -64,6 +65,12 @@ async function getPage() {
 		... on searchPanel_GlobalSet {
 				showRandomObjectButton
 				searchPlaceholder
+		}
+		... on customizeYourViewPanel_GlobalSet {
+				customizeTitle
+				backgroundStars
+				observedPositions
+				discoveredByRubin
 		}
   `;
 

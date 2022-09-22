@@ -23,7 +23,7 @@ export class OrbitViewer extends Page {
 	}
 
 	addEventListeners(): void {
-		return
+	
 		this.addCustomizeView();
 		
 	}
