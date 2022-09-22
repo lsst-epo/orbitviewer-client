@@ -4,9 +4,8 @@ import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { EllipticalPath } from "./EllipticalPath";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 
-export const PLANET_GEO = new SphereGeometry(1, 32, 16);
+export const PLANET_GEO = new SphereGeometry(1, 32, 32);
 const tLoader = new TextureLoader();
-const TEX = tLoader.load(window.location.origin + '/assets/textures/fake-earth.jpg');
 
 export type PlanetOptions = {
     color?:ColorRepresentation;
@@ -20,9 +19,17 @@ export class Planet extends Object3D {
     rotationSpeed:number;
     private _selected:boolean = false;
     material:PlanetMaterial;
+    type:PlanetType;
 
     constructor(name: string, _data:OrbitElements, opts:PlanetOptions={}) {
         super();
+
+        this.type = PlanetIdMap[name];
+        
+        if(this.type !== undefined) {
+            // console.log(this.type);
+            opts.mapURL = `/assets/textures/2k_${this.type}.jpg`;
+        }
 
         this.data = _data;        
         this.name = name;
@@ -32,7 +39,8 @@ export class Planet extends Object3D {
             shininess: 0,
             map: opts.mapURL ? tLoader.load(opts.mapURL) : null
         }, {
-            fresnelColor: 0x3333ff
+            fresnelColor: 0x3333ff,
+            fresnelWidth: .015
         });
 
         this.mesh = new Mesh(PLANET_GEO, this.material);
@@ -61,4 +69,26 @@ export class Planet extends Object3D {
     get selected():boolean {
         return this._selected;
     }
+}
+
+export enum PlanetType {
+    EARTH='earth',
+    MERCURY='mercury',
+    VENUS='venus',
+    MARS='mars',
+    JUPITER='jupiter',
+    SATURN='saturn',
+    URANUS='uranus',
+    NEPTUNE='neptune'
+}
+
+export const PlanetIdMap = {
+    'Mercury Barycenter (199)': PlanetType.MERCURY,
+    'Venus Barycenter (299)': PlanetType.VENUS,
+    'Earth-Moon Barycenter (3)': PlanetType.EARTH,
+    'Mars Barycenter (4)': PlanetType.MARS,
+    'Jupiter Barycenter (5)': PlanetType.JUPITER,
+    'Saturn Barycenter (6)': PlanetType.SATURN,
+    'Uranus Barycenter (7)': PlanetType.URANUS,
+    'Neptune Barycenter (8)': PlanetType.NEPTUNE
 }
