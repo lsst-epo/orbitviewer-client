@@ -42,6 +42,8 @@ async function getPage() {
 						commonPast
 						commonReset
 						commonedit
+						commonShowRandomObjectButton
+						commonSearchPlaceholder
 				}
   `;
 

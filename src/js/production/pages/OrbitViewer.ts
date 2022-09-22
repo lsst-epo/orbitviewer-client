@@ -8,7 +8,7 @@ import { Page } from "./Page";
 export class OrbitViewer extends Page {
 	load(resolve: any): void {
 	
-		// new Search(this.dom);
+		new Search(this.dom);
 
 		super.load(resolve)
 
