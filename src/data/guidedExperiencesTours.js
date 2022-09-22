@@ -50,7 +50,7 @@ async function getPage() {
     data[i === 1 ? 'en' : 'es'] = d.data.entries;
 
   }
-
+console.log(data);
   return data;
 }
 

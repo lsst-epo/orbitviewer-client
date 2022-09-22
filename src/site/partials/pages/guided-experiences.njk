@@ -1,16 +1,6 @@
----
-layout: base
-pageTemplate: guided-experiences
----
-{# ---
-layout: base
-pageTemplate: index
-eleventyComputed:
-  title: "{{ copies.seo.title }}"
-  description: "{{ copies.seo.description }}"
---- #}
-  
-<h1>{{ guidedExperiences.title }}</h1>
+{{ guidedExperiences | dump | safe }}
+
+{# <h1>{{ guidedExperiences.title }}</h1>
 
 {% for tour in tours %}
   <a href="{{ '/' | locale_url }}{{ tour.slug }}">
@@ -34,7 +24,4 @@ eleventyComputed:
     <p>Back to main screen</p>
   </button>
 
-</div>
-
-
-
+</div> #}

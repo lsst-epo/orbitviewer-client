@@ -41,14 +41,10 @@ export const pagesRecap = () => {
 	//  -------------------------------- Create pages
 	for(const pageSlug of tempPages){
 		
-		if(pageSlug === 'landing'){
-			pageClass = new Landing();
-		} else if(pageSlug === 'customize-orbits'){
+		if(pageSlug === 'customize-orbits'){
 			pageClass = new CustomizeOrbits();
 		} else if(pageSlug === 'orbit-viewer'){
 			pageClass = new OrbitViewer();
-		} else if(pageSlug === 'guided-experiences'){
-			pageClass = new GuidedExperiences();
 		} else {
 			pageClass = new Page();
 		}

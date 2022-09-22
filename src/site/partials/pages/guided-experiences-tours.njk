@@ -1,20 +1,6 @@
----
-layout: base
-pageTemplate: guided-experiences-tours
-pagination:
-  alias: experience
-  data: guidedExperiencesTours.en
-  size: 1
-permalink: "{{ experience.tourPicker[0].slug + '/' + experience.slug | slug }}/"
----
+{{ experience | dump | safe}}
 
-{# 
-eleventyComputed:
-title: "{{ project.seo.title }}"
-description: "{{ project.seo.description }}"
-image: "{{ project.seo.seo_image }}" #}
-
-<section class="active" data-slide="initialSlide" data-slide-index="0" data-parent-slug="{{ experience.tourPicker[0].slug }}">
+{# <section class="active" data-slide="initialSlide" data-slide-index="0" data-parent-slug="{{ experience.tourPicker[0].slug }}">
   
     <div class="center-content">
       {% include "tours/preview.njk" %}
@@ -91,4 +77,4 @@ image: "{{ project.seo.seo_image }}" #}
 
   </section>
 
-{% endfor %}
+{% endfor %} #}

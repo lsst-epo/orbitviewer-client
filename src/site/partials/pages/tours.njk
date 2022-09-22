@@ -1,22 +1,5 @@
----
-layout: base
-pageTemplate: tours
-pagination:
-  alias: tour
-  data: tours.en
-  size: 1
-permalink: "{{ tour.slug | slug }}/"
----
 {% from 'tours/loop.njk' import loop as loop %}
 {% from 'ui/panel-times.njk' import panelTimes as panelTimes %}
-
-
-{# 
-eleventyComputed:
-title: "{{ project.seo.title }}"
-description: "{{ project.seo.description }}"
-image: "{{ project.seo.seo_image }}" #}
-
 
 <div class="tours-header">
   <h1>Guided experiences</h1>
