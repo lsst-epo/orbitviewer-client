@@ -22,7 +22,7 @@ async function getPage() {
     }`;
 
     const d = await getQuery(query);
-    data[i === 1 ? 'en' : 'es'] = d.data.entries;
+    data[i === 1 ? 'en' : 'es'] = d.data.entries[0];
 
   }
 

@@ -1,9 +1,9 @@
-{{ guidedExperiences | dump | safe }}
+{{ guidedExperiences | dump | safe }}
 
 {# <h1>{{ guidedExperiences.title }}</h1>
 
 {% for tour in tours %}
-  <a href="{{ '/' | locale_url }}{{ tour.slug }}">
+  <a href="{{ '/' | url }}{{ tour.slug }}">
     <h3>{{ tour.title }}</h3>
     <div class="image" style="background-image: url(/assets/ceres-lorem.jpeg);">
 

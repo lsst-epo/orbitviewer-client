@@ -60,7 +60,7 @@ export class Page {
 	}
 
 	onResize(){
-		if(!this.active || !this.loaded) return;
+		if(!this.active || !this.loaded) return;
 		if(this.panels) this.panels.onResize();
 	}
 

@@ -12,11 +12,9 @@
 <div class="panel" data-panel="navigation">
 
 	<div class="panel-top panel-separator">
-
-		{# todo que aixo vingui del back #}
 		<div class="panel-top-content">
-			<h3>Main menu</h3>
-			<h2>Settings and more</h2>
+			<h3>{{ globals[lang].menuSubtitle }}</h3>
+			<h2>{{ globals[lang].menuTitle }}</h2>
 		</div>
 
 		{{ panelTimes('navigation') }}
@@ -24,7 +22,7 @@
 	</div>
 
 	<div class="panel-section panel-separator">
-		<h3>Settings</h3>
+		<h3>{{ globals[lang].section1Title }}</h3>
 
 		<ul class="menu">
 
@@ -68,14 +66,14 @@
 	</div>
 
 	<div class="panel-section">
-		<h3>Quick access</h3>
+		<h3>{{ globals[lang].section2Title }}</h3>
 
 		<ul class="menu">
 
 			<li>
-				<a class="menu-item" href="{{ '/guided-experiences' | locale_url }}">
+				<a class="menu-item" href="{{ '/' + lang + '/guided-experiences' | url }}">
 					{{ icon('guided', 'Guided Experiences') }}
-					<p>Guided Experiences</p>
+					<p>{{ guidedExperiences[lang].title }}</p>
 				</a>
 			</li>
 		</ul>
@@ -85,7 +83,7 @@
 
 </div>
 
-{% include "navigation/about.njk" %}
-{% include "navigation/lang.njk" %}
+{# {% include "navigation/about.njk" %}
+{% include "navigation/lang.njk" %} #}
 
 
