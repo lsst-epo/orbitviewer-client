@@ -73,7 +73,14 @@ export const historyInit = () => {
 	LOCATION.current.class.dom = dom;
 	LOCATION.current.template = dom.getAttribute('data-template');
 
-	TriggerTransition();
+	LOCATION.current.class.prepare().then(() => {		
+
+		document.body.classList.add(`page__${LOCATION.current.template}`);
+		LOCATION.current.title = document.querySelector('title').textContent;
+
+		TriggerTransition()
+	});
+
 }
 
 export const onChange = (url:string = window.location.pathname) => {		

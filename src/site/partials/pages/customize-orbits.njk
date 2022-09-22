@@ -1,13 +1,13 @@
 {% from 'ui/filter.njk' import filter as filter %}
 
 <div class="customize-orbits-text">
-  <h2>{{ customizeOrbits[lang].title }}</h2>
-  <p>{{ customizeOrbits[lang].description }}</p>
+  <h2>{{ customizeOrbits[lang].customizeOrbitsTitle }}</h2>
+  <p>{{ customizeOrbits[lang].customizeOrbitsDescription }}</p>
 </div>
 
-{{ filter(categories) }}
+{{ filter(categories[lang]) }}
 
-<button data-button="customize-orbits-button" class="ui__button button_max-size">
-  <p>{{ customizeOrbits[lang].button }}</p>
-</button>
+<a href="{{ '/' + lang + '/orbit-viewer' | url }}"  data-button="customize-orbits-button" class="ui__button button_max-size">
+  <p>{{ customizeOrbits[lang].customizeOrbitsButton }}</p>
+</a>
 

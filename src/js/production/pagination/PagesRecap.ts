@@ -41,9 +41,7 @@ export const pagesRecap = () => {
 	//  -------------------------------- Create pages
 	for(const pageSlug of tempPages){
 		
-		if(pageSlug === 'customize-orbits'){
-			pageClass = new CustomizeOrbits();
-		} else if(pageSlug === 'orbit-viewer'){
+		if(pageSlug === 'orbit-viewer'){
 			pageClass = new OrbitViewer();
 		} else {
 			pageClass = new Page();
