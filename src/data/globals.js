@@ -5,6 +5,16 @@ async function getPage() {
 
   const data = {};
 
+	const contentOrder = [
+		'seo',
+		'common',
+		'menu',
+		'filters',
+		'share',
+		'datepicker',
+		'search'
+	]
+
   const content = `
     ... on defaultSEO_GlobalSet {
 						seoTitle
@@ -14,37 +24,47 @@ async function getPage() {
 										url
 								}
 						}
-				}
-				... on share_GlobalSet {
-						emailText
-						facebookText
-						getSnapshotText
-						getUrlText
-						twitterText
-				}
-				... on menuTexts_GlobalSet {
-						section1Title
-						section2Title
-						menuTitle
-						menuSubtitle
-				}
-				... on datepickerTabTexts_GlobalSet {
-						datepickerGoToDate
-						datePickerDescription
-				}
-				... on commonStrings_GlobalSet {
-						commonApply
-						commonCancel
-						commonFar
-						commonFilter
-						commonFuture
-						commonNear
-						commonPast
-						commonReset
-						commonedit
-						commonShowRandomObjectButton
-						commonSearchPlaceholder
-				}
+		}
+		... on commonStrings_GlobalSet {
+				commonApply
+				commonCancel
+				commonFar
+				commonFilter
+				commonFuture
+				commonNear
+				commonPast
+				commonReset
+				commonedit
+		}
+		... on mainMenu_GlobalSet {
+				section1Title
+				section2Title
+				menuTitle
+				menuSubtitle
+		}
+		... on sharePanel_GlobalSet {
+				emailText
+				facebookText
+				getSnapshotText
+				getUrlText
+				twitterText
+		}
+		... on filtersPanel_GlobalSet {
+				section1Title
+				section2Title
+				menuTitle
+				menuSubtitle
+				applyFilter
+				resetFilter
+		}
+		... on datepickerPanel_GlobalSet {
+				datepickerGoToDate
+				datepickerDescription
+		}
+		... on searchPanel_GlobalSet {
+				showRandomObjectButton
+				searchPlaceholder
+		}
   `;
 
   for(let i = 1; i <= 2; i++){
@@ -55,19 +75,23 @@ async function getPage() {
       }
     }`;
 
-    const d = await getQuery(query);
+    let d = await getQuery(query);
+		d = d.data.globalSets;
 
 		const formatted = {};
-		for(const subItem of d.data.globalSets){
+		for(const subItem in d){
 
-			for(const key in subItem){
-				formatted[key] = subItem[key];
+			for(const key in d[subItem]){
+				if(!!!formatted[contentOrder[subItem]]) formatted[contentOrder[subItem]] = {};
+				formatted[contentOrder[subItem]][key] = d[subItem][key];
 			}
 		}
 
     data[i === 1 ? 'en' : 'es'] = formatted;
 
   }
+
+	console.log(data);
 
 	return data;
 }

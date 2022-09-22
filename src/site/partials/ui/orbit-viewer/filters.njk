@@ -18,8 +18,8 @@
 		<div class="panel-top-content">
 			{% include "ui/icons/filter.njk" %}
 			<div>
-				<h3>Filtering tool</h3>
-				<h2>Customize your view</h2>
+				<h3>{{ globals[lang].filters.menuSubtitle }}</h3>
+				<h2>{{ globals[lang].filters.menuTitle }}</h2>
 			</div>
 		</div>
 
@@ -28,16 +28,16 @@
 	</div>
 
 	<div class="panel-section panel-separator">
-		<h3>Object type</h3>
-		{{ filter(categories) }}
+		<h3>{{ globals[lang].filters.section1Title }}</h3>
+		{{ filter(categories[lang]) }}
 	</div>
 
 	<div class="panel-section">
-		<h3>Object characteristics</h3>
+		<h3>{{ globals[lang].filters.section2Title }}</h3>
 
 		<div class="distance-input custom-input" type="double-range" style="--range-1:0;--range-2:1;">
-			<p>Near</p>
-			<p>Far</p>
+			<p>{{ globals[lang].common.commonNear }}</p>
+			<p>{{ globals[lang].common.commonFar }}</p>
 
 			<div class="fake-range"></div>
 
@@ -54,11 +54,11 @@
 		<div class="filter-buttons">
 
 			<button data-button="filters-apply" class="ui__button">
-				<p>Apply Filter</p>
+				<p>{{ globals[lang].filters.applyFilter }}</p>
 			</button>
 
 			<button data-button="filters-reset" class="ui__button ghost-button">
-				<p>Reset Filter</p>
+				<p>{{ globals[lang].filters.resetFilter }}</p>
 			</button>
 
 		</div>

@@ -7,18 +7,18 @@
 		
 		<div class="search-text-input">
 		
-			<input type="text" placeholder="{{ globals[lang].commonSearchPlaceholder }}">
+			<input type="text" placeholder="{{ globals[lang].search.searchPlaceholder }}">
 		
 			<button class="search-reset">
 
-				{% include "ui/icons/times-circle.njk" %}
+				{% include "ui/icons/times-circle.njk" %} 
 
 			</button>
 
 		</div>
 		
 		<button class="search-cancel">
-			<p>{{ globals[lang].commonCancel }}</p>
+			<p>{{ globals[lang].common.commonCancel }}</p>
 		</button>
 	</div>
 </div>
@@ -26,7 +26,7 @@
 <div class="search-panel">
 
 	<button data-button="random-search" class="ui__button button_max-size">
-		<p>{{ globals[lang].commonShowRandomObjectButton }}</p>
+		<p>{{ globals[lang].search.showRandomObjectButton }}</p>
 	</button>
 
 </div>
