@@ -44,6 +44,7 @@ async function getPage() {
 				menuSubtitle
 		}
 		... on sharePanel_GlobalSet {
+				tabTitle
 				emailText
 				facebookText
 				getSnapshotText
