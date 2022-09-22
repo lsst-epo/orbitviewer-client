@@ -66,7 +66,7 @@ export const historyInit = () => {
 	
 	if(DEV) console.log('Site pages --> ', PAGES);
 	
-	onChange();
+	onRequest();
 }
 
 export const onChange = (url:string = window.location.pathname) => {		
