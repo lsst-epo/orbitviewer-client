@@ -158,11 +158,25 @@ module.exports = function (eleventyConfig) {
 		ghostMode: false,
 	});
 
-	console.log(i18n);
 	eleventyConfig.addPlugin(i18n, {
 		defaultLanguage: "en",
 		fallbackLocales: {
 			'*': 'en'
+		}
+	});
+
+	eleventyConfig.setBrowserSyncConfig({
+		callbacks: {
+			ready: function (err, bs) {
+				bs.addMiddleware('*', (req, res) => {
+					if (req.url === '/') {
+						res.writeHead(302, {
+							location: '/en/'
+						});
+						res.end();
+					}
+				});
+			}
 		}
 	});
 
@@ -190,21 +204,6 @@ module.exports = function (eleventyConfig) {
 		path[`bundle/${target}`] = `${target}/bundle`;
 		eleventyConfig.addPassthroughCopy(path);
 	}
-
-	eleventyConfig.setBrowserSyncConfig({
-		callbacks: {
-			ready: function (err, bs) {
-				bs.addMiddleware('*', (req, res) => {
-					if (req.url === '/') {
-						res.writeHead(302, {
-							location: '/en/'
-						});
-						res.end();
-					}
-				});
-			}
-		}
-	});
 
 	return {
 		dir: {

@@ -27,7 +27,7 @@ async function getPage() {
     data[i === 1 ? 'en' : 'es'] = d.data.entries[0];
 
   }
-  console.log(data);
+
   return data;
 }
 
