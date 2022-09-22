@@ -65,8 +65,15 @@ export const historyInit = () => {
 	historyLinksEventListener();
 	
 	if(DEV) console.log('Site pages --> ', PAGES);
+
+	LOCATION.current = getPage(window.location.pathname);
+	console.log(LOCATION.current);
 	
-	onRequest();
+	const dom = document.querySelector('.page__content');
+	LOCATION.current.class.dom = dom;
+	LOCATION.current.template = dom.getAttribute('data-template');
+
+	TriggerTransition();
 }
 
 export const onChange = (url:string = window.location.pathname) => {		
