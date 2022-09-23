@@ -169,9 +169,10 @@ module.exports = function (eleventyConfig) {
 		callbacks: {
 			ready: function (err, bs) {
 				bs.addMiddleware('*', (req, res) => {
-					if (req.url === '/') {
+
+					if(!req.url.includes('/en/') && !req.url.includes('/es/')){
 						res.writeHead(302, {
-							location: '/en/'
+							location: `/en${req.url}`
 						});
 						res.end();
 					}
