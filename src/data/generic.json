@@ -23,7 +23,8 @@
 			"diameter": "Diameter",
 			"day": "Day",
 			"month": "Month",
-			"year": "Year"
+			"year": "Year",
+			"tours": "Tours"
 		},
 		"special-strings": {
 			"customize-orbits": "Apply and explore them",
@@ -101,7 +102,8 @@
 			"diameter": "ES - Diameter",
 			"day": "ES - Day",
 			"month": "ES - Month",
-			"year": "ES - Year"
+			"year": "ES - Year",
+			"tours": "ES - Tours"
 		},
 		"special-strings": {
 			"customize-orbits": "ES - Apply and explore them",
