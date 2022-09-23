@@ -39,7 +39,7 @@
 	</div>
 
 	<div class="panel-section time-picker-details">
-		<p>{{ generic[lang]['special-strings']['current-date'] }} <span>00/00/0000 - 00:00:00 am</span></p>
+		<p>{{ generic[lang]['special-strings']['current-date'] }} <span>00/00/0000 - 00:00:00</span></p>
 
 		<div>
 			<button class="ui__button-small" data-timer="reset">{{ generic[lang].strings.reset }}</button>
@@ -54,15 +54,15 @@
 
 				<div class="date-item">
 					<p>{{ generic[lang].strings.day }}</p>
-					<h4>DD</h4>
+					<h4 data-empty="DD">DD</h4>
 				</div>
 				<div class="date-item">
 					<p>{{ generic[lang].strings.month }}</p>
-					<h4>MM</h4>
+					<h4 data-empty="MM"></h4>
 				</div>
 				<div class="date-item">
 					<p>{{ generic[lang].strings.year }}</p>
-					<h4>{% if lang == 'en' %}YY{% else %}AA{% endif %}</h4>
+					<h4 data-empty="{% if lang == 'en' %}YYYY{% else %}AAAA{% endif %}"></h4>
 				</div>
 
 		</div>

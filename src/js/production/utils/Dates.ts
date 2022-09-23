@@ -19,9 +19,11 @@ export const getFormatDate = (date:Date) => {
 
 export const formatDate = (date:Date) => {
 
-	const d = getFormatDate(date)
+	const d = getFormatDate(date);
 
-	const formattedDate = `${d.m}/${d.d}/${d.y} - ${d.h}:${d.min}:${d.s}`;
+	const isES = document.documentElement.getAttribute('lang') === 'es-ES';	
+
+	const formattedDate = isES ? `${d.d}/${d.m}/${d.y} - ${d.h}:${d.min}:${d.s}` : `${d.m}/${d.d}/${d.y} - ${d.h}:${d.min}:${d.s}`;
 
 	return formattedDate;
 }

@@ -180,9 +180,7 @@ export class TimePickerPanel extends Panel {
 
 		setTimeout(() => {
 			const items = this.subPanel.querySelectorAll('.date-item h4');
-			items[0].innerText = 'DD';
-			items[1].innerText = 'MM';
-			items[2].innerText = 'YY';
+			for(const item of items) item.innerText = item.getAttribute('data-empty');
 		}, 500);
 
 
