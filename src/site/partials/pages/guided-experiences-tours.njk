@@ -1,6 +1,11 @@
-{{ experience | dump | safe}}
+{% set exp = experience %}
+{% for item in guidedExperiencesTours[lang] %}
+  {% if item.id == experience.id %} 
+    {% set exp = item %}
+  {% endif %}
+{% endfor %}
 
-{# <section class="active" data-slide="initialSlide" data-slide-index="0" data-parent-slug="{{ experience.tourPicker[0].slug }}">
+<section class="active" data-slide="initialSlide" data-slide-index="0">
   
     <div class="center-content">
       {% include "tours/preview.njk" %}
@@ -8,14 +13,14 @@
 
     <div class="buttons__wrapper">
 
-      <button data-button="initialSlide-0-prev" class="ui__button">
+      <a href="{{ '/' + lang + '/' + exp.tourPicker[0].slug | url}}" class="ui__button">
         {% include "ui/icons/arrow-prev.njk" %}
-        <p>Back</p>
-      </button>
+        <p>{{ generic[lang].strings.back }}</p>
+      </a>
 
       <button data-button="initialSlide-0-next" class="ui__button">
         {% include "ui/icons/arrow-next.njk" %}
-        <p>Let's start</p>
+        <p>{{ generic[lang]['special-strings']['tour-start'] }}</p>
       </button>
 
     </div>
@@ -40,7 +45,7 @@
           {% if slide.slideTitle %}
             <h3>{{ slide.slideTitle }}</h3>
           {% else %}
-            <h3>Fun Fact</h3>
+            <h3>{{ generic[lang]['special-strings']['tour-fun-fact'] }}</h3>
           {% endif %}
           {% if slide.subTitle %}<h4>{{ slide.subTitle }}</h4>{% endif %}
           <p>{{ slide.slideContent }}</p>
@@ -77,4 +82,4 @@
 
   </section>
 
-{% endfor %} #}
+{% endfor %}

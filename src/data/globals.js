@@ -44,8 +44,6 @@ async function getPage() {
     data[i === 1 ? 'en' : 'es'] = formatted;
 
   }
-
-	console.log(data);
 	return data;
 }
 

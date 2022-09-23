@@ -6,8 +6,8 @@ export const PAGES = [];
 
 // ------------------------------------------ Helpers
 export const getPage = (slug:string) => {
-	const page = PAGES.find(page => slug.includes(page.id));	
-	return !!!page ? PAGES.find(page => page.id.includes('landing')) : page;
+	const page = PAGES.filter(page => slug.includes(page.id));			
+	return page.length === 0 ? PAGES.find(page => page.id.includes('landing')) : page[page.length - 1];
 }
 
 export const getUrl = (page) => {

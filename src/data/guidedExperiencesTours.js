@@ -9,13 +9,14 @@ async function getPage() {
 
   const content = `
     ... on guidedExperiencesTours_default_Entry {
-					title,
-					slug,
+					id
+					title
+					slug
 					tourPicker {
-						title,
+						title
 						slug
-					},
-					complexity,
+					}
+					complexity
 					flexible {
 						... on flexible_introSlide_BlockType {
 								typeHandle
@@ -50,6 +51,8 @@ async function getPage() {
     data[i === 1 ? 'en' : 'es'] = d.data.entries;
 
   }
+
+	console.log(data);
 
 	return data;
 }
