@@ -9,8 +9,8 @@ diffuseColor.a *= material.transmissionAlpha + 0.1;
 // float w = smoothstep(-1., 1., sin(vWeight*PI*2.0-time));
 float w = vWeight;
 
-outgoingLight = mix(outgoingLight * w, vec3(.9), vSelected);
-float alpha = mix(w, 1.0, vSelected);
+outgoingLight = mix(outgoingLight * w, vec3(.9), selected);
+float alpha = mix(w, 1.0, selected);
 
 pc_fragColor = vec4( outgoingLight, alpha * diffuseColor.a );
 

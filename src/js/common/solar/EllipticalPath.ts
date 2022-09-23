@@ -1,3 +1,4 @@
+import { MathUtils } from "@jocabola/math";
 import { BufferAttribute, BufferGeometry, Group, Line, Object3D, Vector3 } from "three";
 import { TrajectoryMaterial } from "../gfx/TrajectoryMaterial";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
@@ -20,6 +21,7 @@ export class EllipticalPath {
     ellipse:Object3D;
     orbitElements:OrbitElements;
     material:TrajectoryMaterial;
+    selected:boolean = false;
 
     constructor(el:OrbitElements) {
         // build path
@@ -125,23 +127,13 @@ export class EllipticalPath {
         }
     }
 
-    set selected(value:boolean) {
-        const selected = this.ellipse.geometry.attributes.selected;
-
-        const arr = selected.array as Float32Array;
-        const v = value ? 1 : 0;
-
-        for(let i=0; i<selected.count; i++) {
-            arr[i] = v;
-        }
-
-        selected.needsUpdate = true;
-    }
-
     update(d:number) {
         const mat = this.material;
         if(mat.shader) {
             mat.shader.uniforms.d.value = d;
+
+            const sel = mat.shader.uniforms.selected;
+            sel.value = MathUtils.lerp(sel.value, this.selected ? 1 : 0, .16);
         }
     }
 }

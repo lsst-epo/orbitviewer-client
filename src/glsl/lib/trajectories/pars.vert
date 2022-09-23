@@ -4,9 +4,6 @@
 attribute float weight;
 out float vWeight;
 
-attribute float selected;
-out float vSelected;
-
 attribute float dt;
 uniform float d;
 uniform OrbitElements el;

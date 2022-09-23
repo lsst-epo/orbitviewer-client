@@ -29,6 +29,7 @@ export class TrajectoryMaterial extends LineBasicMaterial {
         fs = fs.replace("#include <output_fragment>", output_frag);
 
         shader.uniforms.time = {value: 0};
+        shader.uniforms.selected = {value: 0};
         shader.uniforms.el = {value: this.el}
         shader.uniforms.d = {value: SolarTimeManager.getMJDonDate(new Date())}
         shader.vertexShader = vs;
