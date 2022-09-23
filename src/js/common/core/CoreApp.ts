@@ -212,19 +212,6 @@ export class CoreApp extends WebGLSketch {
 		}
 
 		this.particles.data = data;
-
-		// update counts
-		/* let elliptical = 0;
-		let parabolic = 0;
-		let nearParabolic = 0;
-		let hyperbolic = 0;
-
-		for(const el of data) {
-			if(el.type == OrbitType.Elliptical) elliptical++;
-			if(el.type == OrbitType.Parabolic) parabolic++;
-			if(el.type == OrbitType.NearParabolic) nearParabolic++;
-			if(el.type == OrbitType.Hyperbolic) hyperbolic++;
-		} */
 	}
 
 	playPause() {
