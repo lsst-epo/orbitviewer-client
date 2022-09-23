@@ -1,27 +1,13 @@
 import { DEV } from "../../common/core/Globals";
-import { CustomizeOrbits } from "../pages/CustomizeOrbits";
-import { GuidedExperiences } from "../pages/GuidedExperiences";
-import { GuidedExperienceTour } from "../pages/GuidedExperienceTour";
-import { Landing } from "../pages/Landing";
-import { OrbitViewer } from "../pages/OrbitViewer";
-import { Page } from "../pages/Page";
-import { Tours } from "../pages/Tours";
 import { get } from "../utils/Ajax";
-import { getLanguage, getPage, getUrl, PAGES, pagesRecap, recapPages } from "./PagesRecap";
+import { getPage, getUrl, PAGES, pagesRecap } from "./PagesRecap";
 import { TRANSITIONS, TriggerTransition } from "./TransitionManager";
-
-
 
 export const LOCATION = {
 	current: null,
 	previous: null,
 	popstate: false,
 }
-
-
-
-
-
 
 // ------------------------------------------ History
 export const historyTriggerLink = (slug:string = null) => {

@@ -1,10 +1,6 @@
-import { CustomizeOrbits } from "../pages/CustomizeOrbits";
-import { GuidedExperiences } from "../pages/GuidedExperiences";
 import { GuidedExperienceTour } from "../pages/GuidedExperienceTour";
-import { Landing } from "../pages/Landing";
 import { OrbitViewer } from "../pages/OrbitViewer";
 import { Page } from "../pages/Page";
-import { Tours } from "../pages/Tours";
 
 export const PAGES = [];
 
@@ -65,7 +61,7 @@ export const pagesRecap = () => {
 	}
 	for(const pageSlug of tours){
 		
-		pageClass = new Tours();
+		pageClass = new Page();
 
 		const pageItem = {
 			id: pageSlug,
