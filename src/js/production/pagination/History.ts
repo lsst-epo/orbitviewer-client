@@ -53,7 +53,6 @@ export const historyInit = () => {
 	if(DEV) console.log('Site pages --> ', PAGES);
 
 	LOCATION.current = getPage(window.location.pathname);
-	console.log(LOCATION.current);
 	
 	const dom = document.querySelector('.page__content');
 	LOCATION.current.class.dom = dom;
@@ -80,7 +79,7 @@ export const onChange = (url:string = window.location.pathname) => {
 	// GET PAGE
 	const page = getPage(url);
 
-	console.log(page, url);
+	console.log('Loading...', page, url);
 	
 	if(page === LOCATION.current) return;	
 
@@ -94,9 +93,7 @@ export const onChange = (url:string = window.location.pathname) => {
 		LOCATION.current.class.prepare();
 		
 	// OR LOAD PAGE
-	} else {				
-		console.log('Loading page', getUrl(page));
-		
+	} else {						
 		get(getUrl(page)).then(response => {			
 			onRequestNotLoaded(response) 
 		})

@@ -88,6 +88,12 @@
 				"title": "About skyviewer",
 				"subtitle": "Credits"
 			}
+		},
+		"expandable-items": {
+			"tap": "Tap to expand",
+			"overview": "Overview",
+			"context": "Context information",
+			"data": "Detailed data"
 		}
 	},
 	"es": {
@@ -179,6 +185,12 @@
 				"title": "ES - About skyviewer",
 				"subtitle": "ES - Credits"
 			}
+		},
+		"expandable-items": {
+			"tap": "ES - Tap to expand",
+			"overview": "ES - Overview",
+			"context": "ES - Context information",
+			"data": "ES - Detailed data"
 		}
 	}
 }

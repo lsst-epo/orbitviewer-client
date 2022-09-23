@@ -42,7 +42,7 @@ export class Planet extends Object3D {
         if(this.type !== undefined) {
             // console.log(PlanetRadiusMap[this.type] * KM2AU);
             const scl = PlanetRadiusMap[this.type] * KM2AU * PLANET_SCALE;
-            console.log(scl, this.type);
+            // console.log(scl, this.type);
             this.scale.multiplyScalar(scl);
             // correct fresnel
             const s = MathUtils.smoothstep(0, 0.234, scl);
