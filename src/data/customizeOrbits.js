@@ -10,7 +10,6 @@ async function getPage() {
     ...on customizeOrbits_customizeOrbits_Entry {
       customizeOrbitsTitle
       customizeOrbitsDescription
-      customizeOrbitsButton
     }
   `;
 

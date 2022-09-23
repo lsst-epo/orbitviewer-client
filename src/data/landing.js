@@ -8,10 +8,8 @@ async function getPage() {
 
   const content = `
     ...on landing_landing_Entry {
-      landingCenterTitle,
-      landingVersion,
-      landingLeftButtonText,
-      landingRightButtonText
+      landingCenterTitle
+      landingVersion
     }
   `;
 

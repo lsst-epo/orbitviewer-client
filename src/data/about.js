@@ -7,8 +7,6 @@ async function getPage() {
 
   const content = `
     ...on about_about_Entry {
-      menuTitle 
-      menuSubtitle
       text
     }
   `;
