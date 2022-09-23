@@ -1,4 +1,4 @@
-import { BufferAttribute, BufferGeometry, Line, Vector3 } from "three";
+import { BufferAttribute, BufferGeometry, Group, Line, Object3D, Vector3 } from "three";
 import { TrajectoryMaterial } from "../gfx/TrajectoryMaterial";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 import { SolarTimeManager } from "./SolarTime";
@@ -17,8 +17,9 @@ const MIN_POINTS = 10;
  */
 export class EllipticalPath {
     pts:Array<Vector3> = [];
-    ellipse:Line;
+    ellipse:Object3D;
     orbitElements:OrbitElements;
+    material:TrajectoryMaterial;
 
     constructor(el:OrbitElements) {
         // build path
@@ -99,10 +100,29 @@ export class EllipticalPath {
             )
         );
 
-        this.ellipse = new Line(geo, new TrajectoryMaterial({
+        this.ellipse = new Group();
+        const mat = new TrajectoryMaterial({
             color: 0x666666,
             transparent: true
-        }, el));
+        }, el);
+        this.material = mat;
+
+        const l = new Line(geo, mat);
+        this.ellipse.add(l);
+
+        for (let i=0; i<10; i++) {
+            const l1 = new Line(geo, mat);
+            this.ellipse.add(l1);
+            l1.position.set(.0001*i, 0, 0); 
+            
+            const l2 = new Line(geo, mat);
+            this.ellipse.add(l2);
+            l2.position.set(0, .0001*i, 0); 
+
+            const l3 = new Line(geo, mat);
+            this.ellipse.add(l3);
+            l3.position.set(0, 0, .0001*i); 
+        }
     }
 
     set selected(value:boolean) {
@@ -119,7 +139,7 @@ export class EllipticalPath {
     }
 
     update(d:number) {
-        const mat = this.ellipse.material as TrajectoryMaterial;
+        const mat = this.material;
         if(mat.shader) {
             mat.shader.uniforms.d.value = d;
         }
