@@ -110,7 +110,7 @@ export class CoreApp extends WebGLSketch {
         this.sunLightHelper.visible = false;
         this.scene.add(this.sunLightHelper);
 
-        this.ambientLight = new AmbientLight(0xffffff, 0.03);
+        this.ambientLight = new AmbientLight(0xffffff, 0.1);
         this.scene.add(this.ambientLight);
 
         console.log('Core App init');
@@ -254,9 +254,11 @@ export class CoreApp extends WebGLSketch {
         this.camera.lookAt(this.scene.position);
 
         // Init controls
-        CONTROLS.orbit = new OrbitControls(this.camera, this.domElement);
-        CONTROLS.orbit.minDistance = CONTROLS.min;
-        CONTROLS.orbit.maxDistance = CONTROLS.max;
+        const ctrls = new OrbitControls(this.camera, this.domElement);
+        CONTROLS.orbit = ctrls;
+        ctrls.minDistance = CONTROLS.min;
+        ctrls.maxDistance = CONTROLS.max;
+        ctrls.enableDamping = true;
 
         window.addEventListener('keydown', (evt) =>{
             if(evt.key == ' ') this.playPause();

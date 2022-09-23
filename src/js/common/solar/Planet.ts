@@ -7,7 +7,7 @@ import { calculateOrbitByType, KM2AU, OrbitElements, OrbitType } from "./SolarSy
 export const PLANET_GEO = new SphereGeometry(1, 32, 32);
 const tLoader = new TextureLoader();
 
-export const PLANET_SCALE = 200;
+export const PLANET_SCALE = 100;
 
 export type PlanetOptions = {
     color?:ColorRepresentation;
@@ -36,7 +36,7 @@ export class Planet extends Object3D {
         this.data = _data;        
         this.name = name;
 
-        let fresnelWidth = .005;
+        let fresnelWidth = .008;
         let sunIntensity = .5;
 
         if(this.type !== undefined) {
@@ -63,11 +63,12 @@ export class Planet extends Object3D {
             sunIntensity: sunIntensity
         });
 
+        this.orbitPath = new EllipticalPath(_data);
+
         this.mesh = new Mesh(PLANET_GEO, this.material);
         this.add(this.mesh);
+        // this.add(this.orbitPath.ellipse)
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
-
-        this.orbitPath = new EllipticalPath(_data);       
 
         this.rotationSpeed = Random.randf(-1, 1);
     }
@@ -77,6 +78,7 @@ export class Planet extends Object3D {
         this.mesh.rotation.y = d * this.rotationSpeed;
         // this.mesh.updateMatrixWorld();
         this.material.update();
+        this.orbitPath.update(d);
     }
 
     set selected(value:boolean) {
