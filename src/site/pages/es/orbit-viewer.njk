@@ -1,13 +1,8 @@
 ---
 layout: base
 pageTemplate: orbit-viewer
----
-{# ---
-layout: base
-pageTemplate: index
 eleventyComputed:
-  title: "{{ copies.seo.title }}"
-  description: "{{ copies.seo.description }}"
---- #}
-
+  title: "{{ orbitViewer[lang].seoTitle }}"
+  description: "{{ orbitViewer[lang].seoDescription }}"
+---
 {% include "pages/orbit-viewer.njk" %}

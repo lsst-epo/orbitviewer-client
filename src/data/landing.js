@@ -8,6 +8,13 @@ async function getPage() {
 
   const content = `
     ...on landing_landing_Entry {
+      seoTitle
+      seoDescription
+      seoImage {
+        ... on cantoDam_Asset {
+          url
+        }
+      }
       landingCenterTitle
       landingVersion
     }

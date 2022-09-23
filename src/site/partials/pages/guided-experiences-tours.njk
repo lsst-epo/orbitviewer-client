@@ -1,10 +1,3 @@
-{% set exp = experience %}
-{% for item in guidedExperiencesTours[lang] %}
-  {% if item.id == experience.id %} 
-    {% set exp = item %}
-  {% endif %}
-{% endfor %}
-
 <section class="active" data-slide="initialSlide" data-slide-index="0">
   
     <div class="center-content">
@@ -13,7 +6,7 @@
 
     <div class="buttons__wrapper">
 
-      <a href="{{ '/' + lang + '/' + exp.tourPicker[0].slug | url}}" class="ui__button">
+      <a href="{{ '/' + lang + '/' + experience.tourPicker[0].slug | url}}" class="ui__button">
         {% include "ui/icons/arrow-prev.njk" %}
         <p>{{ generic[lang].strings.back }}</p>
       </a>

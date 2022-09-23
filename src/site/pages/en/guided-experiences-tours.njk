@@ -5,13 +5,9 @@ pagination:
   alias: experience
   data: guidedExperiencesTours.en
   size: 1
-permalink: "{{ lang + '/' + experience.tourPicker[0].slug + '/' + experience.slug | slug }}/"
----
-
-{# 
+permalink: "{{ '/' + lang + '/' + experience.tourPicker[0].slug + '/' + experience.slug | slug }}/"
 eleventyComputed:
-title: "{{ project.seo.title }}"
-description: "{{ project.seo.description }}"
-image: "{{ project.seo.seo_image }}" #}
-
+  title: "{{ experience[lang].seoTitle }}"
+  description: "{{ experience[lang].seoDescription }}"
+---
 {% include "pages/guided-experiences-tours.njk" %}

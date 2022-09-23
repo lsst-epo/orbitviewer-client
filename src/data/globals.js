@@ -11,6 +11,7 @@ async function getPage() {
 
   const content = `
     ... on defaultSEO_GlobalSet {
+			seoSiteName
 			seoTitle
 			seoDescription
 			seoImage {

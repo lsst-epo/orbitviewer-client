@@ -1,13 +1,9 @@
 ---
 layout: base
 pageTemplate: index
----
-{# ---
-layout: base
-pageTemplate: index
 eleventyComputed:
-  title: "{{ copies.seo.title }}"
-  description: "{{ copies.seo.description }}"
---- #}
+  title: "{{ landing[lang].seoTitle }}"
+  description: "{{ landing[lang].seoDescription }}"
+---
 
 {% include "pages/index.njk" %}

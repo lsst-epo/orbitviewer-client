@@ -1,13 +1,12 @@
 const getQuery = require('../../utils/getQuery');
 const useCache = require('../../utils/cache.js');
 
-
 async function getPage() {
 
   const data = {};
 
   const content = `
-    ...on customizeOrbits_customizeOrbits_Entry {
+    ...on orbitViewer_orbitViewer_Entry {
       seoTitle
       seoDescription
       seoImage {
@@ -15,15 +14,13 @@ async function getPage() {
           url
         }
       }
-      customizeOrbitsTitle
-      customizeOrbitsDescription
     }
   `;
 
   for(let i = 1; i <= 2; i++){
     const query = `
     {
-      entries(section: "customizeOrbits", siteId: "${i}") {
+      entries(section: "orbitViewer", siteId: "${i}") {
         ${content}
       }
     }`;
@@ -33,12 +30,10 @@ async function getPage() {
 
   }
 
-  return data;
+	return data;
 }
 
 
-// export for 11ty
-// module.exports = getPage;
 module.exports = async () => {
-  return useCache(getPage, 'customizeOrbits.json');
+  return useCache(getPage, 'orbitViewer.json');
 }

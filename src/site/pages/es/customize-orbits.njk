@@ -1,13 +1,8 @@
 ---
 layout: base
 pageTemplate: customize-orbits
----
-{# ---
-layout: base
-pageTemplate: index
 eleventyComputed:
-  title: "{{ copies.seo.title }}"
-  description: "{{ copies.seo.description }}"
---- #}
-
+  title: "{{ customizeOrbits[lang].seoTitle }}"
+  description: "{{ customizeOrbits[lang].seoDescription }}"
+---
 {% include "pages/customize-orbits.njk" %}

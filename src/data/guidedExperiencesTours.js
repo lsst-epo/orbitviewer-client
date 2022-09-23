@@ -9,6 +9,13 @@ async function getPage() {
 
   const content = `
     ... on guidedExperiencesTours_default_Entry {
+					seoTitle
+					seoDescription
+					seoImage {
+						... on cantoDam_Asset {
+							url
+						}
+					}
 					id
 					title
 					slug
@@ -51,9 +58,6 @@ async function getPage() {
     data[i === 1 ? 'en' : 'es'] = d.data.entries;
 
   }
-
-	console.log(data);
-
 	return data;
 }
 

@@ -8,6 +8,13 @@ async function getPage() {
 
   const content = `
     ... on guidedExperiences_guidedExperiences_Entry {
+      seoTitle
+      seoDescription
+      seoImage {
+        ... on cantoDam_Asset {
+          url
+        }
+      }
 			title
 			slug
 		}
