@@ -24,7 +24,8 @@
 			"day": "Day",
 			"month": "Month",
 			"year": "Year",
-			"tours": "Tours"
+			"tours": "Tours",
+			"sort-by": "Sort by"
 		},
 		"special-strings": {
 			"customize-orbits": "Apply and explore them",
@@ -68,6 +69,15 @@
 				"reset-filter": "Reset Filter",
 				"apply-filter": "Apply Filter"
 			},
+			"sort-menu": {
+				"title": "Sort by",
+				"subtitle": "Customize your view",
+				"sections": ["Release characteristics", "Tour's characteristics"],
+				"section0": ["Newer first", "Older first"],
+				"section1": ["Less duration first", "More duration first", "Less complexity first", "More complexity first"],
+				"reset-sort": "Reset Sort",
+				"apply-sort": "Apply Sort"
+			},
 			"language-menu": {
 				"title": "Language selection",
 				"subtitle": "Chose your language"
@@ -103,7 +113,8 @@
 			"day": "ES - Day",
 			"month": "ES - Month",
 			"year": "ES - Year",
-			"tours": "ES - Tours"
+			"tours": "ES - Tours",
+			"sort-by": "ES - Sort by"
 		},
 		"special-strings": {
 			"customize-orbits": "ES - Apply and explore them",
@@ -146,6 +157,15 @@
 				"sections": ["ES - Object type", "ES - Object characteristics"],
 				"reset-filter": "ES - Reset Filter",
 				"apply-filter": "ES - Apply Filter"
+			},
+			"sort-menu": {
+				"title": "ES - Sort by",
+				"subtitle": "ES - Customize your view",
+				"sections": ["Es - Release characteristics", "Es - Tour's characteristics"],
+				"section0": ["Es - Newer first", "Es - Older first"],
+				"section1": ["Es - Less duration first", "Es - More duration first", "Es - Less complexity first", "Es - More complexity first"],
+				"reset-sort": "ES - Reset Sort",
+				"apply-sort": "ES - Apply Sort"
 			},
 			"language-menu": {
 				"title": "ES - Language selection",
