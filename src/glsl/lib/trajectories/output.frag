@@ -6,11 +6,13 @@ diffuseColor.a = 1.0;
 diffuseColor.a *= material.transmissionAlpha + 0.1;
 #endif
 
-float w = smoothstep(-1., 1., sin(vWeight*PI*2.0-time));
+// float w = smoothstep(-1., 1., sin(vWeight*PI*2.0-time));
+float w = vWeight;
 
-outgoingLight = mix(outgoingLight * vWeight, vec3(.9), vSelected);
+outgoingLight = mix(outgoingLight * w, vec3(.9), vSelected);
+float alpha = mix(w, 1.0, vSelected);
 
-pc_fragColor = vec4( outgoingLight, diffuseColor.a );
+pc_fragColor = vec4( outgoingLight, alpha * diffuseColor.a );
 
 #ifdef EMISSIVE
 #if defined( USE_COLOR ) || defined( USE_INSTANCING_COLOR )

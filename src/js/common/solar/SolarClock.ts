@@ -16,6 +16,8 @@ export class SolarClock {
     private elapsedTime:number = 0;
     private speed:number = 1;
     private targetSpeed:number = 1;
+    private edge1:Date = new Date('1900-01-01T00:00:00');
+    private edge2:Date = new Date('2100-01-01T00:00:00');
 
     /**
      * 
@@ -137,6 +139,15 @@ export class SolarClock {
         }
         
         this.date.setTime(this.date.getTime() + dt * 1000 + this.speed * HRSPSEC * dt);
+
+        // cap
+        if(this.date.getTime() < this.edge1.getTime()) {
+            this.date.setTime(this.edge1.getTime())
+        }
+
+        if(this.date.getTime() > this.edge2.getTime()) {
+            this.date.setTime(this.edge2.getTime())
+        }
 
         return SolarTimeManager.getMJDonDate(this.date);
     }
