@@ -1,0 +1,158 @@
+{
+	"en": {
+		"strings": {
+			"apply": "Apply",
+			"cancel": "Cancel",
+			"edit": "Edit",
+			"reset": "Reset",
+			"filter": "Filter",
+			"near": "Near",
+			"far": "Far",
+			"past": "Past",
+			"future": "Future",
+			"back": "Back",
+			"next": "Next",
+			"share": "Share",
+			"search": "Search",
+			"complexity": "Complexity",
+			"duration": "Duration",
+			"easy": "Easy",
+			"medium": "Medium",
+			"hard": "Hard",
+			"name": "Name",
+			"diameter": "Diameter",
+			"day": "Day",
+			"month": "Month",
+			"year": "Year"
+		},
+		"special-strings": {
+			"customize-orbits": "Apply and explore them",
+			"guided-experiences": "Back to main screen",
+			"tours": "Back to guided experiences",
+			"landing-explore": "I want to explore",
+			"landing-guide": "Please guide me",
+			"apply-selection": "Apply selection",
+			"reset-default": "Reset to default",
+			"current-date": "Current date:",
+			"date-explanation": "Slide right/left to go forward/backwards in time",
+			"go-date": "Go to date",
+			"search-placeholder": "Write and click search",
+			"search-random": "Show me one random object!",
+			"customize-view": "Customize your view. Toggle On/Off",
+			"customize-view-options": [
+				"Background Stars",
+				"Observed positions",
+				"Discovered by Rubin"
+			]
+		},
+		"menus": {
+			"menu": {
+				"title": "Main menu",
+				"subtitle": "Settings and more",
+				"sections": ["Settings", "Quick access"]
+			},
+			"share-menu": {
+				"title": "Share Skyviewer",
+				"subtitle": "Let people know about us!",
+				"get-url": "Get URL",
+				"facebook": "Facebook",
+				"twitter": "Twitter",
+				"get-snapshot": "Get Snapshot",
+				"email": "Email"
+			},
+			"filter-menu": {
+				"title": "Filtering tool",
+				"subtitle": "Customize your view",
+				"sections": ["Object type", "Object characteristics"],
+				"reset-filter": "Reset Filter",
+				"apply-filter": "Apply Filter"
+			},
+			"language-menu": {
+				"title": "Language selection",
+				"subtitle": "Chose your language"
+			},
+			"about-menu": {
+				"title": "About skyviewer",
+				"subtitle": "Credits"
+			}
+		}
+	},
+	"es": {
+		"strings": {
+			"apply": "ES - Apply",
+			"cancel": "ES - Cancel",
+			"edit": "ES - Edit",
+			"reset": "ES - Reset",
+			"filter": "ES - Filter",
+			"near": "ES - Near",
+			"far": "ES - Far",
+			"past": "ES - Past",
+			"future": "ES - Future",
+			"back": "ES - Back",
+			"next": "ES - Next",
+			"share": "ES - Share",
+			"search": "ES - Search",
+			"complexity": "ES - Complexity",
+			"duration": "ES - Duration",
+			"easy": "ES - Easy",
+			"medium": "ES - Medium",
+			"hard": "ES - Hard",
+			"name": "ES - Name",
+			"diameter": "ES - Diameter",
+			"day": "ES - Day",
+			"month": "ES - Month",
+			"year": "ES - Year"
+		},
+		"special-strings": {
+			"customize-orbits": "ES - Apply and explore them",
+			"guided-experiences": "ES - Back to main screen",
+			"tours": "ES - Back to guided experiences",
+			"landing-explore": "ES - I want to explore",
+			"landing-guide": "ES - Please guide me",
+			"apply-selection": "ES - Apply selection",
+			"reset-default": "ES - Reset to default",
+			"current-date": "ES - Current date:",
+			"date-explanation": "ES - Slide right/left to go forward/backwards in time",
+			"go-date": "ES - Go to date",
+			"search-placeholder": "ES - Write and click search",
+			"search-random": "ES - Show me one random object!",
+			"customize-view": "ES - Customize your view. Toggle On/Off",
+			"customize-view-options": [
+				"ES - Background Stars",
+				"ES - Observed positions",
+				"ES - Discovered by Rubin"
+			]
+		},
+		"menus": {
+			"menu": {
+				"title": "ES - Main menu",
+				"subtitle": "ES - Settings and more",
+				"sections": ["ES - Settings", "ES - Quick access"]
+			},
+			"share-menu": {
+				"title": "ES - Share Skyviewer",
+				"subtitle": "ES - Let people know about us!",
+				"get-url": "ES - Get URL",
+				"facebook": "ES - Facebook",
+				"twitter": "ES - Twitter",
+				"get-snapshot": "ES - Get Snapshot",
+				"email": "ES - Email"
+			},
+			"filter-menu": {
+				"title": "ES - Filtering tool",
+				"subtitle": "ES - Customize your view",
+				"sections": ["ES - Object type", "ES - Object characteristics"],
+				"reset-filter": "ES - Reset Filter",
+				"apply-filter": "ES - Apply Filter"
+			},
+			"language-menu": {
+				"title": "ES - Language selection",
+				"subtitle": "ES - Chose your language"
+			},
+			"about-menu": {
+				"title": "ES - About skyviewer",
+				"subtitle": "ES - Credits"
+			}
+		}
+	}
+}

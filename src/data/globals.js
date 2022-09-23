@@ -7,71 +7,17 @@ async function getPage() {
 
 	const contentOrder = [
 		'seo',
-		'common',
-		'menu',
-		'filters',
-		'share',
-		'datepicker',
-		'search',
-		'customize'
 	]
 
   const content = `
     ... on defaultSEO_GlobalSet {
-						seoTitle
-						seoDescription
-						seoImage {
-								... on cantoDam_Asset {
-										url
-								}
-						}
-		}
-		... on commonStrings_GlobalSet {
-				commonApply
-				commonCancel
-				commonFar
-				commonFilter
-				commonFuture
-				commonNear
-				commonPast
-				commonReset
-				commonedit
-		}
-		... on mainMenu_GlobalSet {
-				section1Title
-				section2Title
-				menuTitle
-				menuSubtitle
-		}
-		... on sharePanel_GlobalSet {
-				tabTitle
-				emailText
-				facebookText
-				getSnapshotText
-				getUrlText
-				twitterText
-		}
-		... on filtersPanel_GlobalSet {
-				section1Title
-				section2Title
-				menuTitle
-				menuSubtitle
-				applyFilter
-				resetFilter
-		}
-		... on datepickerPanel_GlobalSet {
-				datepickerGoToDate
-				datepickerDescription
-		}
-		... on searchPanel_GlobalSet {
-				showRandomObjectButton
-				searchPlaceholder
-		}
-		... on customizeYourViewPanel_GlobalSet {
-				customizeTitle
-				backgroundStars
-				observedPositions
-				discoveredByRubin
+			seoTitle
+			seoDescription
+			seoImage {
+				... on cantoDam_Asset {
+					url
+				}
+			}
 		}
   `;
 
@@ -100,7 +46,6 @@ async function getPage() {
   }
 
 	console.log(data);
-
 	return data;
 }
 

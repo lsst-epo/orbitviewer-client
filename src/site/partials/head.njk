@@ -8,8 +8,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>{{ globals.seoTitle }} · {{ title or settings.seo.title }}</title>
-	<meta name="Description" content="{{ description or globals.seoDescription }}">
+	<title>{{ globals[lang].seo.seoTitle }} · {{ title or settings.seo.title }}</title>
+	<meta name="Description" content="{{ description or globals[lang].seo.seoDescription }}">
 
 	<meta name="robots" content="noindex,nofollow">
 	<meta name="google" content="nositelinkssearchbox">
@@ -17,10 +17,10 @@
 
 	<meta property="og:url" content="{{ '/' | url }}">
 	<meta property="og:type" content="website">
-	<meta property="og:title" content="{{ title or globals.seoTitle }}">
+	<meta property="og:title" content="{{ title or globals[lang].seo.seoTitle }}">
 	{# <meta property="og:image" content="{% imageUrlFor featuredImage, 600 %}" /> #}
-	<meta property="og:description" content="{{ description or globals.seoDescription }}" />
-	<meta property="og:site_name" content="{{ globals.seoTitle }}">
+	<meta property="og:description" content="{{ description or globals[lang].seo.seoDescription }}" />
+	<meta property="og:site_name" content="{{ globals[lang].seo.seoTitle }}">
 	<meta property="og:locale" content="en_US">
 
 	{# FAVICON MISSING! #}
