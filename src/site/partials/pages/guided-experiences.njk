@@ -2,18 +2,28 @@
 <h1>{{ guidedExperiences[lang].title }}</h1>
 
 {% for tour in tours[lang] %}
-  <a href="{{ '/' + lang + '/' + tour.slug | url }}">
-    <h3>{{ tour.title }}</h3>
-    <div class="image" style="background-image: url(/assets/ceres-lorem.jpeg);">
 
-      <svg viewBox="0 0 48 66" xml:space="preserve">
-        <path d="M48,66L48,66L24,56L0,66V0h48V66z"/>
-        <text transform="matrix(1 0 0 1 24 40)" dominant-baseline="middle" text-anchor="middle">{{ generic[lang].strings.tours }}</text>
-        <text class="num" transform="matrix(1 0 0 1 24 20)" dominant-baseline="middle" text-anchor="middle">7</text>
-      </svg>
+  {% set toursSameCategory = 0 %}
+  {% for experience in guidedExperiencesTours[lang] %}
+      {% if experience.tourPicker[0].slug == tour.slug %}
+        {% set toursSameCategory = toursSameCategory + 1 %}
+      {% endif %}
+  {% endfor %}
 
-    </div>
-  </a>
+  {% if toursSameCategory > 0 %}
+    <a href="{{ '/' + lang + '/' + tour.slug | url }}">
+      <h3>{{ tour.title }}</h3>
+      <div class="image" style="background-image: url(/assets/ceres-lorem.jpeg);">
+
+        <svg viewBox="0 0 48 66" xml:space="preserve">
+          <path d="M48,66L48,66L24,56L0,66V0h48V66z"/>
+          <text transform="matrix(1 0 0 1 24 40)" dominant-baseline="middle" text-anchor="middle">{{ generic[lang].strings.tours }}</text>
+          <text class="num" transform="matrix(1 0 0 1 24 20)" dominant-baseline="middle" text-anchor="middle">{{  toursSameCategory }}</text>
+        </svg>
+
+      </div>
+    </a>
+  {% endif %}
 {% endfor %}
 
 <div class="buttons__wrapper">
