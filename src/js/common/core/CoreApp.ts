@@ -1,7 +1,6 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
-import { TextureLoader } from "three";
-import { AmbientLight, Clock, Group, Mesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PointLight, SphereGeometry } from "three";
+import { AmbientLight, Clock, Group, Mesh, Object3D, PerspectiveCamera, PointLight, SphereGeometry, TextureLoader } from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { css2D } from "../../production/ui/expandable-items/Css2D";
 import { expandableItems, initExpandableItems, resizeExpandableItems } from "../../production/ui/expandable-items/ExpandableItems";
@@ -13,7 +12,6 @@ import { getSolarSystemElements } from "../data/GetData";
 import { initShaders } from "../gfx/shaders";
 import { SunMaterial } from "../gfx/SunMaterial";
 import { VFXRenderer } from "../gfx/VFXRenderer";
-import { TRAJ_LINE_MAT } from "../solar/EllipticalPath";
 import { Planet, PLANET_SCALE } from "../solar/Planet";
 import { SolarClock } from "../solar/SolarClock";
 import { SolarParticles } from "../solar/SolarParticles";
@@ -216,19 +214,6 @@ export class CoreApp extends WebGLSketch {
 		}
 
 		this.particles.data = data;
-
-		// update counts
-		/* let elliptical = 0;
-		let parabolic = 0;
-		let nearParabolic = 0;
-		let hyperbolic = 0;
-
-		for(const el of data) {
-			if(el.type == OrbitType.Elliptical) elliptical++;
-			if(el.type == OrbitType.Parabolic) parabolic++;
-			if(el.type == OrbitType.NearParabolic) nearParabolic++;
-			if(el.type == OrbitType.Hyperbolic) hyperbolic++;
-		} */
 	}
 
 	playPause() {
@@ -259,6 +244,7 @@ export class CoreApp extends WebGLSketch {
         ctrls.minDistance = CONTROLS.min;
         ctrls.maxDistance = CONTROLS.max;
         ctrls.enableDamping = true;
+        ctrls.dampingFactor = .1;
 
         window.addEventListener('keydown', (evt) =>{
             if(evt.key == ' ') this.playPause();
@@ -299,10 +285,6 @@ export class CoreApp extends WebGLSketch {
 		}
 
 		this.sunParticles.update(this.solarClock.time);
-
-        if(TRAJ_LINE_MAT.shader) {
-            TRAJ_LINE_MAT.shader.uniforms.time.value = performance.now() * .001;
-        }
 	}
 
     render(): void {

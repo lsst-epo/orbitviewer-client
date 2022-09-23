@@ -1,17 +1,10 @@
-import { BufferAttribute, BufferGeometry, Line, Vector3 } from "three";
+import { BufferAttribute, BufferGeometry, Group, Line, Object3D, Vector3 } from "three";
 import { TrajectoryMaterial } from "../gfx/TrajectoryMaterial";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 import { SolarTimeManager } from "./SolarTime";
 
 const MIN_DISTANCE = .05;
 const MIN_POINTS = 10;
-
-/* const defaultColor = new Color(0x333333);
-const selectedColor = new Color(0xcccccc); */
-
-export const TRAJ_LINE_MAT = new TrajectoryMaterial({
-    color: 0x666666
-});
 
 /**
  * Elliptical Path
@@ -24,20 +17,24 @@ export const TRAJ_LINE_MAT = new TrajectoryMaterial({
  */
 export class EllipticalPath {
     pts:Array<Vector3> = [];
-    ellipse:Line;
-    firstD:number;
-    lastD:number;
+    ellipse:Object3D;
+    orbitElements:OrbitElements;
+    material:TrajectoryMaterial;
 
     constructor(el:OrbitElements) {
         // build path
         const date = new Date();
         const first = new Vector3();
 
+        this.orbitElements = el;
+
         let d = SolarTimeManager.getMJDonDate(date);
         calculateOrbitByType(el, d, OrbitType.Elliptical, first);
         this.pts.push(first);
 
-        this.firstD = d;
+        const dt = [];
+        dt.push(0);
+        let pD = d;
 
         let curr = new Vector3();
         calculateOrbitByType(el, ++d, OrbitType.Elliptical, curr);
@@ -45,9 +42,10 @@ export class EllipticalPath {
         while(this.pts.length < MIN_POINTS || curr.distanceTo(this.pts[0]) > minD) {
             while(curr.distanceTo(this.pts[this.pts.length-1]) < minD) {
                 calculateOrbitByType(el, ++d, OrbitType.Elliptical, curr);
-                this.lastD = d;
             }
 
+            dt.push(d-pD);
+            // pD = d;
             this.pts.push(curr.clone());
         }
 
@@ -67,6 +65,7 @@ export class EllipticalPath {
         pos.push(p.x, p.y, p.z);
         weight.push(1);
         selected.push(0);
+        dt.push(0);
         
         const geo = new BufferGeometry();
         geo.setAttribute(
@@ -86,6 +85,14 @@ export class EllipticalPath {
         );
 
         geo.setAttribute(
+            'dt',
+            new BufferAttribute(
+                new Float32Array(dt),
+                1
+            )
+        );
+
+        geo.setAttribute(
             'selected',
             new BufferAttribute(
                 new Float32Array(selected),
@@ -93,7 +100,29 @@ export class EllipticalPath {
             )
         );
 
-        this.ellipse = new Line(geo, TRAJ_LINE_MAT);
+        this.ellipse = new Group();
+        const mat = new TrajectoryMaterial({
+            color: 0x666666,
+            transparent: true
+        }, el);
+        this.material = mat;
+
+        const l = new Line(geo, mat);
+        this.ellipse.add(l);
+
+        for (let i=0; i<10; i++) {
+            const l1 = new Line(geo, mat);
+            this.ellipse.add(l1);
+            l1.position.set(.0001*i, 0, 0); 
+            
+            const l2 = new Line(geo, mat);
+            this.ellipse.add(l2);
+            l2.position.set(0, .0001*i, 0); 
+
+            const l3 = new Line(geo, mat);
+            this.ellipse.add(l3);
+            l3.position.set(0, 0, .0001*i); 
+        }
     }
 
     set selected(value:boolean) {
@@ -110,19 +139,9 @@ export class EllipticalPath {
     }
 
     update(d:number) {
-        const t = this.lastD - this.firstD;
-        const dT = d - this.firstD;
-        const geo = this.ellipse.geometry as BufferGeometry;
-        const weight = geo.attributes.weight;
-        const arr = weight.array as Float32Array;
-
-        const p = (Math.abs(dT) / t) % 1;
-
-        for(let i=0;i<arr.length;i++) {
-            let w = (i/(arr.length-1)) % 1;
-            arr[i] = w;
+        const mat = this.material;
+        if(mat.shader) {
+            mat.shader.uniforms.d.value = d;
         }
-
-        weight.needsUpdate = true;
     }
 }

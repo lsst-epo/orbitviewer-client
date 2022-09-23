@@ -36,7 +36,7 @@ export class Planet extends Object3D {
         this.data = _data;        
         this.name = name;
 
-        let fresnelWidth = .008;
+        let fresnelWidth = .005;
         let sunIntensity = .5;
 
         if(this.type !== undefined) {
@@ -50,7 +50,7 @@ export class Planet extends Object3D {
             sunIntensity = MathUtils.lerp(.5, .05, s);
             
         } else {
-            this.scale.multiplyScalar(.01);
+            this.scale.multiplyScalar(.003);
         }
 
         this.material = new PlanetMaterial({
