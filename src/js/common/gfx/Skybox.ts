@@ -8,7 +8,7 @@ export class Skybox {
     scene:Scene = new Scene();
     skyMat:MeshBasicMaterial = initMaterial(new MeshBasicMaterial({
         side: BackSide,
-        color: 0x333333
+        color: 0x999999
     })) as MeshBasicMaterial;
     sky:Mesh;
 

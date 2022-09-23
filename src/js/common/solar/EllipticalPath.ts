@@ -1,4 +1,4 @@
-import { BufferAttribute, BufferGeometry, Color, Line, Vector3 } from "three";
+import { BufferAttribute, BufferGeometry, Line, Vector3 } from "three";
 import { TrajectoryMaterial } from "../gfx/TrajectoryMaterial";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 import { SolarTimeManager } from "./SolarTime";
@@ -10,7 +10,7 @@ const MIN_POINTS = 10;
 const selectedColor = new Color(0xcccccc); */
 
 export const TRAJ_LINE_MAT = new TrajectoryMaterial({
-    color: 0x333333
+    color: 0x666666
 });
 
 /**
@@ -25,6 +25,8 @@ export const TRAJ_LINE_MAT = new TrajectoryMaterial({
 export class EllipticalPath {
     pts:Array<Vector3> = [];
     ellipse:Line;
+    firstD:number;
+    lastD:number;
 
     constructor(el:OrbitElements) {
         // build path
@@ -35,12 +37,15 @@ export class EllipticalPath {
         calculateOrbitByType(el, d, OrbitType.Elliptical, first);
         this.pts.push(first);
 
+        this.firstD = d;
+
         let curr = new Vector3();
         calculateOrbitByType(el, ++d, OrbitType.Elliptical, curr);
         const minD = MIN_DISTANCE * el.a;
         while(this.pts.length < MIN_POINTS || curr.distanceTo(this.pts[0]) > minD) {
             while(curr.distanceTo(this.pts[this.pts.length-1]) < minD) {
                 calculateOrbitByType(el, ++d, OrbitType.Elliptical, curr);
+                this.lastD = d;
             }
 
             this.pts.push(curr.clone());
@@ -102,5 +107,22 @@ export class EllipticalPath {
         }
 
         selected.needsUpdate = true;
+    }
+
+    update(d:number) {
+        const t = this.lastD - this.firstD;
+        const dT = d - this.firstD;
+        const geo = this.ellipse.geometry as BufferGeometry;
+        const weight = geo.attributes.weight;
+        const arr = weight.array as Float32Array;
+
+        const p = (Math.abs(dT) / t) % 1;
+
+        for(let i=0;i<arr.length;i++) {
+            let w = (i/(arr.length-1)) % 1;
+            arr[i] = w;
+        }
+
+        weight.needsUpdate = true;
     }
 }
