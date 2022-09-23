@@ -7,6 +7,9 @@ export const E_CONVERGENCE_THRESHOLD = .001 * Math.PI / 180;
 
 export const K = 0.01720209895;
 
+export const KM2AU = 6.6846e-9;
+export const SUN_RADIUS = 695700; // in KM
+
 export type OrbitElements = {
     id:string;
     N:number;

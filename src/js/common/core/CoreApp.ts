@@ -1,5 +1,6 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
+import { TextureLoader } from "three";
 import { AmbientLight, Clock, Group, Mesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PointLight, SphereGeometry } from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { css2D } from "../../production/ui/expandable-items/Css2D";
@@ -13,10 +14,10 @@ import { initShaders } from "../gfx/shaders";
 import { SunMaterial } from "../gfx/SunMaterial";
 import { VFXRenderer } from "../gfx/VFXRenderer";
 import { TRAJ_LINE_MAT } from "../solar/EllipticalPath";
-import { Planet } from "../solar/Planet";
+import { Planet, PLANET_SCALE } from "../solar/Planet";
 import { SolarClock } from "../solar/SolarClock";
 import { SolarParticles } from "../solar/SolarParticles";
-import { OrbitElements } from "../solar/SolarSystem";
+import { KM2AU, OrbitElements, SUN_RADIUS } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
@@ -85,7 +86,7 @@ export class CoreApp extends WebGLSketch {
             })
         );
 
-        sun.scale.setScalar(.05);
+        sun.scale.setScalar(SUN_RADIUS * KM2AU * PLANET_SCALE * .2);
 
         this.scene.add(sun);
         this.sun = sun;
@@ -103,16 +104,22 @@ export class CoreApp extends WebGLSketch {
         this.particles = new SolarParticles(this.renderer);
         this.scene.add(this.particles.mesh);
 
-        this.sunLight = new PointLight(0xffffff, 1, 400, 2);
+        this.sunLight = new PointLight(0xffffff, .5, 400, 2);
         this.scene.add(this.sunLight);
         this.sunLightHelper = new SunLightHelper(this.sunLight, 0x999900, 0xcc0000);
         this.sunLightHelper.visible = false;
         this.scene.add(this.sunLightHelper);
 
-        this.ambientLight = new AmbientLight(0xffffff, 0.13);
+        this.ambientLight = new AmbientLight(0xffffff, 0.03);
         this.scene.add(this.ambientLight);
 
-        console.log('Core App init');        
+        console.log('Core App init');
+
+        // background
+        const tex = new TextureLoader().load('/assets/textures/8k_stars.jpg', (t) => {
+            this.vfx.bg = t;
+            this.vfx.needsBGUpdate = true;
+        });
         
 
         io.load(window.location.origin + `/assets/data/${PLANETS}`, (res) => {
@@ -168,7 +175,7 @@ export class CoreApp extends WebGLSketch {
 		for(const el of d) {
 			const mel = mapOrbitElements(el);
 
-            el.fulldesignation = `fake-${i}`;
+            // el.fulldesignation = `fake-${i}`;
 			const planet = new Planet(el.fulldesignation, mel);
 
             const expandableItem = expandableItems.find(x => x.name === planet.name);
@@ -298,6 +305,6 @@ export class CoreApp extends WebGLSketch {
 
     render(): void {
         css2D.render(this.camera as PerspectiveCamera);	
-		this.vfx.render(this.scene, this.camera);
+		this.vfx.render(this.scene, this.camera as PerspectiveCamera);
 	}
 }

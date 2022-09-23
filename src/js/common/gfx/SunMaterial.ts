@@ -27,7 +27,7 @@ export class SunMaterial extends MeshPhongMaterial {
         }
 
         shader.uniforms['fresnelWidth'] = {
-            value: 0.04
+            value: 0.15
         }
 
         this.shaderRef = shader;

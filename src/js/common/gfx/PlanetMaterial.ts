@@ -9,6 +9,7 @@ import p_pars_frag from '../../../glsl/lib/planet_pars.frag';
 export type PlanetMaterialParameters = {
     fresnelColor?:ColorRepresentation;
     fresnelWidth?:number;
+    sunIntensity?:number;
     selected?:boolean;
 }
 
@@ -16,12 +17,14 @@ export class PlanetMaterial extends MeshPhongMaterial {
     shaderRef:Shader = null;
     fresnel:Color;
     fresnelWidth:number;
+    sunIntensity:number;
     selected:boolean;
 
     constructor(opts:MeshPhongMaterialParameters=null, opts2:PlanetMaterialParameters={}) {
         super(opts);
         this.fresnel = new Color(opts2.fresnelColor || 0xffffff);
         this.fresnelWidth = opts2.fresnelWidth || .02;
+        this.sunIntensity = opts2.sunIntensity || 1;
         this.selected = opts2.selected != undefined ? opts2.selected : false;
 
         if(!this.defines) {
@@ -48,6 +51,10 @@ export class PlanetMaterial extends MeshPhongMaterial {
             value: new Color(this.fresnel)
         }
 
+        shader.uniforms['sunIntensity'] = {
+            value: this.sunIntensity
+        }
+
         shader.uniforms['fresnelWidth'] = {
             value: this.fresnelWidth
         }
@@ -65,6 +72,7 @@ export class PlanetMaterial extends MeshPhongMaterial {
         if(!this.shaderRef) return;
         const u = this.shaderRef.uniforms;
         u.fresnelWidth.value = this.fresnelWidth;
+        u.sunIntensity.value = this.sunIntensity;
         u.fresnelColor.value.copy(this.fresnel);
         u.selected.value = MathUtils.lerp(u.selected.value, this.selected ? 1 : 0, .06);
     }
