@@ -53,20 +53,17 @@ export class EllipticalPath {
 
         const pos = [];
         const weight = [];
-        const selected = [];
         let k = 0;
 
         for(const p of this.pts) {
             pos.push(p.x, p.y, p.z);
             weight.push(k++/this.pts.length);
-            selected.push(0);
         }
 
         // close
         const p = this.pts[0];
         pos.push(p.x, p.y, p.z);
         weight.push(1);
-        selected.push(0);
         dt.push(0);
         
         const geo = new BufferGeometry();
@@ -90,14 +87,6 @@ export class EllipticalPath {
             'dt',
             new BufferAttribute(
                 new Float32Array(dt),
-                1
-            )
-        );
-
-        geo.setAttribute(
-            'selected',
-            new BufferAttribute(
-                new Float32Array(selected),
                 1
             )
         );
