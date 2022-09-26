@@ -13,7 +13,45 @@
 
 	</div>
 
+	<div class="panel-section section-grow">
+		
+		<div class="section-content">
+
+			<ul>
+
+					<li>
+							<label>
+								<input class="custom-input" type="radio" name="sort-radio" value="new" checked>
+								<div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section0[0] }}
+							</label>
+					</li>
+
+					<li>
+							<label>
+								<input class="custom-input" type="radio" name="sort-radio" value="old">
+								<div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section0[1] }}
+							</label>
+					</li>
+
+			</ul>
+
+		</div>
+
+	</div>
+
 	<div class="panel-section">
+
+		<div class="menu-bottom-buttons">
+
+			<button data-button="filters-apply" class="ui__button">
+				<p>{{ generic[lang].strings['apply-selection'] }}</p>
+			</button>
+
+			<button data-button="filters-reset" class="ui__button ghost-button">
+				<p>{{ generic[lang].strings['reset-default'] }}</p>
+			</button>
+
+		</div>
 		
 	</div>
 </div>
