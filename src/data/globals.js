@@ -7,6 +7,7 @@ async function getPage() {
 
 	const contentOrder = [
 		'seo',
+		'menu'
 	]
 
   const content = `
@@ -19,6 +20,10 @@ async function getPage() {
 					url
 				}
 			}
+		}
+		... on mainMenu_GlobalSet {
+			helpUrl
+			howToUseUrl
 		}
   `;
 

@@ -37,7 +37,7 @@
 
 <div class="tours-button buttons__wrapper">
 
-  <a href="{{ '/' + lang + '/guided-experiences' | url }}" class="ui__button button_max-size">
+  <a href="{{ '/' + lang + '/guided-experiences' | url }}" class="ui__button button_max-size">
     {% include "ui/icons/arrow-prev.njk" %}
     <p>{{ generic[lang]['strings']['tours-back'] }}</p>
   </a>
@@ -54,8 +54,8 @@
 		<div class="panel-top-content">
       {% include "ui/icons/sort.njk" %}
       <div>
-        <h3>{{ generic[lang].menus['sort-menu'].title }}</h3>
-        <h2>{{ generic[lang].menus['sort-menu'].subtitle }}</h2>
+        <h3>{{ generic[lang].menus['sort-menu'].title }}</h3>
+        <h2>{{ generic[lang].menus['sort-menu'].subtitle }}</h2>
       </div>
 		</div>
 
@@ -65,21 +65,21 @@
 
 	<div class="panel-section panel-separator">
     
-    <h3>{{ generic[lang].menus['sort-menu'].sections[0] }}</h3>
+    <h3>{{ generic[lang].menus['sort-menu'].sections[0] }}</h3>
 
     <ul>
       
       <li class="ui__radio">
         <label>
           <input class="custom-input" type="radio" name="sort-radio" value="new" checked>
-          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section0[0] }}
+          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section0[0] }}
         </label>
       </li>
       
       <li class="ui__radio">
         <label>
           <input class="custom-input" type="radio" name="sort-radio" value="old">
-          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section0[1] }}
+          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section0[1] }}
         </label>
       </li>
     
@@ -89,35 +89,35 @@
 
   <div class="panel-section">
     
-    <h3>{{ generic[lang].menus['sort-menu'].sections[1] }}</h3>
+    <h3>{{ generic[lang].menus['sort-menu'].sections[1] }}</h3>
 
     <ul>
 
       <li class="ui__radio">
         <label>
           <input class="custom-input" type="radio" name="sort-radio" value="less-duration">
-          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section1[0] }}
+          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section1[0] }}
         </label>
       </li>
       
       <li class="ui__radio">
         <label>
           <input class="custom-input" type="radio" name="sort-radio" value="more-duration">
-          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section1[1] }}
+          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section1[1] }}
         </label>
       </li>
 
       <li class="ui__radio">
         <label>
           <input class="custom-input" type="radio" name="sort-radio" value="less-complexity">
-          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section1[2] }}
+          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section1[2] }}
         </label>
       </li>
 
       <li class="ui__radio">
         <label>
           <input class="custom-input" type="radio" name="sort-radio" value="more-complexity">
-          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section1[3] }}
+          <div class="sort-bullet"><div></div></div>{{ generic[lang].menus['sort-menu'].section1[3] }}
         </label>
       </li>
     
@@ -128,11 +128,11 @@
   <div class="bottom-buttons">
 
     <button data-button="sort-apply" class="ui__button">
-      <p>{{ generic[lang].menus['sort-menu']['apply-sort'] }}</p>
+      <p>{{ generic[lang].menus['sort-menu']['apply-sort'] }}</p>
     </button>
 
     <button data-button="sort-reset" class="ui__button ghost-button">
-      <p>{{ generic[lang].menus['sort-menu']['reset-sort'] }}</p>
+      <p>{{ generic[lang].menus['sort-menu']['reset-sort'] }}</p>
     </button>
 
   </div>
