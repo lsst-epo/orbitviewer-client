@@ -2,7 +2,7 @@ import { MathUtils, Random } from "@jocabola/math";
 import { ColorRepresentation, Mesh, Object3D, SphereGeometry, TextureLoader } from "three";
 import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { EllipticalPath } from "./EllipticalPath";
-import { calculateOrbitByType, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";
+import { calculateOrbitByType, DEG_TO_RAD, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";
 
 export const PLANET_GEO = new SphereGeometry(1, 32, 32);
 const tLoader = new TextureLoader();
@@ -71,7 +71,14 @@ export class Planet extends Object3D {
         // this.add(this.orbitPath.ellipse)
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
 
-        this.rotationSpeed = Random.randf(-1, 1);
+        // this.rotationSpeed = Random.randf(-1, 1);
+        if(this.type !== undefined) {
+            const rt = PlanetRotationMap[this.type] as PlanetRotationData;
+            this.rotationSpeed = DEG_TO_RAD * rt.period;
+            this.mesh.rotation.z = DEG_TO_RAD * rt.axialTilt;
+        } else {
+            this.rotationSpeed = 0;
+        }
     }
 
     update(d:number) {
@@ -129,4 +136,50 @@ export const PlanetRadiusMap = {
 export type PlanetRotationData = {
     axialTilt:number;
     period:number;
+}
+
+export type RotationMap = {
+    mercury:PlanetRotationData,
+    venus:PlanetRotationData,
+    earth:PlanetRotationData,
+    mars:PlanetRotationData,
+    jupiter:PlanetRotationData,
+    saturn:PlanetRotationData,
+    uranus:PlanetRotationData,
+    neptune:PlanetRotationData
+}
+
+export const PlanetRotationMap:RotationMap = {
+    mercury: {
+        axialTilt: 0.034,
+        period: 58.6462
+    },
+    venus: {
+        axialTilt: 177.36,
+        period: 243.018
+    },
+    earth: {
+        axialTilt: 23.4392811,
+        period: 1
+    },
+    mars: {
+        axialTilt: 25.19,
+        period: 1.02595676
+    },
+    jupiter: {
+        axialTilt: 3.13,
+        period: 0.41354
+    },
+    saturn: {
+        axialTilt: 26.73,
+        period: 0.44401
+    },
+    uranus: {
+        axialTilt: 97.77,
+        period: 0.71833
+    },
+    neptune: {
+        axialTilt: 28.32,
+        period: 0.67125
+    }
 }
