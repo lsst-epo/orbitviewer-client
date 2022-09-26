@@ -64,7 +64,7 @@ export class Planet extends Object3D {
             sunIntensity: sunIntensity
         });
 
-        this.orbitPath = new EllipticalPath(_data, scl*.9);
+        this.orbitPath = new EllipticalPath(_data, scl*.8);
 
         this.mesh = new Mesh(PLANET_GEO, this.material);
         this.add(this.mesh);
