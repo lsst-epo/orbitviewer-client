@@ -63,7 +63,7 @@ export class EllipticalPath {
         // close
         const p = this.pts[0];
         pos.push(p.x, p.y, p.z);
-        weight.push(1);
+        weight.push(0);
         dt.push(0);
         
         const geo = new BufferGeometry();
