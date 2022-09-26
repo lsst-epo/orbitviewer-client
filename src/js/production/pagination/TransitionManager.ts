@@ -1,6 +1,7 @@
-import { gsap } from 'gsap/dist/gsap';
 import { DEV } from '../../common/core/Globals';
 import { LOCATION } from "./History";
+import { gsap } from 'gsap/dist/gsap';
+
 
 export const TRANSITIONS = {
 	inProgress: false
@@ -16,7 +17,6 @@ export const EndTransition = () => {
 	if(pages.from) {
 		pages.from.class.disable();		
 	}
-	// navigationUpdate();
 }
 
 export const TriggerTransition = (skip:boolean = false) => {

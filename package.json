@@ -21,7 +21,7 @@
 		"@jocabola/math": "^0.2.42",
 		"@jocabola/phy": "^0.1.74",
 		"@jocabola/utils": "^0.1.89",
-		"gsap": "^3.10.3",
+		"gsap": "npm:@gsap/business",
 		"https": "^1.0.0",
 		"md5": "^2.3.0",
 		"three": "^0.144.0"
