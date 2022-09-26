@@ -23,7 +23,7 @@ export class EllipticalPath {
     material:TrajectoryMaterial;
     selected:boolean = false;
 
-    constructor(el:OrbitElements) {
+    constructor(el:OrbitElements, r:number) {
         // build path
         const date = new Date();
         const first = new Vector3();
@@ -101,18 +101,28 @@ export class EllipticalPath {
         const l = new Line(geo, mat);
         this.ellipse.add(l);
 
-        for (let i=0; i<10; i++) {
+        const dR = Math.min(r/20, .0001);
+
+        for (let i=0; i<20; i++) {
             const l1 = new Line(geo, mat);
             this.ellipse.add(l1);
-            l1.position.set(.0001*i, 0, 0); 
-            
+            l1.position.set(dR*i, 0, 0); 
+
             const l2 = new Line(geo, mat);
             this.ellipse.add(l2);
-            l2.position.set(0, .0001*i, 0); 
+            l2.position.set(-dR*i, 0, 0); 
+            
+            /* const l2 = new Line(geo, mat);
+            this.ellipse.add(l2);
+            l2.position.set(0, .0001*i, 0);  */
 
             const l3 = new Line(geo, mat);
             this.ellipse.add(l3);
-            l3.position.set(0, 0, .0001*i); 
+            l3.position.set(0, 0, dR*i); 
+
+            /* const l4 = new Line(geo, mat);
+            this.ellipse.add(l4);
+            l4.position.set(0, 0, -dR*i);  */
         }
     }
 

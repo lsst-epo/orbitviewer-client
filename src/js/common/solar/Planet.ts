@@ -38,10 +38,11 @@ export class Planet extends Object3D {
 
         let fresnelWidth = .005;
         let sunIntensity = .5;
+        let scl = .003;
 
         if(this.type !== undefined) {
             // console.log(PlanetRadiusMap[this.type] * KM2AU);
-            const scl = PlanetRadiusMap[this.type] * KM2AU * PLANET_SCALE;
+            scl = PlanetRadiusMap[this.type] * KM2AU * PLANET_SCALE;
             console.log(scl, this.type);
             this.scale.multiplyScalar(scl);
             // correct fresnel
@@ -63,7 +64,7 @@ export class Planet extends Object3D {
             sunIntensity: sunIntensity
         });
 
-        this.orbitPath = new EllipticalPath(_data);
+        this.orbitPath = new EllipticalPath(_data, scl*.9);
 
         this.mesh = new Mesh(PLANET_GEO, this.material);
         this.add(this.mesh);
@@ -123,4 +124,9 @@ export const PlanetRadiusMap = {
     'saturn': 58232,
     'uranus': 25360,
     'neptune': 24620
+}
+
+export type PlanetRotationData = {
+    axialTilt:number;
+    period:number;
 }
