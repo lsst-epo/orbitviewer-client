@@ -81,6 +81,10 @@
 		@include light-2;
 		margin-bottom: var(--distance-20);
 	}
+
+	p:not(:last-of-type) {
+		margin-bottom: 1em;
+	}
 }
 
 .panel-top {
