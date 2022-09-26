@@ -37,7 +37,7 @@
 
 <div class="tours-button buttons__wrapper">
 
-  <a href="{{ '/' + lang + '/guided-experiences' | url }}" class="ui__button button_max-size">
+  <a href="{{ '/' + lang + '/guided-experiences' | url }}" class="ui__button button_max-size has-arrow">
     {% include "ui/icons/arrow-prev.njk" %}
     <p>{{ generic[lang]['strings']['tours-back'] }}</p>
   </a>
@@ -50,8 +50,7 @@
 
 	<div class="panel-top panel-separator">
 
-		{# todo que aixo vingui del back #}
-		<div class="panel-top-content">
+		<div class="panel-top-content has-icon">
       {% include "ui/icons/sort.njk" %}
       <div>
         <h3>{{ generic[lang].menus['sort-menu'].title }}</h3>

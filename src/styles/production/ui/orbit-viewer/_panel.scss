@@ -75,11 +75,7 @@
 }
 
 .panel-section {
-	padding-top: var(--distance-15);
-
-	&:not(:has(h3)){
-		padding-top: var(--distance-30);
-	}
+	padding-top: var(--distance-20);
 
 	h3 {
 		@include light-2;
@@ -109,7 +105,7 @@
 			@include bold-2;
 		}
 
-		&:has(svg){
+		&.has-icon {
 			flex-direction: row;
 			justify-content: flex-start;
 			align-items: center;

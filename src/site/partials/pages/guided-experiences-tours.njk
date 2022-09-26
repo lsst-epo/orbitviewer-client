@@ -61,12 +61,12 @@
         </button>
       {% endif %}
 
-      <button data-button="{{ slide.typeHandle + '-' + loop.index + 'prev' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' }}">
+      <button data-button="{{ slide.typeHandle + '-' + loop.index + 'prev' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' else 'has-arrow' }}">
         {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/icons/arrow-prev.njk" %}{% endif %}
         <p>Back</p>
       </button>
 
-      <button data-button="{{ slide.typeHandle + '-' + loop.index + 'next' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' }}">
+      <button data-button="{{ slide.typeHandle + '-' + loop.index + 'next' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' else 'has-arrow' }}">
         {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/icons/arrow-next.njk" %}{% endif %}
         <p>Next</p>
       </button>

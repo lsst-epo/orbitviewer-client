@@ -38,13 +38,16 @@
 
 // Arrows
 .button_arrow {
+	svg {
+		height: 1.5em;
+	}
 	path, line {
 		fill: none;
 		stroke: var(--white-0);
 		stroke-width: 3;
 	}
 }
-.ui__button:has(.button_arrow) {
+.ui__button.has-arrow {
 	.button_arrow {
 		display: none;
 		@include desktop { display: flex;	}
