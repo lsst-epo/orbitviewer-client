@@ -73,7 +73,6 @@ export class VFXRenderer {
     render(scene:Scene, camera:PerspectiveCamera) {
         this.rnd.autoClear = true;
         this.rnd.setClearColor(0x000000, 1);
-        this.rnd.autoClear = true;
 
         if(this.bg && this.needsBGUpdate) {
             this.needsBGUpdate = false;

@@ -289,5 +289,6 @@ export class CoreApp extends WebGLSketch {
     render(): void {
         css2D.render(this.camera as PerspectiveCamera);	
 		this.vfx.render(this.scene, this.camera as PerspectiveCamera);
+        this.particles.sim.drawFbo();
 	}
 }

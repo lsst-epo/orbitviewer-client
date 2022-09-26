@@ -1,3 +1,5 @@
+import { Size } from "@jocabola/gfx";
+
 /**
  * DEV_MODE is injected by esbuild
  */
@@ -36,10 +38,33 @@ export const CLOCK_SETTINGS = {
 	backwards: false,
 }
 
+export const GPU_SIM_SIZES = {
+	low: {
+		width: 128,
+		height: 128
+	},
+	medium: {
+		width: 256,
+		height: 128
+	},
+	high: {
+		width: 256,
+		height: 256
+	},
+	ultra: {
+		width: 512,
+		height: 512
+	}
+}
+
+export function getParticleCount(s:Size) {
+	return s.width * s.height;
+}
+
 export const VISUAL_SETTINGS = {
 	current: 'low',
-	low: 10000,
-	medium: 32000,
-	high: 50000,
-	ultra: 200000
+	low: getParticleCount(GPU_SIM_SIZES.low),
+	medium: getParticleCount(GPU_SIM_SIZES.medium),
+	high: getParticleCount(GPU_SIM_SIZES.high),
+	ultra: getParticleCount(GPU_SIM_SIZES.ultra)
 }

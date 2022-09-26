@@ -11,6 +11,7 @@ import { MathUtils } from "@jocabola/math";
 import { Color, InstancedMesh, MeshPhongMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Vector3, WebGLMultipleRenderTargets, WebGLRenderer } from "three";
 import { VISUAL_SETTINGS } from "../core/Globals";
 import { COMP_SP_NORMAL, initMaterial } from "../gfx/ShaderLib";
+import { GPUSim } from "./GPUSim";
 import { calculateOrbit, OrbitElements } from "./SolarSystem";
 
 const MAX = VISUAL_SETTINGS[VISUAL_SETTINGS.current];
@@ -44,8 +45,11 @@ export class SolarParticles {
     private _data:Array<OrbitElements> = [];
     mesh:InstancedMesh;
     maps:WebGLMultipleRenderTargets;
+    sim:GPUSim;
 
     constructor(renderer:WebGLRenderer){
+        this.sim = new GPUSim(renderer);
+
         this.mesh = new InstancedMesh(GEO, MAT, MAX);
         this.mesh.visible = false;
         for(let i=0; i<MAX; i++) {
@@ -73,7 +77,7 @@ export class SolarParticles {
         this._data = value;
         const count = Math.min(MAX, this._data.length);
 
-        const col = new Color(0xffffff);
+        this.sim.data = value;
 
         for(let i=0; i<count; i++) {
             const el = this._data[i];
@@ -92,6 +96,8 @@ export class SolarParticles {
     update(d:number, camera:PerspectiveCamera) {
         this.mesh.visible = this._data.length > 0;
         if(!this.mesh.visible) return;
+
+        this.sim.render();
 
         const count = Math.min(MAX, this._data.length);
 
