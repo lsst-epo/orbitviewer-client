@@ -54,7 +54,8 @@ export class CoreApp extends WebGLSketch {
     constructor() {
         super(window.innerWidth, window.innerHeight, {
             alpha: false,
-            antialias: true
+            antialias: true,
+            near: 0.01
         }, false);
 
         document.body.appendChild(this.domElement);
