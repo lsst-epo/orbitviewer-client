@@ -36,8 +36,6 @@ export class Inputs {
 				if(el.hasAttribute('data-timer')) item = new TimePickerRange(el)
 			}
 			if(el.hasAttribute('data-date')) item = new DateInput(el);
-
-			console.log(item);
 			
 			if(item) this.inputs.push(item);
 			
