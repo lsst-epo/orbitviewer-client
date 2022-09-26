@@ -25,9 +25,7 @@
 			"month": "Month",
 			"year": "Year",
 			"tours": "Tours",
-			"sort-by": "Sort by"
-		},
-		"special-strings": {
+			"sort-by": "Sort by",
 			"customize-orbits": "Apply and explore them",
 			"guided-experiences": "Back to main screen",
 			"landing-explore": "I want to explore",
@@ -37,7 +35,7 @@
 			"current-date": "Current date:",
 			"date-explanation": "Slide right/left to go forward/backwards in time",
 			"go-date": "Go to date",
-			"tours": "Back to guided experiences",
+			"tours-back": "Back to guided experiences",
 			"tour-start": "Let's start",
 			"tour-fun-fact": "Fun fact",			
 			"search-placeholder": "Write and click search",
@@ -122,9 +120,7 @@
 			"month": "ES - Month",
 			"year": "ES - Year",
 			"tours": "ES - Tours",
-			"sort-by": "ES - Sort by"
-		},
-		"special-strings": {
+			"sort-by": "ES - Sort by",
 			"customize-orbits": "ES - Apply and explore them",
 			"guided-experiences": "ES - Back to main screen",
 			"landing-explore": "ES - I want to explore",
@@ -134,7 +130,7 @@
 			"current-date": "ES - Current date:",
 			"date-explanation": "ES - Slide right/left to go forward/backwards in time",
 			"go-date": "ES - Go to date",
-			"tours": "ES - Back to guided experiences",
+			"tours-back": "ES - Back to guided experiences",
 			"tour-start": "ES - Let's start",
 			"tour-fun-fact": "ES - Fun fact",
 			"search-placeholder": "ES - Write and click search",
