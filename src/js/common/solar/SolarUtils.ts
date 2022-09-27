@@ -53,42 +53,42 @@ export function mapOrbitElements(dEl:OrbitDataElements):OrbitElements {
     return el;
 }
 
-// export function getTypeStr(type:OrbitType): string {
-//     if(type === OrbitType.Elliptical) return 'Elliptical';
-//     if(type === OrbitType.Parabolic) return 'Parabolic';
-//     if(type === OrbitType.NearParabolic) return 'NearParabolic';
-//     return 'Hyperbolic';
-// }
+export function getTypeStr(type:OrbitType): string {
+    if(type === OrbitType.Elliptical) return 'Elliptical';
+    if(type === OrbitType.Parabolic) return 'Parabolic';
+    if(type === OrbitType.NearParabolic) return 'NearParabolic';
+    return 'Hyperbolic';
+}
 
-// export function getDataString(dEl:OrbitDataElements):string {
-//     const type = getOrbitType(dEl);
-//     return `
-//         ${dEl.Name}
-//         Node: ${dEl.Node}
-//         a: ${dEl.a}
-//         e: ${dEl.e}
-//         i: ${dEl.i}
-//         Peri: ${dEl.Peri}
-//         M: ${dEl.M}
-//         n: ${dEl.n}
-//         Orbit Type: ${getTypeStr(type)}
-//     `;
-// }
+export function getDataString(dEl:OrbitDataElements):string {
+    const type = getOrbitType(dEl);
+    return `
+        ${dEl.Name}
+        Node: ${dEl.Node}
+        a: ${dEl.a}
+        e: ${dEl.e}
+        i: ${dEl.i}
+        Peri: ${dEl.Peri}
+        M: ${dEl.M}
+        n: ${dEl.n}
+        Orbit Type: ${getTypeStr(type)}
+    `;
+}
 
-// export const openFileDialog = (accept, callback) => {
-// 	// Create an input element
-// 	var inputElement = document.createElement('input');
+export const openFileDialog = (accept, callback) => {
+	// Create an input element
+	var inputElement = document.createElement('input');
 
-// 	// Set its type to file
-// 	inputElement.type = 'file';
+	// Set its type to file
+	inputElement.type = 'file';
 
-// 	// Set accept to the file types you want the user to select.
-// 	// Include both the file extension and the mime type
-// 	inputElement.accept = accept;
+	// Set accept to the file types you want the user to select.
+	// Include both the file extension and the mime type
+	inputElement.accept = accept;
 
-// 	// set onchange event to call callback when user has selected file
-// 	inputElement.addEventListener('change', callback);
+	// set onchange event to call callback when user has selected file
+	inputElement.addEventListener('change', callback);
 
-// 	// dispatch a click event to open the file dialog
-// 	inputElement.dispatchEvent(new MouseEvent('click'));
-// };
+	// dispatch a click event to open the file dialog
+	inputElement.dispatchEvent(new MouseEvent('click'));
+};
