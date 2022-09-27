@@ -1,11 +1,15 @@
+import { MathUtils } from "@jocabola/math";
 import { Vector3 } from "three";
 import { Object3D } from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { CAMERA_POSITION } from "../../../common/core/Globals";
 import { css2D } from "./Css2D";
 
 export class ExpandableItem {
 	dom: HTMLElement;
 	container: CSS2DObject;
+
+	containerElement: HTMLElement;
 	ref: Object3D;
 
 	name: string;
@@ -22,13 +26,22 @@ export class ExpandableItem {
 		this.dom = dom;
 		this.container = new CSS2DObject(this.dom);
 		css2D.add(this.container);
+
+		this.containerElement = this.container.element.querySelector('.item-scale-wrapper');
 		
 		this.name = this.dom.getAttribute('data-name');		
 
 		this.sections = this.dom.querySelectorAll('section');
 
+
+
 		this.onResize();
 				
+	}
+
+	loaded(){
+		this.visible = true;		
+		this.dom.classList.add('visible');		
 	}
 
 
@@ -48,9 +61,6 @@ export class ExpandableItem {
 	}
 
 	enable(){
-		this.visible = true;		
-
-		this.dom.classList.add('visible');		
 
 		this.ref.selected = true;
 		
@@ -59,12 +69,9 @@ export class ExpandableItem {
 	}
 
 	disable(){
-		this.visible = false;
 		this.active = false;
-		this.dom.classList.remove('visible');
 		this.ref.selected = false;
 		this.hideInfo();
-
 	}
 
 	showInfo(){
@@ -108,9 +115,18 @@ export class ExpandableItem {
 		if(!this.visible) return;
 		if(!!!this.ref) return;
 
-		this.tmp.copy(this.ref.position)
+		this.container.position.copy(this.ref.position);	
+		
+		const d = this.ref.position.distanceTo(CAMERA_POSITION);
+		
+		if(d > 100){
+			this.container.element.style.opacity = 0;
+			return;
+		}
+		const s = MathUtils.clamp( MathUtils.map(d, 5, 150, 1, 0.1), 0.1, 1);
+		this.containerElement.style.transform = `scale3d(${s}, ${s}, 1)`;
+		this.container.element.style.opacity = 1;
 
-		this.container.position.copy(this.tmp);	
 
 	}
 }

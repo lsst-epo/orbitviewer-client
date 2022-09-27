@@ -1,4 +1,5 @@
 import { Size } from "@jocabola/gfx";
+import { Vector3 } from "three";
 
 /**
  * DEV_MODE is injected by esbuild
@@ -68,3 +69,5 @@ export const VISUAL_SETTINGS = {
 	high: getParticleCount(GPU_SIM_SIZES.high),
 	ultra: getParticleCount(GPU_SIM_SIZES.ultra)
 }
+
+export const CAMERA_POSITION = new Vector3();

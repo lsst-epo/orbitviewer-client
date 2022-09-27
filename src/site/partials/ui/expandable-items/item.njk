@@ -8,57 +8,57 @@
 	{% endif %}
 {% endfor %}
 
-	<div class="expandable-item" data-name="{{ element.elementID }}">
+	<div class="expandable-item" data-name="{{ element.elementID }}">	
+		<div class="item-scale-wrapper">
+			<div class="item-wrapper">
 
-		<div class="item-wrapper">
+				<button class="close-item">
+					{% include "ui/icons/times-circle.njk" %}
+				</button>
 
-			<button class="close-item">
-				{% include "ui/icons/times-circle.njk" %}
-			</button>
+				<div class="cover" style="background-image: url(/assets/ceres-lorem.jpeg);">
 
-			<div class="cover" style="background-image: url(/assets/ceres-lorem.jpeg);">
+					<div class="icon">
 
-				<div class="icon">
+						{{ filterIcon(cat.slug, cat.title, cat.mainColor ) }}
 
-					{{ filterIcon(cat.slug, cat.title, cat.mainColor ) }}
-
-					<div class="icon-text">
-						<h3>{{ element.title }}</h3>
-						<p>{{ generic[lang]['expandable-items'].tap }}</p>
+						<div class="icon-text">
+							<h3>{{ element.title }}</h3>
+							<p>{{ generic[lang]['expandable-items'].tap }}</p>
+						</div>
 					</div>
 				</div>
+				
+				<div class="hidden-tabs">
+
+					<section>
+						<div class="head">
+							<p>{{ generic[lang]['expandable-items'].overview }}</p>
+						</div>
+						<div class="content">
+							<p>Pending</p>
+						</div>
+					</section>
+
+					<section>
+						<div class="head">
+							<p>{{ generic[lang]['expandable-items'].context }}</p>
+						</div>
+						<div class="content">
+							{{ element.text | safe }}
+						</div>
+					</section>
+
+					<section>
+						<div class="head">
+							<p>{{ generic[lang]['expandable-items'].data }}</p>
+						</div>
+						<div class="content">
+							<p>Pending</p>
+						</div>
+					</section>
+				</div>
+
 			</div>
-			
-			<div class="hidden-tabs">
-
-				<section>
-					<div class="head">
-						<p>{{ generic[lang]['expandable-items'].overview }}</p>
-					</div>
-					<div class="content">
-						<p>Pending</p>
-					</div>
-				</section>
-
-				<section>
-					<div class="head">
-						<p>{{ generic[lang]['expandable-items'].context }}</p>
-					</div>
-					<div class="content">
-						{{ element.text | safe }}
-					</div>
-				</section>
-
-				<section>
-					<div class="head">
-						<p>{{ generic[lang]['expandable-items'].data }}</p>
-					</div>
-					<div class="content">
-						<p>Pending</p>
-					</div>
-				</section>
-			</div>
-
-		</div>
-
+	</div>
 	</div>

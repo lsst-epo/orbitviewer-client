@@ -19,7 +19,7 @@ import { KM2AU, OrbitElements, SUN_RADIUS } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
-import { CLOCK_SETTINGS, CONTROLS } from "./Globals";
+import { CAMERA_POSITION, CLOCK_SETTINGS, CONTROLS } from "./Globals";
 
 const GEO = new SphereGeometry(1, 32, 32);
 
@@ -179,7 +179,7 @@ export class CoreApp extends WebGLSketch {
             const expandableItem = expandableItems.find(x => x.name === planet.name);            
             if(expandableItem) {
                 expandableItem.ref = planet;
-                expandableItem.enable();
+                expandableItem.loaded();
             }
             
 			this.planets.add(planet);
@@ -270,6 +270,8 @@ export class CoreApp extends WebGLSketch {
         updateRaycaster(this.camera);
 
 		CONTROLS.orbit.update();
+
+        CAMERA_POSITION.copy(this.camera.position)
 
         if(this.clockChanged())this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
 		const d = this.solarClock.update();
