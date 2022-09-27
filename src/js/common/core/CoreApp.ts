@@ -15,12 +15,12 @@ import { VFXRenderer } from "../gfx/VFXRenderer";
 import { Planet, PLANET_SCALE } from "../solar/Planet";
 import { SolarClock } from "../solar/SolarClock";
 import { SolarParticles } from "../solar/SolarParticles";
+import { buildSimWithData, particles } from "../solar/SolarParticlesManager";
 import { KM2AU, OrbitElements, SUN_RADIUS } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
-import { CAMERA_POSITION, CLOCK_SETTINGS, CONTROLS } from "./Globals";
-import { CLOCK_SETTINGS, CONTROLS, DEV } from "./Globals";
+import { CAMERA_POSITION, CLOCK_SETTINGS, CONTROLS, DEV } from "./Globals";
 
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 
@@ -33,8 +33,8 @@ const DWARF_PLANETS = "dwarf_planet_elems.json";
 
 export const solarClock = new SolarClock(new Clock());
 
+
 export class CoreApp extends WebGLSketch {
-    particles:SolarParticles;
 
     solarClock:SolarClock = solarClock;
 
@@ -101,8 +101,8 @@ export class CoreApp extends WebGLSketch {
         this.scene.add(this.planetPaths);
         this.scene.add(this.dwarfPlanetPaths);
 
-        this.particles = new SolarParticles(this.renderer);
-        this.scene.add(this.particles.points);
+        particles.init(this.renderer);
+        this.scene.add(particles.points);
         // this.scene.add(this.particles.mesh);
 
         this.sunLight = new PointLight(0xffffff, .5, 400, 2);
@@ -135,7 +135,7 @@ export class CoreApp extends WebGLSketch {
                     
                     const d = res.mpcorb;                    
                     
-                    this.buildSimWithData(d);
+                    buildSimWithData(d);
                     
                     loadData(()=> {
                         this.onDataLoaded();
@@ -208,21 +208,6 @@ export class CoreApp extends WebGLSketch {
 
 	}
 
-	buildSimWithData(d:Array<OrbitDataElements>, forceKeep:boolean=false) {
-		if(!forceKeep) {
-			data.splice(0, data.length);
-		}
-
-		for(const el of d) {
-            // console.log(el);
-            
-			const mel = mapOrbitElements(el);
-			data.push(mel);
-		}
-
-		this.particles.data = data;
-	}
-
 	playPause() {
 		if(this.solarClock.playing) {
 			this.solarClock.pause();
@@ -232,7 +217,7 @@ export class CoreApp extends WebGLSketch {
 	}
 
 	importData(d:Array<OrbitDataElements>) {
-		this.buildSimWithData(d);
+		buildSimWithData(d);
 	}
 
 	resetClock() {
@@ -292,7 +277,7 @@ export class CoreApp extends WebGLSketch {
         if(this.clockChanged())this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
 		const d = this.solarClock.update();
 		
-		this.particles.update(d, this.camera as PerspectiveCamera);
+		particles.update(d, this.camera as PerspectiveCamera);
 
         const sunMat = this.sun.material as SunMaterial;
 		sunMat.update(this.solarClock.time);
@@ -313,6 +298,6 @@ export class CoreApp extends WebGLSketch {
     render(): void {
         css2D.render(this.camera as PerspectiveCamera);	
 		this.vfx.render(this.scene, this.camera as PerspectiveCamera);
-        // this.particles.sim.drawFbo();
+        // particles.sim.drawFbo();
 	}
 }

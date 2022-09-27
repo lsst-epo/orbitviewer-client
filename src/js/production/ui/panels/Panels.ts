@@ -1,3 +1,4 @@
+import { FilterPanel } from "./FilterPanel";
 import { LanguagePanel } from "./LanguagePanel";
 import { Panel } from "./Panel";
 import { TimePickerPanel } from "./TimePickerPanel";
@@ -30,6 +31,7 @@ export class Panels {
 			if(id === 'time-picker') panel = new TimePickerPanel(id);
 			else if(id.includes('tour-sort')) panel = new TourSortPanel(id);
 			else if(id.includes('lang')) panel = new LanguagePanel(id);
+			else if(id.includes('filters')) panel = new FilterPanel(id);
 			else panel = new Panel(id);
 
 			this.panels.push(panel);

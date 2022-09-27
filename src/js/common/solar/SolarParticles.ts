@@ -75,7 +75,9 @@ export class SolarParticles {
     sim:GPUSim;
     quality:SimQuality;
 
-    constructor(renderer:WebGLRenderer){
+    constructor(){}
+
+    init(renderer:WebGLRenderer){
         this.sim = new GPUSim(renderer);
         this.quality = this.sim.qualitySettings;
         MAT.uniforms.computedPosition.value = this.sim.texture;
@@ -272,3 +274,4 @@ export class SolarParticles {
         // this.mesh.instanceMatrix.needsUpdate = true;
     }
 }
+
