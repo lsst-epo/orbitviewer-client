@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en-US" style="opacity:0;">
+<html lang="{{ locale }}" dir="{{ dir }}" style="opacity:0;">
 
 	{% include 'head.njk' %}
 
-	<link rel="stylesheet" href="{{ '/production/bundle/main.css' }}"/>
+	<link rel="stylesheet" href="{{ '/production/bundle/main.css' | url  }}"/>
 
 	<script>
 		const data = {
-			tours: {{ tours | dump | safe }},
-			guidedExperiencesTours: {{ guidedExperiencesTours | dump | safe }}
+			tours: {{ tours.en | dump | safe }},
+			guidedExperiencesTours: {{ guidedExperiencesTours.en | dump | safe }}
 		};
 	</script>
 
-	<body>
+	<body class="{{ 'en-site' if lang == 'en' else 'es-site'}}">
 
 		<div class="site__wrapper">
 
@@ -26,7 +26,7 @@
 		{# EXPANDABLE ELEMENTS #}
 		{% include "ui/expandable-items/loop.njk" %}
 
-		<script src="{{ '/production/bundle/main.js' }}"></script>
+		<script src="{{ '/production/bundle/main.js' | url }}"></script>
 
 	</body>
 </html>

@@ -53,6 +53,6 @@ export class Panel {
 	}
 
 	update(){
-		if(!this.active) return;
+
 	}
 }

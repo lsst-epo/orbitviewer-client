@@ -321,3 +321,17 @@
 		@include bold-2;
 	}
 }
+
+[lang="en-EN"]{
+	.date-picker {
+		.date-item:nth-of-type(1){
+			order: 2;
+		}
+		.date-item:nth-of-type(2){
+			order: 1;
+		}
+		.date-item:nth-of-type(3){
+			order: 3;
+		}
+	}
+}

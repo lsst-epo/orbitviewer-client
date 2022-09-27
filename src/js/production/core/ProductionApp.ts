@@ -1,5 +1,6 @@
 import { CoreApp } from "../../common/core/CoreApp";
-import { historyInit, LOCATION, onChange, PAGES } from "../pagination/History";
+import { historyInit, LOCATION, onChange } from "../pagination/History";
+import { PAGES } from "../pagination/PagesRecap";
 import { updateRaycaster } from "../ui/expandable-items/Raycaster";
 
 export class ProductionApp extends CoreApp {

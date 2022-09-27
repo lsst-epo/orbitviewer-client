@@ -55,12 +55,20 @@
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
+
+		&:hover {
+			p {
+				color: var(--blue-0);
+				text-decoration: underline;
+			}
+		}
 	}
 
 	svg {
 		width: var(--icon-medium);
 		height: var(--icon-medium);
 		margin: 0 var(--distance-15) 0 0;
+		color: var(--blue-0);
 	}
 
 }

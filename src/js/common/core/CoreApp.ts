@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { css2D } from "../../production/ui/expandable-items/Css2D";
 import { expandableItems, initExpandableItems, resizeExpandableItems } from "../../production/ui/expandable-items/ExpandableItems";
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/expandable-items/Raycaster";
+import { applyCategories } from "../data/Categories";
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/GetData";
@@ -130,7 +131,8 @@ export class CoreApp extends WebGLSketch {
 
                 getSolarSystemElements().then((res) => {
                     
-                    const d = res.mpcorb;
+                    const d = res.mpcorb;                    
+                    
                     this.buildSimWithData(d);
                     
                     loadData(()=> {
@@ -208,6 +210,8 @@ export class CoreApp extends WebGLSketch {
 		}
 
 		for(const el of d) {
+            console.log(el);
+            
 			const mel = mapOrbitElements(el);
 			data.push(mel);
 		}

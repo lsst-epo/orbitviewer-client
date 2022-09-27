@@ -5,8 +5,6 @@ export const expandableItems: Array<ExpandableItem> = [];
 export const initExpandableItems = () => {;
 
 	const items = document.querySelectorAll('.expandable-item');
-
-	console.log(items);
 	
 
 	// Fake add name

@@ -1,7 +1,7 @@
 {% set prev = 0 %}
 {% set next = 0 %}
 
-{% for tourItem in tours %}
+{% for tourItem in tours[lang] %}
 
   {% if tour == tourItem %}
     {% set current = loop.index0 %}
@@ -16,13 +16,13 @@
   {% endif %}
 {% endfor %}
 
-{% set prev = tours[prev] %}
-{% set next = tours[next] %}
+{% set prev = tours[lang][prev] %}
+{% set next = tours[lang][next] %}
 
-<a href="/{{ prev.slug }}" class="prev tour-pagination">
+<a href="{{ '/' + lang + '/' + prev.slug | url }}" class="prev tour-pagination">
 	{% include "ui/icons/chev-prev.njk" %}
 </a>
 
-<a href="/{{ next.slug }}" class="next tour-pagination">
+<a href="{{ '/' + lang + '/' + next.slug | url }}" class="next tour-pagination">
   {% include "ui/icons/chev-next.njk" %}
 </a>

@@ -4,25 +4,38 @@ const useCache = require('../../utils/cache.js');
 
 async function getPage() {
 
-	// todo
-	// landingLogo, quan arregli lo de les imatges
+  const data = {};
 
-	const query = `
-	{
-		entries(section: "guidedExperiences") {
-				... on guidedExperiences_guidedExperiences_Entry {
-						title,
-						slug,
-				}
+  const content = `
+    ... on guidedExperiences_guidedExperiences_Entry {
+      seoTitle
+      seoDescription
+      seoImage {
+        ... on cantoDam_Asset {
+          url
+        }
+      }
+			title
+			slug
 		}
-	}`;
+  `;
 
-	const data = await getQuery(query);
+  for(let i = 1; i <= 2; i++){
+    const query = `
+    {
+      entries(section: "guidedExperiences", siteId: "${i}") {
+        ${content}
+      }
+    }`;
 
-	const d = data.data.entries[0];
+    const d = await getQuery(query);
+    data[i === 1 ? 'en' : 'es'] = d.data.entries[0];
 
-	return d;
+  }
+
+  return data;
 }
+
 
 
 // export for 11ty

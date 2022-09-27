@@ -4,31 +4,36 @@ const useCache = require('../../utils/cache.js');
 
 async function getPage() {
 
-  // todo
-  // landingLogo, quan arregli lo de les imatges
+  const data = {};
 
-  const query = `
-  {
-    entries(section: "customizeOrbits") {
-      ...on customizeOrbits_customizeOrbits_Entry {
-        customizeOrbitsTitle,
-        customizeOrbitsDescription,
-        customizeOrbitsButton
+  const content = `
+    ...on customizeOrbits_customizeOrbits_Entry {
+      seoTitle
+      seoDescription
+      seoImage {
+        ... on cantoDam_Asset {
+          url
+        }
       }
+      customizeOrbitsTitle
+      customizeOrbitsDescription
     }
-  }`;
+  `;
 
-  const data = await getQuery(query);
+  for(let i = 1; i <= 2; i++){
+    const query = `
+    {
+      entries(section: "customizeOrbits", siteId: "${i}") {
+        ${content}
+      }
+    }`;
 
-  const d = data.data.entries[0];
+    const d = await getQuery(query);
+    data[i === 1 ? 'en' : 'es'] = d.data.entries[0];
 
-  const formatted = {
-    title: d.customizeOrbitsTitle,
-    description: d.customizeOrbitsDescription,
-    button: d.customizeOrbitsButton
   }
 
-  return formatted;
+  return data;
 }
 
 

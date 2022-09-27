@@ -5,11 +5,49 @@
 
 		{# todo que aixo vingui del back #}
 		<div class="panel-top-content">
-			<h3>Main menu</h3>
-			<h2>Language</h2>
+			<h3>{{ generic[lang].menus['language-menu'].title }}</h3>
+			<h2>{{ generic[lang].menus['language-menu'].subtitle }}</h2>
 		</div>
 
 		{{ panelTimes('lang') }}
 
+	</div>
+
+	<div class="panel-section">
+		
+		<div class="section-content">
+
+			<ul>
+
+					<li class="ui__radio">
+						<label>
+							<input class="custom-input" type="radio" name="lang" value="en" {{ 'checked' if lang == 'en'}}>
+							<div class="sort-bullet"><div></div></div>English
+						</label>
+					</li>
+
+					<li class="ui__radio">
+						<label>
+							<input class="custom-input" type="radio" name="lang" value="es" {{ 'checked' if lang == 'es'}}>
+							<div class="sort-bullet"><div></div></div>Español
+						</label>
+					</li>
+
+			</ul>
+
+		</div>
+
+	</div>
+
+	<div class="bottom-buttons">
+
+		<button data-button="language-apply" class="ui__button">
+			<p>{{ generic[lang].strings['apply-selection'] }}</p>
+		</button>
+
+		<button data-button="language-reset" class="ui__button ghost-button">
+			<p>{{ generic[lang].strings['reset-default'] }}</p>
+		</button>
+		
 	</div>
 </div>

@@ -17,12 +17,13 @@ export class OrbitViewer extends Page {
 	show(): void {
 		RAYCASTER.active = true;
 	}
+
 	hide(): void {
 		RAYCASTER.active = false;
 	}
 
 	addEventListeners(): void {
-
+	
 		this.addCustomizeView();
 		
 	}

@@ -72,8 +72,6 @@ export class GuidedExperienceTour extends Page {
 	prev(){
 
 		if(this.activeSlide === 0){
-			const slug = this.slides[0].dom.getAttribute('data-parent-slug');
-			onChange(slug)
 			return;
 		}
 

@@ -5,46 +5,60 @@ const useCache = require('../../utils/cache.js');
 
 async function getPage() {
 
-	// todo
-	// landingLogo, quan arregli lo de les imatges
+  const data = {};
 
-	const query = `
-	{
-		entries(section: "guidedExperiencesTours") {
-			... on guidedExperiencesTours_default_Entry {
-				title,
-				slug,
-				tourPicker {
-					title,
+  const content = `
+    ... on guidedExperiencesTours_default_Entry {
+					seoTitle
+					seoDescription
+					seoImage {
+						... on cantoDam_Asset {
+							url
+						}
+					}
+					id
+					title
 					slug
-				},
-				complexity,
-				flexible {
-					... on flexible_introSlide_BlockType {
-							typeHandle
-							slideTitle
-							subTitle
-							slideContent
-							thumbnail
+					tourPicker {
+						title
+						slug
 					}
-					... on flexible_defaultSlide_BlockType {
-							typeHandle
-							slideTitle
-							subTitle
-							slideContent
-					}
-					... on flexible_funFactSlide_BlockType {
-							typeHandle
-							slideContent
+					complexity
+					flexible {
+						... on flexible_introSlide_BlockType {
+								typeHandle
+								slideTitle
+								subTitle
+								slideContent
+								thumbnail
+						}
+						... on flexible_defaultSlide_BlockType {
+								typeHandle
+								slideTitle
+								subTitle
+								slideContent
+						}
+						... on flexible_funFactSlide_BlockType {
+								typeHandle
+								slideContent
+						}
 					}
 				}
-			}
-		}
-	}`;
+  `;
 
-	const data = await getQuery(query);
-	const d = data.data.entries;
-	return d;
+  for(let i = 1; i <= 2; i++){
+    const query = `
+    {
+      entries(section: "guidedExperiencesTours", siteId: "${i}") {
+        ${content}
+      }
+    }`;
+
+    const d = await getQuery(query);
+    data[i === 1 ? 'en' : 'es'] = d.data.entries;
+
+  }
+	return data;
 }
 
 

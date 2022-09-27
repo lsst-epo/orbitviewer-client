@@ -7,18 +7,18 @@
 		
 		<div class="search-text-input">
 		
-			<input type="text" placeholder="Write your search...">
+			<input type="text" placeholder="{{ generic[lang]['strings']['search-placeholder'] }}">
 		
 			<button class="search-reset">
 
-				{% include "ui/icons/times-circle.njk" %}
+				{% include "ui/icons/times-circle.njk" %} 
 
 			</button>
 
 		</div>
 		
 		<button class="search-cancel">
-			<p>Cancel</p>
+			<p>{{ generic[lang].strings.cancel }}</p>
 		</button>
 	</div>
 </div>
@@ -26,7 +26,7 @@
 <div class="search-panel">
 
 	<button data-button="random-search" class="ui__button button_max-size">
-		<p>Show me one random object!</p>
+		<p>{{ generic[lang]['strings']['search-random'] }}</p>
 	</button>
 
 </div>
