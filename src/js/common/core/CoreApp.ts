@@ -130,7 +130,7 @@ export class CoreApp extends WebGLSketch {
 
                 getSolarSystemElements().then((res) => {
                     
-                    const d = res.mpcorb;
+                    const d = res.mpcorb;                    
                     
                     this.buildSimWithData(d);
                     
@@ -209,6 +209,8 @@ export class CoreApp extends WebGLSketch {
 		}
 
 		for(const el of d) {
+            console.log(el);
+            
 			const mel = mapOrbitElements(el);
 			data.push(mel);
 		}
