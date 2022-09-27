@@ -9,7 +9,7 @@ async function getPage() {
     ... on elements_default_Entry {
 				title
         elementID
-        elementContextInformation
+        text
 				elementCategory {
 					slug
 				}					
