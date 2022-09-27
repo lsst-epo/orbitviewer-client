@@ -175,7 +175,7 @@ export class CoreApp extends WebGLSketch {
 			const mel = mapOrbitElements(el);
 
             // el.fulldesignation = `fake-${i}`;
-			const planet = new Planet(el.fulldesignation, mel);
+			const planet = new Planet(el.id, false, mel);
 
             const expandableItem = expandableItems.find(x => x.name === planet.name);
             if(expandableItem) expandableItem.ref = planet;
@@ -192,7 +192,7 @@ export class CoreApp extends WebGLSketch {
 	createDwarfPlanets(d:Array<OrbitDataElements>) {
 		for(const el of d) {
 			const mel = mapOrbitElements(el);
-			const planet = new Planet(el.fulldesignation, mel, {
+			const planet = new Planet(el.id, true, mel, {
                 color: 0xFA6868
             });
 
@@ -210,7 +210,7 @@ export class CoreApp extends WebGLSketch {
 		}
 
 		for(const el of d) {
-            console.log(el);
+            // console.log(el);
             
 			const mel = mapOrbitElements(el);
 			data.push(mel);
