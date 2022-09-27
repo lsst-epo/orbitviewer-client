@@ -151,9 +151,12 @@ export class SolarParticles {
 
         const geo = new BufferGeometry();
         const pos = [];
+        const color = [];
+        const col = COLORS[0];
 
         for(let i=0; i<count; i++) {
             // this.mesh.setColorAt(i, COLORS[0]);
+            color.push(col.r, col.g, col.b);
             pos.push(
                 Random.randf(-500, 500),
                 Random.randf(-500, 500),
@@ -182,6 +185,14 @@ export class SolarParticles {
         );
 
         geo.setAttribute(
+            'color',
+            new BufferAttribute(
+                new Float32Array(color),
+                3
+            )
+        );
+
+        geo.setAttribute(
             'simUV',
             new BufferAttribute(
                 new Float32Array(simUV),
@@ -197,17 +208,25 @@ export class SolarParticles {
      */
     set data(value:Array<OrbitElements>) {
         this._data = value;
-        // const count = Math.min(MAX, this._data.length);
+        const count = Math.min(MAX, this._data.length);
 
         this.sim.data = value;
 
-        /* for(let i=0; i<count; i++) {
+        const color = this.points.geometry.attributes.color;
+        const arr = color.array as Float32Array;
+
+        for(let i=0; i<count; i++) {
             const el = this._data[i];
-            this.mesh.setColorAt(i, COLORS[el.type]);
+            const col = COLORS[el.type];
+            arr[i*3] = col.r;
+            arr[i*3 + 1] = col.g;
+            arr[i*3 + 2] = col.b;
+            // this.mesh.setColorAt(i, COLORS[el.type]);
             // this.mesh.setColorAt(i, col);
         }
 
-        this.mesh.instanceColor.needsUpdate = true; */
+        // this.mesh.instanceColor.needsUpdate = true;
+        color.needsUpdate = true;
     }
 
     /**
