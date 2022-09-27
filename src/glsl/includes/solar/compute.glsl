@@ -1,4 +1,5 @@
 const float E_CONVERGENCE_THRESHOLD = radians(.001);
+const float K = 0.01720209895;
 #define MAX_E_ITERATIONS 100
 
 struct OrbitElements {
@@ -11,8 +12,33 @@ struct OrbitElements {
     float w;
     float M;
     float n;
+    float Tp;
+    float q;
     int type;
 };
+
+float cbrt(float x) {
+    return exp(log(x) / 3.0);
+}
+
+/* // COSH Function (Hyperbolic Cosine)
+float cosh(float val) {
+  float tmp = exp(val);
+  float cosH = (tmp + 1.0 / tmp) / 2.0;
+  return cosH;
+}
+// TANH Function (Hyperbolic Tangent)
+float tanh(float val) {
+  float tmp = exp(val);
+  float tanH = (tmp - 1.0 / tmp) / (tmp + 1.0 / tmp);
+  return tanH;
+}
+// SINH Function (Hyperbolic Sine)
+float sinh(float val) {
+  float tmp = exp(val);
+  float sinH = (tmp - 1.0 / tmp) / 2.0;
+  return sinH;
+} */
 
 vec3 getCartesianCoordinates(float v, float r, OrbitElements el) {
     float N = radians(el.N);
@@ -57,4 +83,82 @@ vec3 ellipticalCalc(OrbitElements el, float d) {
     vec3 xyz = getCartesianCoordinates(v, r, el);
 
     return xyz;
+}
+
+vec3 parabolicCalc(OrbitElements el, float d) {
+    float dT = el.Tp;//JD2MJD(el.Tp);
+    float q = el.q;
+
+    float H = (d-dT) * (K/sqrt(2.0)) / sqrt(q*q*q);
+    
+    float h = 1.5 * H;
+    float g = sqrt( 1.0 + h*h );
+    float s = cbrt( g + h ) - cbrt( g - h );
+
+    float v = 2.0 * atan(s);
+    float r = q * ( 1.0 + s*s );
+
+    return getCartesianCoordinates(v, r, el);
+}
+
+vec3 nearParabolicCalc(OrbitElements el, float d) {
+    //Perihelion distance
+    float q = el.q;
+    float dT = el.Tp;//JD2MJD(el.Tp);
+    float e = el.e;
+
+    float a = 0.75 * (d-dT) * K * sqrt( (1.0 + e) / (q*q*q) );
+    float b = sqrt( 1.0 + a*a );
+    float W = cbrt(b + a) - cbrt(b - a);
+    float f = (1.0 - e) / (1.0 + e);
+
+    float a1 = (2./3.) + (2./5.) * W*W;
+    float a2 = (7./5.) + (33./35.) * W*W + (37./175.) * pow(W, 4.0);
+    float a3 = W*W * ( (432./175.) + (956./1125.) * W*W + (84./1575.) * pow(W, 4.0) );
+
+    float C = W*W / (1.0 + W*W);
+    float g = f * C*C;
+    float w = W * ( 1.0 + f * C * ( a1 + a2*g + a3*g*g ) );
+    // float w = DEG_TO_RAD * W * ( 1 + f * C * ( a1 + a2*g + a3*g*g ) );
+
+    float v = 2.0 * atan(w);
+    float r = q * ( 1.0 + w*w ) / ( 1.0 + w*w * f );
+
+    return getCartesianCoordinates(v, r, el);
+}
+
+vec3 hyperbolicCalc(OrbitElements el, float d) {
+    float q = el.q;
+    float e = el.e;
+    // float a = q / (1 - e);
+    float a = el.a;
+    float dT = el.Tp;//JD2MJD(el.Tp);
+
+    float M = radians(d-dT) / pow(-a,1.5);
+
+    float F0 = M;
+    float F1 = ( M + e * ( F0 * cosh(F0) - sinh(F0) ) ) / ( e * cosh(F0) - 1.0 );
+    int iterations = 1;
+
+    while(abs(F1-F0) > E_CONVERGENCE_THRESHOLD) {
+        iterations++;
+        F0 = F1;
+        F1 = ( M + e * ( F0 * cosh(F0) - sinh(F0) ) ) / ( e * cosh(F0) - 1.0 );
+        if(iterations >= MAX_E_ITERATIONS) break;
+    }
+    float F = F1;
+    
+
+    float v = 2.0 * atan( sqrt((e+1.0)/(e-1.0)) ) * tanh(F/2.0);
+    float r = a * ( 1.0 - e*e ) / ( 1.0 + e * cos(v) );
+
+    return getCartesianCoordinates(v, r, el);
+}
+
+vec3 computePosition(OrbitElements el, float d) {
+    if(el.type == 1) return parabolicCalc(el, d);
+    else if(el.type == 2) return nearParabolicCalc(el, d);
+    else if(el.type == 3) return hyperbolicCalc(el, d);
+
+    return ellipticalCalc(el, d);
 }

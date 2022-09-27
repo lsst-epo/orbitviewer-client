@@ -131,7 +131,7 @@ export function parabolicCalc(el:OrbitElements, d:number, target:Vector3= new Ve
     const H = (d-dT) * (K/Math.sqrt(2)) / Math.sqrt(q*q*q);
     
     const h = 1.5 * H;
-    const g = Math. sqrt( 1.0 + h*h );
+    const g = Math.sqrt( 1.0 + h*h );
     const s = Math.cbrt( g + h ) - Math.cbrt( g - h );
 
     const v = 2.0 * Math.atan(s);

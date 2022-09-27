@@ -84,6 +84,8 @@ export class GPUSim {
         const w = new Float32Array(count);
         const M = new Float32Array(count);
         const n = new Float32Array(count);
+        const Tp = new Float32Array(count);
+        const q = new Float32Array(count);
         const type = new Float32Array(count);
 
         for(let i=0; i<siz.width; i++) {
@@ -140,6 +142,16 @@ export class GPUSim {
         );
 
         geo.setAttribute(
+            'Tp',
+            new BufferAttribute(Tp, 1)
+        );
+
+        geo.setAttribute(
+            'q',
+            new BufferAttribute(q, 1)
+        );
+
+        geo.setAttribute(
             'type', 
             new BufferAttribute(type, 1)
         );
@@ -190,6 +202,8 @@ export class GPUSim {
         this.updateDataBuffer('w', value);
         this.updateDataBuffer('M', value);
         this.updateDataBuffer('n', value);
+        this.updateDataBuffer('Tp', value);
+        this.updateDataBuffer('q', value);
         this.updateDataBuffer('type', value);
 
         alive.needsUpdate = true;

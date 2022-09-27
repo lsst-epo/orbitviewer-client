@@ -9,7 +9,7 @@ in float isActive;
 void main() {
     if(isActive == 0.0) discard;
 
-    vec3 pos = ellipticalCalc(els, d);
+    vec3 pos = computePosition(els, d);
 
     gl_FragColor = vec4(pos, 1.0);
     // gl_FragColor = vec4(vec3(1.0), 1.0);

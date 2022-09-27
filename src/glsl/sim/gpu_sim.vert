@@ -8,6 +8,8 @@ attribute float i;
 attribute float w;
 attribute float M;
 attribute float n;
+attribute float Tp;
+attribute float q;
 attribute float type;
 
 attribute float alive;
@@ -23,6 +25,8 @@ void main() {
     els.w = w;
     els.M = M;
     els.n = n;
+    els.Tp = Tp;
+    els.q = q;
     els.type = int(type);
 
     isActive = alive;
