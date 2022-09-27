@@ -18,14 +18,14 @@ import { KM2AU, OrbitElements, SUN_RADIUS } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
-import { CLOCK_SETTINGS, CONTROLS } from "./Globals";
+import { CLOCK_SETTINGS, CONTROLS, DEV } from "./Globals";
+
+import Stats from 'three/examples/jsm/libs/stats.module.js';
 
 const GEO = new SphereGeometry(1, 32, 32);
 
 const data = new Array<OrbitElements>();
-const dummy = new Object3D();
 
-const FILES = ["iso_elems.json", "parabolic_elems_simulated.json", "solarsystem_full_elems_100k.json"];
 const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
 
@@ -100,7 +100,8 @@ export class CoreApp extends WebGLSketch {
         this.scene.add(this.dwarfPlanetPaths);
 
         this.particles = new SolarParticles(this.renderer);
-        this.scene.add(this.particles.mesh);
+        this.scene.add(this.particles.points);
+        // this.scene.add(this.particles.mesh);
 
         this.sunLight = new PointLight(0xffffff, .5, 400, 2);
         this.scene.add(this.sunLight);
@@ -249,7 +250,21 @@ export class CoreApp extends WebGLSketch {
             if(evt.key == ' ') this.playPause();
         });
 
-        this.start();
+        if(DEV) {
+            const stats = new Stats();
+            document.body.appendChild(stats.domElement);
+
+            const customAnimate = () => {
+                requestAnimationFrame(customAnimate);
+                stats.begin();
+                this.update();
+                this.render();
+                stats.end();
+            }
+            this.start(customAnimate);
+        } else {
+            this.start();
+        }
         this.solarClock = solarClock;
         this.solarClock.start();
     }
@@ -289,6 +304,6 @@ export class CoreApp extends WebGLSketch {
     render(): void {
         css2D.render(this.camera as PerspectiveCamera);	
 		this.vfx.render(this.scene, this.camera as PerspectiveCamera);
-        this.particles.sim.drawFbo();
+        // this.particles.sim.drawFbo();
 	}
 }

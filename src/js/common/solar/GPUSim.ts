@@ -1,9 +1,20 @@
 import { FboUtils, Size } from "@jocabola/gfx";
-import { BufferAttribute, BufferGeometry, FloatType, NearestFilter, OrthographicCamera, Points, PointsMaterial, Scene, Texture, WebGLRenderer, WebGLRenderTarget } from "three";
+import { BufferAttribute, BufferGeometry, FloatType, NearestFilter, OrthographicCamera, Points, Scene, ShaderMaterial, Texture, WebGLRenderer, WebGLRenderTarget } from "three";
 import { GPU_SIM_SIZES, VISUAL_SETTINGS } from "../core/Globals";
 import { OrbitElements } from "./SolarSystem";
 
 export type SimQuality = 'low'|'medium'|'high'|'ultra';
+
+import sim_f from '../../../glsl/sim/gpu_sim.frag';
+import sim_v from '../../../glsl/sim/gpu_sim.vert';
+
+const SIM_MAT = new ShaderMaterial({
+    vertexShader: sim_v,
+    fragmentShader: sim_f,
+    uniforms: {
+        d: {value: 0}
+    }
+})
 
 export class GPUSim {
     private quality:SimQuality = VISUAL_SETTINGS.current as SimQuality;
@@ -17,6 +28,10 @@ export class GPUSim {
     constructor(renderer:WebGLRenderer) {
         this.rnd = renderer;
         this.createBuffers(true);
+    }
+
+    get qualitySettings():SimQuality {
+        return this.quality;
     }
 
     private createBuffers(firstTime:boolean=false) {
@@ -36,11 +51,7 @@ export class GPUSim {
             this.fbo.texture.type = FloatType;
             this.points = new Points(
                 this.createPoints(),
-                new PointsMaterial({
-                    color: 0xff0000,
-                    size: 1,
-                    sizeAttenuation: false
-                })
+                SIM_MAT
             );
             this.scene.add(this.points);
         } else {
@@ -54,8 +65,8 @@ export class GPUSim {
             this.camera.updateProjectionMatrix();
         }
 
-        this.points.position.x = -w/2;
-        this.points.position.y = -h/2;
+        this.points.position.x = -w/2 + 1;
+        this.points.position.y = -h/2 + 1;
     }
 
     private createPoints(): BufferGeometry {
@@ -65,7 +76,7 @@ export class GPUSim {
 
         // attrs
         const pos = [];
-        const active = new Float32Array(count); // 0 dead 1 active
+        const alive = new Float32Array(count); // 0 dead 1 alive
         const N = new Float32Array(count);
         const a = new Float32Array(count);
         const e = new Float32Array(count);
@@ -89,8 +100,8 @@ export class GPUSim {
         );
 
         geo.setAttribute(
-            'active', 
-            new BufferAttribute(active, 1)
+            'alive', 
+            new BufferAttribute(alive, 1)
         );
 
         geo.setAttribute(
@@ -159,8 +170,10 @@ export class GPUSim {
 
     set data(value:Array<OrbitElements>) {
         const geo = this.points.geometry;
-        const active = geo.attributes.active;
-        const arr = active.array as Float32Array;
+        const alive = geo.attributes.alive;
+        const arr = alive.array as Float32Array;
+
+        console.log(this.totalItems, value.length);
         
         for(let i=0; i<Math.min(this.totalItems, value.length); i++) {
             arr[i] = 1;
@@ -179,11 +192,12 @@ export class GPUSim {
         this.updateDataBuffer('n', value);
         this.updateDataBuffer('type', value);
 
-        active.needsUpdate = true;
+        alive.needsUpdate = true;
         // N.needsUpdate = true;
     }
 
-    render() {
+    render(d:number) {
+        SIM_MAT.uniforms.d.value = d;
         this.rnd.setRenderTarget(this.fbo);
         this.rnd.render(this.scene, this.camera);
         this.rnd.setRenderTarget(null);

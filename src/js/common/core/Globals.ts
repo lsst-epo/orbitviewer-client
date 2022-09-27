@@ -62,7 +62,7 @@ export function getParticleCount(s:Size) {
 }
 
 export const VISUAL_SETTINGS = {
-	current: 'low',
+	current: 'high',
 	low: getParticleCount(GPU_SIM_SIZES.low),
 	medium: getParticleCount(GPU_SIM_SIZES.medium),
 	high: getParticleCount(GPU_SIM_SIZES.high),
