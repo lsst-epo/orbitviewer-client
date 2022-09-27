@@ -42,6 +42,7 @@ export class ExpandableItem {
 	loaded(){
 		this.visible = true;		
 		this.dom.classList.add('visible');		
+		this.addEventListeners();
 	}
 
 
@@ -60,46 +61,37 @@ export class ExpandableItem {
 
 	}
 
-	enable(){
 
-		this.ref.selected = true;
-		
-		this.addEventListeners();
-
-	}
-
-	disable(){
+	hide(){
 		this.active = false;
 		this.ref.selected = false;
-		this.hideInfo();
-	}
-
-	showInfo(){
-		if(this.active) return;
-		if(!this.visible) return; 
-
-		this.active = true;
-		this.dom.classList.add('active');
-
-		this.sections[0].classList.add('active');
-
-	}
-
-	hideInfo(){
+	
 		this.active = false;
 		this.dom.classList.remove('active');
 		for(const section of this.sections) section.classList.remove('active');
 	}
 
+	show(){
+		if(this.active) return;
+		if(!this.visible) return; 
+
+		this.active = true;
+		this.dom.classList.add('active');
+		
+		this.ref.selected = true;
+
+		this.sections[0].classList.add('active');
+
+	}
+
 	addEventListeners(){
 		
 		this.dom.querySelector('.close-item').addEventListener('click', () => {
-			if(!this.active) this.disable();
-			else this.hideInfo();
+			this.hide();
 		})
 
-		this.dom.querySelector('.item-wrapper .cover').addEventListener('click', () => {			
-			this.showInfo();
+		this.container.element.querySelector('.item-wrapper .cover').addEventListener('click', () => {						
+			this.show();
 		})
 
 		for(const section of this.sections){

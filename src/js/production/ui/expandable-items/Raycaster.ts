@@ -50,7 +50,9 @@ const raycasterClick = () => {
 	if(RAYCASTER.watch.length === 0) return;
 
 	const intersects = checkIntersects();
-	if(!intersects) return
+	if(!intersects) {
+		return
+	}
 	
 	for(const element of RAYCASTER.watch){
 		
@@ -70,11 +72,9 @@ const clickedElement = (element:any) => {
 		return
 	}
 	
-	for(const _item of expandableItems){
-		if(_item.visible) _item.disable();
-	}
+	for(const _item of expandableItems) _item.hide();
 	
-	item.enable();
+	item.show();
 
 }
 
