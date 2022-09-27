@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { css2D } from "../../production/ui/expandable-items/Css2D";
 import { expandableItems, initExpandableItems, resizeExpandableItems } from "../../production/ui/expandable-items/ExpandableItems";
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/expandable-items/Raycaster";
+import { applyCategories } from "../data/Categories";
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/GetData";
@@ -18,6 +19,7 @@ import { KM2AU, OrbitElements, SUN_RADIUS } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
+import { CAMERA_POSITION, CLOCK_SETTINGS, CONTROLS } from "./Globals";
 import { CLOCK_SETTINGS, CONTROLS, DEV } from "./Globals";
 
 import Stats from 'three/examples/jsm/libs/stats.module.js';
@@ -131,7 +133,8 @@ export class CoreApp extends WebGLSketch {
 
                 getSolarSystemElements().then((res) => {
                     
-                    const d = res.mpcorb;
+                    const d = res.mpcorb;                    
+                    
                     this.buildSimWithData(d);
                     
                     loadData(()=> {
@@ -173,11 +176,13 @@ export class CoreApp extends WebGLSketch {
 		for(const el of d) {
 			const mel = mapOrbitElements(el);
 
-            // el.fulldesignation = `fake-${i}`;
-			const planet = new Planet(el.fulldesignation, mel);
+			const planet = new Planet(el.id, false, mel);
 
-            const expandableItem = expandableItems.find(x => x.name === planet.name);
-            if(expandableItem) expandableItem.ref = planet;
+            const expandableItem = expandableItems.find(x => x.name === planet.name);            
+            if(expandableItem) {
+                expandableItem.ref = planet;
+                expandableItem.loaded();
+            }
             
 			this.planets.add(planet);
 			this.planetPaths.add(planet.orbitPath.ellipse);
@@ -191,7 +196,7 @@ export class CoreApp extends WebGLSketch {
 	createDwarfPlanets(d:Array<OrbitDataElements>) {
 		for(const el of d) {
 			const mel = mapOrbitElements(el);
-			const planet = new Planet(el.fulldesignation, mel, {
+			const planet = new Planet(el.id, true, mel, {
                 color: 0xFA6868
             });
 
@@ -209,6 +214,8 @@ export class CoreApp extends WebGLSketch {
 		}
 
 		for(const el of d) {
+            // console.log(el);
+            
 			const mel = mapOrbitElements(el);
 			data.push(mel);
 		}
@@ -279,6 +286,8 @@ export class CoreApp extends WebGLSketch {
         updateRaycaster(this.camera);
 
 		CONTROLS.orbit.update();
+
+        CAMERA_POSITION.copy(this.camera.position)
 
         if(this.clockChanged())this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
 		const d = this.solarClock.update();

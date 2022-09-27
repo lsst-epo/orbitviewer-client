@@ -1,11 +1,12 @@
 
 .expandable-item {
-	opacity: 0;
 	transition-property: opacity;
 	transition-duration: 0.25s;
 	transition-timing-function: ease-in-out;
 
 	&:not(.visible){
+		opacity: 0;
+		
 		&, & * {
 			pointer-events: none;
 		}
@@ -28,6 +29,11 @@
 	height: 0;
 
 	overflow: visible;
+
+	.item-scale-wrapper {
+		transform-origin: 50% 100%;
+		transition-duration: 0s;
+	}
 }
 
 .expandable-item .item-wrapper {
@@ -49,13 +55,15 @@
 	position: absolute;
 	z-index: 1;
 
-	width: 30px;
-	height: 30px;
+	width: 25px;
+	height: 25px;
 
 	padding: var(--distance-5);
 
-	transform: translate(25px, -25px);
+	transform: translate(22px, -22px);
 	transition-property: transform;
+
+	opacity: 0;
 
 	cursor: pointer;
 	
@@ -75,8 +83,8 @@
 .expandable-item .cover {
 	position: relative;
 
-	width: 75px;
-	height: 75px;
+	width: 60px;
+	height: 60px;
 	border-radius: 100%;
 	border: 1px solid var(--white-0);
 
@@ -126,8 +134,7 @@
 		}
 
 		p {
-			margin-top: var(--distance-5);
-			@include light-3;
+			@include light-4;
 			white-space: nowrap;
 			transition-property: opacity;
 		}
@@ -185,6 +192,10 @@
 
 			opacity: 0;
 			transition-property: opacity;
+			
+			&:not(:last-of-type){
+				margin-bottom: 0.5em;
+			}
 		}
 	}
 
@@ -203,12 +214,14 @@
 }
 
 .expandable-item.visible.active {
+	z-index: 100 !important;
 	
 	.item-wrapper {
 		transform: translate(-50%, 15px);
 	}
 
 	.close-item {
+		opacity: 1;
 		transform: translate(90px, -50px);
 	}
 

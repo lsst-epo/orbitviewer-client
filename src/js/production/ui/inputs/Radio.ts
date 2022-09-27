@@ -13,7 +13,7 @@ export class Radio extends Input {
 
 	checkState(){
 		const parent = this.dom.parentElement;
-		const el = this.dom as HTMLInputElement;
+		const el = this.dom as HTMLInputElement;		
 
 		const checked = el.checked;		
 

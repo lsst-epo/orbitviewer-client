@@ -1,14 +1,13 @@
 
 // Localhost
+require('dotenv').config();
+
 const env = process.env.ELEVENTY_ENV ? process.env.ELEVENTY_ENV.split(':') : [];
 const isLocalhost = env.indexOf('localhost') > -1;
 
-// const isLocalhost = true;
-const token = isLocalhost ? 'LdTQ3Q1QUtzPec_TNIAmmolWYUaevo3o' : 'Ma3vUfBJiY3XXmjerRcBQo5PpE3A0jxU';
 const url = isLocalhost ? 'http://localhost:8080' : 'https://orbitviewer-api-dot-skyviewer.uw.r.appspot.com';
 
 // Real deal
-
 const fetch = (...args) =>
 import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
@@ -29,7 +28,7 @@ async function getQuery(query = null) {
 			headers: {
 				"Content-Type": "application/json",
 				Accept: "application/json",
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${isLocalhost ? process.env.LOCAL_TOKEN : process.env.PROD_TOKEN}`,
 			},
 			body: JSON.stringify({
 				query,

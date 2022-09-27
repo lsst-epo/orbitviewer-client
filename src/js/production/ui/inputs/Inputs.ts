@@ -19,6 +19,7 @@ export class Inputs {
 
 		const inputs = this.dom.querySelectorAll('.custom-input');
 		for(const input of inputs){
+			
 			const el = input as HTMLElement;
 			const type = el.getAttribute('type');
 
@@ -35,8 +36,7 @@ export class Inputs {
 				if(el.hasAttribute('data-timer')) item = new TimePickerRange(el)
 			}
 			if(el.hasAttribute('data-date')) item = new DateInput(el);
-
-
+			
 			if(item) this.inputs.push(item);
 			
 		}

@@ -14,16 +14,13 @@ export class css2D {
 		document.body.appendChild(renderer.domElement);
 		renderer.domElement.classList.add('css2D__wrapper', 'expandable-items')
 		renderer.setSize(width, height);
-		// scene.add(cam);
 	}
 
 	static render(camera:PerspectiveCamera) {
 		if(!initialized) return;
 		
 		cam.copy(camera);
-		// cam.position.multiplyScalar(CSS_SCALE_UP);
 		renderer.render(scene, cam);
-		// cam.position.multiplyScalar(CSS_SCALE_DOWN);
 	}
 
 	static add(el:CSS2DObject) {

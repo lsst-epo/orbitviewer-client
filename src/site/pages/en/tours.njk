@@ -1,0 +1,13 @@
+---
+layout: base
+pageTemplate: tours
+pagination:
+  alias: tour
+  data: tours.en
+  size: 1
+permalink: "/{{ lang }}/{{ tour.slug | slug }}/"
+eleventyComputed:
+  title: "{{ tour[lang].seoTitle }}"
+  description: "{{ tour[lang].seoDescription }}"
+---
+{% include "pages/tours.njk" %}

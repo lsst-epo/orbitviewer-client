@@ -5,8 +5,8 @@
 
 		{# todo que aixo vingui del back #}
 		<div class="panel-top-content">
-			<h3>{{ about.description }}</h3>
-			<h2>{{ about.title }}</h2>
+			<h3>{{ generic[lang].menus['about-menu'].title }}</h3>
+			<h2>{{ generic[lang].menus['about-menu'].subtitle }}</h2>
 		</div>
 
 		{{ panelTimes('about') }}
@@ -14,6 +14,6 @@
 	</div>
 
 	<div class="panel-section">
-		<p>{{ about.content }}</p>
+		{{ about[lang].text | safe }}
 	</div>
 </div>

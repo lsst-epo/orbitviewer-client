@@ -1,0 +1,13 @@
+---
+layout: base
+pageTemplate: guided-experiences-tours
+pagination:
+  alias: experience
+  data: guidedExperiencesTours.es
+  size: 1
+permalink: "{{ '/' + lang + '/' + experience.tourPicker[0].slug + '/' + experience.slug | slug }}/"
+eleventyComputed:
+  title: "{{ experience[lang].seoTitle }}"
+  description: "{{ experience[lang].seoDescription }}"
+---
+{% include "pages/guided-experiences-tours.njk" %}

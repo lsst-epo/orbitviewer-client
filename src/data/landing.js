@@ -4,33 +4,36 @@ const useCache = require('../../utils/cache.js');
 
 async function getPage() {
 
-  // todo
-  // landingLogo, quan arregli lo de les imatges
+  const data = {};
 
-  const query = `
-  {
-    entries(section: "landing") {
-      ...on landing_landing_Entry {
-        landingCenterTitle,
-        landingVersion,
-        landingLeftButtonText,
-        landingRightButtonText
+  const content = `
+    ...on landing_landing_Entry {
+      seoTitle
+      seoDescription
+      seoImage {
+        ... on cantoDam_Asset {
+          url
+        }
       }
+      landingCenterTitle
+      landingVersion
     }
-  }`;
+  `;
 
-  const data = await getQuery(query);
+  for(let i = 1; i <= 2; i++){
+    const query = `
+    {
+      entries(section: "landing", siteId: "${i}") {
+        ${content}
+      }
+    }`;
 
-  const d = data.data.entries[0];
+    const d = await getQuery(query);
+    data[i === 1 ? 'en' : 'es'] = d.data.entries[0];
 
-  const formatted = {
-    title: d.landingCenterTitle,
-    version: d.landingVersion,
-    leftButton: d.landingLeftButtonText,
-    rightButton: d.landingRightButtonText
   }
 
-  return formatted;
+  return data;
 }
 
 

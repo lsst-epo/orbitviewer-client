@@ -12,11 +12,9 @@
 <div class="panel" data-panel="navigation">
 
 	<div class="panel-top panel-separator">
-
-		{# todo que aixo vingui del back #}
 		<div class="panel-top-content">
-			<h3>Main menu</h3>
-			<h2>Settings and more</h2>
+			<h3>{{ generic[lang].menus.menu.title }}</h3>
+			<h2>{{ generic[lang].menus.menu.subtitle }}</h2>
 		</div>
 
 		{{ panelTimes('navigation') }}
@@ -24,7 +22,7 @@
 	</div>
 
 	<div class="panel-section panel-separator">
-		<h3>Settings</h3>
+		<h3>{{ generic[lang].menus.menu.sections[0] }}</h3>
 
 		<ul class="menu">
 
@@ -43,7 +41,7 @@
 			</li>
 		
 			<li>
-				<a class="menu-item" target="_blank" href="https://www.google.com/">
+				<a class="menu-item" target="_blank" href="{{ globals[lang].menu.helpUrl }}">
 					{{ icon('help', 'Help') }}
 					<p>Help</p>
 				</a>
@@ -57,7 +55,7 @@
 			</li>
 
 			<li>
-				<a class="menu-item" target="_blank" href="https://www.google.com/">
+				<a class="menu-item" target="_blank" href="{{ globals[lang].menu.howToUseUrl }}">
 					{{ icon('how', 'How to use the Orbit Viewer') }}
 					<p>How to use the Orbit Viewer</p>
 				</a>
@@ -68,14 +66,14 @@
 	</div>
 
 	<div class="panel-section">
-		<h3>Quick access</h3>
+		<h3>{{ generic[lang].menus.menu.sections[1] }}</h3>
 
 		<ul class="menu">
 
 			<li>
-				<a class="menu-item" href="{{ '/guided-experiences' | url }}">
+				<a class="menu-item" href="{{ '/' + lang + '/guided-experiences' | url }}">
 					{{ icon('guided', 'Guided Experiences') }}
-					<p>Guided Experiences</p>
+					<p>{{ guidedExperiences[lang].title }}</p>
 				</a>
 			</li>
 		</ul>

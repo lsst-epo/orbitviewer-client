@@ -1,10 +1,10 @@
-{% macro loop(guidedExperiencesTours, tour) %}
+{% macro loop(guidedExperiencesTours, tour, lang) %}
 
 	{% for experience in guidedExperiencesTours %}
 
 			{% if experience.tourPicker[0].slug == tour.slug %}
 
-				<a href="{{ tour.slug + '/' + experience.slug | slug }}">
+				<a href="{{ '/' + lang + '/' + tour.slug + '/' + experience.slug | url }}">
 					{% include "tours/preview.njk" %}
 				</a>
 

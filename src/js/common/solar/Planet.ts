@@ -21,26 +21,27 @@ export class Planet extends Object3D {
     rotationSpeed:number;
     private _selected:boolean = false;
     material:PlanetMaterial;
-    type:PlanetType;
+    type:string;
+    dwarf:boolean = false;
 
-    constructor(name: string, _data:OrbitElements, opts:PlanetOptions={}) {
+    constructor(id: string, dwarf:boolean, _data:OrbitElements, opts:PlanetOptions={}) {
         super();
 
-        this.type = PlanetIdMap[name];
-        
-        if(this.type !== undefined) {
-            // console.log(this.type);
+        this.type = id;        
+        this.dwarf = dwarf;
+
+        if(!this.dwarf) {
             opts.mapURL = `/assets/textures/2k_${this.type}.jpg`;
         }
 
         this.data = _data;        
-        this.name = name;
+        this.name = id;
 
         let fresnelWidth = .005;
         let sunIntensity = .5;
         let scl = .003;
 
-        if(this.type !== undefined) {
+        if(!this.dwarf) {
             // console.log(PlanetRadiusMap[this.type] * KM2AU);
             scl = PlanetRadiusMap[this.type] * KM2AU * PLANET_SCALE;
             console.log(scl, this.type);
@@ -72,7 +73,7 @@ export class Planet extends Object3D {
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
 
         // this.rotationSpeed = Random.randf(-1, 1);
-        if(this.type !== undefined) {
+        if(!this.dwarf) {
             const rt = PlanetRotationMap[this.type] as PlanetRotationData;
             this.rotationSpeed = DEG_TO_RAD * rt.period;
             this.mesh.rotation.z = DEG_TO_RAD * rt.axialTilt;
@@ -98,28 +99,6 @@ export class Planet extends Object3D {
     get selected():boolean {
         return this._selected;
     }
-}
-
-export enum PlanetType {
-    EARTH='earth',
-    MERCURY='mercury',
-    VENUS='venus',
-    MARS='mars',
-    JUPITER='jupiter',
-    SATURN='saturn',
-    URANUS='uranus',
-    NEPTUNE='neptune'
-}
-
-export const PlanetIdMap = {
-    'Mercury Barycenter (199)': PlanetType.MERCURY,
-    'Venus Barycenter (299)': PlanetType.VENUS,
-    'Earth-Moon Barycenter (3)': PlanetType.EARTH,
-    'Mars Barycenter (4)': PlanetType.MARS,
-    'Jupiter Barycenter (5)': PlanetType.JUPITER,
-    'Saturn Barycenter (6)': PlanetType.SATURN,
-    'Uranus Barycenter (7)': PlanetType.URANUS,
-    'Neptune Barycenter (8)': PlanetType.NEPTUNE
 }
 
 export const PlanetRadiusMap = {

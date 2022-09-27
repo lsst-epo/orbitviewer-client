@@ -1,7 +1,15 @@
-		{# <div class="expandable-item" data-id="{{ element.slug }}"> #}
-		{# Fake id #}
-		<div class="expandable-item" data-name="">
+{% from 'ui/filter-icons/filter-icon.njk' import filterIcon as filterIcon %}
 
+{% set cat = element.elementCategory[0] %}
+
+{% for category in categories[lang] %}
+	{% if category.slug == cat.slug %}
+		{% set cat = category %}
+	{% endif %}
+{% endfor %}
+
+	<div class="expandable-item" data-name="{{ element.elementID }}">	
+		<div class="item-scale-wrapper">
 			<div class="item-wrapper">
 
 				<button class="close-item">
@@ -9,22 +17,14 @@
 				</button>
 
 				<div class="cover" style="background-image: url(/assets/ceres-lorem.jpeg);">
-					
+
 					<div class="icon">
-
-						{% set cat = element.elementCategory[0] %}
-
-						{% for category in categories %}
-							{% if category.slug == cat.slug %}
-								{% set cat = category %}
-							{% endif %}
-						{% endfor %}
 
 						{{ filterIcon(cat.slug, cat.title, cat.mainColor ) }}
 
 						<div class="icon-text">
 							<h3>{{ element.title }}</h3>
-							<p>Tap to expand</p>
+							<p>{{ generic[lang]['expandable-items'].tap }}</p>
 						</div>
 					</div>
 				</div>
@@ -33,33 +33,32 @@
 
 					<section>
 						<div class="head">
-							<p>Overview</p>
+							<p>{{ generic[lang]['expandable-items'].overview }}</p>
 						</div>
 						<div class="content">
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, illo in facere possimus esse consequuntur provident voluptate dolorum saepe sit repellendus sunt illum reiciendis amet corporis, officia blanditiis hic doloribus.</p>
+							<p>Pending</p>
 						</div>
 					</section>
 
 					<section>
 						<div class="head">
-							<p>Context information</p>
+							<p>{{ generic[lang]['expandable-items'].context }}</p>
 						</div>
 						<div class="content">
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, illo in facere possimus esse consequuntur provident voluptate dolorum saepe sit repellendus sunt illum reiciendis amet corporis, officia blanditiis hic doloribus.</p>
+							{{ element.text | safe }}
 						</div>
 					</section>
 
 					<section>
 						<div class="head">
-							<p>Detailed data</p>
+							<p>{{ generic[lang]['expandable-items'].data }}</p>
 						</div>
 						<div class="content">
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, illo in facere possimus esse consequuntur provident voluptate dolorum saepe sit repellendus sunt illum reiciendis amet corporis, officia blanditiis hic doloribus.</p>
+							<p>Pending</p>
 						</div>
 					</section>
 				</div>
 
 			</div>
-
 		</div>
-		
+	</div>

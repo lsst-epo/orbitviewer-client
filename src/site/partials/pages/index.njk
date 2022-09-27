@@ -1,0 +1,21 @@
+
+<div class="center__wrapper">
+
+    {# TODO imatge del gestor #}
+    <img src="/assets/ceres-lorem.jpeg" alt="{{ landing[lang].landingCenterTitle }}"> 
+    <h1>{{ landing[lang].landingCenterTitle}}</h1>
+    <p>{{ landing[lang].landingVersion }}</p>
+
+</div>
+
+<div class="buttons__wrapper">
+
+  <a href="{{ '/' + lang + '/customize-orbits' | url }}" class="ui__button">
+    <p>{{ generic[lang]['strings']['landing-explore'] }}</p>
+  </a>
+
+  <a href="{{ '/' + lang + '/guided-experiences' | url }}" class="ui__button">
+    <p>{{ generic[lang]['strings']['landing-guide'] }}</p>
+  </a>
+
+</div>

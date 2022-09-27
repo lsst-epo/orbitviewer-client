@@ -1,32 +1,36 @@
 const getQuery = require('../../utils/getQuery');
 const useCache = require('../../utils/cache.js');
 
-
 async function getPage() {
 
-	// todo
-	// landingLogo, quan arregli lo de les imatges
+  const data = {};
 
-	const query = `
-	{
-		entries(section: "elements") {
-				... on elements_default_Entry {
-						title,
-						slug,
-						elementCategory {
-							title,
-							slug,
-						}					
-				}
+  const content = `
+    ... on elements_default_Entry {
+				title
+        elementID
+        text
+				elementCategory {
+					slug
+				}					
 		}
-	}`;
+  `;
 
-	const data = await getQuery(query);
+  for(let i = 1; i <= 2; i++){
+    const query = `
+    {
+      entries(section: "elements", siteId: "${i}") {
+        ${content}
+      }
+    }`;
 
-	const d = data.data.entries;
+    const d = await getQuery(query);
+    data[i === 1 ? 'en' : 'es'] = d.data.entries;
 
-	return d;
+  }
+  return data;
 }
+
 
 
 // export for 11ty

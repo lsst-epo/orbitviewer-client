@@ -13,13 +13,11 @@
 
 	<div class="panel-top panel-separator">
 
-		{# todo que aixo vingui del back #}
-		{# todo que aixo pugui tenir icona #}
-		<div class="panel-top-content">
+		<div class="panel-top-content has-icon">
 			{% include "ui/icons/filter.njk" %}
 			<div>
-				<h3>Filtering tool</h3>
-				<h2>Customize your view</h2>
+				<h3>{{ generic[lang].menus['filter-menu'].title }}</h3>
+				<h2>{{ generic[lang].menus['filter-menu'].subtitle }}</h2>
 			</div>
 		</div>
 
@@ -28,16 +26,16 @@
 	</div>
 
 	<div class="panel-section panel-separator">
-		<h3>Object type</h3>
-		{{ filter(categories) }}
+		<h3>{{ generic[lang].menus['filter-menu'].sections[0] }}</h3>
+		{{ filter(categories[lang]) }}
 	</div>
 
 	<div class="panel-section">
-		<h3>Object characteristics</h3>
+		<h3>{{ generic[lang].menus['filter-menu'].sections[1] }}</h3>
 
 		<div class="distance-input custom-input" type="double-range" style="--range-1:0;--range-2:1;">
-			<p>Near</p>
-			<p>Far</p>
+			<p>{{ generic[lang].strings.near }}</p>
+			<p>{{ generic[lang].strings.far }}</p>
 
 			<div class="fake-range"></div>
 
@@ -49,20 +47,17 @@
 		</div>
 	</div>
 
-	<div class="panel-section">
+	<div class="bottom-buttons">
 
-		<div class="filter-buttons">
+		<button data-button="filters-apply" class="ui__button">
+			<p>{{ generic[lang].menus['filter-menu']['apply-filter'] }}</p>
+		</button>
 
-			<button data-button="filters-apply" class="ui__button">
-				<p>Apply Filter</p>
-			</button>
-
-			<button data-button="filters-reset" class="ui__button ghost-button">
-				<p>Reset Filter</p>
-			</button>
-
-		</div>
+		<button data-button="filters-reset" class="ui__button ghost-button">
+			<p>{{ generic[lang].menus['filter-menu']['reset-filter'] }}</p>
+		</button>
 
 	</div>
+
 
 </div>

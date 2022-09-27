@@ -3,6 +3,8 @@ const { exec } = require('child_process');
 const pkj = require('./package.json');
 
 const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
+const i18n = require("eleventy-plugin-i18n");
+
 const fs = require('fs');
 const fse = require('fs-extra');
 
@@ -14,6 +16,7 @@ const targets = ['production', 'editor'];
 
 const env = process.env.ELEVENTY_ENV ? process.env.ELEVENTY_ENV.split(':') : [];
 const isProduction = env.indexOf('production') > -1;
+
 
 if (!isProduction) {
 	console.log(`${fil}Running server...`);
@@ -153,6 +156,29 @@ module.exports = function (eleventyConfig) {
 
 	eleventyConfig.setBrowserSyncConfig({
 		ghostMode: false,
+	});
+
+	eleventyConfig.addPlugin(i18n, {
+		defaultLanguage: "en",
+		fallbackLocales: {
+			'*': 'en'
+		}
+	});
+
+	eleventyConfig.setBrowserSyncConfig({
+		callbacks: {
+			ready: function (err, bs) {
+				bs.addMiddleware('*', (req, res) => {
+
+					if(!req.url.includes('/en/') && !req.url.includes('/es/')){
+						res.writeHead(302, {
+							location: `/en${req.url}`
+						});
+						res.end();
+					}
+				});
+			}
+		}
 	});
 
 	eleventyConfig.setWatchJavaScriptDependencies(false);

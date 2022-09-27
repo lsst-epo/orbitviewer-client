@@ -2,33 +2,31 @@ const getQuery = require('../../utils/getQuery');
 const useCache = require('../../utils/cache.js');
 
 async function getPage() {
-  const query = `
-  {
-    entries(section: "about") {
-			...on about_about_Entry {
-				siteTitle
-				siteDescription
-				pageContent
-			}
-		}
-  }`;
 
-  const data = await getQuery(query);
+  const data = {};
 
-  const d = data.data.entries[0];
-  
-  const formatted = {
-    title: d.siteTitle,
-		description: d.siteDescription,
-		content: d.pageContent
+  const content = `
+    ...on about_about_Entry {
+      text
+    }
+  `;
+
+  for(let i = 1; i <= 2; i++){
+    const query = `
+    {
+      entries(section: "about", siteId: "${i}") {
+        ${content}
+      }
+    }`;
+
+    const d = await getQuery(query);
+    data[i === 1 ? 'en' : 'es'] = d.data.entries[0];
+
   }
 
-  return formatted;
+  return data;
 }
 
-
-// export for 11ty
-// module.exports = getPage;
 
 module.exports = async () => {
   return useCache(getPage, 'about.json');

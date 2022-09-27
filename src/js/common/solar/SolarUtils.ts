@@ -1,6 +1,8 @@
+import { getCategory } from "../data/Categories";
 import { OrbitElements, OrbitType } from "./SolarSystem"
 
 export type OrbitDataElements = {
+    id:string;
     fulldesignation:string;
     node:number;
     a:number;
@@ -14,6 +16,7 @@ export type OrbitDataElements = {
     n:number;
     tperi?:number;
     peri:number;
+    category:string
 }
 
 export function getOrbitType(el:OrbitDataElements): OrbitType {
@@ -30,7 +33,8 @@ export function getOrbitType(el:OrbitDataElements): OrbitType {
 
 export function mapOrbitElements(dEl:OrbitDataElements):OrbitElements {
     const el = {
-        id: dEl.fulldesignation,
+        id: dEl.id,
+        fulldesignation: dEl.fulldesignation,
         N: dEl.node,
         a: dEl.a,
         e: dEl.e,
@@ -43,9 +47,9 @@ export function mapOrbitElements(dEl:OrbitDataElements):OrbitElements {
         n: dEl.n,
         q: dEl.q,
         Tp: dEl.tperi,
-        type: getOrbitType(dEl)
-    }
-
+        type: getOrbitType(dEl),
+        category: getCategory(dEl)
+    }    
     return el;
 }
 
@@ -58,15 +62,17 @@ export function getTypeStr(type:OrbitType): string {
 
 export function getDataString(dEl:OrbitDataElements):string {
     const type = getOrbitType(dEl);
-    return `${dEl.Name}
-Node: ${dEl.Node}
-a: ${dEl.a}
-e: ${dEl.e}
-i: ${dEl.i}
-Peri: ${dEl.Peri}
-M: ${dEl.M}
-n: ${dEl.n}
-Orbit Type: ${getTypeStr(type)}`;
+    return `
+        ${dEl.Name}
+        Node: ${dEl.Node}
+        a: ${dEl.a}
+        e: ${dEl.e}
+        i: ${dEl.i}
+        Peri: ${dEl.Peri}
+        M: ${dEl.M}
+        n: ${dEl.n}
+        Orbit Type: ${getTypeStr(type)}
+    `;
 }
 
 export const openFileDialog = (accept, callback) => {
