@@ -95,6 +95,10 @@
 
 	transition-property: border-radius, width, height;
 
+	* {
+		pointer-events: all;
+	}
+
 
 	.icon {
 		position: absolute;
