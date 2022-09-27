@@ -104,12 +104,11 @@ export class ExpandableItem {
 
 	}
 
-	update(){
+	update(){		
 		if(!this.visible) return;
 		if(!!!this.ref) return;
 
 		this.tmp.copy(this.ref.position)
-		this.tmp.y -= this.ref.mesh.scale.y;
 
 		this.container.position.copy(this.tmp);	
 

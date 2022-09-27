@@ -1,16 +1,4 @@
-{% from 'ui/filter-icons/filter-icon.njk' import filterIcon as filterIcon %}
 
-
-{% for element in solarSystemElements %}
-
-		{# Create 8 fake #}
-		{% include "ui/expandable-items/item.njk" %}
-		{% include "ui/expandable-items/item.njk" %}
-		{% include "ui/expandable-items/item.njk" %}
-		{% include "ui/expandable-items/item.njk" %}
-		{% include "ui/expandable-items/item.njk" %}
-		{% include "ui/expandable-items/item.njk" %}
-		{% include "ui/expandable-items/item.njk" %}
-		{% include "ui/expandable-items/item.njk" %}
-
+{% for element in solarSystemElements[lang] %}
+	{% include "ui/expandable-items/item.njk" %}
 {% endfor %}

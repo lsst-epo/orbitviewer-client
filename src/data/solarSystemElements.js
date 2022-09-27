@@ -8,9 +8,9 @@ async function getPage() {
   const content = `
     ... on elements_default_Entry {
 				title
-				slug
+        elementID
+        elementContextInformation
 				elementCategory {
-					title
 					slug
 				}					
 		}
@@ -28,7 +28,6 @@ async function getPage() {
     data[i === 1 ? 'en' : 'es'] = d.data.entries;
 
   }
-
   return data;
 }
 

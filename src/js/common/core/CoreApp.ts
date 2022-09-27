@@ -174,11 +174,13 @@ export class CoreApp extends WebGLSketch {
 		for(const el of d) {
 			const mel = mapOrbitElements(el);
 
-            // el.fulldesignation = `fake-${i}`;
 			const planet = new Planet(el.id, false, mel);
 
-            const expandableItem = expandableItems.find(x => x.name === planet.name);
-            if(expandableItem) expandableItem.ref = planet;
+            const expandableItem = expandableItems.find(x => x.name === planet.name);            
+            if(expandableItem) {
+                expandableItem.ref = planet;
+                expandableItem.enable();
+            }
             
 			this.planets.add(planet);
 			this.planetPaths.add(planet.orbitPath.ellipse);

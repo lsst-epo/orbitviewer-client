@@ -49,12 +49,12 @@
 	position: absolute;
 	z-index: 1;
 
-	width: 30px;
-	height: 30px;
+	width: 25px;
+	height: 25px;
 
 	padding: var(--distance-5);
 
-	transform: translate(25px, -25px);
+	transform: translate(22px, -22px);
 	transition-property: transform;
 
 	cursor: pointer;
@@ -75,8 +75,8 @@
 .expandable-item .cover {
 	position: relative;
 
-	width: 75px;
-	height: 75px;
+	width: 60px;
+	height: 60px;
 	border-radius: 100%;
 	border: 1px solid var(--white-0);
 
@@ -126,8 +126,7 @@
 		}
 
 		p {
-			margin-top: var(--distance-5);
-			@include light-3;
+			@include light-4;
 			white-space: nowrap;
 			transition-property: opacity;
 		}
@@ -203,6 +202,7 @@
 }
 
 .expandable-item.visible.active {
+	z-index: 100 !important;
 	
 	.item-wrapper {
 		transform: translate(-50%, 15px);
