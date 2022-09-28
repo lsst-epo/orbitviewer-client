@@ -1,11 +1,16 @@
-import { getSolarSystemElementsByFilter, saveSelectedFilters, syncFilters } from "../../../common/data/GetData";
-import { buildSimWithData } from "../../../common/solar/SolarParticlesManager";
+import { addFiltersListener, applyFilters, FiltersListener, syncFilters } from "../../../common/data/FiltersManager";
 import { Panel } from "./Panel";
 
 
-export class FilterPanel extends Panel {
+export class FilterPanel extends Panel implements FiltersListener {
 	buttonApply:HTMLButtonElement;
 	filters:NodeListOf<HTMLInputElement>
+
+	constructor(id){
+		super(id);
+
+		addFiltersListener(this);
+	}
 
 	create(){
 		this.filters = this.dom.querySelectorAll('.categories-filter input[type="checkbox"]');
@@ -31,16 +36,11 @@ export class FilterPanel extends Panel {
 	}
 
 	applyFilters(){
-		
-		const needsUpdate = saveSelectedFilters(this.filters);
-		
-		if(!needsUpdate) return;
-		
-		getSolarSystemElementsByFilter().then( (res) => {		
-			const d = res.mpcorb;                                  
-      buildSimWithData(d, false);
-		});
+		applyFilters(this.filters);
+	}
 
+	syncFilters(): void {
+		syncFilters(this.filters);
 	}
 	
 }

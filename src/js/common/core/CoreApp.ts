@@ -1,20 +1,18 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
-import { AmbientLight, Clock, Group, Mesh, Object3D, PerspectiveCamera, PointLight, SphereGeometry, TextureLoader } from "three";
+import { AmbientLight, Clock, Group, Mesh, PerspectiveCamera, PointLight, SphereGeometry, TextureLoader } from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { css2D } from "../../production/ui/expandable-items/Css2D";
 import { expandableItems, initExpandableItems, resizeExpandableItems } from "../../production/ui/expandable-items/ExpandableItems";
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/expandable-items/Raycaster";
-import { applyCategories } from "../data/Categories";
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
-import { getSolarSystemElements } from "../data/GetData";
+import { getSolarSystemElements } from "../data/FiltersManager";
 import { initShaders } from "../gfx/shaders";
 import { SunMaterial } from "../gfx/SunMaterial";
 import { VFXRenderer } from "../gfx/VFXRenderer";
 import { Planet, PLANET_SCALE } from "../solar/Planet";
 import { SolarClock } from "../solar/SolarClock";
-import { SolarParticles } from "../solar/SolarParticles";
 import { buildSimWithData, particles } from "../solar/SolarParticlesManager";
 import { KM2AU, OrbitElements, SUN_RADIUS } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
@@ -23,6 +21,7 @@ import { SunParticles } from "../solar/SunParticles";
 import { CAMERA_POSITION, CLOCK_SETTINGS, CONTROLS, DEV } from "./Globals";
 
 import Stats from 'three/examples/jsm/libs/stats.module.js';
+import { hideLoader } from "../../production/ui/loader";
 
 const GEO = new SphereGeometry(1, 32, 32);
 
@@ -136,6 +135,8 @@ export class CoreApp extends WebGLSketch {
                     const d = res.mpcorb;                    
                     
                     buildSimWithData(d);
+
+                    hideLoader();
                     
                     loadData(()=> {
                         this.onDataLoaded();

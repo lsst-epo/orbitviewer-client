@@ -17,6 +17,4 @@ export const buildSimWithData = (d:Array<OrbitDataElements>, forceKeep:boolean=f
     }
 
     particles.data = data;
-
-    hideLoader();
 }
