@@ -51,7 +51,10 @@
 			"menu": {
 				"title": "Main menu",
 				"subtitle": "Settings and more",
-				"sections": ["Settings", "Quick access"]
+				"sections": ["Settings", "Quick access"],
+				"share-orbit-viewer": "Share orbit viewer",
+				"help": "Help",
+				"how-to-use": "How to use the Orbit Viewer"
 			},
 			"share-menu": {
 				"title": "Share Skyviewer",
@@ -59,7 +62,6 @@
 				"get-url": "Get URL",
 				"facebook": "Facebook",
 				"twitter": "Twitter",
-				"get-snapshot": "Get Snapshot",
 				"email": "Email"
 			},
 			"filter-menu": {
@@ -81,6 +83,14 @@
 			"language-menu": {
 				"title": "Language selection",
 				"subtitle": "Chose your language"
+			},
+			"resolution-menu": {
+				"title": "Resolution settings",
+				"subtitle": "Select your desired resolution",
+				"low": ["Low", "(Uses fewer fewer resources)"],
+				"medium": ["Medium", "(Uses fewer resources)"],
+				"high": ["High", "(Uses more resources)"],
+				"ultra": ["Ultra", "(Uses more more resources)"]
 			},
 			"about-menu": {
 				"title": "About skyviewer",
@@ -146,7 +156,11 @@
 			"menu": {
 				"title": "ES - Main menu",
 				"subtitle": "ES - Settings and more",
-				"sections": ["ES - Settings", "ES - Quick access"]
+				"sections": ["ES - Settings", "ES - Quick access"],
+				"share-orbit-viewer": "ES - Share orbit viewer",
+				"help": "ES - Help",
+				"how-to-use": "ES - How to use the Orbit Viewer",
+				"resolution": "ES - Resolution settings"
 			},
 			"share-menu": {
 				"title": "ES - Share Skyviewer",
@@ -154,7 +168,6 @@
 				"get-url": "ES - Get URL",
 				"facebook": "ES - Facebook",
 				"twitter": "ES - Twitter",
-				"get-snapshot": "ES - Get Snapshot",
 				"email": "ES - Email"
 			},
 			"filter-menu": {
@@ -176,6 +189,14 @@
 			"language-menu": {
 				"title": "ES - Language selection",
 				"subtitle": "ES - Chose your language"
+			},
+			"resolution-menu": {
+				"title": "ES - Resolution settings",
+				"subtitle": "ES - Select your desired resolution",
+				"low": ["ES - Low", "ES - (Uses fewer fewer resources)"],
+				"medium": ["ES - Medium", "ES - (Uses fewer resources)"],
+				"high": ["ES - High", "ES - (Uses more resources)"],
+				"ultra": ["ES - Ultra", "ES - (Uses more more resources)"]
 			},
 			"about-menu": {
 				"title": "ES - About skyviewer",

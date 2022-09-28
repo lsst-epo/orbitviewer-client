@@ -5,6 +5,7 @@ import { CameraManager } from "../../../common/core/CameraManager";
 import { CAMERA_POSITION } from "../../../common/core/Globals";
 import { css2D } from "./Css2D";
 import { InteractiveObject } from "./Raycaster";
+import { expandableItems } from "./ExpandableItems";
 
 export class ExpandableItem {
 	dom: HTMLElement;
@@ -76,6 +77,8 @@ export class ExpandableItem {
 		if(this.active) return;
 		if(!this.visible) return;
 
+		for(const _item of expandableItems) _item.hide();
+
 		this.active = true;
 		this.dom.classList.add('active');
 		
@@ -113,7 +116,7 @@ export class ExpandableItem {
 		
 		const d = this.ref.position.distanceTo(CAMERA_POSITION);
 		
-		if(d > 100){
+		if(d > 80){
 			this.container.element.style.opacity = 0;
 			return;
 		}

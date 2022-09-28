@@ -2,7 +2,6 @@ import { hideLoader, showLoader } from "../../production/ui/loader";
 import { VISUAL_SETTINGS } from "../core/Globals";
 import { buildSimWithData } from "../solar/SolarParticlesManager";
 
-const LIMIT = VISUAL_SETTINGS[VISUAL_SETTINGS.current];
 const HASURA_URL = `https://hasura-e3g4rcii3q-uc.a.run.app/api/rest`;
 
 
@@ -156,10 +155,10 @@ const syncFilter = (element:HTMLInputElement) => {
 
 
 // Filters fetch
-export async function getSolarSystemElements(limit:number = LIMIT) {
+export async function getSolarSystemElements() {
 	showLoader();
 
-	const url = `${HASURA_URL}/orbit-elements/${limit}`;	
+	const url = `${HASURA_URL}/orbit-elements/${VISUAL_SETTINGS[VISUAL_SETTINGS.current]}`;	
 
 	const response = await fetch(url, {
 		headers: {
@@ -173,7 +172,15 @@ export async function getSolarSystemElementsByFilter() {
 	
 	showLoader();
 
-	const url = `${HASURA_URL}/orbit-elements-by-filter/${LIMIT}/${filters.asteroids}/${filters.centaurs}/${filters.comets}/${filters.interestellarObjects}/${filters.nearEarthObjects}/${filters.transNeptunianObjects}`;	
+	let allFiltersActive = true;
+	for(const filter in filters){
+		if(!filter) allFiltersActive = false;
+	}
+	if(!allFiltersActive){		
+		return await getSolarSystemElements();
+	}
+	
+	const url = `${HASURA_URL}/orbit-elements-by-filter/${VISUAL_SETTINGS[VISUAL_SETTINGS.current]}/${filters.asteroids}/${filters.centaurs}/${filters.comets}/${filters.interestellarObjects}/${filters.nearEarthObjects}/${filters.transNeptunianObjects}`;	
 
 	// Todo si planets false amagar els planetes
 	// si planets true ensenyar els planetes

@@ -1,0 +1,63 @@
+<div class="panel" data-panel="resolution">
+
+	<div class="panel-top panel-separator">
+
+		<div class="panel-top-content">
+			<h3>{{ generic[lang].menus['resolution-menu'].title }}</h3>
+			<h2>{{ generic[lang].menus['resolution-menu'].subtitle }}</h2>
+		</div>
+
+		{{ panelTimes('resolution') }}
+
+	</div>
+ 
+	<div class="panel-section">
+		
+		<div class="section-content">
+
+			<ul>
+
+					<li class="ui__radio radio-subtext">
+						<label>
+							<input class="custom-input" type="radio" name="resolution" value="low">
+							<div class="radio-bullet"><div></div></div><p>{{ generic[lang].menus['resolution-menu'].low[0] }}<span>{{ generic[lang].menus['resolution-menu'].low[1] }}</span></p>
+						</label>
+					</li>
+
+					<li class="ui__radio radio-subtext">
+						<label>
+							<input class="custom-input" type="radio" name="resolution" value="medium">
+							<div class="radio-bullet"><div></div></div><p>{{ generic[lang].menus['resolution-menu'].medium[0] }}<span>{{ generic[lang].menus['resolution-menu'].medium[1] }}</span></p>
+						</label>
+					</li>
+					<li class="ui__radio radio-subtext">
+						<label>
+							<input class="custom-input" type="radio" name="resolution" value="high">
+							<div class="radio-bullet"><div></div></div><p>{{ generic[lang].menus['resolution-menu'].high[0] }}<span>{{ generic[lang].menus['resolution-menu'].high[1] }}</span></p>
+						</label>
+					</li>
+					<li class="ui__radio radio-subtext">
+						<label>
+							<input class="custom-input" type="radio" name="resolution" value="ultra">
+							<div class="radio-bullet"><div></div></div><p>{{ generic[lang].menus['resolution-menu'].ultra[0] }}<span>{{ generic[lang].menus['resolution-menu'].ultra[1] }}</span></p>
+						</label>
+					</li>
+
+			</ul>
+
+		</div>
+
+	</div>
+
+	<div class="bottom-buttons">
+
+		<button data-button="resolution-apply" class="ui__button">
+			<p>{{ generic[lang].strings['apply-selection'] }}</p>
+		</button>
+
+		<button data-button="resolution-reset" class="ui__button ghost-button">
+			<p>{{ generic[lang].strings['reset-default'] }}</p>
+		</button>
+		
+	</div>
+</div>
