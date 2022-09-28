@@ -1,7 +1,6 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
 import { AmbientLight, Clock, Group, Mesh, PerspectiveCamera, PointLight, SphereGeometry, TextureLoader } from "three";
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { css2D } from "../../production/ui/expandable-items/Css2D";
 import { expandableItems, initExpandableItems, resizeExpandableItems } from "../../production/ui/expandable-items/ExpandableItems";
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/expandable-items/Raycaster";
@@ -18,9 +17,11 @@ import { KM2AU, OrbitElements, SUN_RADIUS } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { SunParticles } from "../solar/SunParticles";
-import { CAMERA_POSITION, CLOCK_SETTINGS, CONTROLS, DEV } from "./Globals";
+import { CAMERA_POSITION, CLOCK_SETTINGS, DEV } from "./Globals";
 
 import Stats from 'three/examples/jsm/libs/stats.module.js';
+import { CameraManager } from "./CameraManager";
+import { Sun } from "../solar/Sun";
 import { hideLoader } from "../../production/ui/loader";
 
 const GEO = new SphereGeometry(1, 32, 32);
@@ -34,7 +35,6 @@ export const solarClock = new SolarClock(new Clock());
 
 
 export class CoreApp extends WebGLSketch {
-
     solarClock:SolarClock = solarClock;
 
     planets:Group = new Group();
@@ -49,8 +49,7 @@ export class CoreApp extends WebGLSketch {
     ambientLight:AmbientLight;
 
     vfx:VFXRenderer;
-    sun:Mesh;
-    sunParticles:SunParticles;
+    sun:Sun;
 
     constructor() {
         super(window.innerWidth, window.innerHeight, {
@@ -77,22 +76,11 @@ export class CoreApp extends WebGLSketch {
 
         this.vfx = new VFXRenderer(this.renderer, window.innerWidth, window.innerHeight);
 
-        const sun = new Mesh(
-            GEO,
-            new SunMaterial({
-                emissive: 0xff6600,
-                emissiveIntensity: 1.5
-            })
-        );
-
-        sun.scale.setScalar(SUN_RADIUS * KM2AU * PLANET_SCALE * .2);
+        const sun = new Sun();
 
         this.scene.add(sun);
         this.sun = sun;
         // this.renderer.physicallyCorrectLights = true;
-
-        this.sunParticles = new SunParticles(sun.scale.x+.006, sun.scale.x * .15);
-        this.scene.add(this.sunParticles.mesh);
 
         this.scene.add(this.planets);
         this.scene.add(this.dwarfPlanets);
@@ -227,12 +215,7 @@ export class CoreApp extends WebGLSketch {
         this.camera.lookAt(this.scene.position);
 
         // Init controls
-        const ctrls = new OrbitControls(this.camera, this.domElement);
-        CONTROLS.orbit = ctrls;
-        ctrls.minDistance = CONTROLS.min;
-        ctrls.maxDistance = CONTROLS.max;
-        ctrls.enableDamping = true;
-        ctrls.dampingFactor = .1;
+        CameraManager.init(this.camera as PerspectiveCamera, this.domElement);
 
         window.addEventListener('keydown', (evt) =>{
             if(evt.key == ' ') this.playPause();
@@ -266,7 +249,7 @@ export class CoreApp extends WebGLSketch {
 
         updateRaycaster(this.camera);
 
-		CONTROLS.orbit.update();
+		CameraManager.update();
 
         CAMERA_POSITION.copy(this.camera.position)
 
@@ -274,9 +257,6 @@ export class CoreApp extends WebGLSketch {
 		const d = this.solarClock.update();
 		
 		particles.update(d, this.camera as PerspectiveCamera);
-
-        const sunMat = this.sun.material as SunMaterial;
-		sunMat.update(this.solarClock.time);
 		
 		for(const c of this.planets.children) {
 			const p = c as Planet;
@@ -288,7 +268,7 @@ export class CoreApp extends WebGLSketch {
 			p.update(d);
 		}
 
-		this.sunParticles.update(this.solarClock.time);
+        this.sun.update(solarClock.time);
 	}
 
     render(): void {

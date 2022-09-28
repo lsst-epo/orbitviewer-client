@@ -21,7 +21,7 @@ export const P_MAT = new ShaderMaterial({
             value: new Color(0xffffff)
         },
         fresnelWidth: {
-            value: .08
+            value: .5
         }
     },
     // visible: false,
