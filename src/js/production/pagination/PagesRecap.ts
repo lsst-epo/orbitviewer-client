@@ -19,7 +19,7 @@ export const getLanguage = () => {
 	const docLang = document.documentElement.getAttribute('lang');
 	const lang = docLang.includes('en') ? 'en' : 'es';
 	return lang;
-}
+}	
 
 
 export const pagesRecap = () => {

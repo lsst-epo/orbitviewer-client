@@ -28,38 +28,45 @@
 
 			<li>
 				<button class="menu-item" data-panel-button="lang">
-					{{ icon('lang', 'Language selection') }}
+					{{ icon('lang', generic[lang].menus['language-menu'].title) }}
 					<p>{{ generic[lang].menus['language-menu'].title }}</p>
 				</button>
 			</li>
 
 			<li>
 				<button class="menu-item" data-panel-button="share">
-					{{ icon('share', 'Share Orbit Viewer') }}
+					{{ icon('share', generic[lang].menus.menu['share-orbit-viewer'] ) }}
 					<p>{{ generic[lang].menus.menu['share-orbit-viewer'] }}</p>
 				</button>
 			</li>
 		
 			<li>
 				<a class="menu-item" target="_blank" href="{{ globals[lang].menu.helpUrl }}">
-					{{ icon('help', 'Help') }}
+					{{ icon('help', generic[lang].menus.menu['help']) }}
 					<p>{{ generic[lang].menus.menu['help'] }}</p>
 				</a>
 			</li>
 
 			<li>
 				<button class="menu-item" data-panel-button="about">
-					{{ icon('about', 'About Orbit Viewer') }}
+					{{ icon('about', generic[lang].menus['about-menu'].title) }}
 					<p>{{ generic[lang].menus['about-menu'].title }}</p>
 				</button>
 			</li>
 
 			<li>
 				<a class="menu-item" target="_blank" href="{{ globals[lang].menu.howToUseUrl }}">
-					{{ icon('how', 'How to use the Orbit Viewer') }}
+					{{ icon('how', generic[lang].menus.menu['how-to-use']) }}
 					<p>{{ generic[lang].menus.menu['how-to-use'] }}</p>
 				</a>
 			</li>	
+
+			<li>
+				<button class="menu-item" data-panel-button="resolution">
+					{{ icon('about', generic[lang].menus['resolution-menu'].title) }}
+					<p>{{ generic[lang].menus['resolution-menu'].title}}</p>
+				</button>
+			</li>
 
 		</ul>
 
@@ -85,5 +92,6 @@
 
 {% include "navigation/about.njk" %}
 {% include "navigation/lang.njk" %}
+{% include "navigation/resolution.njk" %}
 
 

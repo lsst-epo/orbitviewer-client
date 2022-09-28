@@ -1,9 +1,7 @@
-{# LANGUAGE PANEL #}
 <div class="panel" data-panel="lang">
 
 	<div class="panel-top panel-separator">
 
-		{# todo que aixo vingui del back #}
 		<div class="panel-top-content">
 			<h3>{{ generic[lang].menus['language-menu'].title }}</h3>
 			<h2>{{ generic[lang].menus['language-menu'].subtitle }}</h2>
@@ -22,14 +20,14 @@
 					<li class="ui__radio">
 						<label>
 							<input class="custom-input" type="radio" name="lang" value="en" {{ 'checked' if lang == 'en'}}>
-							<div class="sort-bullet"><div></div></div>English
+							<div class="radio-bullet"><div></div></div>English
 						</label>
 					</li>
 
 					<li class="ui__radio">
 						<label>
 							<input class="custom-input" type="radio" name="lang" value="es" {{ 'checked' if lang == 'es'}}>
-							<div class="sort-bullet"><div></div></div>Español
+							<div class="radio-bullet"><div></div></div>Español
 						</label>
 					</li>
 
