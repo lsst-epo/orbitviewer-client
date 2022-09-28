@@ -19,3 +19,7 @@
 .page__orbit-viewer .expandable-items {
 	opacity: 1;
 }
+
+.loader-active .expandable-item {
+	display: none;
+}
