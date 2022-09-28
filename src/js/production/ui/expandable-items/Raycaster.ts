@@ -71,9 +71,7 @@ const clickedElement = (element:any) => {
 		console.log('No expandable item by this name:', element.name);
 		return
 	}
-	
-	for(const _item of expandableItems) _item.hide();
-	
+		
 	item.show();
 
 }

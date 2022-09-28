@@ -38,7 +38,7 @@
 
 .expandable-item .item-wrapper {
 	width: 180px;
-	height: 100px;
+	height: 0;
 
 	position: absolute;
 	top: 50%;
@@ -61,7 +61,7 @@
 	padding: var(--distance-5);
 
 	transform: translate(22px, -22px);
-	transition-property: transform;
+	transition-property: opacity transform;
 
 	opacity: 0;
 
@@ -147,6 +147,11 @@
 
 }
 
+.expandable-item.no-picture .cover {
+	height: 0;
+	width: 0;
+}
+
 .hidden-tabs {
 	position: absolute;
 	bottom: 0;
@@ -221,6 +226,7 @@
 	z-index: 100 !important;
 	
 	.item-wrapper {
+		height: 100px;
 		transform: translate(-50%, 15px);
 	}
 
