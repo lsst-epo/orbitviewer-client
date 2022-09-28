@@ -87,17 +87,13 @@ export const saveSelectedFilters = (domFilters:NodeListOf<HTMLInputElement>):Boo
 				break;
 		}
 	}	
-	console.log(needsUpdate);
 	
 	return needsUpdate;
 }
 
 export const applyFilters = (domFilters: NodeListOf<HTMLInputElement>) => {
 	
-	const needsUpdate = saveSelectedFilters(domFilters);
-
-	console.log('FILTERS APPLY ', needsUpdate);
-	
+	const needsUpdate = saveSelectedFilters(domFilters);	
 
 	if(!needsUpdate) return;
 
@@ -114,10 +110,7 @@ export const applyFilters = (domFilters: NodeListOf<HTMLInputElement>) => {
 
 }
 
-export const syncFilters = (domFilters: NodeListOf<HTMLInputElement>) => {
-
-	console.log('SYNC FILTERS', filters, domFilters);
-	
+export const syncFilters = (domFilters: NodeListOf<HTMLInputElement>) => {	
 
 	for(const element of domFilters){
 		syncFilter(element);
