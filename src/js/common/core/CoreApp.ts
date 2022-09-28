@@ -6,7 +6,7 @@ import { expandableItems, initExpandableItems, resizeExpandableItems } from "../
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/expandable-items/Raycaster";
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
-import { getSolarSystemElements } from "../data/GetData";
+import { getSolarSystemElements } from "../data/FiltersManager";
 import { initShaders } from "../gfx/shaders";
 import { SunMaterial } from "../gfx/SunMaterial";
 import { VFXRenderer } from "../gfx/VFXRenderer";
@@ -22,6 +22,7 @@ import { CAMERA_POSITION, CLOCK_SETTINGS, DEV } from "./Globals";
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { CameraManager } from "./CameraManager";
 import { Sun } from "../solar/Sun";
+import { hideLoader } from "../../production/ui/loader";
 
 const GEO = new SphereGeometry(1, 32, 32);
 
@@ -125,6 +126,7 @@ export class CoreApp extends WebGLSketch {
                     
                     loadData(()=> {
                         this.onDataLoaded();
+                        hideLoader();
                     });
                 });
                 
@@ -145,12 +147,8 @@ export class CoreApp extends WebGLSketch {
 
         const globals = getEntryById('globals').data;
         // this.updateMeshSettings(globals['demo'] as DemoType);
-        
-        // --------------------------------------------- Hide loader
-        document.body.classList.remove('loader__in-progress');
-        document.querySelector('.site__loader')?.remove();
-        // --------------------------------------------- Launch
-        
+
+        // --------------------------------------------- Launch        
         this.launch();
     }
 
