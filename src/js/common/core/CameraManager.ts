@@ -1,3 +1,4 @@
+import { copy } from "fs-extra";
 import { Object3D, PerspectiveCamera, Quaternion, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { InteractiveObject } from "../../production/ui/expandable-items/Raycaster";
@@ -74,6 +75,11 @@ class CameraController {
         TARGET.obj.lookAt(origin);
         TARGET.prevPos.copy(this.cam.position);
         TARGET.prevRot.copy(this.cam.quaternion);
+    }
+
+    unlock() {
+        TARGET.obj.position.copy(TARGET.prevPos);
+        TARGET.obj.quaternion.copy(TARGET.prevRot);
     }
 
     update() {

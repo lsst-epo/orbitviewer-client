@@ -65,12 +65,13 @@ export class ExpandableItem {
 
 
 	hide(){
+		if(!this.active) return;
 		this.active = false;
 		this.ref.selected = false;
-	
-		this.active = false;
+		CameraManager.unlock();
 		this.dom.classList.remove('active');
 		for(const section of this.sections) section.classList.remove('active');
+
 	}
 
 	show(){
