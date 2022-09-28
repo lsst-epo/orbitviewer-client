@@ -160,12 +160,8 @@ export class CoreApp extends WebGLSketch {
 
         const globals = getEntryById('globals').data;
         // this.updateMeshSettings(globals['demo'] as DemoType);
-        
-        // --------------------------------------------- Hide loader
-        document.body.classList.remove('loader__in-progress');
-        document.querySelector('.site__loader')?.remove();
-        // --------------------------------------------- Launch
-        
+
+        // --------------------------------------------- Launch        
         this.launch();
     }
 
