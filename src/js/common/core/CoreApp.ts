@@ -31,6 +31,9 @@ const DWARF_PLANETS = "dwarf_planet_elems.json";
 
 export const solarClock = new SolarClock(new Clock());
 
+export const SUN = {
+    instance: null
+}
 
 export class CoreApp extends WebGLSketch {
     solarClock:SolarClock = solarClock;
@@ -78,6 +81,7 @@ export class CoreApp extends WebGLSketch {
 
         this.scene.add(sun);
         this.sun = sun;
+        SUN.instance = sun;
         // this.renderer.physicallyCorrectLights = true;
 
         this.scene.add(this.planets);

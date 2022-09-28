@@ -5,7 +5,7 @@ import { CameraManager } from "../../../common/core/CameraManager";
 import { CAMERA_POSITION } from "../../../common/core/Globals";
 import { css2D } from "./Css2D";
 import { InteractiveObject } from "./Raycaster";
-import { expandableItems } from "./ExpandableItems";
+import { expandableItems, onHide, onShow } from "./ExpandableItems";
 
 export class ExpandableItem {
 	dom: HTMLElement;
@@ -68,7 +68,7 @@ export class ExpandableItem {
 		if(!this.active) return;
 		this.active = false;
 		this.ref.selected = false;
-		CameraManager.unlock();
+		onHide();
 		this.dom.classList.remove('active');
 		for(const section of this.sections) section.classList.remove('active');
 
@@ -85,6 +85,7 @@ export class ExpandableItem {
 		
 		this.ref.selected = true;
 		CameraManager.goToTarget(this.ref);
+		onShow();
 
 		this.sections[0].classList.add('active');
 

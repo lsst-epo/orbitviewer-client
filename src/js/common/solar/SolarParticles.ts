@@ -18,6 +18,8 @@ import { Random } from "@jocabola/math";
 import p_frag from '../../../glsl/sim/particles.frag';
 import p_vert from '../../../glsl/sim/particles.vert';
 
+import { gsap } from 'gsap/gsap-core';
+
 const MAX = VISUAL_SETTINGS[VISUAL_SETTINGS.current];
 
 const GEO = new SphereGeometry(.01, 32, 32);
@@ -39,14 +41,8 @@ const MAT = new ShaderMaterial({
         computedPosition: {
             value: null
         },
-        normalMap: {
-            value: null
-        },
-        alphaMap: {
-            value: null
-        },
-        map: {
-            value: null
+        opacity: {
+            value: 1
         }
     },
     blending: AdditiveBlending
@@ -142,8 +138,8 @@ export class SolarParticles {
         renderer.setRenderTarget(null);
 
         // MAT.uniforms.normalMap.value = this.maps.texture[0];
-        MAT.uniforms.alphaMap.value = this.maps.texture[1];
-        MAT.uniforms.map.value = this.maps.texture[2];
+        // MAT.uniforms.alphaMap.value = this.maps.texture[1];
+        // MAT.uniforms.map.value = this.maps.texture[2];
         // MAT.emissiveMap = this.maps.texture[2];
         // MAT.alphaTest = .01;
     }
@@ -229,6 +225,15 @@ export class SolarParticles {
 
         // this.mesh.instanceColor.needsUpdate = true;
         color.needsUpdate = true;
+    }
+
+    /**
+     * Sets state of particles (opacity)
+     */
+    set highlighted(value:boolean) {
+        const u = MAT.uniforms;
+        gsap.killTweensOf(u.opacity);
+        gsap.to(u.opacity, {value: value ? 1 : .25, duration: 2});
     }
 
     /**

@@ -6,6 +6,7 @@ in float alive;
 // uniform sampler2D normalMap;
 // uniform sampler2D alphaMap;
 in vec3 vColor;
+uniform float opacity;
 
 layout(location = 1) out vec4 gGlow;
 
@@ -19,6 +20,8 @@ void main () {
     // d = (1.0-depth) * smoothstep(0.25, 1.0, d);
 
     d = smoothstep(0.25, 1.0, d);
+
+    d *= opacity;
 
     /* vec4 map = texture(map, uv);
     float alpha = texture(alphaMap, uv).r; */
