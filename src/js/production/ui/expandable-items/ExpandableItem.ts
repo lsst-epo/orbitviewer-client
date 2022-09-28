@@ -35,10 +35,7 @@ export class ExpandableItem {
 
 		this.sections = this.dom.querySelectorAll('section');
 
-
-
 		this.onResize();
-				
 	}
 
 	loaded(){
@@ -64,8 +61,10 @@ export class ExpandableItem {
 	}
 
 
-	hide(){
+	hide(){		
 		if(!this.active) return;
+		console.log('hide');
+
 		this.active = false;
 		this.ref.selected = false;
 		onHide();
@@ -77,9 +76,8 @@ export class ExpandableItem {
 	show(){
 		if(this.active) return;
 		if(!this.visible) return;
-
-		for(const _item of expandableItems) _item.hide();
-
+		console.log('show');
+		
 		this.active = true;
 		this.dom.classList.add('active');
 		
@@ -93,11 +91,11 @@ export class ExpandableItem {
 
 	addEventListeners(){
 		
-		this.dom.querySelector('.close-item').addEventListener('click', () => {
-			this.hide();
+		this.dom.querySelector('.close-item').addEventListener('click', (ev) => {			
+			this.hide();		
 		})
 
-		this.container.element.querySelector('.item-wrapper .cover').addEventListener('click', () => {						
+		this.dom.querySelector('.item-wrapper .cover').addEventListener('click', (ev) => {							
 			this.show();
 		})
 

@@ -240,6 +240,7 @@
 		width: 100%;
 		height: 100px;
 		cursor: default;
+		pointer-events: none;
 
 		.icon, h3, p {
 			opacity: 0;
