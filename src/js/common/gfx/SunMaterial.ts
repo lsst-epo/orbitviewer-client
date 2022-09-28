@@ -1,6 +1,7 @@
 import { MathUtils } from "@jocabola/math";
 import { Color, MeshPhongMaterial, MeshPhongMaterialParameters, Shader, Vector3, WebGLRenderer } from "three";
 import { CameraManager } from "../core/CameraManager";
+import { Sun, SUN_SCALE } from "../solar/Sun";
 
 const tmp = new Vector3();
 
@@ -42,7 +43,7 @@ export class SunMaterial extends MeshPhongMaterial {
         // sunMat['uniforms'] = shader.uniforms;
     }
 
-    update(time:number) {
+    update(time:number, sunRef:Sun) {
         if(!this.shaderRef) return;
         const u = this.shaderRef.uniforms;
         u.time.value = time;
@@ -51,9 +52,14 @@ export class SunMaterial extends MeshPhongMaterial {
             d = tmp.copy(CameraManager.cam.position).length();
             // console.log(d);
         }
+
+        const p = MathUtils.smoothstep(SUN_SCALE.min, SUN_SCALE.max, sunRef.scale.x);
+        const min = MathUtils.lerp(.0025, .02, p);
+        const max = MathUtils.lerp(.1, .1, p);
+
         u.fresnelWidth.value = MathUtils.mix(
-            .0025,
-            .1,
+            min,
+            max,
             MathUtils.smoothstep(0.08, 5, d)
         )
     }
