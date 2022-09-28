@@ -99,6 +99,16 @@ export class ExpandableItem {
 			this.show();
 		})
 
+		document.addEventListener('keydown', (e) => {			
+
+			if(e.key != 'Escape') return;
+
+			if(!this.active) return;
+
+			this.hide();
+			
+		})
+
 		for(const section of this.sections){
 			section.querySelector('.head').addEventListener('click', () => {				
 				for(const section of this.sections) section.classList.remove('active');
