@@ -135,11 +135,10 @@ export class CoreApp extends WebGLSketch {
                     const d = res.mpcorb;                    
                     
                     buildSimWithData(d);
-
-                    hideLoader();
                     
                     loadData(()=> {
                         this.onDataLoaded();
+                        hideLoader();
                     });
                 });
                 
