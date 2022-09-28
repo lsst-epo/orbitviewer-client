@@ -7,3 +7,4 @@ out float vWeight;
 attribute float dt;
 uniform float d;
 uniform OrbitElements el;
+out vec3 pos;

@@ -126,10 +126,12 @@ export class EllipticalPath {
         }
     }
 
-    update(d:number) {
+    update(d:number, target:Vector3, radius:number) {
         const mat = this.material;
         if(mat.shader) {
             mat.shader.uniforms.d.value = d;
+            mat.shader.uniforms.bodyPos.value.copy(target);
+            mat.shader.uniforms.dRadius.value = radius;
 
             const sel = mat.shader.uniforms.selected;
             sel.value = MathUtils.lerp(sel.value, this.selected ? 1 : 0, .16);

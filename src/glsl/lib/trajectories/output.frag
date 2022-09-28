@@ -12,6 +12,10 @@ float w = vWeight;
 outgoingLight = mix(outgoingLight * w, vec3(.9), selected);
 float alpha = mix(w, 1.0, selected);
 
+float d = distance(bodyPos, pos);
+
+alpha *= smoothstep(dRadius*2.0, 8.0*dRadius, d);
+
 // if(alpha < .1) discard;
 
 pc_fragColor = vec4( outgoingLight, alpha * diffuseColor.a );

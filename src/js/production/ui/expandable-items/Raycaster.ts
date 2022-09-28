@@ -1,9 +1,12 @@
-import { PerspectiveCamera } from "three";
-import { OrthographicCamera } from "three";
-import { Object3D } from "three";
-import { Raycaster } from "three";
+import { Object3D, OrthographicCamera, PerspectiveCamera, Raycaster, Vector3 } from "three";
 import { expandableItems } from "./ExpandableItems";
 
+export class InteractiveObject {
+	selected:boolean;
+	target:Object3D;
+	lockedDistance:number;
+	lockedOffset:Vector3;
+}
 
 export const RAYCASTER = {
 	instance: null,

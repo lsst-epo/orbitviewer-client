@@ -1,16 +1,17 @@
 import { MathUtils } from "@jocabola/math";
 import { Vector3 } from "three";
-import { Object3D } from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { CameraManager } from "../../../common/core/CameraManager";
 import { CAMERA_POSITION } from "../../../common/core/Globals";
 import { css2D } from "./Css2D";
+import { InteractiveObject } from "./Raycaster";
 
 export class ExpandableItem {
 	dom: HTMLElement;
 	container: CSS2DObject;
 
 	containerElement: HTMLElement;
-	ref: Object3D;
+	ref: InteractiveObject;
 
 	name: string;
 
@@ -73,12 +74,13 @@ export class ExpandableItem {
 
 	show(){
 		if(this.active) return;
-		if(!this.visible) return; 
+		if(!this.visible) return;
 
 		this.active = true;
 		this.dom.classList.add('active');
 		
 		this.ref.selected = true;
+		CameraManager.goToTarget(this.ref);
 
 		this.sections[0].classList.add('active');
 

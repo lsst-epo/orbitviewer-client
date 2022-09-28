@@ -1,5 +1,6 @@
-import { MathUtils, Random } from "@jocabola/math";
-import { ColorRepresentation, Mesh, Object3D, SphereGeometry, TextureLoader } from "three";
+import { MathUtils } from "@jocabola/math";
+import { ColorRepresentation, Mesh, Object3D, SphereGeometry, TextureLoader, Vector3 } from "three";
+import { InteractiveObject } from "../../production/ui/expandable-items/Raycaster";
 import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { EllipticalPath } from "./EllipticalPath";
 import { calculateOrbitByType, DEG_TO_RAD, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";
@@ -14,7 +15,7 @@ export type PlanetOptions = {
     mapURL?:string;
 }
 
-export class Planet extends Object3D {
+export class Planet extends Object3D implements InteractiveObject {
     mesh:Mesh;
     data:OrbitElements;
     orbitPath:EllipticalPath;
@@ -23,6 +24,9 @@ export class Planet extends Object3D {
     material:PlanetMaterial;
     type:string;
     dwarf:boolean = false;
+    target:Object3D;
+    lockedDistance:number = 0;
+    lockedOffset:Vector3 = new Vector3();
 
     constructor(id: string, dwarf:boolean, _data:OrbitElements, opts:PlanetOptions={}) {
         super();
@@ -49,6 +53,10 @@ export class Planet extends Object3D {
             const s = MathUtils.smoothstep(0, 0.234, scl);
             fresnelWidth = MathUtils.lerp(fresnelWidth, fresnelWidth*10, s);
             sunIntensity = MathUtils.lerp(.5, .05, s);
+
+            const lock = PlanetLockedMap[this.type];
+            this.lockedDistance = lock.distance;
+            this.lockedOffset.copy(lock.offset);
             
         } else {
             this.scale.multiplyScalar(.003);
@@ -68,6 +76,7 @@ export class Planet extends Object3D {
 
         this.mesh = new Mesh(PLANET_GEO, this.material);
         this.add(this.mesh);
+        this.target = this;
         // this.add(this.orbitPath.ellipse)
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
 
@@ -86,13 +95,13 @@ export class Planet extends Object3D {
         this.mesh.rotation.y = d * this.rotationSpeed;
         // this.mesh.updateMatrixWorld();
         this.material.update();
-        this.orbitPath.update(d);
+        this.orbitPath.update(d, this.position, this.scale.x);
     }
 
     set selected(value:boolean) {
         this._selected = value;
         this.orbitPath.selected = value;
-        this.material.selected = value;
+        // this.material.selected = value;
     }
 
     get selected():boolean {
@@ -159,5 +168,40 @@ export const PlanetRotationMap:RotationMap = {
     neptune: {
         axialTilt: 28.32,
         period: 0.67125
+    }
+}
+
+export const PlanetLockedMap = {
+    earth: {
+        distance: .05,
+        offset: new Vector3(-.01, .005, 0)
+    },
+    mercury: {
+        distance: .015,
+        offset: new Vector3(-.0025, .0015, 0)
+    },
+    venus: {
+        distance: .05,
+        offset: new Vector3(-.01, .01, 0)
+    },
+    mars: {
+        distance: .05,
+        offset: new Vector3(-.01, .01, 0)
+    },
+    jupiter: {
+        distance: .25,
+        offset: new Vector3(-.05, .05, 0)
+    },
+    saturn: {
+        distance: .25,
+        offset: new Vector3(-.05, .05, 0)
+    },
+    uranus: {
+        distance: .05,
+        offset: new Vector3(-.01, .01, 0)
+    },
+    neptune: {
+        distance: .05,
+        offset: new Vector3(-.01, .01, 0)
     }
 }

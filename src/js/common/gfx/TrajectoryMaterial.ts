@@ -1,10 +1,10 @@
-import { LineBasicMaterial, LineBasicMaterialParameters, Shader, WebGLRenderer } from "three";
+import { LineBasicMaterial, LineBasicMaterialParameters, Shader, Vector3, WebGLRenderer } from "three";
 
 import output_frag from '../../../glsl/lib/trajectories/output.frag';
 import pars_frag from '../../../glsl/lib/trajectories/pars.frag';
 import pars_vert from '../../../glsl/lib/trajectories/pars.vert';
-import weight from '../../../glsl/lib/trajectories/weight.vert';
 import poscalc from '../../../glsl/lib/trajectories/poscalc.vert';
+import weight from '../../../glsl/lib/trajectories/weight.vert';
 import { OrbitElements } from "../solar/SolarSystem";
 import { SolarTimeManager } from "../solar/SolarTime";
 
@@ -30,6 +30,8 @@ export class TrajectoryMaterial extends LineBasicMaterial {
 
         shader.uniforms.time = {value: 0};
         shader.uniforms.selected = {value: 0};
+        shader.uniforms.bodyPos = {value: new Vector3()};
+        shader.uniforms.dRadius = {value: .1};
         shader.uniforms.el = {value: this.el}
         shader.uniforms.d = {value: SolarTimeManager.getMJDonDate(new Date())}
         shader.vertexShader = vs;

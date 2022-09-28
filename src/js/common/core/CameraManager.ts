@@ -1,6 +1,7 @@
-import { Object3D, PerspectiveCamera } from "three";
+import { Object3D, PerspectiveCamera, Quaternion, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { CONTROLS } from "./Globals";
+import { InteractiveObject } from "../../production/ui/expandable-items/Raycaster";
+import { CONTROLS, DEV } from "./Globals";
 
 export enum CameraMode {
     ORBIT,
@@ -16,9 +17,19 @@ export const CameraSettings = {
         zoomSpeed: 1.2
     },
     traveling: {
-        easing: .06
+        easing: .016
     }
 }
+
+const TARGET = {
+    obj: new Object3D(),
+    prevPos: new Vector3(),
+    prevRot: new Quaternion()
+}
+
+const origin = new Vector3();
+const tmp = new Vector3();
+const tmp2 = new Vector3();
 
 /**
  * Camera Controller Class
@@ -42,6 +53,7 @@ class CameraController {
         this.mode = CameraMode.ORBIT;
         const s = CameraSettings.orbit;
         CONTROLS.orbit = this.controls;
+        this.controls.enablePan = DEV;
         this.controls.minDistance = s.min;
         this.controls.maxDistance = s.max;
         this.controls.enableDamping = true;
@@ -49,14 +61,31 @@ class CameraController {
         this.controls.zoomSpeed = s.zoomSpeed;
     }
 
-    goToTarget(target:Object3D, distance:number=1) {
+    goToTarget(target:InteractiveObject) {
         if(!this.initialized) return console.warn("CameraController not initialized! Please run CameraManager.init() first.");
+        this.mode = CameraMode.LOCKED;
+        target.target.getWorldPosition(TARGET.obj.position);
+        tmp.copy(TARGET.obj.position);
+        tmp2.copy(origin).sub(tmp).normalize().multiplyScalar(target.lockedDistance);
+        TARGET.obj.position.sub(tmp2)
+        TARGET.obj.translateX(target.lockedOffset.x);
+        TARGET.obj.translateY(target.lockedOffset.y);
+        TARGET.obj.translateZ(target.lockedOffset.z);
+        TARGET.obj.lookAt(origin);
+        TARGET.prevPos.copy(this.cam.position);
+        TARGET.prevRot.copy(this.cam.quaternion);
     }
 
     update() {
         if(!this.initialized) return;
         this.controls.enabled = this.mode === CameraMode.ORBIT;
-        this.controls.update();
+        if(this.controls.enabled) this.controls.update();
+        if(this.mode === CameraMode.LOCKED) {
+            this.cam.position.lerp(TARGET.obj.position, CameraSettings.traveling.easing);
+            // this.cam.quaternion.slerp(TARGET.obj.quaternion, CameraSettings.traveling.easing);
+            this.cam.lookAt(origin);
+            // this.cam.updateMatrix();
+        }
     }
 }
 

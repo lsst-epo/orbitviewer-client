@@ -1,6 +1,6 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
-import { AmbientLight, Clock, Group, Mesh, PerspectiveCamera, PointLight, SphereGeometry, TextureLoader } from "three";
+import { AmbientLight, Clock, Group, PerspectiveCamera, PointLight, SphereGeometry, TextureLoader } from "three";
 import { css2D } from "../../production/ui/expandable-items/Css2D";
 import { expandableItems, initExpandableItems, resizeExpandableItems } from "../../production/ui/expandable-items/ExpandableItems";
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/expandable-items/Raycaster";
@@ -8,21 +8,19 @@ import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/FiltersManager";
 import { initShaders } from "../gfx/shaders";
-import { SunMaterial } from "../gfx/SunMaterial";
 import { VFXRenderer } from "../gfx/VFXRenderer";
-import { Planet, PLANET_SCALE } from "../solar/Planet";
+import { Planet } from "../solar/Planet";
 import { SolarClock } from "../solar/SolarClock";
 import { buildSimWithData, particles } from "../solar/SolarParticlesManager";
-import { KM2AU, OrbitElements, SUN_RADIUS } from "../solar/SolarSystem";
+import { OrbitElements } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
-import { SunParticles } from "../solar/SunParticles";
 import { CAMERA_POSITION, CLOCK_SETTINGS, DEV } from "./Globals";
 
 import Stats from 'three/examples/jsm/libs/stats.module.js';
-import { CameraManager } from "./CameraManager";
-import { Sun } from "../solar/Sun";
 import { hideLoader } from "../../production/ui/loader";
+import { Sun } from "../solar/Sun";
+import { CameraManager } from "./CameraManager";
 
 const GEO = new SphereGeometry(1, 32, 32);
 
