@@ -62,7 +62,6 @@
 				"get-url": "Get URL",
 				"facebook": "Facebook",
 				"twitter": "Twitter",
-				"get-snapshot": "Get Snapshot",
 				"email": "Email"
 			},
 			"filter-menu": {
@@ -160,7 +159,6 @@
 				"get-url": "ES - Get URL",
 				"facebook": "ES - Facebook",
 				"twitter": "ES - Twitter",
-				"get-snapshot": "ES - Get Snapshot",
 				"email": "ES - Email"
 			},
 			"filter-menu": {
