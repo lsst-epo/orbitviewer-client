@@ -1,0 +1,18 @@
+.ui-block {
+	.navigation,
+	.back-button, 
+	.search,
+	.filters,
+	.customize-view,
+	.share,
+	.time-picker,
+	.zoom-controller,
+	.orbit-controls {
+		transition: opacity 0.3s ease-in-out;
+		opacity: 0.3;
+
+		&, & * {
+			pointer-events: none !important;
+		}
+	}
+}
