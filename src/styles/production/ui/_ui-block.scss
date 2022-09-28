@@ -7,9 +7,18 @@
 	.share,
 	.time-picker,
 	.zoom-controller,
-	.orbit-controls {
+	.orbit-controls{
 		transition: opacity 0.3s ease-in-out;
 		opacity: 0.3;
+
+		&, & * {
+			pointer-events: none !important;
+		}
+	}
+
+	.expandable-item:not(.active){
+		transition: opacity 0.3s ease-in-out;
+		opacity: 0 !important;
 
 		&, & * {
 			pointer-events: none !important;
