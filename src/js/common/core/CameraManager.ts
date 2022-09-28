@@ -4,6 +4,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { InteractiveObject } from "../../production/ui/expandable-items/Raycaster";
 import { CONTROLS, DEV } from "./Globals";
 
+import { gsap } from "gsap/gsap-core";
+
 export enum CameraMode {
     ORBIT,
     LOCKED,
@@ -64,6 +66,7 @@ class CameraController {
 
     goToTarget(target:InteractiveObject) {
         if(!this.initialized) return console.warn("CameraController not initialized! Please run CameraManager.init() first.");
+        this.killTweens();
         this.mode = CameraMode.LOCKED;
         target.target.getWorldPosition(TARGET.obj.position);
         tmp.copy(TARGET.obj.position);
@@ -77,9 +80,24 @@ class CameraController {
         TARGET.prevRot.copy(this.cam.quaternion);
     }
 
+    private killTweens() {
+        gsap.killTweensOf(this.cam.position);
+        gsap.killTweensOf(this.cam.quaternion);
+    }
+
     unlock() {
-        TARGET.obj.position.copy(TARGET.prevPos);
-        TARGET.obj.quaternion.copy(TARGET.prevRot);
+        if(!this.initialized) return console.warn("CameraController not initialized! Please run CameraManager.init() first.");
+        this.mode = CameraMode.DISABLED;
+        this.killTweens();
+
+        const pos = TARGET.prevPos;
+        const quat = TARGET.prevRot;
+
+        gsap.to(this.cam.position, {x: pos.x, y: pos.y, z: pos.z, duration: 3, ease: 'power2.inOut', onComplete: () => {
+            this.mode = CameraMode.ORBIT;
+            this.killTweens();
+        }});
+        gsap.to(this.cam.quaternion, {x: quat.x, y: quat.y, z: quat.z, w: quat.w, duration: 3, ease: 'power2.inOut'});
     }
 
     update() {
