@@ -4,3 +4,4 @@
 #include <fresnel_pars_vert>
 out vec3 vPosition;
 uniform float time;
+uniform float vertexAmp;

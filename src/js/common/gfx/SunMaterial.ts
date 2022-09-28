@@ -1,4 +1,8 @@
-import { Color, MeshPhongMaterial, MeshPhongMaterialParameters, Shader, WebGLRenderer } from "three";
+import { MathUtils } from "@jocabola/math";
+import { Color, MeshPhongMaterial, MeshPhongMaterialParameters, Shader, Vector3, WebGLRenderer } from "three";
+import { CameraManager } from "../core/CameraManager";
+
+const tmp = new Vector3();
 
 export class SunMaterial extends MeshPhongMaterial {
     shaderRef:Shader;
@@ -27,7 +31,11 @@ export class SunMaterial extends MeshPhongMaterial {
         }
 
         shader.uniforms['fresnelWidth'] = {
-            value: 0.05
+            value: 0.0025
+        }
+
+        shader.uniforms['vertexAmp'] = {
+            value: 0.0005
         }
 
         this.shaderRef = shader;
@@ -38,5 +46,15 @@ export class SunMaterial extends MeshPhongMaterial {
         if(!this.shaderRef) return;
         const u = this.shaderRef.uniforms;
         u.time.value = time;
+        let d = 0;
+        if(CameraManager.active) {
+            d = tmp.copy(CameraManager.cam.position).length();
+            // console.log(d);
+        }
+        u.fresnelWidth.value = MathUtils.mix(
+            .0025,
+            .1,
+            MathUtils.smoothstep(0.08, 5, d)
+        )
     }
 }
