@@ -100,13 +100,8 @@ export class ExpandableItem {
 		})
 
 		document.addEventListener('keydown', (e) => {			
-
 			if(e.key != 'Escape') return;
-
-			if(!this.active) return;
-
 			this.hide();
-			
 		})
 
 		for(const section of this.sections){
