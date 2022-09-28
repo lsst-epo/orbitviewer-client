@@ -1,3 +1,4 @@
+import { hideLoader } from "../../production/ui/loader";
 import { SolarParticles } from "./SolarParticles";
 import { OrbitElements } from "./SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "./SolarUtils";
@@ -16,4 +17,6 @@ export const buildSimWithData = (d:Array<OrbitDataElements>, forceKeep:boolean=f
     }
 
     particles.data = data;
+
+    hideLoader();
 }

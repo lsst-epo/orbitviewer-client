@@ -1,3 +1,4 @@
+import { CustomizeOrbits } from "../pages/CustomizeOrbits";
 import { GuidedExperienceTour } from "../pages/GuidedExperienceTour";
 import { OrbitViewer } from "../pages/OrbitViewer";
 import { Page } from "../pages/Page";
@@ -39,6 +40,8 @@ export const pagesRecap = () => {
 		
 		if(pageSlug === 'orbit-viewer'){
 			pageClass = new OrbitViewer();
+		} else if(pageSlug === 'customize-orbits'){
+			pageClass = new CustomizeOrbits();
 		} else {
 			pageClass = new Page();
 		}
