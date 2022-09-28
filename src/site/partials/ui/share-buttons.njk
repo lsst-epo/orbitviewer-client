@@ -1,13 +1,3 @@
-
-
-
-<a class="share-button get-url" href="">
-	<div class="icon">
-		{% include "ui/icons/get-url.njk" %}
-	</div>
-	<p>{{ generic[lang].menus['share-menu']['get-url'] }}</p>
-</a>
-
 <a class="share-button facebook" href="">
 	<div class="icon">
 		{% include "ui/icons/facebook.njk" %}
@@ -22,11 +12,18 @@
 	<p>{{ generic[lang].menus['share-menu'].twitter }}</p>
 </a>
 
-<a class="share-button snapshot" href="">
+{# <a class="share-button snapshot" href="">
 	<div class="icon">
 		{% include "ui/icons/snapshot.njk" %}
 	</div>
 	<p>{{ generic[lang].menus['share-menu']['get-snapshot'] }}</p>
+</a> #}
+
+<a class="share-button get-url" href="">
+	<div class="icon">
+		{% include "ui/icons/get-url.njk" %}
+	</div>
+	<p>{{ generic[lang].menus['share-menu']['get-url'] }}</p>
 </a>
 
 <a class="share-button email" href="">

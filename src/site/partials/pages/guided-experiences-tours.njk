@@ -57,7 +57,7 @@
       
       {% if slide.typeHandle == 'defaultSlide' %}
         <button data-button="{{ slide.typeHandle + '-' + loop.index + 'share' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' }}">
-          <p>Share</p>
+          <p>{{ generic[lang].strings.share }}</p>
         </button>
       {% endif %}
 

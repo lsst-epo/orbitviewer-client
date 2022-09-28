@@ -44,7 +44,7 @@
 		background-color: #3d5a99;
 	}
 	svg {
-		width: 9px;
+		width: 11px;
 		transform: translateX(-1px);
 	}
 }
@@ -53,21 +53,22 @@
 		background-color: #0f8fff;
 	}
 	svg {
-		width: 18px;
+		width: 19px;
 	}
 }
-.share-button.snapshot {
+// .share-button.snapshot {
+// 	.icon {
+// 		background-color: var(--teal-0);
+// 	}
+// 	svg {
+// 		width: 15px;
+// 	}
+// }
+
+.share-button.email {
 	.icon {
-		background-color: var(--teal-0);
+		background-color: var(--teal-2);
 	}
-	svg {
-		width: 15px;
-	}
-}
-	.share-button.email {
-		.icon {
-			background-color: var(--teal-2);
-		}
 	svg {
 		width: 20px;
 	}
