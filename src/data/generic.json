@@ -51,7 +51,10 @@
 			"menu": {
 				"title": "Main menu",
 				"subtitle": "Settings and more",
-				"sections": ["Settings", "Quick access"]
+				"sections": ["Settings", "Quick access"],
+				"share-orbit-viewer": "Share orbit viewer",
+				"help": "Help",
+				"how-to-use": "How to use the Orbit Viewer"
 			},
 			"share-menu": {
 				"title": "Share Skyviewer",
@@ -146,7 +149,10 @@
 			"menu": {
 				"title": "ES - Main menu",
 				"subtitle": "ES - Settings and more",
-				"sections": ["ES - Settings", "ES - Quick access"]
+				"sections": ["ES - Settings", "ES - Quick access"],
+				"share-orbit-viewer": "ES - Share orbit viewer",
+				"help": "ES - Help",
+				"how-to-use": "ES - How to use the Orbit Viewer"
 			},
 			"share-menu": {
 				"title": "ES - Share Skyviewer",

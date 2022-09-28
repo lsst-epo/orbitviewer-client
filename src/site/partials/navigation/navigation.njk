@@ -29,35 +29,35 @@
 			<li>
 				<button class="menu-item" data-panel-button="lang">
 					{{ icon('lang', 'Language selection') }}
-					<p>Language selection</p>
+					<p>{{ generic[lang].menus['language-menu'].title }}</p>
 				</button>
 			</li>
 
 			<li>
 				<button class="menu-item" data-panel-button="share">
 					{{ icon('share', 'Share Orbit Viewer') }}
-					<p>Share Orbit Viewer</p>
+					<p>{{ generic[lang].menus.menu['share-orbit-viewer'] }}</p>
 				</button>
 			</li>
 		
 			<li>
 				<a class="menu-item" target="_blank" href="{{ globals[lang].menu.helpUrl }}">
 					{{ icon('help', 'Help') }}
-					<p>Help</p>
+					<p>{{ generic[lang].menus.menu['help'] }}</p>
 				</a>
 			</li>
 
 			<li>
 				<button class="menu-item" data-panel-button="about">
 					{{ icon('about', 'About Orbit Viewer') }}
-					<p>About Orbit Viewer</p>
+					<p>{{ generic[lang].menus['about-menu'].title }}</p>
 				</button>
 			</li>
 
 			<li>
 				<a class="menu-item" target="_blank" href="{{ globals[lang].menu.howToUseUrl }}">
 					{{ icon('how', 'How to use the Orbit Viewer') }}
-					<p>How to use the Orbit Viewer</p>
+					<p>{{ generic[lang].menus.menu['how-to-use'] }}</p>
 				</a>
 			</li>	
 
