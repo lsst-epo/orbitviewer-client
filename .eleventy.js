@@ -165,21 +165,21 @@ module.exports = function (eleventyConfig) {
 		}
 	});
 
-	eleventyConfig.setBrowserSyncConfig({
-		callbacks: {
-			ready: function (err, bs) {
-				bs.addMiddleware('*', (req, res) => {
+	// eleventyConfig.setBrowserSyncConfig({
+	// 	callbacks: {
+	// 		ready: function (err, bs) {
+	// 			bs.addMiddleware('*', (req, res) => {
 
-					if(!req.url.includes('/en/') && !req.url.includes('/es/')){
-						res.writeHead(302, {
-							location: `/en${req.url}`
-						});
-						res.end();
-					}
-				});
-			}
-		}
-	});
+	// 				if(!req.url.includes('/en/') && !req.url.includes('/es/')){
+	// 					res.writeHead(302, {
+	// 						location: `/en${req.url}`
+	// 					});
+	// 					res.end();
+	// 				}
+	// 			});
+	// 		}
+	// 	}
+	// });
 
 	eleventyConfig.setWatchJavaScriptDependencies(false);
 
@@ -188,6 +188,7 @@ module.exports = function (eleventyConfig) {
 	});
 
 	eleventyConfig.addPassthroughCopy({ 'src/assets': 'assets' });
+	eleventyConfig.addPassthroughCopy({ '_redirects': '_redirects' });
 
 	if (isProduction) {
 		eleventyConfig.addPassthroughCopy({ uploads: 'uploads' });
