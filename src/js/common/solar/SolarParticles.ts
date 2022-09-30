@@ -20,7 +20,7 @@ import p_vert from '../../../glsl/sim/particles.vert';
 
 import { gsap } from 'gsap/gsap-core';
 
-const MAX = VISUAL_SETTINGS[VISUAL_SETTINGS.current];
+
 
 const GEO = new SphereGeometry(.01, 32, 32);
 /* const MAT = new SolarParticlesMaterial({
@@ -205,6 +205,12 @@ export class SolarParticles {
      * Updates the associated data
      */
     set data(value:Array<OrbitElements>) {
+        const MAX = VISUAL_SETTINGS[VISUAL_SETTINGS.current];
+        if(this.quality != VISUAL_SETTINGS.current){
+            this.quality = VISUAL_SETTINGS.current as SimQuality;
+            this.points.geometry.dispose();
+            this.points.geometry = this.createPointsGeo();
+        }
         this._data = value;
         const count = Math.min(MAX, this._data.length);
 

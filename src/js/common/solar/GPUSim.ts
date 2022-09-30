@@ -181,9 +181,16 @@ export class GPUSim {
     }
 
     set data(value:Array<OrbitElements>) {
+
+        if(VISUAL_SETTINGS.current !== this.quality){
+            this.quality = VISUAL_SETTINGS.current as SimQuality;
+            this.createBuffers();
+        }
+
         const geo = this.points.geometry;
         const alive = geo.attributes.alive;
         const arr = alive.array as Float32Array;
+
 
         console.log(this.totalItems, value.length);
         
