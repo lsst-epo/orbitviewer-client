@@ -2,3 +2,19 @@
 	opacity: 0;
 	transform: translateY(10px);
 }
+
+[data-animation-type="control-left"] {
+	opacity: 0;
+	transform: translateX(-10px);
+	
+}
+[data-animation-type="control-right"] {
+	opacity: 0;
+	transform: translateX(10px);
+
+}
+[data-animation-type="control-bottom"] {
+	opacity: 0;
+	transform: translateY(10px);
+
+}

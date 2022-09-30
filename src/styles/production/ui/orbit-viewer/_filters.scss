@@ -1,14 +1,18 @@
+.filters-orbit {
+	transform: translateX(var(--distance-15));
+	top: 120px;
+	left: 0;
+	position: absolute;
+}
+
 .filters-button {
 	z-index: 2;
-	position: absolute;
 
 	width: var(--icon-big);
 	height: var(--icon-big);
 
 	background-color: var(--blue-0);
-	transform: translateX(var(--distance-15));
-	top: 120px;
-	left: 0;
+
 
 	display: flex;
 	justify-content: center;

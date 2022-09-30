@@ -2,6 +2,7 @@ import { DEV } from '../../common/core/Globals';
 import { LOCATION } from "./History";
 import { gsap } from 'gsap/dist/gsap';
 import { SlideIn, SlideOut } from './animations/Slide';
+import { OrbitControlsIn, OrbitControlsOut } from './animations/OrbitControls';
 
 
 export const TRANSITIONS = {
@@ -63,20 +64,15 @@ const Transition = () => {
 	
 	if(!LOCATION.previous){
 		tl.to('body', {	autoAlpha: 1 }, label)
-	} else if(id === 'landing' || id === 'customize-orbits') {
-		CreateTl('out', tl, label);
 	} else {
-		tl.to(LOCATION.previous.class.dom, { autoAlpha: 0 }, label)
+		CreateTl('out', tl, label);
 	}
+
 	
 	// Current enter
 	label = 'start+=0.5';
 	id = LOCATION.current.id;
-	if(id === 'landing' || id === 'customize-orbits') {
-		CreateTl('in', tl, label);
-	} else {
-		tl.to(LOCATION.current.class.dom, {	autoAlpha: 1 }, label)
-	}
+	CreateTl('in', tl, label);
 
 	tl.play();
 }
@@ -85,10 +81,12 @@ const CreateTl = (dir: string, tl:GSAPTimeline, label:string) => {
 
 	if(dir === 'in'){
 		SlideIn(tl, label);
+		OrbitControlsIn(tl, label);
 		return;
 	}
 
-	SlideOut(tl, label)
+	SlideOut(tl, label);
+	OrbitControlsOut(tl, label);
 
 }
 
