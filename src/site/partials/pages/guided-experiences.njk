@@ -1,36 +1,40 @@
 
-<h1>{{ guidedExperiences[lang].title }}</h1>
+<div class="page-content" data-animation-type="fade">
 
-{% for tour in tours[lang] %}
+  <h1>{{ guidedExperiences[lang].title }}</h1>
 
-  {% set toursSameCategory = 0 %}
-  {% for experience in guidedExperiencesTours[lang] %}
-      {% if experience.tourPicker[0].slug == tour.slug %}
-        {% set toursSameCategory = toursSameCategory + 1 %}
-      {% endif %}
+  {% for tour in tours[lang] %}
+
+    {% set toursSameCategory = 0 %}
+    {% for experience in guidedExperiencesTours[lang] %}
+        {% if experience.tourPicker[0].slug == tour.slug %}
+          {% set toursSameCategory = toursSameCategory + 1 %}
+        {% endif %}
+    {% endfor %}
+
+    {% if toursSameCategory > 0 %}
+      <a href="{{ '/' + lang + '/' + tour.slug | url }}" class="tour-preview">
+        <h3>{{ tour.title }}</h3>
+        <div class="image" style="background-image: url(/assets/ceres-lorem.jpeg);">
+
+          <svg viewBox="0 0 48 66" xml:space="preserve">
+            <path d="M48,66L48,66L24,56L0,66V0h48V66z"/>
+            <text transform="matrix(1 0 0 1 24 40)" dominant-baseline="middle" text-anchor="middle">{{ generic[lang].strings.tours }}</text>
+            <text class="num" transform="matrix(1 0 0 1 24 20)" dominant-baseline="middle" text-anchor="middle">{{  toursSameCategory }}</text>
+          </svg>
+
+        </div>
+      </a>
+    {% endif %}
   {% endfor %}
 
-  {% if toursSameCategory > 0 %}
-    <a href="{{ '/' + lang + '/' + tour.slug | url }}">
-      <h3>{{ tour.title }}</h3>
-      <div class="image" style="background-image: url(/assets/ceres-lorem.jpeg);">
+  <div class="buttons__wrapper">
 
-        <svg viewBox="0 0 48 66" xml:space="preserve">
-          <path d="M48,66L48,66L24,56L0,66V0h48V66z"/>
-          <text transform="matrix(1 0 0 1 24 40)" dominant-baseline="middle" text-anchor="middle">{{ generic[lang].strings.tours }}</text>
-          <text class="num" transform="matrix(1 0 0 1 24 20)" dominant-baseline="middle" text-anchor="middle">{{  toursSameCategory }}</text>
-        </svg>
-
-      </div>
+    <a href="{{ '/' + lang + '/' | url }}" class="ui__button has-arrow">
+      {% include "ui/icons/arrow-prev.njk" %}
+      <p>{{ generic[lang]['strings']['guided-experiences'] }}</p>
     </a>
-  {% endif %}
-{% endfor %}
 
-<div class="buttons__wrapper">
-
-  <a href="{{ '/' + lang + '/' | url }}" class="ui__button has-arrow">
-    {% include "ui/icons/arrow-prev.njk" %}
-    <p>{{ generic[lang]['strings']['guided-experiences'] }}</p>
-  </a>
+  </div>
 
 </div>

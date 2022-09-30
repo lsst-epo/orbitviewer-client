@@ -3,11 +3,15 @@
 
 	.page-content {
 		background-color: var(--black-alpha);
-		border: var(--panels-border);
+
+		padding: var(--distance-40);
+		@include tablet { padding: var(--distance-60);	}
+		@include desktop { padding: var(--distance-100);	}
 	}
 
 }
 
+// Page popup
 [data-template="index"],
 [data-template="customize-orbits"] {
 	display: flex;
@@ -16,13 +20,29 @@
 
 	.page-content {
 		width: auto;
+
+		border: var(--panels-border);
 		
 		@include desktop {	min-width: 800px; }
 		height: auto;
 		border-radius: 5px;
 
-		padding: var(--distance-40);
-		@include tablet { padding: var(--distance-60);	}
-		@include desktop { padding: var(--distance-100);	}
+	}
+}
+
+
+// Page fullscreen
+[data-template="guided-experiences"]{
+	overflow-y: auto;
+
+	.page-content {
+		width: 100%;
+		height: auto;
+		min-height: 100vh;
+
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
 	}
 }

@@ -1,9 +1,11 @@
 import { DEV } from '../../common/core/Globals';
 import { LOCATION } from "./History";
-import { gsap } from 'gsap/dist/gsap';
 import { SlideIn, SlideOut } from './animations/Slide';
 import { OrbitControlsIn, OrbitControlsOut } from './animations/OrbitControls';
+import { FadeIn, FadeOut } from './animations/Fade';
+import gsap, { ScrollToPlugin } from 'gsap/all';
 
+gsap.registerPlugin(ScrollToPlugin);
 
 export const TRANSITIONS = {
 	inProgress: false
@@ -60,7 +62,6 @@ const Transition = () => {
 	console.log(LOCATION.previous);
 
 	let label = 'start';
-	let id = LOCATION.current.id;
 	
 	if(!LOCATION.previous){
 		tl.to('body', {	autoAlpha: 1 }, label)
@@ -68,10 +69,13 @@ const Transition = () => {
 		CreateTl('out', tl, label);
 	}
 
+	tl.set(LOCATION.current.class.dom, {
+		scrollTo: 0
+	})
+
 	
 	// Current enter
 	label = 'start+=0.5';
-	id = LOCATION.current.id;
 	CreateTl('in', tl, label);
 
 	tl.play();
@@ -81,11 +85,13 @@ const CreateTl = (dir: string, tl:GSAPTimeline, label:string) => {
 
 	if(dir === 'in'){
 		SlideIn(tl, label);
+		FadeIn(tl, label);
 		OrbitControlsIn(tl, label);
 		return;
 	}
 
 	SlideOut(tl, label);
+	FadeOut(tl, label);
 	OrbitControlsOut(tl, label);
 
 }

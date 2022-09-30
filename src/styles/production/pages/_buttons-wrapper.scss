@@ -1,36 +1,24 @@
 
 // Bottom buttons
 [data-template="index"],
-[data-template="customize-orbits"] {
-
-	.buttons__wrapper {
-		display: flex;
-		justify-content: center;
-		width: 100%;
-		padding: var(--distance-20) 0 0 0;
-	}
-
-	a {
-		margin: 0 var(--distance-5);
-	}
-
-}
-
-
+[data-template="customize-orbits"],
 [data-template="guided-experiences"] {
+
 	.buttons__wrapper {
 		display: flex;
 		justify-content: center;
 		flex-grow: 1;
 		align-items: flex-end;
-
-		padding-top: 50px;
-
+		
 		width: 100%;
 
-		@include desktop {
-			width: 520px;
-		}
+		padding: var(--distance-40) 0 0 0;
+		@include tablet { padding: var(--distance-60) 0 0 0;	}
+		@include desktop { padding: var(--distance-100) 0 0 0;	}
+	}
+
+	a {
+		margin: 0 var(--distance-5);
 	}
 
 }
