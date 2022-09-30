@@ -1,49 +1,52 @@
 {% from 'tours/loop.njk' import loop as loop %}
 {% from 'ui/panel-times.njk' import panelTimes as panelTimes %}
 
-<div class="tours-header">
-  <h1>{{ guidedExperiences[lang].title }}</h1>
-  <h3>{{ tour.title }}</h3>
-  {% include "tours/pagination.njk" %}  
-</div>
+<div class="page-content" data-animation-type="fade">
 
-<div class="tours-filters">
-  
-  <button class="sort-button" data-panel-button="tour-sort-{{ tour.slug }}">
+  <div class="tours-header">
+    <h1>{{ guidedExperiences[lang].title }}</h1>
+    <h3>{{ tour.title }}</h3>
+    {% include "tours/pagination.njk" %}  
+  </div>
+
+  <div class="tours-filters">
     
-    {% include "ui/icons/sort.njk" %}
+    <button class="sort-button" data-panel-button="tour-sort-{{ tour.slug }}">
+      
+      {% include "ui/icons/sort.njk" %}
 
-    <p>{{ generic[lang].strings['sort-by'] }}</p>
-  </button>
-  
-  <button class="search-button">
+      <p>{{ generic[lang].strings['sort-by'] }}</p>
+    </button>
+    
+    <button class="search-button">
 
-    {% include "ui/icons/lense.njk" %}
-    <p>{{ generic[lang].strings.search }}</p>
+      {% include "ui/icons/lense.njk" %}
+      <p>{{ generic[lang].strings.search }}</p>
 
-    <div class="active-search">
-      <input type="text" name="tour-search">
-      <label for="tour-search">{{ generic[lang]['strings']['search-placeholder'] }}</label>
-    </div>
+      <div class="active-search">
+        <input type="text" name="tour-search">
+        <label for="tour-search">{{ generic[lang]['strings']['search-placeholder'] }}</label>
+      </div>
 
-  </button>
+    </button>
+
+  </div>
+
+  {# ACTIVE TOURS #}
+  <div class="tours-list">
+    {{ loop(guidedExperiencesTours[lang], tour, lang ) }}
+  </div>
+
+  <div class="buttons__wrapper">
+
+    <a href="{{ '/' + lang + '/guided-experiences' | url }}" class="ui__button has-arrow">
+      {% include "ui/icons/arrow-prev.njk" %}
+      <p>{{ generic[lang]['strings']['tours-back'] }}</p>
+    </a>
+
+  </div>
 
 </div>
-
-{# ACTIVE TOURS #}
-<div class="tours-list">
-  {{ loop(guidedExperiencesTours[lang], tour, lang ) }}
-</div>
-
-<div class="tours-button buttons__wrapper">
-
-  <a href="{{ '/' + lang + '/guided-experiences' | url }}" class="ui__button has-arrow">
-    {% include "ui/icons/arrow-prev.njk" %}
-    <p>{{ generic[lang]['strings']['tours-back'] }}</p>
-  </a>
-
-</div>
-
 
 {# Filter PANEL #}
 <div class="panel" data-panel="tour-sort-{{ tour.slug }}">

@@ -105,13 +105,3 @@ body {
 	}
 }
 
-// Exceptions
-main[data-template="orbit-viewer"] {
-	pointer-events: none;
-}
-main[data-template="tours"]{
-	@include desktop {
-		padding-right: 0;
-		padding-left: 0;
-	}
-}

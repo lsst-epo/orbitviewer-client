@@ -75,7 +75,7 @@ const Transition = () => {
 
 	
 	// Current enter
-	label = 'start+=0.5';
+	label = 'start+=0.4';
 	CreateTl('in', tl, label);
 
 	tl.play();

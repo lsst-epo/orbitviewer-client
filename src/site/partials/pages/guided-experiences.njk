@@ -1,7 +1,7 @@
 
 <div class="page-content" data-animation-type="fade">
 
-  <h1>{{ guidedExperiences[lang].title }}</h1>
+  <h1 data-animation-type="slide">{{ guidedExperiences[lang].title }}</h1>
 
   {% for tour in tours[lang] %}
 
@@ -13,7 +13,7 @@
     {% endfor %}
 
     {% if toursSameCategory > 0 %}
-      <a href="{{ '/' + lang + '/' + tour.slug | url }}" class="tour-preview">
+      <a href="{{ '/' + lang + '/' + tour.slug | url }}" class="tour-preview" data-animation-type="slide">
         <h3>{{ tour.title }}</h3>
         <div class="image" style="background-image: url(/assets/ceres-lorem.jpeg);">
 
@@ -28,7 +28,7 @@
     {% endif %}
   {% endfor %}
 
-  <div class="buttons__wrapper">
+  <div class="buttons__wrapper" data-animation-type="slide">
 
     <a href="{{ '/' + lang + '/' | url }}" class="ui__button has-arrow">
       {% include "ui/icons/arrow-prev.njk" %}

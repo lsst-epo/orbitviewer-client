@@ -32,7 +32,8 @@
 
 
 // Page fullscreen
-[data-template="guided-experiences"]{
+[data-template="guided-experiences"],
+[data-template="tours"] {
 	overflow-y: auto;
 
 	.page-content {

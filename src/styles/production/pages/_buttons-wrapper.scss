@@ -2,14 +2,15 @@
 // Bottom buttons
 [data-template="index"],
 [data-template="customize-orbits"],
-[data-template="guided-experiences"] {
+[data-template="guided-experiences"],
+[data-template="tours"] {
 
 	.buttons__wrapper {
 		display: flex;
 		justify-content: center;
 		flex-grow: 1;
 		align-items: flex-end;
-		
+
 		width: 100%;
 
 		padding: var(--distance-40) 0 0 0;

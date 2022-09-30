@@ -3,6 +3,10 @@
 	transform: translateY(10px);
 }
 
+[data-animation-type="fade"]{
+	opacity: 0;
+}
+
 [data-animation-type="control-left"] {
 	opacity: 0;
 	transform: translateX(-10px);

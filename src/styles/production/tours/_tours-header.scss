@@ -1,29 +1,4 @@
 
-[data-template="tours"]{
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	align-items: center;
-
-	padding: var(--distance-20);
-
-	background-color: var(--black-0);
-
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	flex-direction: column;
-
-	height: 100vh;
-	height: var(--doc-height);
-	overflow-y: auto;
-
-	@include desktop {
-		padding: var(--distance-60);
-	}
-}
-
-
 .tours-header {
 	text-align: center;
 	padding: 0 var(--distance-30) var(--distance-15);
