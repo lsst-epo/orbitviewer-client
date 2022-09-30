@@ -15,18 +15,18 @@ export class Tours extends Page {
 		this.playing = true;
 
 		gsap.to(chev, {
-			duration: 0.2,
+			duration: 0.6,
 			x: direction === 'left' ? '-=10px' : '+=10px',
-			scaleY: 0.7,
+			scaleY: 0.9,
 			transformOrigin: 'center',
-			ease: 'power2.out',
+			ease: 'power2.inOut',
 			onComplete: () => {
 				gsap.to(chev, {
 					duration: 0.6,
 					x: 0,
 					scaleY: 1,
 					transformOrigin: 'center',
-					ease: 'power2.in',
+					ease: 'power2.inOut',
 					onComplete: () => {
 						this.playing = false;
 					}

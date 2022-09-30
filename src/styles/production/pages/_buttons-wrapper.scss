@@ -16,10 +16,11 @@
 		padding: var(--distance-40) 0 0 0;
 		@include tablet { padding: var(--distance-60) 0 0 0;	}
 		@include desktop { padding: var(--distance-100) 0 0 0;	}
-	}
 
-	a {
-		margin: 0 var(--distance-5);
-	}
 
+		a {
+			margin: 0 var(--distance-5);
+		}
+		
+	}
 }
