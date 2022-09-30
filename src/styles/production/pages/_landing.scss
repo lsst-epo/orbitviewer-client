@@ -14,7 +14,8 @@
 		align-items: center;
 		flex-direction: column;
 
-		padding:var(--distance-20);
+		padding: var(--distance-60) 0;
+		@include tablet { padding: var(--distance-60); }
 		@include desktop { padding: var(--distance-100); }
 
 		img {
