@@ -12,7 +12,7 @@
 	@include bold-3;
 	
 	width: 100%;
-	max-width: 250px;
+	max-width: 300px;
 	height: calc(36px + 1em); // Dobule padding + one line of text
 	
 	padding: var(--distance-20);
@@ -92,4 +92,8 @@
 	@include desktop {
 		margin: var(--distance-30) var(--distance-5);
 	}
+}
+
+.panel .ui__button {
+	max-width: 100%;
 }

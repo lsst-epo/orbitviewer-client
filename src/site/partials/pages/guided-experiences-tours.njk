@@ -1,5 +1,6 @@
-<section class="active" data-slide="initialSlide" data-slide-index="0">
-  
+<div class="page-content" data-animation-type="slide">
+  <section class="active" data-slide="initialSlide" data-slide-index="0">
+    
     <div class="center-content">
       {% include "tours/preview.njk" %}
     </div>
@@ -18,61 +19,63 @@
 
     </div>
 
-</section>
-
-{% for slide in experience.flexible %}
-
-  <section data-slide="{{ slide.typeHandle }}" data-slide-index="{{ loop.index }}">
-    
-    {% if slide.typeHandle == 'introSlide' or slide.typeHandle == 'funFactSlide' %}
-
-        <div class="media">
-          {% if slide.typeHandle == 'introSlide' %}
-            <div class="thumb" style="background-image: url(/assets/ceres-lorem.jpeg); "></div>
-          {% else %}
-            <div class="icon"></div>
-          {% endif %}
-        </div>
-
-        <div class="content">
-          {% if slide.slideTitle %}
-            <h3>{{ slide.slideTitle }}</h3>
-          {% else %}
-            <h3>{{ generic[lang]['strings']['tour-fun-fact'] }}</h3>
-          {% endif %}
-          {% if slide.subTitle %}<h4>{{ slide.subTitle }}</h4>{% endif %}
-          <p>{{ slide.slideContent }}</p>
-        </div>
-
-    {% else %}
-        <div class="content">
-          <h4>{{ slide.subTitle }}</h4>
-          <h3>{{ slide.slideTitle }}</h3>
-          <p>{{ slide.slideContent }}</p>
-        </div>
-    {% endif %}
-
-
-    <div class="buttons__wrapper">
-      
-      {% if slide.typeHandle == 'defaultSlide' %}
-        <button data-button="{{ slide.typeHandle + '-' + loop.index + 'share' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' }}">
-          <p>{{ generic[lang].strings.share }}</p>
-        </button>
-      {% endif %}
-
-      <button data-button="{{ slide.typeHandle + '-' + loop.index + 'prev' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' else 'has-arrow' }}">
-        {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/icons/arrow-prev.njk" %}{% endif %}
-        <p>Back</p>
-      </button>
-
-      <button data-button="{{ slide.typeHandle + '-' + loop.index + 'next' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' else 'has-arrow' }}">
-        {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/icons/arrow-next.njk" %}{% endif %}
-        <p>Next</p>
-      </button>
-
-    </div>
-
   </section>
 
-{% endfor %}
+  {% for slide in experience.flexible %}
+
+    <section data-slide="{{ slide.typeHandle }}" data-slide-index="{{ loop.index }}">
+      
+      {% if slide.typeHandle == 'introSlide' or slide.typeHandle == 'funFactSlide' %}
+
+          <div class="media">
+            {% if slide.typeHandle == 'introSlide' %}
+              <div class="thumb" style="background-image: url(/assets/ceres-lorem.jpeg); "></div>
+            {% else %}
+              <div class="icon"></div>
+            {% endif %}
+          </div>
+
+          <div class="content">
+            {% if slide.slideTitle %}
+              <h3>{{ slide.slideTitle }}</h3>
+            {% else %}
+              <h3>{{ generic[lang]['strings']['tour-fun-fact'] }}</h3>
+            {% endif %}
+            {% if slide.subTitle %}<h4>{{ slide.subTitle }}</h4>{% endif %}
+            <p>{{ slide.slideContent }}</p>
+          </div>
+
+      {% else %}
+          <div class="content">
+            <h4>{{ slide.subTitle }}</h4>
+            <h3>{{ slide.slideTitle }}</h3>
+            <p>{{ slide.slideContent }}</p>
+          </div>
+      {% endif %}
+
+
+      <div class="buttons__wrapper">
+        
+        {% if slide.typeHandle == 'defaultSlide' %}
+          <button data-button="{{ slide.typeHandle + '-' + loop.index + 'share' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' }}">
+            <p>{{ generic[lang].strings.share }}</p>
+          </button>
+        {% endif %}
+
+        <button data-button="{{ slide.typeHandle + '-' + loop.index + 'prev' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' else 'has-arrow' }}">
+          {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/icons/arrow-prev.njk" %}{% endif %}
+          <p>Back</p>
+        </button>
+
+        <button data-button="{{ slide.typeHandle + '-' + loop.index + 'next' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' else 'has-arrow' }}">
+          {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/icons/arrow-next.njk" %}{% endif %}
+          <p>Next</p>
+        </button>
+
+      </div>
+
+    </section>
+
+  {% endfor %}
+
+</div>

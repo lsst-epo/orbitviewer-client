@@ -53,16 +53,10 @@ const Transition = () => {
 			EndTransition();
 		},
 	});
-
-	console.log('Transition');
 	
 	tl.add('start')
 
-	// Previous leave
-	console.log(LOCATION.previous);
-
 	let label = 'start';
-	
 	if(!LOCATION.previous){
 		tl.to('body', {	autoAlpha: 1 }, label)
 	} else {

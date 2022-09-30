@@ -13,7 +13,7 @@
 
 // Page popup
 [data-template="index"],
-[data-template="customize-orbits"] {
+[data-template="customize-orbits"]{
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -33,7 +33,8 @@
 
 // Page fullscreen
 [data-template="guided-experiences"],
-[data-template="tours"] {
+[data-template="tours"],
+[data-template="guided-experiences-tours"] {
 	overflow-y: auto;
 
 	.page-content {
@@ -46,4 +47,8 @@
 		align-items: center;
 		justify-content: flex-start;
 	}
+}
+
+[data-template="guided-experiences-tours"] .page-content {
+	background-color: transparent;
 }
