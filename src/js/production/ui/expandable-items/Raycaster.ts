@@ -1,7 +1,7 @@
 import { Object3D, OrthographicCamera, PerspectiveCamera, Raycaster, Vector3 } from "three";
 import { expandableItems } from "./ExpandableItems";
 
-export class InteractiveObject {
+export interface InteractiveObject {
 	selected:boolean;
 	target:Object3D;
 	lockedDistance:number;

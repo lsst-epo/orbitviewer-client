@@ -19,7 +19,7 @@ export class Planet extends Object3D implements InteractiveObject {
     mesh:Mesh;
     data:OrbitElements;
     orbitPath:EllipticalPath;
-    rotationSpeed:number;
+    rotationSpeed:number; 
     private _selected:boolean = false;
     material:PlanetMaterial;
     type:string;

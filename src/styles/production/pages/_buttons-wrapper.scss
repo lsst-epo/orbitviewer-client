@@ -1,0 +1,41 @@
+
+// Bottom buttons
+[data-template="index"] {
+
+	.buttons__wrapper {
+		display: flex;
+		width: 100%;
+
+		@include desktop {
+			width: 520px;
+		}
+	}
+
+	a {
+		margin: 0 var(--distance-10) 0 0;
+
+		&:last-of-type {
+			margin: 0 0 0 var(--distance-10);
+		}
+	}
+
+}
+
+
+[data-template="guided-experiences"] {
+	.buttons__wrapper {
+		display: flex;
+		justify-content: center;
+		flex-grow: 1;
+		align-items: flex-end;
+
+		padding-top: 50px;
+
+		width: 100%;
+
+		@include desktop {
+			width: 520px;
+		}
+	}
+
+}

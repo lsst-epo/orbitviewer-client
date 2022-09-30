@@ -128,7 +128,6 @@ export class CoreApp extends WebGLSketch {
                     
                     loadData(()=> {
                         this.onDataLoaded();
-                        hideLoader();
                     });
                 });
                 
@@ -241,6 +240,8 @@ export class CoreApp extends WebGLSketch {
         }
         this.solarClock = solarClock;
         this.solarClock.start();
+
+        hideLoader();
     }
 
     clockChanged():boolean {

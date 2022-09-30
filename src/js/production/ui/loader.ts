@@ -52,6 +52,7 @@ resetTl();
 export const showLoader = () => {
 	if(active) return;
 	active = true;
+	document.querySelector('.view').classList.remove('loaded');
 	document.body.classList.add('loader-active');
 
 	tl1.play();
@@ -81,6 +82,8 @@ export const hideLoader = () => {
 		ease: 'power1.inOut',
 		onComplete: () => {
 			resetTl();
+
+			document.querySelector('.view').classList.add('loaded');
 		}
 	})
 }

@@ -21,13 +21,15 @@
 					{{ content | safe }}
 				</main>
 			{% endblock %}
+
+			{# LOADER #}
+			{% include "ui/loader.njk" %}
+
 		</div>
 
 		{# EXPANDABLE ELEMENTS #}
 		{% include "ui/expandable-items/loop.njk" %}
 
-		{# LOADER #}
-		{% include "ui/loader.njk" %}
 
 		<script src="{{ '/production/bundle/main.js' | url }}"></script>
 

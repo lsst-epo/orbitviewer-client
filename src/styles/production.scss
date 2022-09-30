@@ -9,6 +9,13 @@
 @import './production/partials/vars';
 @import './production/partials/fonts';
 
+// Pages
+@import './production/pages/pages';
+@import './production/pages/landing';
+@import './production/pages/customize-orbits';
+@import './production/pages/guided-experiences';
+@import './production/pages/buttons-wrapper';
+
 // UI
 @import './production/ui/buttons';
 @import './production/ui/loader';
@@ -16,10 +23,7 @@
 @import './production/ui/share-buttons';
 @import './production/ui/inputs/radio';
 
-// Full pages
-@import './production/landing';
-@import './production/customize-orbits';
-@import './production/guided-experiences';
+
 
 // Orbit viewer
 @import './production/ui/orbit-viewer/panel';
@@ -84,13 +88,10 @@ body {
 }
 
 .view {
+	transition: opacity 0.5s ease-in-out;
 	opacity: 0;
-}
 
-.page__orbit-viewer,
-.page__guided-experiences-tours {
-
-	.view {
+	&.loaded {
 		opacity: 1;
 	}
 }
