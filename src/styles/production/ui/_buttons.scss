@@ -22,8 +22,12 @@
 	border-radius: 5px;
 
 	cursor: pointer;
+
+	transition: background-color 0.2s ease-in-out;
 	
-	&:active {
+	&:active,
+	&:hover {
+		transition: background-color 0.4s ease-in-out;
 		background-color: var(--teal-2);
 	}
 }
