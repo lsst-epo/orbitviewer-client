@@ -1,22 +1,17 @@
 
 // Bottom buttons
-[data-template="index"] {
+[data-template="index"],
+[data-template="customize-orbits"] {
 
 	.buttons__wrapper {
 		display: flex;
+		justify-content: center;
 		width: 100%;
-
-		@include desktop {
-			width: 520px;
-		}
+		padding: var(--distance-20) 0 0 0;
 	}
 
 	a {
-		margin: 0 var(--distance-10) 0 0;
-
-		&:last-of-type {
-			margin: 0 0 0 var(--distance-10);
-		}
+		margin: 0 var(--distance-5);
 	}
 
 }

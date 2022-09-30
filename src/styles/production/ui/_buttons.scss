@@ -1,6 +1,7 @@
 
 
 .ui__button {
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -10,16 +11,12 @@
 
 	@include bold-3;
 	
-	padding: var(--distance-20);
 	width: 100%;
+	max-width: 250px;
 	height: calc(36px + 1em); // Dobule padding + one line of text
-	@include desktop {
-		padding: var(--distance-30);
-	}
-
-	&.button_max-size {
-		@include desktop { max-width: 250px; }
-	}
+	
+	padding: var(--distance-20);
+	@include desktop { padding: var(--distance-30);	}
 
 	background-color: var(--green-1);
 	border-radius: 5px;

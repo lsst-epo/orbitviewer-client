@@ -1,31 +1,43 @@
 // Default page template styles
 [data-template="customize-orbits"] {
-	padding: var(--distance-20);
 
-	background-color: var(--black-0);
+	.text {
+		max-width: 800px;
 
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	flex-direction: column;
+		padding: 0 0 var(--distance-30);
+		@include desktop {	padding: 0 0 var(--distance-30);	}
 
-	height: 100vh;
-	height: var(--doc-height);
-	overflow-y: auto;
+		h2 {
+			margin: 0 0 var(--distance-10) 0;		
+			@include title-1;
 
-	@include desktop {
-		justify-content: center;
+			@include desktop {
+				margin: 0 0 var(--distance-40) 0;
+			}
+		}
+
+		p {
+			font-size: 0.8em;
+			line-height: 1.5em;
+
+			@include desktop {
+				font-size: 1.3rem;
+			}
+		}
 	}
 
-	.categories-filter {
-		margin: var(--distance-35) 0;
-		padding: 0 var(--distance-30) var(--distance-30);
-		@include desktop {
-			padding: 0 var(--distance-10) var(--distance-30);
-		}
+	.filters {
+		padding: var(--distance-60) 0;
 
 		flex-grow: 1;
 		width: 100%;
+
+
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+		
 
 		@include desktop {
 			display: flex;
@@ -33,48 +45,17 @@
 			flex-grow: 0;
 			width: 810px;
 			justify-content: space-between;
+			flex-direction: row;
 
-			li {
-				width: 50%;
-				max-width: var(--default-max-width);
-			}
+		}
+
+
+		li {
+			width: 100%;
+			@include desktop { width: 50%; }
+			max-width: var(--default-max-width);
 		}
 	}
 
-	@include desktop {
-		.ui__button {
-			margin-top: 120px;
-		}
-	}
 }
 
-.customize-orbits-text {
-	padding: 0 var(--distance-15) var(--distance-15);
-	max-width: 810px;
-
-	@include desktop {
-		padding: 0 var(--distance-15) var(--distance-30);
-	}
-
-	h2 {
-		margin: 0 0 var(--distance-10) 0;		
-		@include title-1;
-		
-		@include desktop {
-			margin: 0 0 var(--distance-40) 0;
-		}
-	}
-
-	p {
-		font-size: 0.8em;
-		line-height: 1.5em;
-
-		@include desktop {
-			font-size: 1.3rem;
-		}
-	}
-}
-
-.page__customize-orbits [data-template="customize-orbits"] {
-	pointer-events: all
-}

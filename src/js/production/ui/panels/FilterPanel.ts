@@ -13,7 +13,7 @@ export class FilterPanel extends Panel implements FiltersListener {
 	}
 
 	create(){
-		this.filters = this.dom.querySelectorAll('.categories-filter input[type="checkbox"]');
+		this.filters = this.dom.querySelectorAll('.filters input[type="checkbox"]');
 		syncFilters(this.filters);
 
 		this.buttonApply = this.dom.querySelector('[data-button="filters-apply"]');

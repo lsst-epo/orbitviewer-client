@@ -8,7 +8,8 @@
 
 }
 
-[data-template="index"]{
+[data-template="index"],
+[data-template="customize-orbits"] {
 	display: flex;
 	justify-content: center;
 	align-items: center;

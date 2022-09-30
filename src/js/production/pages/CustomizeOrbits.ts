@@ -7,7 +7,7 @@ export class CustomizeOrbits extends Page implements FiltersListener {
 	filters:NodeListOf<HTMLInputElement>;
 
 	onLoaded(): void {
-		this.filters = this.dom.querySelectorAll('.categories-filter input[type="checkbox"]');
+		this.filters = this.dom.querySelectorAll('.filters input[type="checkbox"]');
 		this.syncFilters();
 		this.buttonApply = this.dom.querySelector('[data-button="filters-apply"]');
 	}
