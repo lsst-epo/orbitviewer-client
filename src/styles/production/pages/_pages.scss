@@ -1,9 +1,9 @@
 
 [data-template]{
-	--background-fade: rgba(0,0,0,0.9);
 
 	.page-content {
-		background-color: var(--background-fade);
+		background-color: var(--black-alpha);
+		border: var(--panels-border);
 	}
 
 }

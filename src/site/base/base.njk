@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ locale }}" dir="{{ dir }}" style="opacity:0;">
+<html lang="{{ locale }}" dir="{{ dir }}">
 
 	{% include 'head.njk' %}
 
@@ -12,12 +12,12 @@
 		};
 	</script>
 
-	<body class="{{ 'en-site' if lang == 'en' else 'es-site'}}">
+	<body class="{{ 'en-site' if lang == 'en' else 'es-site'}}" style="opacity:0;">
 
 		<div class="site__wrapper">
 
 			{% block content %}
-				<main data-template="{{ pageTemplate }}" class="page__content" style="opacity: 0;">
+				<main data-template="{{ pageTemplate }}" class="page__content">
 					{{ content | safe }}
 				</main>
 			{% endblock %}

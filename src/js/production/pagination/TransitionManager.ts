@@ -1,6 +1,7 @@
 import { DEV } from '../../common/core/Globals';
 import { LOCATION } from "./History";
 import { gsap } from 'gsap/dist/gsap';
+import { SlideIn, SlideOut } from './animations/Slide';
 
 
 export const TRANSITIONS = {
@@ -30,29 +31,15 @@ export const TriggerTransition = (skip:boolean = false) => {
 	
 	pages.to.class.active = true;
 
-	if(!!!pages.from) {
-		console.log('Init Transitions');
-		InitialFadeIn();
-		return;
+	if(DEV) {
+		if(!LOCATION.previous) console.log('Init transitions. Page transition To:', LOCATION.current.template);
+		if(LOCATION.previous) console.log('Page transition - From:', LOCATION.previous.template, 'To:', LOCATION.current.template);
 	}
 
-	if(DEV) console.log('Page transition - From:', pages.from.template,'To:', pages.to.template);
-
-	DefaultTransition();
+	Transition();
 }
 
-const InitialFadeIn = (skip:boolean = false) => {
-	gsap.to(['html', '.page__content'], {
-		duration: 0.2,
-		autoAlpha: 1,
-		ease: 'power1.inOut',
-		onComplete: () => {
-			EndTransition();
-		}
-	})
-}
-
-const DefaultTransition = () => {
+const Transition = () => {
 	const tl = gsap.timeline({
 		paused: true,
 		defaults: {
@@ -64,16 +51,44 @@ const DefaultTransition = () => {
 		},
 	});
 
+	console.log('Transition');
+	
 	tl.add('start')
-	tl.to(LOCATION.current.class.dom, {
-		autoAlpha: 1,
-	}, 'start')
 
-	if(LOCATION.previous) {
-		tl.to(LOCATION.previous.class.dom, {
-			autoAlpha: 0,
-		}, 'start')
+	// Previous leave
+	console.log(LOCATION.previous);
+
+	let label = 'start';
+	let id = LOCATION.current.id;
+	
+	if(!LOCATION.previous){
+		tl.to('body', {	autoAlpha: 1 }, label)
+	} else if(id === 'landing' || id === 'customize-orbits') {
+		CreateTl('out', tl, label);
+	} else {
+		tl.to(LOCATION.previous.class.dom, { autoAlpha: 0 }, label)
+	}
+	
+	// Current enter
+	label = 'start+=0.5';
+	id = LOCATION.current.id;
+	if(id === 'landing' || id === 'customize-orbits') {
+		CreateTl('in', tl, label);
+	} else {
+		tl.to(LOCATION.current.class.dom, {	autoAlpha: 1 }, label)
 	}
 
 	tl.play();
 }
+
+const CreateTl = (dir: string, tl:GSAPTimeline, label:string) => {
+
+	if(dir === 'in'){
+		SlideIn(tl, label);
+		return;
+	}
+
+	SlideOut(tl, label)
+
+}
+

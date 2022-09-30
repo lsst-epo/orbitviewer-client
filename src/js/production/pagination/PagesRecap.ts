@@ -44,7 +44,7 @@ export const pagesRecap = () => {
 			pageClass = new CustomizeOrbits();
 		} else {
 			pageClass = new Page();
-		}
+		}		
 
 		const pageItem = {
 			id: pageSlug,
