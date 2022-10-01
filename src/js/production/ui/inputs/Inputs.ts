@@ -2,9 +2,11 @@ import { Checkbox } from "./Checkbox";
 import { DateInput } from "./DateInput";
 import { DoubleRange } from "./DoubleRange";
 import { Asteroids } from "./filters/Asteroids";
+import { Centaurs } from "./filters/Centaurs";
 import { Comets } from "./filters/Comets";
 import { InterstellarObjects } from "./filters/InterstellarObjects";
 import { NearEarthObjects } from "./filters/NearEarthObjects";
+import { PlanetsMoons } from "./filters/PlantsMoons";
 import { TransNeptunianObjects } from "./filters/TransNeptunianObjects";
 import { Input } from "./Input";
 import { Radio } from "./Radio";
@@ -35,6 +37,8 @@ export class Inputs {
 				if(el.getAttribute('name') === 'interstellar-objects') item = new InterstellarObjects(el);
 				if(el.getAttribute('name') === 'trans-neptunian-objects') item = new TransNeptunianObjects(el);
 				if(el.getAttribute('name') === 'comets') item = new Comets(el);
+				if(el.getAttribute('name') === 'planets-moons') item = new PlanetsMoons(el);
+				if(el.getAttribute('name') === 'centaurs') item = new Centaurs(el);
 				else item = new Checkbox(el)
 			}
 			if(type === 'radio') item = new Radio(el)
