@@ -1,6 +1,8 @@
 import { Checkbox } from "./Checkbox";
 import { DateInput } from "./DateInput";
 import { DoubleRange } from "./DoubleRange";
+import { Asteroids } from "./filters/Asteroids";
+import { InterstellarObjects } from "./filters/InterstellarObjects";
 import { NearEarthObjects } from "./filters/NearEarthObjects";
 import { Input } from "./Input";
 import { Radio } from "./Radio";
@@ -26,8 +28,9 @@ export class Inputs {
 			let item = null;
 
 			if(type === 'checkbox') {
-				// if(el.getAttribute('name') === 'recent-discoveries') item = new RecentDiscoveries(el);
 				if(el.getAttribute('name') === 'near-earth-objects') item = new NearEarthObjects(el);
+				if(el.getAttribute('name') === 'asteroids') item = new Asteroids(el);
+				if(el.getAttribute('name') === 'interstellar-objects') item = new InterstellarObjects(el);
 				else item = new Checkbox(el)
 			}
 			if(type === 'radio') item = new Radio(el)

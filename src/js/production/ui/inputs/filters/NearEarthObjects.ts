@@ -4,54 +4,49 @@ import { Checkbox } from "../Checkbox";
 
 export class NearEarthObjects extends Checkbox {
 	create(){
-		this.tlIn = gsap.timeline({ paused: true });
-		this.tlOut = gsap.timeline({ paused: true });
+		this.tl = gsap.timeline({ paused: true });
 
-		const bg = this.dom.parentElement.querySelector('svg .rd-bg');
-		const exc = this.dom.parentElement.querySelector('svg .rd-exclamation');
+		const all = this.dom.parentElement.querySelector('svg .all');
+		const circle = this.dom.parentElement.querySelector('svg .circle');
+		const dots = this.dom.parentElement.querySelectorAll('svg .dots path');
+		const earth = this.dom.parentElement.querySelectorAll('svg .earth');
 
-		gsap.set([bg, exc], {
-			scale: 0.7,
-			autoAlpha: 0.5,
+		gsap.set(dots, {
+			autoAlpha: 0
+		})
+		gsap.set(all, {
+			autoAlpha: 0.3
+		})
+		gsap.set(circle, {
+			y: 25,
+			autoAlpha: 0,
+		})
+		gsap.set(earth, {
+			scale: 0.8,
 			transformOrigin: 'center'
 		})
 
-		gsap.set(bg, {
-			rotate: 180
-		})
+		this.tl.timeScale(1.2);
 
-		this.tlIn
+		this.tl
 			.addLabel('start')
-			.to([bg, exc], {
+			.to(all, {
 				autoAlpha: 1,
 				duration: 0.5,
-				ease: 'power1.out'
 			}, 'start')
-			.to(bg, {
+			.to(earth, {
 				scale: 1,
-				ease: 'power1.out',
 				duration: 0.5,
 			}, 'start')
-			.to(exc, {
-				scale: 1,
-				ease: 'elastic.out',
+			.to(dots, {
+				autoAlpha: 1,
+				stagger: 0.1,
 				duration: 1,
-			}, 'start+=0.2')
-			.to(bg, {
-				rotate: 0,
-				duration: 2,
-				ease: 'power1.out'
 			}, 'start')
-
-		this.tlOut
-			.addLabel('start')
-			.to([bg, exc], {
-				scale: 0.7,
-				autoAlpha: 0.5,
-				ease: 'power1.out',
-				duration: 0.5,
+			.to(circle, {
+				y: 0,
+				duration: 1,
+				autoAlpha: 1,
 			}, 'start')
-
-
 	}
 }

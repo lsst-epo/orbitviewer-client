@@ -73,6 +73,7 @@
 	svg {
 		width: var(--icon-big);
 		height: var(--icon-big);
+		overflow: hidden;
 	}
 
 	.checked {
