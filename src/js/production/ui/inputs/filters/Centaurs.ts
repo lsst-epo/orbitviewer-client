@@ -30,6 +30,8 @@ export class Centaurs extends Checkbox {
 			drawSVG: '0%'
 		})
 
+		this.tl.timeScale(1.2)
+
 		this.tl
 			.addLabel('start')
 			.to(all, {
