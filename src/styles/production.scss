@@ -66,6 +66,10 @@ main {
 	height: 100vh;
 	height: var(--doc-height);
 	overflow: hidden;
+
+	&[data-template="orbit-viewer"] {
+		pointer-events: none;
+	}
 }
 
 html {

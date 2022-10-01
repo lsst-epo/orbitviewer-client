@@ -13,7 +13,6 @@ export class Panels {
 
 		this.dom = dom;
 		
-
 		this.createPanels();
 		this.addListeners();
 

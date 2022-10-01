@@ -1,4 +1,5 @@
 import gsap from "gsap/all";
+import { broadcastPanelsClose } from "./panels/PanelsManager";
 
 
 let active = false;
@@ -52,6 +53,9 @@ resetTl();
 export const showLoader = () => {
 	if(active) return;
 	active = true;
+
+	broadcastPanelsClose();
+
 	document.querySelector('.view').classList.remove('loaded');
 	document.body.classList.add('loader-active');
 

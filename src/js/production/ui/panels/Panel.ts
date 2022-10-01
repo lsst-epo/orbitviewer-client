@@ -1,6 +1,7 @@
+import { addPanelListener, PanelsListener } from "./PanelsManager";
 
 
-export class Panel {
+export class Panel implements PanelsListener {
 	id:string;
 	dom: HTMLElement;
 	active: boolean = false;
@@ -10,12 +11,25 @@ export class Panel {
 
 		this.dom = document.querySelector(`[data-panel="${id}"]`);
 
+		addPanelListener(this);
+
 		this.create();
 
 		this.addEventListeners();
+
 	}
 
 	create(){
+
+		
+		
+	}
+
+	closePanel(){
+
+		this.active = false;
+		this.dom.classList.remove('active');
+		this.dom.classList.remove('to-front');
 		
 	}
 
