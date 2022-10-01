@@ -4,6 +4,7 @@ import { DoubleRange } from "./DoubleRange";
 import { Asteroids } from "./filters/Asteroids";
 import { InterstellarObjects } from "./filters/InterstellarObjects";
 import { NearEarthObjects } from "./filters/NearEarthObjects";
+import { TransNeptunianObjects } from "./filters/TransNeptunianObjects";
 import { Input } from "./Input";
 import { Radio } from "./Radio";
 import { TimePickerRange } from "./TimePickerRange";
@@ -31,6 +32,7 @@ export class Inputs {
 				if(el.getAttribute('name') === 'near-earth-objects') item = new NearEarthObjects(el);
 				if(el.getAttribute('name') === 'asteroids') item = new Asteroids(el);
 				if(el.getAttribute('name') === 'interstellar-objects') item = new InterstellarObjects(el);
+				if(el.getAttribute('name') === 'trans-neptunian-objects') item = new TransNeptunianObjects(el);
 				else item = new Checkbox(el)
 			}
 			if(type === 'radio') item = new Radio(el)
