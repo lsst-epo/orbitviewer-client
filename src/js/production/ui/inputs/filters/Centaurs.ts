@@ -53,6 +53,5 @@ export class Centaurs extends Checkbox {
 				scaleX: 1,
 				duration: 0.2,
 			}, 'start+=0.8')
-			
 	}
 }
