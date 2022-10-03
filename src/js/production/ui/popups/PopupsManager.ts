@@ -26,9 +26,7 @@ export function enablePopup() {
 	RAYCASTER.active = false;
 	CoreAppSingleton.instance.lock();
 
-	for(const popup of popups) {
-		if(!popup.active) popup.hide();
-	}
+	for(const popup of popups) popup.hide();
 
 	hideUI();
 }

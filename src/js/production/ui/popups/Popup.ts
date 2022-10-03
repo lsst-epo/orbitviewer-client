@@ -23,6 +23,8 @@ export class Popup {
 
 	tmp: Vector3 = new Vector3();
 
+	transitionInProgress:boolean = false;
+
 	constructor(dom){
 		
 		this.dom = dom;
@@ -85,19 +87,15 @@ export class Popup {
 	}
 
 	hide(){
-		
 		if(!this.visible) return;
-		console.log('hide');
+		if(this.transitionInProgress) return;
 
 		this.visible = false;		
 		this.dom.classList.remove('visible');		
 	}
 
-	show(){
-		console.log('show');
-		
+	show(){		
 		if(this.visible) return;
-		if(this.active) return;
 
 		this.visible = true;		
 		this.dom.classList.add('visible');		
@@ -106,6 +104,8 @@ export class Popup {
 	close(){	
 
 		if(!this.active) return;
+
+		this.transitionInProgress = true;
 
 		this.ref.selected = false;
 
@@ -118,7 +118,8 @@ export class Popup {
 	open(){
 
 		if(this.active) return;
-		if(!this.visible) return;
+
+		this.transitionInProgress = true;
 		
 		this.ref.selected = true;
 		CameraManager.goToTarget(this.ref);
@@ -131,15 +132,13 @@ export class Popup {
 
 	animateToActive(){
 
-		this.dom.classList.add('transition-in-progress');
-
 		const tl = gsap.timeline({
 			paused: true,
 			onComplete: () => {
-				this.dom.classList.remove('transition-in-progress'); 
 				this.active = true;
 				this.dom.classList.add('active');
 				this.sections[0].classList.add('active');
+				this.transitionInProgress = false;
 			}
 		})
 
@@ -148,8 +147,9 @@ export class Popup {
 			.to(this.dom, {
 				x: '130px',
 				y: window.innerHeight * .5,
-				duration: 1.5,
-				ease: 'power1.inOut'
+				duration: 1,
+				ease: 'power1.inOut',
+				clearProps: 'all',
 			})
 
 		tl.play();
@@ -170,7 +170,11 @@ export class Popup {
 				gsap.to(this.container, {
 					autoAlpha: 1,
 					duration: 1,
-					ease: 'power1.inOut'
+					clearProps: 'all',
+					ease: 'power1.inOut',
+					onComplete: () => {
+						this.transitionInProgress = false;
+					}
 				})
 			}
 		})
