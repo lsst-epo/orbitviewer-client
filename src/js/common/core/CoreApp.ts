@@ -9,7 +9,7 @@ import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/FiltersManager";
 import { initShaders } from "../gfx/shaders";
 import { VFXRenderer } from "../gfx/VFXRenderer";
-import { Planet } from "../solar/Planet";
+import { Planet, PlanetId } from "../solar/Planet";
 import { SolarClock } from "../solar/SolarClock";
 import { buildSimWithData, particles } from "../solar/SolarParticlesManager";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
@@ -175,7 +175,7 @@ export class CoreApp extends WebGLSketch {
 			const mel = mapOrbitElements(el);
             mel.category = 'planets-moons';
 
-			const planet = new Planet(el.id, false, mel);
+			const planet = new Planet(el.id as PlanetId, mel);
 
             const popup = popups.find(x => x.name === planet.name);            
             if(popup) {
@@ -197,7 +197,7 @@ export class CoreApp extends WebGLSketch {
 		for(const el of d) {
 			const mel = mapOrbitElements(el);
             mel.category = 'planets-moons';
-			const planet = new Planet(el.id, true, mel, {
+			const planet = new Planet(null, mel, {
                 color: 0xFA6868
             });
 

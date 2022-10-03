@@ -15,6 +15,8 @@ export type PlanetOptions = {
     mapURL?:string;
 }
 
+export type PlanetId = 'mercury'|'venus'|'earth'|'mars'|'jupiter'|'saturn'|'uranus'|'neptune';
+
 export class Planet extends Object3D implements InteractiveObject {
     mesh:Mesh;
     data:OrbitElements;
@@ -28,11 +30,11 @@ export class Planet extends Object3D implements InteractiveObject {
     lockedDistance:number = 0;
     lockedOffset:Vector3 = new Vector3();
 
-    constructor(id: string, dwarf:boolean, _data:OrbitElements, opts:PlanetOptions={}) {
+    constructor(id: PlanetId, _data:OrbitElements, opts:PlanetOptions={}) {
         super();
 
-        this.type = id;        
-        this.dwarf = dwarf;
+        this.type = id; 
+        this.dwarf = id === null;
 
         if(!this.dwarf) {
             opts.mapURL = `/assets/textures/2k_${this.type}.jpg`;
@@ -108,8 +110,6 @@ export class Planet extends Object3D implements InteractiveObject {
         return this._selected;
     }
 }
-
-export type PlanetId = 'mercury'|'venus'|'earth'|'mars'|'jupiter'|'saturn'|'uranus'|'neptune';
 
 export const PlanetRadiusMap:Record<PlanetId,number> = {
     'mercury': 2440,
