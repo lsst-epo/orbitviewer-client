@@ -32,7 +32,7 @@ Following scripts are available:
 3. `yarn dev` to launch dev mode environment.
 4. `yarn clean` to clean all temp generated files & clean data cache.
 
-When developing you can use the following urls: `http://localhost:8080/editor` for the editor app, and `http://localhost:8080/production` for the production one.
+When developing you can use the following url: `http://localhost:8080/` to launh the front-end.
 
 ## Known Issues
 Dev mode behaves sometimes a bit buggy when launching. Usually a `yarn clean && yarn build && yarn dev` fixes things... (To be resolved one day). Once running, it should run robustly.
