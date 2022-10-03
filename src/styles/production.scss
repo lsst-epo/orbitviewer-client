@@ -86,13 +86,6 @@ body {
 	z-index: $toFrontIndex;
 }
 
-.css2D__wrapper {
-	position: absolute;
-	top: 0;
-	z-index: $css2DIndex;
-	pointer-events: none;
-}
-
 .view {
 	transition: opacity 0.5s ease-in-out;
 	opacity: 0;

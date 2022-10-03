@@ -1,17 +1,20 @@
 import gsap from "gsap";
+import { Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { CoreAppSingleton } from "../../../common/core/CoreApp";
 import { OrbitControlsIn, OrbitControlsOut } from "../../pagination/animations/OrbitControls";
 import { LOCATION } from "../../pagination/History";
+import { css2D } from "./Css2D";
 import { Popup } from "./Popup";
 import { RAYCASTER } from "./Raycaster";
 
 export const popups: Array<Popup> = [];
 
+
 export const initPopups = () => {;
 
-	const items = document.querySelectorAll('.popup');
+	const items = document.querySelectorAll('.popup');	
 
 	for(const item of items){	
 		popups.push(new Popup(item));
@@ -19,17 +22,22 @@ export const initPopups = () => {;
 
 }
 
-
-export function onShow() {
+export function enablePopup() {
 	RAYCASTER.active = false;
 	CoreAppSingleton.instance.lock();
+
+	for(const popup of popups) popup.hide();
+
 	hideUI();
 }
 
-export function onHide() {
+export function disablePopup() {
 	CameraManager.unlock();
 	RAYCASTER.active = true;
 	CoreAppSingleton.instance.unlock();
+	
+	for(const popup of popups) popup.show();
+
 	showUI();
 }
 

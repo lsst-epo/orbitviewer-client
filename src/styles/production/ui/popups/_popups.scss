@@ -1,5 +1,7 @@
 
-.popups {
+.popups-wrapper {
+	z-index: $css2DIndex;
+
 	overflow: hidden;
 	
 	position: absolute;
@@ -14,12 +16,15 @@
 	}
 
 	opacity: 0;
+
+	transition: opacity 0.3s ease-in-out;
+
+	// Prevents display none override
+	.popup {
+		display: flex !important;
+	}
 }
 
-.page__orbit-viewer .popups {
+.page__orbit-viewer .popups-wrapper {
 	opacity: 1;
-}
-
-.loader-active .popup {
-	display: none;
 }

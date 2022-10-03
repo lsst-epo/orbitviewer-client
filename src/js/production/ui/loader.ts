@@ -62,11 +62,6 @@ export const showLoader = () => {
 	tl1.play();
 	tl2.play();
 
-	gsap.to(loader, {
-		autoAlpha: 1,
-		duration: 0.4,
-		ease: 'power1.inOut'
-	})
 	gsap.to(svg, {
 		scale: 1,
 		duration: 0.5,
@@ -80,14 +75,9 @@ export const hideLoader = () => {
 	active = false;
 	document.body.classList.remove('loader-active');
 
-	gsap.to(loader, {
-		autoAlpha: 0,
-		duration: 0.3,
-		ease: 'power1.inOut',
-		onComplete: () => {
-			resetTl();
+	setTimeout(() => {
+		resetTl();
+		document.querySelector('.view').classList.add('loaded');
+	}, 500);
 
-			document.querySelector('.view').classList.add('loaded');
-		}
-	})
 }
