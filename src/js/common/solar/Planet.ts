@@ -109,7 +109,9 @@ export class Planet extends Object3D implements InteractiveObject {
     }
 }
 
-export const PlanetRadiusMap = {
+export type PlanetId = 'mercury'|'venus'|'earth'|'mars'|'jupiter'|'saturn'|'uranus'|'neptune';
+
+export const PlanetRadiusMap:Record<PlanetId,number> = {
     'mercury': 2440,
     'venus': 6052,
     'earth': 6371,
@@ -125,18 +127,7 @@ export type PlanetRotationData = {
     period:number;
 }
 
-export type RotationMap = {
-    mercury:PlanetRotationData,
-    venus:PlanetRotationData,
-    earth:PlanetRotationData,
-    mars:PlanetRotationData,
-    jupiter:PlanetRotationData,
-    saturn:PlanetRotationData,
-    uranus:PlanetRotationData,
-    neptune:PlanetRotationData
-}
-
-export const PlanetRotationMap:RotationMap = {
+export const PlanetRotationMap:Record<PlanetId, PlanetRotationData> = {
     mercury: {
         axialTilt: 0.034,
         period: 58.6462
@@ -171,7 +162,12 @@ export const PlanetRotationMap:RotationMap = {
     }
 }
 
-export const PlanetLockedMap = {
+export type CameraLockPosition = {
+    distance: number;
+    offset: Vector3;
+}
+
+export const PlanetLockedMap:Record<PlanetId,CameraLockPosition> = {
     earth: {
         distance: .05,
         offset: new Vector3(-.01, .005, 0)

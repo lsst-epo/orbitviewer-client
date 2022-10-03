@@ -268,11 +268,13 @@ export class CoreApp extends WebGLSketch {
     }
 
     goToIntroView () {
+        if(!this.launched) return;
         this.lock();
         CameraManager.goToTarget(this.sun, true);
     }
 
     goToDefaultView () {
+        if(!this.launched) return;
         this.unlock();
         CameraManager.reset();
     }
