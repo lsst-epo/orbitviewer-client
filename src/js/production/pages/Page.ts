@@ -27,7 +27,7 @@ export class Page {
 	}
 
 	show(){
-
+		
 	}
 
 	hide(){

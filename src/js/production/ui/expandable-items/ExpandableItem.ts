@@ -4,8 +4,8 @@ import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { CAMERA_POSITION } from "../../../common/core/Globals";
 import { css2D } from "./Css2D";
+import { onHide, onShow } from "./ExpandableItems";
 import { InteractiveObject } from "./Raycaster";
-import { expandableItems, onHide, onShow } from "./ExpandableItems";
 
 export class ExpandableItem {
 	dom: HTMLElement;
@@ -117,17 +117,17 @@ export class ExpandableItem {
 		if(!this.visible) return;
 		if(!!!this.ref) return;
 
-		this.container.position.copy(this.ref.position);	
+		this.container.position.copy(this.ref.target.position);	
 		
-		const d = this.ref.position.distanceTo(CAMERA_POSITION);
+		const d = this.ref.target.position.distanceTo(CAMERA_POSITION);
 		
 		if(d > 80){
-			this.container.element.style.opacity = 0;
+			this.container.element.style.opacity = '0';
 			return;
 		}
 		const s = MathUtils.clamp( MathUtils.map(d, 5, 150, 1, 0.1), 0.1, 1);
 		this.containerElement.style.transform = `scale3d(${s}, ${s}, 1)`;
-		this.container.element.style.opacity = 1;
+		this.container.element.style.opacity = '1';
 
 
 	}
