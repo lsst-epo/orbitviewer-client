@@ -1,3 +1,4 @@
+import { CameraManager } from "../../common/core/CameraManager";
 import { onChange } from "../pagination/History";
 import { Search } from "../partials/Search";
 import { popups } from "../ui/popups/PopupsManager";
@@ -52,8 +53,7 @@ export class OrbitViewer extends Page {
 	addCameraReset(){
 		const button = this.dom.querySelector('.orbit-controls-reset');
 		button.addEventListener('click', () => {
-			console.log('CAMERA RESET MISSING HERE');
-			
+			CameraManager.reset();
 		})
 	}
 
