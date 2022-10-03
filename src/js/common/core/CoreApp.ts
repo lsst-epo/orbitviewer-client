@@ -14,7 +14,7 @@ import { SolarClock } from "../solar/SolarClock";
 import { buildSimWithData, particles } from "../solar/SolarParticlesManager";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
-import { CAMERA_POSITION, CLOCK_SETTINGS, DEV } from "./Globals";
+import { CLOCK_SETTINGS, DEV } from "./Globals";
 
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { LOCATION } from "../../production/pagination/History";
@@ -305,8 +305,6 @@ export class CoreApp extends WebGLSketch {
         updateRaycaster(this.camera);
 
 		CameraManager.update();
-
-        CAMERA_POSITION.copy(this.camera.position)
 
         if(this.clockChanged())this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
 		const d = this.solarClock.update();

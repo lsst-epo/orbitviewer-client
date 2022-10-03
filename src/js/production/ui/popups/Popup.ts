@@ -2,10 +2,9 @@ import { MathUtils } from "@jocabola/math";
 import { Vector3 } from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CameraManager } from "../../../common/core/CameraManager";
-import { CAMERA_POSITION } from "../../../common/core/Globals";
 import { css2D } from "./Css2D";
-import { InteractiveObject } from "./Raycaster";
 import { onHide, onShow } from "./PopupsManager";
+import { InteractiveObject } from "./Raycaster";
 
 export class Popup {
 	dom: HTMLElement;
@@ -119,7 +118,7 @@ export class Popup {
 
 		this.container.position.copy(this.ref.target.position);	
 		
-		const d = this.ref.target.position.distanceTo(CAMERA_POSITION);
+		const d = this.ref.target.position.distanceTo(CameraManager.cam.position);
 		
 		if(d > 80){
 			this.container.element.style.opacity = '0';
