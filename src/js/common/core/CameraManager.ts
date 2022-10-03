@@ -1,7 +1,7 @@
 import { copy } from "fs-extra";
 import { Object3D, PerspectiveCamera, Quaternion, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { InteractiveObject } from "../../production/ui/expandable-items/Raycaster";
+import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { CONTROLS, DEV } from "./Globals";
 
 import { gsap } from "gsap/gsap-core";

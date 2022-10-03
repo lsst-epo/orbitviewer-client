@@ -5,9 +5,9 @@ import { CameraManager } from "../../../common/core/CameraManager";
 import { CAMERA_POSITION } from "../../../common/core/Globals";
 import { css2D } from "./Css2D";
 import { InteractiveObject } from "./Raycaster";
-import { expandableItems, onHide, onShow } from "./ExpandableItems";
+import { onHide, onShow } from "./PopupsManager";
 
-export class ExpandableItem {
+export class Popup {
 	dom: HTMLElement;
 	container: CSS2DObject;
 

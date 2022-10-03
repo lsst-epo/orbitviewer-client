@@ -1,6 +1,6 @@
 import { MathUtils } from "@jocabola/math";
 import { ColorRepresentation, Mesh, Object3D, SphereGeometry, TextureLoader, Vector3 } from "three";
-import { InteractiveObject } from "../../production/ui/expandable-items/Raycaster";
+import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { EllipticalPath } from "./EllipticalPath";
 import { calculateOrbitByType, DEG_TO_RAD, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";

@@ -8,7 +8,7 @@
 	{% endif %}
 {% endfor %}
 
-	<div class="expandable-item no-picture" data-name="{{ element.elementID }}">	
+	<div class="popup no-picture" data-name="{{ element.elementID }}">	
 		<div class="item-scale-wrapper">
 			<div class="item-wrapper">
 
@@ -24,7 +24,7 @@
 
 						<div class="icon-text">
 							<h3>{{ element.title }}</h3>
-							<p>{{ generic[lang]['expandable-items'].tap }}</p>
+							<p>{{ generic[lang]['popups'].tap }}</p>
 						</div>
 					</div>
 				</div>
@@ -33,7 +33,7 @@
 
 					<section>
 						<div class="head">
-							<p>{{ generic[lang]['expandable-items'].overview }}</p>
+							<p>{{ generic[lang]['popups'].overview }}</p>
 						</div>
 						<div class="content">
 							<p>Pending</p>
@@ -42,7 +42,7 @@
 
 					<section>
 						<div class="head">
-							<p>{{ generic[lang]['expandable-items'].context }}</p>
+							<p>{{ generic[lang]['popups'].context }}</p>
 						</div>
 						<div class="content">
 							{{ element.text | safe }}
@@ -51,7 +51,7 @@
 
 					<section>
 						<div class="head">
-							<p>{{ generic[lang]['expandable-items'].data }}</p>
+							<p>{{ generic[lang]['popups'].data }}</p>
 						</div>
 						<div class="content">
 							<p>Pending</p>

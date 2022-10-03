@@ -1,17 +1,17 @@
 import { CameraManager } from "../../../common/core/CameraManager";
 import { SUN } from "../../../common/core/CoreApp";
 import { particles } from "../../../common/solar/SolarParticlesManager";
-import { ExpandableItem } from "./ExpandableItem";
+import { Popup } from "./Popup";
 import { RAYCASTER } from "./Raycaster";
 
-export const expandableItems: Array<ExpandableItem> = [];
+export const popups: Array<Popup> = [];
 
-export const initExpandableItems = () => {;
+export const initPopups = () => {;
 
-	const items = document.querySelectorAll('.expandable-item');
+	const items = document.querySelectorAll('.popup');
 
 	for(const item of items){	
-		expandableItems.push(new ExpandableItem(item));
+		popups.push(new Popup(item));
 	}
 
 }
@@ -31,6 +31,6 @@ export function onHide() {
 	document.body.classList.remove('ui-block');
 }
 
-export const resizeExpandableItems = () => {
-	for(const expandableItem of expandableItems) expandableItem.onResize();
+export const resizePopups = () => {
+	for(const popup of popups) popup.onResize();
 }

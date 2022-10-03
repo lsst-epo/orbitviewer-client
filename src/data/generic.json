@@ -97,7 +97,7 @@
 				"subtitle": "Credits"
 			}
 		},
-		"expandable-items": {
+		"popups": {
 			"tap": "Tap to expand",
 			"overview": "Overview",
 			"context": "Context information",
@@ -203,7 +203,7 @@
 				"subtitle": "ES - Credits"
 			}
 		},
-		"expandable-items": {
+		"popups": {
 			"tap": "ES - Tap to expand",
 			"overview": "ES - Overview",
 			"context": "ES - Context information",

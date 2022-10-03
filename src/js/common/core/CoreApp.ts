@@ -1,9 +1,9 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
 import { AmbientLight, Clock, Group, PerspectiveCamera, PointLight, SphereGeometry, TextureLoader } from "three";
-import { css2D } from "../../production/ui/expandable-items/Css2D";
-import { expandableItems, initExpandableItems, resizeExpandableItems } from "../../production/ui/expandable-items/ExpandableItems";
-import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/expandable-items/Raycaster";
+import { css2D } from "../../production/ui/popups/Css2D";
+import { initPopups, popups, resizePopups } from "../../production/ui/popups/PopupsManager";
+import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/popups/Raycaster";
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/FiltersManager";
@@ -73,7 +73,7 @@ export class CoreApp extends WebGLSketch {
         initRaycaster();
 
         css2D.init(window.innerWidth, window.innerHeight);
-        initExpandableItems();
+        initPopups();
 
         this.vfx = new VFXRenderer(this.renderer, window.innerWidth, window.innerHeight);
 
@@ -139,7 +139,7 @@ export class CoreApp extends WebGLSketch {
     resize(width: number, height: number): void {
 		super.resize(width, height);
         css2D.setSize(width, height);
-        resizeExpandableItems();
+        resizePopups();
 		this.vfx.resize(width, height);
 	}
 
@@ -163,10 +163,10 @@ export class CoreApp extends WebGLSketch {
 
 			const planet = new Planet(el.id, false, mel);
 
-            const expandableItem = expandableItems.find(x => x.name === planet.name);            
-            if(expandableItem) {
-                expandableItem.ref = planet;
-                expandableItem.loaded();
+            const popup = popups.find(x => x.name === planet.name);            
+            if(popup) {
+                popup.ref = planet;
+                popup.loaded();
             }
             
 			this.planets.add(planet);
