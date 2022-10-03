@@ -42,9 +42,9 @@ export const pagesRecap = () => {
 		
 		if(pageSlug === 'orbit-viewer'){
 			pageClass = new OrbitViewer();
-		} else if(pageSlug === 'landing'){
+		} else if(pageSlug === 'landing'){
 			pageClass = new Landing();
-		} else if(pageSlug === 'customize-orbits'){
+		} else if(pageSlug === 'customize-orbits'){
 			pageClass = new CustomizeOrbits();
 		} else {
 			pageClass = new Page();

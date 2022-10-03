@@ -1,7 +1,6 @@
 import { LOCATION } from "../History";
 
-export const OrbitControlsOut = (tl:GSAPTimeline, label:string) => {
-	const dom = LOCATION.previous.class.dom;
+export const OrbitControlsOut = (tl:GSAPTimeline, label:string, dom:HTMLElement = LOCATION.previous.class.dom) => {
 
 	const left = dom.querySelectorAll('[data-animation-type="control-left"]');
 	if(left.length > 0){

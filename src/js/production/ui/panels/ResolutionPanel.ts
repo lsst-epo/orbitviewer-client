@@ -1,5 +1,5 @@
 import { VISUAL_SETTINGS } from "../../../common/core/Globals";
-import { addFiltersListener, applyFilters, FiltersListener, getSolarSystemElementsByFilter, syncFilters } from "../../../common/data/FiltersManager";
+import { getSolarSystemElementsByFilter } from "../../../common/data/FiltersManager";
 import { buildSimWithData } from "../../../common/solar/SolarParticlesManager";
 import { hideLoader } from "../loader";
 import { Panel } from "./Panel";
@@ -19,7 +19,7 @@ export class ResolutionPanel extends Panel {
 		this.buttonApply = this.dom.querySelector('[data-button="resolution-apply"]');
 		this.buttonReset = this.dom.querySelector('[data-button="resolution-reset"]');
 
-		const active = this.dom.querySelector(`[value="${this.original}"]`);		
+		const active = this.dom.querySelector(`[value="${this.original}"]`) as HTMLElement;		
 		active?.click();
 
 	}
