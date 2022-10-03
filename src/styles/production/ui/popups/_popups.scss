@@ -1,5 +1,7 @@
 
 .popups {
+	z-index: $css2DIndex;
+
 	overflow: hidden;
 	
 	position: absolute;

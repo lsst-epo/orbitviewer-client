@@ -1,9 +1,10 @@
 import { MathUtils } from "@jocabola/math";
+import gsap from "gsap";
 import { Vector3 } from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { css2D } from "./Css2D";
-import { popupsHide, popupsShow } from "./PopupsManager";
+import { disablePopup, enablePopup } from "./PopupsManager";
 import { InteractiveObject } from "./Raycaster";
 
 export class Popup {
@@ -109,7 +110,7 @@ export class Popup {
 
 		this.ref.selected = false;
 
-		popupsHide();
+		disablePopup();
 
 		this.dom.classList.remove('active');
 		for(const section of this.sections) section.classList.remove('active');
@@ -123,32 +124,54 @@ export class Popup {
 		
 		this.active = true;
 
-		this.dom.classList.add('active');
-		
 		this.ref.selected = true;
 		CameraManager.goToTarget(this.ref);
 
-		popupsShow();
+		enablePopup();
 
-		this.sections[0].classList.add('active');
+		this.animateToActive();
+
+	}
+
+	animateToActive(){
+
+		const tl = gsap.timeline({
+			paused: true,
+			onComplete: () => {
+				this.dom.classList.add('active');
+				this.sections[0].classList.add('active');
+			}
+		})
+
+		tl
+			.addLabel('start')
+			.to(this.container, {
+				x: 0,
+				y: 0,
+				duration: 1.5,
+				ease: 'power1.inOut'
+			})
+
+		tl.play();
 
 	}
 
 	update(){		
 		if(!!!this.ref) return;
 
-		if(!this.visible || this.active) {
-			
+		if(!this.visible) {
+			this.container.style.transform = '';
 			this.css2DElement.element.style.opacity = '';
-			this.container.style.transform = ``;
-			
+
 			return;
 		}
+		
+		if(this.active) return;
 
 		this.css2DElement.position.copy(this.ref.target.position);	
-		
+
 		const d = this.ref.target.position.distanceTo(CameraManager.cam.position);
-		
+
 		if(d > 80){
 			this.css2DElement.element.style.opacity = '0';
 			return;
@@ -156,7 +179,6 @@ export class Popup {
 		const s = MathUtils.clamp( MathUtils.map(d, 5, 150, 1, 0.1), 0.1, 1);
 		this.container.style.transform = `scale3d(${s}, ${s}, 1)`;
 		this.css2DElement.element.style.opacity = '1';
-
 
 	}
 }

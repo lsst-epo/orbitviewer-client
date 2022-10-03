@@ -2,7 +2,7 @@ import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
 import { AmbientLight, Clock, Group, PerspectiveCamera, PointLight, TextureLoader } from "three";
 import { css2D } from "../../production/ui/popups/Css2D";
-import { initPopups, popups, resizePopups } from "../../production/ui/popups/PopupsManager";
+import { popups, resizePopups } from "../../production/ui/popups/PopupsManager";
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/popups/Raycaster";
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
@@ -81,10 +81,11 @@ export class CoreApp extends WebGLSketch {
 
         initShaders();
         
-        initRaycaster();
 
         css2D.init(window.innerWidth, window.innerHeight);
-        initPopups();
+
+        initRaycaster();
+
 
         this.vfx = new VFXRenderer(this.renderer, window.innerWidth, window.innerHeight);
 
