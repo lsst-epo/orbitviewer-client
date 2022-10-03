@@ -1,3 +1,4 @@
+import { MathUtils } from "@jocabola/math";
 import { gsap } from "gsap/gsap-core";
 import { Mesh, Object3D, SphereGeometry, Vector3 } from "three";
 import { InteractiveObject } from "../../production/ui/expandable-items/Raycaster";
@@ -40,7 +41,7 @@ export class Sun extends Object3D implements InteractiveObject {
         this.add(this.mesh);
 
         this.particles = new SunParticles(1.1, this.scale.x * .15);
-        this.add(this.particles.mesh);
+        // this.add(this.particles.mesh);
     }
 
     set highlight(value:boolean) {
@@ -54,5 +55,12 @@ export class Sun extends Object3D implements InteractiveObject {
         const sunMat = this.mesh.material as SunMaterial;
         sunMat.update(time, this);
         this.particles.update(time);
+        if(sunMat.shaderRef) {
+            sunMat.shaderRef.uniforms.vertexAmp.value = MathUtils.lerp(
+                sunMat.shaderRef.uniforms.vertexAmp.value,
+                this.selected ? 0.0005 : 0.00025,
+                .016
+            )
+        }
     }
 }

@@ -59,7 +59,7 @@ export class CoreApp extends WebGLSketch {
     vfx:VFXRenderer;
     sun:Sun;
 
-        
+    private launched:boolean = false;
 
     constructor() {
         super(window.innerWidth, window.innerHeight, {
@@ -280,6 +280,7 @@ export class CoreApp extends WebGLSketch {
     }
 
     lock() {
+        if(!this.launched) return;
         particles.highlighted = false;
         this.sun.highlight = true;
 
@@ -290,6 +291,7 @@ export class CoreApp extends WebGLSketch {
     }
 
     unlock() {
+        if(!this.launched) return;
         particles.highlighted = true;
         this.sun.highlight = false;
         
@@ -297,6 +299,13 @@ export class CoreApp extends WebGLSketch {
             const path = orbitPaths[i];
             path.hidden = false;
         }
+    }
+
+    set planetsVisibility(value:boolean) {
+        this.planets.visible = value;
+        this.planetPaths.visible = value;
+        this.dwarfPlanets.visible = value;
+        this.dwarfPlanetPaths.visible = value;
     }
 
     clockChanged():boolean {
