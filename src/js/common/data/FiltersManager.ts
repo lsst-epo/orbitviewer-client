@@ -105,6 +105,8 @@ export const applyFilters = (domFilters: NodeListOf<HTMLInputElement>) => {
 		buildSimWithData(d, false);
 
 		hideLoader();
+	}).catch(() => {
+		alert('Database fetch error')
 	});
 
 }

@@ -49,6 +49,8 @@ export class ResolutionPanel extends Panel {
 			const d = res.mpcorb;                                  
 			buildSimWithData(d, false);
 			hideLoader();
+		}).catch(() => {
+			alert('Database fetch error.')
 		});
 	}
 
