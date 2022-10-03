@@ -4,16 +4,10 @@
 	transition-duration: 0.25s;
 	transition-timing-function: ease-in-out;
 
-	&:not(.visible){
-		opacity: 0;
-		
-		&, & * {
-			pointer-events: none;
-		}
-	}
+	opacity: 0;
 
-	&.visible {
-		opacity: 1;
+	&, & * {
+		pointer-events: none;
 	}
 
 	* {
@@ -83,8 +77,9 @@
 .popup .cover {
 	position: relative;
 
-	width: 60px;
-	height: 60px;
+	height: 0;
+	width: 0;
+
 	border-radius: 100%;
 	border: 1px solid var(--white-0);
 
@@ -145,11 +140,6 @@
 
 	}
 
-}
-
-.popup.no-picture .cover {
-	height: 0;
-	width: 0;
 }
 
 .hidden-tabs {
@@ -222,7 +212,7 @@
 
 }
 
-.popup.visible.active {
+.popup.active {
 	z-index: 100 !important;
 	
 	.item-wrapper {
@@ -260,6 +250,8 @@
 }
 
 .popup.visible {
+
+	opacity: 1;
 
 	.close-item,
 	.cover{

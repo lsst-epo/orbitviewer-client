@@ -20,16 +20,24 @@ export const initPopups = () => {;
 }
 
 
-export function onShow() {
+export function popupsShow() {
 	RAYCASTER.active = false;
 	CoreAppSingleton.instance.lock();
+
+	for(const popup of popups) {
+		if(!popup.active) popup.hide();
+	}
+
 	hideUI();
 }
 
-export function onHide() {
+export function popupsHide() {
 	CameraManager.unlock();
 	RAYCASTER.active = true;
 	CoreAppSingleton.instance.unlock();
+	
+	for(const popup of popups) popup.show();
+
 	showUI();
 }
 
