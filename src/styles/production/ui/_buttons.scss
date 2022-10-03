@@ -32,9 +32,11 @@
 	}
 }
 
-.ui__button.ghost-button {
+.ui__button.ghost-button,
+.ui__button-small.ghost-button {
 	background-color: transparent;
 	border: 1px solid var(--white-0);
+	color: var(--white-0);
 }
 
 // Arrows

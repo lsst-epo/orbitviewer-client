@@ -21,6 +21,7 @@ export class TimePickerPanel extends Panel {
 
 	reset: HTMLButtonElement;
 	edit: HTMLButtonElement;
+	pause: HTMLButtonElement;
 
 	state: STATE = 0;
 
@@ -59,6 +60,7 @@ export class TimePickerPanel extends Panel {
 
 		this.reset = buttonsZone.querySelector('[data-timer="reset"]');
 		this.edit = buttonsZone.querySelector('[data-timer="edit"]');
+		this.pause = buttonsZone.querySelector('[data-timer="pause"]');
 
 		this.subPanelApply = this.subPanel.querySelector('[data-button="apply-date"]');
 		this.subPanelCancel = this.subPanel.querySelector('[data-button="close-edit"]');
@@ -140,8 +142,6 @@ export class TimePickerPanel extends Panel {
 			this.tl.add(futureTween, `start+=${start}`)
 
 		}
-		
-
 		
 	}
 
@@ -233,6 +233,10 @@ export class TimePickerPanel extends Panel {
 
 		this.reset.addEventListener('click', () => {	
 			solarClock.setDate();
+			this.range.value = '0';
+		})
+
+		this.pause.addEventListener('click', () => {	
 			this.range.value = '0';
 		})
 
