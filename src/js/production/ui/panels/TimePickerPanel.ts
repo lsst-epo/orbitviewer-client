@@ -70,6 +70,13 @@ export class TimePickerPanel extends Panel {
 		this.createClockTl();
 	}
 
+	leave(){
+		super.leave();
+
+		this.range.value = '0';
+
+	}
+
 	createTl(){
 		this.tl = gsap.timeline({
 			paused: true,
@@ -197,6 +204,11 @@ export class TimePickerPanel extends Panel {
 
 		this.state = 1;
 		this.togglePanel();		
+	}
+
+	closePanel(): void {
+		this.state = 0;
+		this.togglePanel();
 	}
 
 	togglePanel(): void {

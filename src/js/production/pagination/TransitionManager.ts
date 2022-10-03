@@ -50,6 +50,9 @@ const Transition = () => {
 			duration: 0.2,
 			ease: 'power1.inOut',
 		},
+		onStart: () => {
+			if(LOCATION.previous) LOCATION.previous.class.hide();
+		},
 		onComplete: () => {
 			EndTransition();
 		},

@@ -19,6 +19,7 @@ export class OrbitViewer extends Page {
 	}
 
 	hide(): void {
+		super.hide();
 		RAYCASTER.active = false;
 	}
 
