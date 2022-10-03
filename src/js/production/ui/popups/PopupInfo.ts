@@ -5,6 +5,8 @@ export class PopupInfo {
 	dom: HTMLElement;
 	name: string;
 
+	active: boolean;
+
 	closeButton: HTMLElement;
 
 	sections:NodeListOf<HTMLElement>;
@@ -50,6 +52,7 @@ export class PopupInfo {
 
 		document.addEventListener('keydown', (e) => {			
 			if(e.key != 'Escape') return;
+			if(!this.active) return;
 			disablePopup();
 		})
 
@@ -64,10 +67,12 @@ export class PopupInfo {
 	}
 
 	show(){
+		this.active = true;
 		this.dom.classList.add('active');
 	}
 
 	hide(){
+		this.active = false;
 		this.dom.classList.remove('active');
 	}
 
