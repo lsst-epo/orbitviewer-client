@@ -13,7 +13,7 @@ export class css2D {
 		initialized = true;
 		console.log('Init CSS 2D Renderer');
 		document.body.appendChild(renderer.domElement);
-		renderer.domElement.classList.add('popups-wrapper')
+		renderer.domElement.classList.add('popups-wrapper', 'popups-labels')
 		renderer.setSize(width, height);
 
 		initPopups();

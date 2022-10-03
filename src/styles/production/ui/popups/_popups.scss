@@ -17,14 +17,15 @@
 
 	opacity: 0;
 
-	transition: opacity 0.3s ease-in-out;
-
-	// Prevents display none override
-	.popup {
-		display: flex !important;
-	}
+	transition: opacity 1s ease-in-out;
+	transition-delay: 1.5s;
 }
 
 .page__orbit-viewer .popups-wrapper {
 	opacity: 1;
+}
+
+.popups-wrapper.popups-labels.hidden {
+	transition-delay: 0s;
+	opacity: 0;
 }

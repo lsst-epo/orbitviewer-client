@@ -22,8 +22,6 @@ export class PopupLabel {
 
 	tmp: Vector3 = new Vector3();
 
-	info:PopupInfo;
-
 	constructor(dom){
 		
 		this.dom = dom;
@@ -34,139 +32,38 @@ export class PopupLabel {
 		
 		this.name = this.dom.getAttribute('data-name');	
 
-		this.info = new PopupInfo(document.querySelector(`.popup-info[data-name="${this.name}"]`));
-
-
-
 	}
 
 	loaded(){
 		this.addEventListeners();
-		this.show();
 	}
 
 	addEventListeners(){
 
-
 		this.dom.addEventListener('click', (ev) => {							
-			this.open();
-		})
-
-		document.addEventListener('keydown', (e) => {			
-			if(e.key != 'Escape') return;
-			this.close();
+			enablePopup(this.name);
 		})
 
 	}
 
-	onResize(){
-		this.info.setSize();
-	}
-
-	hide(){
-		if(!this.visible) return;
-
-		this.visible = false;		
-		this.dom.classList.remove('visible');		
-	}
-
-	show(){		
-		if(this.visible) return;
-
-		this.visible = true;		
-		this.dom.classList.add('visible');		
-	}
-
-	close(){	
-
-		if(!this.active) return;
-
-		this.ref.selected = false;
-
-		disablePopup();
-
-		this.animateToNotActive();
-
-	}
-
-	open(){
-
-		if(this.active) return;
-
-		this.transitionInProgress = true;
-		
+	select(){
 		this.ref.selected = true;
 		CameraManager.goToTarget(this.ref);
-
-		enablePopup();
-
-		this.animateToActive();
-
 	}
 
-	animateToActive(){
-
-		const tl = gsap.timeline({
-			paused: true,
-			onComplete: () => {
-				this.active = true;
-				this.dom.classList.add('active');
-			}
-		})
-
-		tl
-			.addLabel('start')
-			.to(this.dom, {
-				x: '130px',
-				y: window.innerHeight * .5,
-				duration: 1,
-				ease: 'power1.inOut',
-				clearProps: 'all',
-			})
-
-		tl.play();
-
-	}
-	animateToNotActive(){
-
-		gsap.to(this.container, {
-			autoAlpha: 0,
-			duration: 0.6,
-			ease: 'power1.inOut',
-			onComplete: () => {
-
-				this.active = false;
-				this.dom.classList.remove('active');
-
-				gsap.to(this.container, {
-					autoAlpha: 1,
-					duration: 1,
-					clearProps: 'all',
-					ease: 'power1.inOut',
-				})
-			}
-		})
-		
+	unselect(){
+		this.ref.selected = false;
 	}
 
 	update(){		
 		if(!!!this.ref) return;
 
-		if(!this.visible) return;
-		if(this.active) return;
-
 		this.css2DElement.position.copy(this.ref.target.position);	
 
-		return;
-
-		// Todo opacity relativa distancia
 		const d = this.ref.target.position.distanceTo(CameraManager.cam.position);
+		const alpha = MathUtils.clamp( MathUtils.map(d, 80, 150, 1, 0), 0, 1).toString();
 
-		if(d > 80){
-			this.css2DElement.element.style.opacity = '0';
-			return;
-		}
-		this.css2DElement.element.style.opacity = '1';
+		this.css2DElement.element.style.opacity = alpha;
 
 	}
 }

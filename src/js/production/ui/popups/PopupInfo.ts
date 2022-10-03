@@ -1,7 +1,9 @@
+import { disablePopup } from "./PopupsManager";
 
 
 export class PopupInfo {
 	dom: HTMLElement;
+	name: string;
 
 	closeButton: HTMLElement;
 
@@ -10,13 +12,21 @@ export class PopupInfo {
 	constructor(el){
 		this.dom = el;
 
-		this.sections = this.dom.querySelectorAll('section');
+		this.name = this.dom.getAttribute('data-name');
 
-		this.setSize();
+		this.sections = this.dom.querySelectorAll('section');
 
 		this.closeButton = this.dom.querySelector('.close-item');
 
+	}
+
+	onResize(){
+		this.setSize();
+	}
+
+	loaded(){
 		this.addEventListeners();
+		this.setSize();
 	}
 
 	setSize(){
@@ -35,7 +45,12 @@ export class PopupInfo {
 	addEventListeners(){
 
 		this.dom.querySelector('.close-item').addEventListener('click', (ev) => {			
-			// Close all popups
+			disablePopup();
+		})
+
+		document.addEventListener('keydown', (e) => {			
+			if(e.key != 'Escape') return;
+			disablePopup();
 		})
 
 		for(const section of this.sections){
@@ -46,6 +61,14 @@ export class PopupInfo {
 		}
 
 
+	}
+
+	show(){
+		this.dom.classList.add('active');
+	}
+
+	hide(){
+		this.dom.classList.remove('active');
 	}
 
 }
