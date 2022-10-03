@@ -29,7 +29,7 @@ export class Popup {
 		this.css2DElement = new CSS2DObject(this.dom);
 		css2D.add(this.css2DElement);
 
-		this.container = this.css2DElement.element.querySelector('.item-scale-wrapper');
+		this.container = this.dom.querySelector('.item-scale-wrapper');
 		
 		this.name = this.dom.getAttribute('data-name');		
 
@@ -106,14 +106,12 @@ export class Popup {
 	close(){	
 
 		if(!this.active) return;
-		this.active = false;
 
 		this.ref.selected = false;
 
 		disablePopup();
 
-		this.dom.classList.remove('active');
-		for(const section of this.sections) section.classList.remove('active');
+		this.animateToNotActive();
 
 	}
 
@@ -122,8 +120,6 @@ export class Popup {
 		if(this.active) return;
 		if(!this.visible) return;
 		
-		this.active = true;
-
 		this.ref.selected = true;
 		CameraManager.goToTarget(this.ref);
 
@@ -135,9 +131,13 @@ export class Popup {
 
 	animateToActive(){
 
+		this.dom.classList.add('transition-in-progress');
+
 		const tl = gsap.timeline({
 			paused: true,
 			onComplete: () => {
+				this.dom.classList.remove('transition-in-progress'); 
+				this.active = true;
 				this.dom.classList.add('active');
 				this.sections[0].classList.add('active');
 			}
@@ -145,9 +145,9 @@ export class Popup {
 
 		tl
 			.addLabel('start')
-			.to(this.container, {
-				x: 0,
-				y: 0,
+			.to(this.dom, {
+				x: '130px',
+				y: window.innerHeight * .5,
 				duration: 1.5,
 				ease: 'power1.inOut'
 			})
@@ -155,17 +155,32 @@ export class Popup {
 		tl.play();
 
 	}
+	animateToNotActive(){
+
+		gsap.to(this.container, {
+			autoAlpha: 0,
+			duration: 0.6,
+			ease: 'power1.inOut',
+			onComplete: () => {
+
+				this.active = false;
+				this.dom.classList.remove('active');
+				for(const section of this.sections) section.classList.remove('active');
+
+				gsap.to(this.container, {
+					autoAlpha: 1,
+					duration: 1,
+					ease: 'power1.inOut'
+				})
+			}
+		})
+		
+	}
 
 	update(){		
 		if(!!!this.ref) return;
 
-		if(!this.visible) {
-			this.container.style.transform = '';
-			this.css2DElement.element.style.opacity = '';
-
-			return;
-		}
-		
+		if(!this.visible) return;
 		if(this.active) return;
 
 		this.css2DElement.position.copy(this.ref.target.position);	
@@ -176,8 +191,8 @@ export class Popup {
 			this.css2DElement.element.style.opacity = '0';
 			return;
 		}
-		const s = MathUtils.clamp( MathUtils.map(d, 5, 150, 1, 0.1), 0.1, 1);
-		this.container.style.transform = `scale3d(${s}, ${s}, 1)`;
+		// const s = MathUtils.clamp( MathUtils.map(d, 5, 150, 1, 0.1), 0.1, 1);
+		// this.container.style.transform = `scale3d(${s}, ${s}, 1)`;
 		this.css2DElement.element.style.opacity = '1';
 
 	}
