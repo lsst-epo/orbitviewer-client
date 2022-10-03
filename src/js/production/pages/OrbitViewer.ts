@@ -59,6 +59,6 @@ export class OrbitViewer extends Page {
 
 	update(): void {
 		super.update();
-		for(const popup of popups) popup.update();
+		for(const popup of popups) popup.label.update();
 	}
 }

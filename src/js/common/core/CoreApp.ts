@@ -180,8 +180,9 @@ export class CoreApp extends WebGLSketch {
 
             const popup = popups.find(x => x.name === planet.name);            
             if(popup) {
-                popup.ref = planet;
-                popup.loaded();
+                popup.label.ref = planet;
+                popup.label.loaded();
+                popup.info.loaded();
             }
             
 			this.planets.add(planet);

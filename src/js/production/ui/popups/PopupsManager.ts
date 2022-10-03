@@ -1,48 +1,72 @@
 import gsap from "gsap";
-import { Vector3 } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { CoreAppSingleton } from "../../../common/core/CoreApp";
 import { OrbitControlsIn, OrbitControlsOut } from "../../pagination/animations/OrbitControls";
 import { LOCATION } from "../../pagination/History";
-import { css2D } from "./Css2D";
-import { Popup } from "./Popup";
+import { PopupInfo } from "./PopupInfo";
+import { PopupLabel } from "./PopupLabel";
 import { RAYCASTER } from "./Raycaster";
 
-export const popups: Array<Popup> = [];
+export const popups: Array<{name: string, label: PopupLabel, info: PopupInfo}> = [];
 
 
 export const initPopups = () => {;
 
-	const items = document.querySelectorAll('.popup');	
+	const items = document.querySelectorAll('.popup-label');	
 
 	for(const item of items){	
-		popups.push(new Popup(item));
+
+		const name = item.getAttribute('data-name');
+		const infoItem = document.querySelector(`.popup-info[data-name="${name}"]`);
+
+		popups.push({
+			name,
+			label: new PopupLabel(item),
+			info: new PopupInfo(infoItem)
+		});
 	}
 
 }
 
-export function enablePopup() {
+export function enablePopup(name: string) {
+
 	RAYCASTER.active = false;
 	CoreAppSingleton.instance.lock();
 
-	for(const popup of popups) popup.hide();
+	document.querySelector('.popups-labels').classList.add('hidden');
+
+	for(const popup of popups) {
+		
+		if(popup.name === name) {
+			popup.label.select();
+			popup.info.show();
+		}
+	}
 
 	hideUI();
 }
 
 export function disablePopup() {
+
 	CameraManager.unlock();
 	RAYCASTER.active = true;
 	CoreAppSingleton.instance.unlock();
+
+	document.querySelector('.popups-labels').classList.remove('hidden');
 	
-	for(const popup of popups) popup.show();
+	for(const popup of popups) {
+		popup.label.unselect();
+		popup.info.hide();
+	}
 
 	showUI();
 }
 
 export const resizePopups = () => {
-	for(const popup of popups) popup.onResize();
+	for(const popup of popups) {
+		// popup.label.onResize();
+		popup.info.onResize();
+	}
 }
 
 const hideUI = () => {
