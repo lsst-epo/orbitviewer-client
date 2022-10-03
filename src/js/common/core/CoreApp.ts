@@ -111,7 +111,7 @@ export class CoreApp extends WebGLSketch {
         this.sunLightHelper.visible = false;
         this.scene.add(this.sunLightHelper);
 
-        this.ambientLight = new AmbientLight(0xffffff, 0.1);
+        this.ambientLight = new AmbientLight(0xffffff, 0.35);
         this.scene.add(this.ambientLight);
 
         console.log('Core App init');

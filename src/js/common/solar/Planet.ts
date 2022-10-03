@@ -1,9 +1,11 @@
 import { MathUtils } from "@jocabola/math";
-import { ColorRepresentation, Mesh, Object3D, SphereGeometry, TextureLoader, Vector3 } from "three";
+import { ColorRepresentation, DoubleSide, Mesh, MeshPhongMaterial, Object3D, SphereGeometry, TextureLoader, Vector3 } from "three";
 import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { EllipticalPath } from "./EllipticalPath";
 import { calculateOrbitByType, DEG_TO_RAD, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { initMaterial } from "../gfx/ShaderLib";
 
 export const PLANET_GEO = new SphereGeometry(1, 32, 32);
 const tLoader = new TextureLoader();
@@ -16,6 +18,8 @@ export type PlanetOptions = {
 }
 
 export type PlanetId = 'mercury'|'venus'|'earth'|'mars'|'jupiter'|'saturn'|'uranus'|'neptune';
+
+const gltfLoader = new GLTFLoader();
 
 export class Planet extends Object3D implements InteractiveObject {
     mesh:Mesh;
@@ -81,6 +85,20 @@ export class Planet extends Object3D implements InteractiveObject {
         this.target = this;
         // this.add(this.orbitPath.ellipse)
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
+
+        if(id === 'saturn') {
+            console.log('Houston, we\'ve got Saturn!');
+            gltfLoader.load('/assets/models/ring.glb', (gltf) => {
+                console.log(gltf.scene);
+                gltf.scene.scale.setScalar(2);
+                gltf.scene.children[0].material = initMaterial(new MeshPhongMaterial({
+                    side: DoubleSide,
+                    transparent: true,
+                    map: tLoader.load(`/assets/textures/2k_saturn_ring_alpha.png`)
+                }));
+                this.mesh.add(gltf.scene);
+            })
+        }
 
         // this.rotationSpeed = Random.randf(-1, 1);
         if(!this.dwarf) {
@@ -181,23 +199,23 @@ export const PlanetLockedMap:Record<PlanetId,CameraLockPosition> = {
         offset: new Vector3(-.01, .01, 0)
     },
     mars: {
-        distance: .05,
-        offset: new Vector3(-.01, .01, 0)
+        distance: .035,
+        offset: new Vector3(-.01, .0025, 0)
     },
     jupiter: {
         distance: .25,
         offset: new Vector3(-.05, .05, 0)
     },
     saturn: {
-        distance: .25,
-        offset: new Vector3(-.05, .05, 0)
+        distance: .4,
+        offset: new Vector3(.05, -.025, 0)
     },
     uranus: {
-        distance: .05,
-        offset: new Vector3(-.01, .01, 0)
+        distance: .1,
+        offset: new Vector3(-.02, .02, 0)
     },
     neptune: {
-        distance: .05,
-        offset: new Vector3(-.01, .01, 0)
+        distance: .1,
+        offset: new Vector3(-.016, .01, 0)
     }
 }

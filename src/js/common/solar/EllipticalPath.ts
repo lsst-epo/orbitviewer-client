@@ -102,7 +102,7 @@ export class EllipticalPath {
         const l = new Line(geo, mat);
         this.ellipse.add(l);
 
-        const dR = Math.min(r/20, .0001);
+        const dR = Math.min(r/20, .000025);
 
         for (let i=0; i<20; i++) {
             const l1 = new Line(geo, mat);
