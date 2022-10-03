@@ -6,18 +6,18 @@ import { CoreAppSingleton } from "../../../common/core/CoreApp";
 import { OrbitControlsIn, OrbitControlsOut } from "../../pagination/animations/OrbitControls";
 import { LOCATION } from "../../pagination/History";
 import { css2D } from "./Css2D";
-import { Popup } from "./Popup";
+import { PopupLabel } from "./PopupLabel";
 import { RAYCASTER } from "./Raycaster";
 
-export const popups: Array<Popup> = [];
+export const popups: Array<PopupLabel> = [];
 
 
 export const initPopups = () => {;
 
-	const items = document.querySelectorAll('.popup');	
+	const items = document.querySelectorAll('.popup-label');	
 
 	for(const item of items){	
-		popups.push(new Popup(item));
+		popups.push(new PopupLabel(item));
 	}
 
 }

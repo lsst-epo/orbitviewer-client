@@ -8,7 +8,19 @@
 	{% endif %}
 {% endfor %}
 
-	<div class="popup" data-name="{{ element.elementID }}">	
+	<div class="popup-label" data-name="{{ element.elementID }}">
+		<div class="icon">
+
+			{{ filterIcon(cat.slug, cat.title, cat.mainColor ) }}
+
+			<div class="icon-text">
+				<h3>{{ element.title }}</h3>
+				<p>{{ generic[lang]['popups'].tap }}</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="popup-info" data-name="{{ element.elementID }}">	
 		<div class="item-scale-wrapper">
 			<div class="item-wrapper">
 
@@ -18,15 +30,6 @@
 
 				<div class="cover" style="background-image: url(/assets/ceres-lorem.jpeg);">
 
-					<div class="icon">
-
-						{{ filterIcon(cat.slug, cat.title, cat.mainColor ) }}
-
-						<div class="icon-text">
-							<h3>{{ element.title }}</h3>
-							<p>{{ generic[lang]['popups'].tap }}</p>
-						</div>
-					</div>
 				</div>
 				
 				<div class="hidden-tabs">

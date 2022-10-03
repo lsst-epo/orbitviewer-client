@@ -4,26 +4,25 @@ import { Vector3 } from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { css2D } from "./Css2D";
+import { PopupInfo } from "./PopupInfo";
 import { disablePopup, enablePopup } from "./PopupsManager";
 import { InteractiveObject } from "./Raycaster";
 
-export class Popup {
+export class PopupLabel {
 	dom: HTMLElement;
 	css2DElement: CSS2DObject;
+
+	name: string; 
 
 	container: HTMLElement;
 	ref: InteractiveObject;
 
-	name: string;
-
 	visible: boolean = false;
 	active: boolean = false;
 
-	sections:NodeListOf<HTMLElement>;
-
 	tmp: Vector3 = new Vector3();
 
-	transitionInProgress:boolean = false;
+	info:PopupInfo;
 
 	constructor(dom){
 		
@@ -33,11 +32,12 @@ export class Popup {
 
 		this.container = this.dom.querySelector('.item-scale-wrapper');
 		
-		this.name = this.dom.getAttribute('data-name');		
+		this.name = this.dom.getAttribute('data-name');	
 
-		this.sections = this.dom.querySelectorAll('section');
+		this.info = new PopupInfo(document.querySelector(`.popup-info[data-name="${this.name}"]`));
 
-		this.setSize();
+
+
 	}
 
 	loaded(){
@@ -47,11 +47,8 @@ export class Popup {
 
 	addEventListeners(){
 
-		this.dom.querySelector('.close-item').addEventListener('click', (ev) => {			
-			this.close();		
-		})
 
-		this.dom.querySelector('.item-wrapper .cover').addEventListener('click', (ev) => {							
+		this.dom.addEventListener('click', (ev) => {							
 			this.open();
 		})
 
@@ -60,35 +57,14 @@ export class Popup {
 			this.close();
 		})
 
-		for(const section of this.sections){
-			section.querySelector('.head').addEventListener('click', () => {				
-				for(const section of this.sections) section.classList.remove('active');
-				section.classList.add('active');
-			})
-		}
-
-	}
-
-	setSize(){
-
-		for(const section of this.sections){
-			const contents = section.querySelectorAll('.content') as NodeListOf<HTMLElement>;
-			for(const content of contents) {
-				content.style.height = 'auto';
-				const r = content.getBoundingClientRect();
-				content.style.setProperty('--height', `${r.height + 20 }px`);
-				content.style.height = '';
-			}
-		}
 	}
 
 	onResize(){
-		this.setSize();
+		this.info.setSize();
 	}
 
 	hide(){
 		if(!this.visible) return;
-		if(this.transitionInProgress) return;
 
 		this.visible = false;		
 		this.dom.classList.remove('visible');		
@@ -104,8 +80,6 @@ export class Popup {
 	close(){	
 
 		if(!this.active) return;
-
-		this.transitionInProgress = true;
 
 		this.ref.selected = false;
 
@@ -137,8 +111,6 @@ export class Popup {
 			onComplete: () => {
 				this.active = true;
 				this.dom.classList.add('active');
-				this.sections[0].classList.add('active');
-				this.transitionInProgress = false;
 			}
 		})
 
@@ -165,16 +137,12 @@ export class Popup {
 
 				this.active = false;
 				this.dom.classList.remove('active');
-				for(const section of this.sections) section.classList.remove('active');
 
 				gsap.to(this.container, {
 					autoAlpha: 1,
 					duration: 1,
 					clearProps: 'all',
 					ease: 'power1.inOut',
-					onComplete: () => {
-						this.transitionInProgress = false;
-					}
 				})
 			}
 		})
@@ -189,14 +157,15 @@ export class Popup {
 
 		this.css2DElement.position.copy(this.ref.target.position);	
 
+		return;
+
+		// Todo opacity relativa distancia
 		const d = this.ref.target.position.distanceTo(CameraManager.cam.position);
 
 		if(d > 80){
 			this.css2DElement.element.style.opacity = '0';
 			return;
 		}
-		// const s = MathUtils.clamp( MathUtils.map(d, 5, 150, 1, 0.1), 0.1, 1);
-		// this.container.style.transform = `scale3d(${s}, ${s}, 1)`;
 		this.css2DElement.element.style.opacity = '1';
 
 	}
