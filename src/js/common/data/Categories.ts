@@ -1,4 +1,4 @@
-import { push } from "../../../data/locales";
+import { Color } from "three";
 import { OrbitDataElements } from "../solar/SolarUtils";
 
 export type SolarCategory = 'trans-neptunian-objects'|'near-earth-objects'|'interstellar-objects'|'comets'|'centaurs'|'asteroids'|'planets-moons';
@@ -15,7 +15,7 @@ export const categoriesSort:Array<SolarCategory> = [
 	'trans-neptunian-objects'
 ]
 
-export const getCategory = (item: OrbitDataElements) => {
+export const getCategory = (item: OrbitDataElements):SolarCategory => {
 	const avail_categories:Array<SolarCategory> = [];
 
 	if(item.is_tno) avail_categories.push('trans-neptunian-objects');
@@ -31,15 +31,17 @@ export const getCategory = (item: OrbitDataElements) => {
 		if(p < k) k = p;
 	}
 
+	if(!avail_categories.length) return categoriesSort[0];
+
 	return categoriesSort[k];
 }
 
-export const CategoryColorMap:Record<SolarCategory,string> = {
-	'asteroids': "#FDD56D",
-	'centaurs': "#36B3FF",
-	'comets': "#7EEA00",
-	'interstellar-objects': "#A8F0ED",
-	'near-earth-objects': "#FAAA58",
-	'planets-moons': "#ffffff",
-	'trans-neptunian-objects': "#98F79A"
+export const CategoryColorMap:Record<SolarCategory,Color> = {
+	'asteroids': new Color("#FDD56D"),
+	'centaurs': new Color("#36B3FF"),
+	'comets': new Color("#7EEA00"),
+	'interstellar-objects': new Color("#A8F0ED"),
+	'near-earth-objects': new Color("#FAAA58"),
+	'planets-moons': new Color("#ffffff"),
+	'trans-neptunian-objects': new Color("#98F79A")
 }

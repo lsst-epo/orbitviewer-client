@@ -7,7 +7,7 @@
  */
 
 import { FboUtils } from "@jocabola/gfx";
-import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, InstancedMesh, Object3D, PerspectiveCamera, Points, ShaderMaterial, SphereGeometry, Vector3, WebGLMultipleRenderTargets, WebGLRenderer } from "three";
+import { BufferAttribute, BufferGeometry, Color, InstancedMesh, NormalBlending, Object3D, PerspectiveCamera, Points, ShaderMaterial, Vector3, WebGLMultipleRenderTargets, WebGLRenderer } from "three";
 import { GPU_SIM_SIZES, VISUAL_SETTINGS } from "../core/Globals";
 import { COMP_SP_NORMAL } from "../gfx/ShaderLib";
 import { GPUSim, SimQuality } from "./GPUSim";
@@ -19,18 +19,8 @@ import p_frag from '../../../glsl/sim/particles.frag';
 import p_vert from '../../../glsl/sim/particles.vert';
 
 import { gsap } from 'gsap/gsap-core';
+import { CategoryColorMap } from "../data/Categories";
 
-
-
-const GEO = new SphereGeometry(.01, 32, 32);
-/* const MAT = new SolarParticlesMaterial({
-    shininess: 0,
-    emissive: 0xffffff,
-    emissiveIntensity: .25,
-    // transparent: true,
-    // depthTest: false,
-    // blending: AdditiveBlending
-}); */
 
 const MAT = new ShaderMaterial({
     vertexShader: p_vert,
@@ -45,7 +35,7 @@ const MAT = new ShaderMaterial({
             value: 1
         }
     },
-    blending: AdditiveBlending
+    blending: NormalBlending
 });
 
 const SCALE = {
@@ -55,13 +45,6 @@ const SCALE = {
 
 const dummy = new Object3D();
 const tmp = new Vector3();
-
-const COLORS:Array<Color> = [
-    new Color(0xcc00ff), // Elliptical
-    new Color(0xff3311), // parabolic
-    new Color(0x11aa11), // near parabolic
-    new Color(0x11aaff) // hyperbolic
-];
 
 export class SolarParticles {
     private _data:Array<OrbitElements> = [];
@@ -78,56 +61,6 @@ export class SolarParticles {
         this.quality = this.sim.qualitySettings;
         MAT.uniforms.computedPosition.value = this.sim.texture;
 
-        // const count = VISUAL_SETTINGS[VISUAL_SETTINGS.current];
-
-        /* this.mesh = new InstancedMesh(GEO, MAT, count);
-        // this.mesh.visible = false;
-        for(let i=0; i<count; i++) {
-            this.mesh.setColorAt(i, COLORS[0]);
-        } */
-
-        /* const geo = new BufferGeometry();
-        const pos = [];
-
-        for(let i=0; i<count; i++) {
-            // this.mesh.setColorAt(i, COLORS[0]);
-            pos.push(
-                Random.randf(-500, 500),
-                Random.randf(-500, 500),
-                Random.randf(-500, 500)
-            )
-        }
-
-        const siz = GPU_SIM_SIZES[VISUAL_SETTINGS.current];
-        const w = siz.width;
-        const h = siz.height;
-
-        const simUV = [];
-
-        for(let i=0; i<w; i++){
-            for(let j=0; j<h; j++){
-                simUV.push(i/w, j/h);
-            }
-        }
-
-        // console.log(count, simUV.length/2, pos.length/3);
-        
-        geo.setAttribute(
-            'position',
-            new BufferAttribute(
-                new Float32Array(pos),
-                3
-            )
-        );
-
-        geo.setAttribute(
-            'simUV',
-            new BufferAttribute(
-                new Float32Array(simUV),
-                2
-            )
-        ); */
-
         this.points = new Points(this.createPointsGeo(), MAT);
 
         this.maps = new WebGLMultipleRenderTargets(512, 512, 3);
@@ -136,12 +69,6 @@ export class SolarParticles {
         this.maps.texture[2].name = 'diffuse';
         FboUtils.renderToFbo(this.maps, renderer, COMP_SP_NORMAL);
         renderer.setRenderTarget(null);
-
-        // MAT.uniforms.normalMap.value = this.maps.texture[0];
-        // MAT.uniforms.alphaMap.value = this.maps.texture[1];
-        // MAT.uniforms.map.value = this.maps.texture[2];
-        // MAT.emissiveMap = this.maps.texture[2];
-        // MAT.alphaTest = .01;
     }
 
     private createPointsGeo():BufferGeometry {
@@ -150,10 +77,9 @@ export class SolarParticles {
         const geo = new BufferGeometry();
         const pos = [];
         const color = [];
-        const col = COLORS[0];
+        const col = new Color();
 
         for(let i=0; i<count; i++) {
-            // this.mesh.setColorAt(i, COLORS[0]);
             color.push(col.r, col.g, col.b);
             pos.push(
                 Random.randf(-500, 500),
@@ -221,12 +147,10 @@ export class SolarParticles {
 
         for(let i=0; i<count; i++) {
             const el = this._data[i];
-            const col = COLORS[el.type];
+            const col = CategoryColorMap[el.category];
             arr[i*3] = col.r;
             arr[i*3 + 1] = col.g;
             arr[i*3 + 2] = col.b;
-            // this.mesh.setColorAt(i, COLORS[el.type]);
-            // this.mesh.setColorAt(i, col);
         }
 
         // this.mesh.instanceColor.needsUpdate = true;
@@ -248,41 +172,7 @@ export class SolarParticles {
      * @param camera - Camera rendering the simulation
      */
     update(d:number, camera:PerspectiveCamera) {
-        /* this.mesh.visible = this._data.length > 0;
-        if(!this.mesh.visible) return; */
-
         this.sim.render(d);
-        /* const mat = this.mesh.material as SolarParticlesMaterial;
-        if(mat.shaderRef != null) {
-            mat.shaderRef.uniforms.computedPosition.value = this.sim.texture;
-        } */
-
-        /* const count = Math.min(MAX, this._data.length);
-
-        for(let i=0; i<count; i++) {
-            const el = this._data[i];
-            dummy.matrix.identity();
-            calculateOrbit(el, d, dummy.position);
-            
-            tmp.copy(dummy.position).sub(camera.position);
-            const p = MathUtils.smoothstep(0, 200, tmp.length());
-            dummy.scale.setScalar(
-                MathUtils.mix(SCALE.min, SCALE.max, p)
-            );
-            dummy.lookAt(camera.position);
-
-            dummy.updateMatrix();
-            this.mesh.setMatrixAt(i, dummy.matrix);
-        }
-
-        for(let i=count; i<MAX; i++) {
-            dummy.matrix.identity();
-            dummy.scale.setScalar(0); // make invisible
-            dummy.updateMatrix();
-            this.mesh.setMatrixAt(i, dummy.matrix);
-        } */
-
-        // this.mesh.instanceMatrix.needsUpdate = true;
     }
 }
 

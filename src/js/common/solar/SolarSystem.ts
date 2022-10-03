@@ -1,4 +1,5 @@
 import { Vector3 } from "three";
+import { SolarCategory } from "../data/Categories";
 import { OrbitDataElements } from "./SolarUtils";
 
 export const DEG_TO_RAD = Math.PI / 180;
@@ -25,7 +26,7 @@ export type OrbitElements = {
     q?:number;
     Tp?:number;
     type:OrbitType;
-    category:string;
+    category:SolarCategory;
 }
 
 export enum OrbitType {
@@ -33,33 +34,6 @@ export enum OrbitType {
     Parabolic,
     NearParabolic,
     Hyperbolic
-}
-
-export const TestBody:OrbitElements = {
-    "N": 258.0442, // longitude of ascending node (degrees)
-    "a": 49.9849804, // semi major axis (AU)
-    "e": 0.2905768, // eccentricity
-    "id": "2007 OC10",
-    "G": 0.15, // don't worry about this for now
-    "i": 21.65338, // inclination (degrees)
-    "H": 5.0, // don't worry about this for now
-    "w": 52.45668, // argument of perihelion (degrees)
-    "M": 11.95706, // mean anomaly (degrees)
-    "n": 0.00278898, // daily motion (degrees per day)
-    "type": OrbitType.Elliptical
-}
-
-export const TestBodyData:OrbitDataElements = {
-    "node": 258.0442, // longitude of ascending node (degrees)
-    "a": 49.9849804, // semi major axis (AU)
-    "e": 0.2905768, // eccentricity
-    "fulldesignation": "2007 OC10",
-    "G": 0.15, // don't worry about this for now
-    "incl": 21.65338, // inclination (degrees)
-    "H": 5.0, // don't worry about this for now
-    "peri": 52.45668, // argument of perihelion (degrees)
-    "M": 11.95706, // mean anomaly (degrees)
-    "n": 0.00278898 // daily motion (degrees per day)
 }
 
 export function getCartesianCoordinates(v:number, r:number, el:OrbitElements, target:Vector3=new Vector3()):Vector3 {
