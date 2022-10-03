@@ -1,7 +1,7 @@
 import { MathUtils } from "@jocabola/math";
 import { gsap } from "gsap/gsap-core";
 import { Mesh, Object3D, SphereGeometry, Vector3 } from "three";
-import { InteractiveObject } from "../../production/ui/expandable-items/Raycaster";
+import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { SunMaterial } from "../gfx/SunMaterial";
 import { PLANET_SCALE } from "./Planet";
 import { KM2AU, SUN_RADIUS } from "./SolarSystem";
