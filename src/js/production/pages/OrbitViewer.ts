@@ -1,7 +1,7 @@
 import { onChange } from "../pagination/History";
 import { Search } from "../partials/Search";
-import { expandableItems } from "../ui/expandable-items/ExpandableItems";
-import { RAYCASTER } from "../ui/expandable-items/Raycaster";
+import { popups } from "../ui/popups/PopupsManager";
+import { RAYCASTER } from "../ui/popups/Raycaster";
 import { Page } from "./Page";
 
 
@@ -19,12 +19,15 @@ export class OrbitViewer extends Page {
 	}
 
 	hide(): void {
+		super.hide();
 		RAYCASTER.active = false;
 	}
 
 	addEventListeners(): void {
 	
 		this.addCustomizeView();
+
+		this.addCameraReset();
 		
 	}
 
@@ -37,24 +40,25 @@ export class OrbitViewer extends Page {
 			wrapper.classList.toggle('active');
 		})
 
-		this.dom.querySelector('.back-button button').addEventListener('click', () => {
-			onChange('/');
+		document.addEventListener('keydown', (e) => {			
+			if(e.key != 'Escape') return;
+			if(!wrapper.classList.contains('active')) return;
+			wrapper.classList.remove('active');
 		})
 
-		document.addEventListener('keydown', (e) => {			
 
-			if(e.key != 'Escape') return;
+	}
 
-			if(!wrapper.classList.contains('active')) return;
-
-			e.preventDefault();
-
-			wrapper.classList.remove('active');
+	addCameraReset(){
+		const button = this.dom.querySelector('.orbit-controls-reset');
+		button.addEventListener('click', () => {
+			console.log('CAMERA RESET MISSING HERE');
+			
 		})
 	}
 
 	update(): void {
 		super.update();
-		for(const expandableItem of expandableItems) expandableItem.update();
+		for(const popup of popups) popup.update();
 	}
 }

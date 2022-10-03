@@ -26,6 +26,7 @@
 			"year": "Year",
 			"tours": "Tours",
 			"sort-by": "Sort by",
+			"pause": "Pause",
 			"customize-orbits": "Apply and explore them",
 			"guided-experiences": "Back to main screen",
 			"landing-explore": "I want to explore",
@@ -37,7 +38,7 @@
 			"go-date": "Go to date",
 			"tours-back": "Back to guided experiences",
 			"tour-start": "Let's start",
-			"tour-fun-fact": "Fun fact",			
+			"tour-fun-fact": "Fun fact",
 			"search-placeholder": "Write and click search",
 			"search-random": "Show me one random object!",
 			"customize-view": "Customize your view. Toggle On/Off",
@@ -97,7 +98,7 @@
 				"subtitle": "Credits"
 			}
 		},
-		"expandable-items": {
+		"popups": {
 			"tap": "Tap to expand",
 			"overview": "Overview",
 			"context": "Context information",
@@ -131,6 +132,7 @@
 			"year": "ES - Year",
 			"tours": "ES - Tours",
 			"sort-by": "ES - Sort by",
+			"pause": "ES - Pause",
 			"customize-orbits": "ES - Apply and explore them",
 			"guided-experiences": "ES - Back to main screen",
 			"landing-explore": "ES - I want to explore",
@@ -203,7 +205,7 @@
 				"subtitle": "ES - Credits"
 			}
 		},
-		"expandable-items": {
+		"popups": {
 			"tap": "ES - Tap to expand",
 			"overview": "ES - Overview",
 			"context": "ES - Context information",

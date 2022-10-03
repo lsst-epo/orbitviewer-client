@@ -1,5 +1,5 @@
 
-.expandable-items {
+.popups {
 	overflow: hidden;
 	
 	position: absolute;
@@ -16,10 +16,10 @@
 	opacity: 0;
 }
 
-.page__orbit-viewer .expandable-items {
+.page__orbit-viewer .popups {
 	opacity: 1;
 }
 
-.loader-active .expandable-item {
+.loader-active .popup {
 	display: none;
 }

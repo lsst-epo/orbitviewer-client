@@ -19,6 +19,10 @@ export class Panel implements PanelsListener {
 
 	}
 
+	leave(){
+		this.closePanel();
+	}
+
 	create(){
 
 		
@@ -27,9 +31,8 @@ export class Panel implements PanelsListener {
 
 	closePanel(){
 
-		this.active = false;
-		this.dom.classList.remove('active');
-		this.dom.classList.remove('to-front');
+		if(!this.active) return;
+		this.togglePanel();
 		
 	}
 

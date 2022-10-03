@@ -12,7 +12,7 @@ export class css2D {
 		initialized = true;
 		console.log('Init CSS 3D Renderer');
 		document.body.appendChild(renderer.domElement);
-		renderer.domElement.classList.add('css2D__wrapper', 'expandable-items')
+		renderer.domElement.classList.add('css2D__wrapper', 'popups')
 		renderer.setSize(width, height);
 	}
 

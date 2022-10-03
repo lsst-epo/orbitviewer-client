@@ -69,5 +69,3 @@ export const VISUAL_SETTINGS = {
 	high: getParticleCount(GPU_SIM_SIZES.high),
 	ultra: getParticleCount(GPU_SIM_SIZES.ultra)
 }
-
-export const CAMERA_POSITION = new Vector3();

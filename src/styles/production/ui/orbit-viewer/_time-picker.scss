@@ -45,6 +45,7 @@
 
 [data-panel="time-picker"]{
 	overflow: visible;
+	max-width: var(--time-picker-max-width);
 
 	p {
 		@include light-3;

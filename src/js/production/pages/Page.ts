@@ -30,12 +30,11 @@ export class Page {
 		
 	}
 
-	hide(){
-
+	hide(){		
+		this.panels.leave();
 	}
 	
 	disable () {
-		this.hide();
 		this.dom.classList.add('disabled');
 		this.active = false;
 	}

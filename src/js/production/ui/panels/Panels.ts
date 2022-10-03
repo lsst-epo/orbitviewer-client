@@ -61,6 +61,10 @@ export class Panels {
 
 	}
 
+	leave(){
+		for(const p of this.panels) p.leave();
+	}
+
 	update(){					
 		for(const p of this.panels) p.update();
 	}

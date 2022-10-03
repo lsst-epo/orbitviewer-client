@@ -6,6 +6,7 @@ import { FadeIn, FadeOut } from './animations/Fade';
 import gsap from 'gsap'
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
 import { CoreAppSingleton } from '../../common/core/CoreApp';
+import { CameraManager } from '../../common/core/CameraManager';
 gsap.registerPlugin(ScrollToPlugin);
 
 
@@ -43,6 +44,8 @@ export const TriggerTransition = (skip:boolean = false) => {
 
 	Transition();
 
+	if(!CameraManager.active) return;
+	
 	if(LOCATION.current.id != 'orbit-viewer') {
 		CoreAppSingleton.instance.goToIntroView();
 	} else {
@@ -56,6 +59,9 @@ const Transition = () => {
 		defaults: {
 			duration: 0.2,
 			ease: 'power1.inOut',
+		},
+		onStart: () => {
+			if(LOCATION.previous) LOCATION.previous.class.hide();
 		},
 		onComplete: () => {
 			EndTransition();

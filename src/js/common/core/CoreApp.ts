@@ -1,9 +1,9 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
 import { AmbientLight, Clock, Group, PerspectiveCamera, PointLight, TextureLoader } from "three";
-import { css2D } from "../../production/ui/expandable-items/Css2D";
-import { expandableItems, initExpandableItems, resizeExpandableItems } from "../../production/ui/expandable-items/ExpandableItems";
-import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/expandable-items/Raycaster";
+import { css2D } from "../../production/ui/popups/Css2D";
+import { initPopups, popups, resizePopups } from "../../production/ui/popups/PopupsManager";
+import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/popups/Raycaster";
 import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/FiltersManager";
@@ -14,14 +14,14 @@ import { SolarClock } from "../solar/SolarClock";
 import { buildSimWithData, particles } from "../solar/SolarParticlesManager";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
-import { CAMERA_POSITION, CLOCK_SETTINGS, DEV } from "./Globals";
+import { CLOCK_SETTINGS, DEV } from "./Globals";
 
 import Stats from 'three/examples/jsm/libs/stats.module.js';
+import { LOCATION } from "../../production/pagination/History";
 import { hideLoader } from "../../production/ui/loader";
+import { EllipticalPath } from "../solar/EllipticalPath";
 import { Sun } from "../solar/Sun";
 import { CameraManager, DEFAULT_CAM_POS } from "./CameraManager";
-import { EllipticalPath } from "../solar/EllipticalPath";
-import { LOCATION } from "../../production/pagination/History";
 
 const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
@@ -84,7 +84,7 @@ export class CoreApp extends WebGLSketch {
         initRaycaster();
 
         css2D.init(window.innerWidth, window.innerHeight);
-        initExpandableItems();
+        initPopups();
 
         this.vfx = new VFXRenderer(this.renderer, window.innerWidth, window.innerHeight);
 
@@ -140,8 +140,10 @@ export class CoreApp extends WebGLSketch {
                     loadData(()=> {
                         this.onDataLoaded();
                     });
+                }).catch(() => {
+                    alert('Database fetch error.')
                 });
-                
+                        
             });
 
         });
@@ -150,7 +152,7 @@ export class CoreApp extends WebGLSketch {
     resize(width: number, height: number): void {
 		super.resize(width, height);
         css2D.setSize(width, height);
-        resizeExpandableItems();
+        resizePopups();
 		this.vfx.resize(width, height);
 	}
 
@@ -175,10 +177,10 @@ export class CoreApp extends WebGLSketch {
 
 			const planet = new Planet(el.id, false, mel);
 
-            const expandableItem = expandableItems.find(x => x.name === planet.name);            
-            if(expandableItem) {
-                expandableItem.ref = planet;
-                expandableItem.loaded();
+            const popup = popups.find(x => x.name === planet.name);            
+            if(popup) {
+                popup.ref = planet;
+                popup.loaded();
             }
             
 			this.planets.add(planet);
@@ -305,8 +307,6 @@ export class CoreApp extends WebGLSketch {
         updateRaycaster(this.camera);
 
 		CameraManager.update();
-
-        CAMERA_POSITION.copy(this.camera.position)
 
         if(this.clockChanged())this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
 		const d = this.solarClock.update();
