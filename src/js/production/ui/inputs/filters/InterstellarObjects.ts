@@ -43,4 +43,14 @@ export class InterstellarObjects extends Checkbox {
 				ease: 'power2.inOut'
 			}, 'start')
 	}
+
+	play(): void {
+		this.tl.timeScale(1)
+		this.tl.play();
+	}
+
+	reverse(): void {
+		this.tl.timeScale(1.5);
+		this.tl.reverse(1);
+	}
 }

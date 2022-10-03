@@ -49,4 +49,14 @@ export class NearEarthObjects extends Checkbox {
 				autoAlpha: 1,
 			}, 'start')
 	}
+
+	play(): void {
+		this.tl.timeScale(1)
+		this.tl.play();
+	}
+
+	reverse(): void {
+		this.tl.timeScale(1.5);
+		this.tl.reverse(1);
+	}
 }

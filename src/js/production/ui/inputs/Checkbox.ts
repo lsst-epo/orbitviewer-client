@@ -11,6 +11,14 @@ export class Checkbox extends Input {
 		})
 	}
 
+	reverse(){
+		this.tl.reverse();		
+	}
+
+	play(){
+		this.tl.play();
+	}
+
 	checkState(playAnimation:boolean = true){
 
 		const parent = this.dom.parentElement;
@@ -27,8 +35,8 @@ export class Checkbox extends Input {
 		if(!this.tl) return;
 
 		if(playAnimation){
-			if(checked) this.tl.play();
-			else this.tl.reverse();
+			if(checked) this.play()
+			else this.reverse()
 		} else {
 			if(checked) this.tl.progress(1);
 			else this.tl.progress(0)
