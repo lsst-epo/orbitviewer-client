@@ -11,7 +11,7 @@ uniform float opacity;
 layout(location = 1) out vec4 gGlow;
 
 void main () {
-    if(alive < 1.0) discard;
+    if(alive < .1) discard;
 
     vec2 uv = gl_PointCoord.xy;
     vec2 st = vec2(-1.0) + 2.0 * uv;
