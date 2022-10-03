@@ -68,12 +68,14 @@ export class PopupInfo {
 
 	show(){
 		this.active = true;
+		this.sections[0].classList.add('active');
 		this.dom.classList.add('active');
 	}
 
 	hide(){
 		this.active = false;
 		this.dom.classList.remove('active');
+		for(const section of this.sections) section.classList.remove('active');
 	}
 
 }

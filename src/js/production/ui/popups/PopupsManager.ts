@@ -1,8 +1,9 @@
 import gsap from "gsap";
 import { CameraManager } from "../../../common/core/CameraManager";
-import { CoreAppSingleton } from "../../../common/core/CoreApp";
+import { CoreAppSingleton, solarClock } from "../../../common/core/CoreApp";
 import { OrbitControlsIn, OrbitControlsOut } from "../../pagination/animations/OrbitControls";
 import { LOCATION } from "../../pagination/History";
+import { broadcastPanelsClose } from "../panels/PanelsManager";
 import { PopupInfo } from "./PopupInfo";
 import { PopupLabel } from "./PopupLabel";
 import { RAYCASTER } from "./Raycaster";
@@ -35,6 +36,9 @@ export function enablePopup(name: string) {
 
 	document.querySelector('.popups-labels').classList.add('hidden');
 
+	solarClock.pause();
+	broadcastPanelsClose();
+
 	for(const popup of popups) {
 		
 		if(popup.name === name) {
@@ -51,6 +55,8 @@ export function disablePopup() {
 	CameraManager.unlock();
 	RAYCASTER.active = true;
 	CoreAppSingleton.instance.unlock();
+
+	solarClock.resume();
 
 	document.querySelector('.popups-labels').classList.remove('hidden');
 	

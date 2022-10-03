@@ -55,15 +55,6 @@
 
 		background-position: center;
 		background-size: cover;
-
-		cursor: pointer;
-
-		transition-property: border-radius, width, height;
-
-		* {
-			pointer-events: all;
-		}
-
 	}
 
 	.hidden-tabs {
@@ -114,6 +105,9 @@
 			overflow: hidden;
 			padding: 0 var(--distance-10);
 			height: 0px;
+
+			transition: 0.4s ease-in-out;
+			transition-property: all;
 
 			p {
 				@include light-3;
