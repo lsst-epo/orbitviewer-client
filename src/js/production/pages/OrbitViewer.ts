@@ -25,6 +25,8 @@ export class OrbitViewer extends Page {
 	addEventListeners(): void {
 	
 		this.addCustomizeView();
+
+		this.addCameraReset();
 		
 	}
 
@@ -37,19 +39,20 @@ export class OrbitViewer extends Page {
 			wrapper.classList.toggle('active');
 		})
 
-		this.dom.querySelector('.back-button button').addEventListener('click', () => {
-			onChange('/');
+		document.addEventListener('keydown', (e) => {			
+			if(e.key != 'Escape') return;
+			if(!wrapper.classList.contains('active')) return;
+			wrapper.classList.remove('active');
 		})
 
-		document.addEventListener('keydown', (e) => {			
 
-			if(e.key != 'Escape') return;
+	}
 
-			if(!wrapper.classList.contains('active')) return;
-
-			e.preventDefault();
-
-			wrapper.classList.remove('active');
+	addCameraReset(){
+		const button = this.dom.querySelector('.orbit-controls-reset');
+		button.addEventListener('click', () => {
+			console.log('CAMERA RESET MISSING HERE');
+			
 		})
 	}
 

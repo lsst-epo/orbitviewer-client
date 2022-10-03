@@ -26,19 +26,8 @@
 		cursor: pointer;
 
 		svg {
-			width: 20px;
-		}
-	}
-
-	.orbit-controls-free {
-		svg {
-			transform: translate(-1px, 0px);
-		}
-	}
-
-	.orbit-controls-axis {
-		svg {
-			transform: translate(2px, -1px);
+			width: 22px;
+			color: var(--white-1);
 		}
 	}
 }

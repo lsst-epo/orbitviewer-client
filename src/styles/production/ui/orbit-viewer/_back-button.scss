@@ -3,8 +3,9 @@
 	top: 0;
 	right: 0;
 
-	button {
+	a {
 		padding: var(--distance-10);
+		display: block;
 
 		@include desktop {
 			padding: var(--distance-10) var(--distance-20);
@@ -12,10 +13,7 @@
 
 		svg {
 			width: var(--icon-medium);
-		}
-
-		path {
-			fill: var(--white-0);
+			color: var(--white-0);
 		}
 	}
 }
