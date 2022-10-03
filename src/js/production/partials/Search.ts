@@ -49,8 +49,6 @@ export class Search {
 
 			if(this.state === 0) return;
 
-			e.preventDefault();
-
 			input.value = '';
 			this.updateState(0);
 		})
