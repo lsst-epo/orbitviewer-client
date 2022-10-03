@@ -3,8 +3,8 @@ import { LOCATION } from "./History";
 import { SlideIn, SlideOut } from './animations/Slide';
 import { OrbitControlsIn, OrbitControlsOut } from './animations/OrbitControls';
 import { FadeIn, FadeOut } from './animations/Fade';
-import gsap, { ScrollToPlugin } from 'gsap/all';
-
+import gsap from 'gsap'
+import ScrollToPlugin from 'gsap/ScrollToPlugin';
 gsap.registerPlugin(ScrollToPlugin);
 
 export const TRANSITIONS = {

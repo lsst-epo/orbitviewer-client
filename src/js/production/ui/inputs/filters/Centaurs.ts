@@ -1,6 +1,6 @@
-import gsap, { DrawSVGPlugin } from "gsap/all";
+import gsap from "gsap";
+import DrawSVGPlugin from "gsap/DrawSVGPlugin";
 import { Checkbox } from "../Checkbox";
-
 gsap.registerPlugin(DrawSVGPlugin);
 
 

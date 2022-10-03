@@ -1,6 +1,6 @@
 import { MathUtils } from "@jocabola/math";
 import { isMobile } from "@jocabola/utils";
-import gsap from "gsap/all";
+import gsap from "gsap";
 import { solarClock } from "../../../common/core/CoreApp";
 import { formatDate } from "../../utils/Dates";
 import { Panel } from "./Panel";

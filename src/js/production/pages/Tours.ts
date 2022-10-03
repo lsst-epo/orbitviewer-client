@@ -1,4 +1,4 @@
-import gsap from "gsap/all";
+import gsap from "gsap";
 import { Page } from "./Page";
 
 

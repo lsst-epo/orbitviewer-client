@@ -1,6 +1,6 @@
-import gsap, { MorphSVGPlugin } from "gsap/all";
+import gsap from "gsap";
+import MorphSVGPlugin from "gsap/MorphSVGPlugin";
 import { Checkbox } from "../Checkbox";
-
 gsap.registerPlugin(MorphSVGPlugin);
 
 
