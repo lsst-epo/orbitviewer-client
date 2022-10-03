@@ -30,6 +30,7 @@ export class TrajectoryMaterial extends LineBasicMaterial {
 
         shader.uniforms.time = {value: 0};
         shader.uniforms.selected = {value: 0};
+        shader.uniforms.globalOpacity = {value: 1};
         shader.uniforms.bodyPos = {value: new Vector3()};
         shader.uniforms.dRadius = {value: .1};
         shader.uniforms.el = {value: this.el}

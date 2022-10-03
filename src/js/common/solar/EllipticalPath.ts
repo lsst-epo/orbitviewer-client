@@ -22,6 +22,7 @@ export class EllipticalPath {
     orbitElements:OrbitElements;
     material:TrajectoryMaterial;
     selected:boolean = false;
+    hidden:boolean = false;
 
     constructor(el:OrbitElements, r:number) {
         // build path
@@ -135,6 +136,9 @@ export class EllipticalPath {
 
             const sel = mat.shader.uniforms.selected;
             sel.value = MathUtils.lerp(sel.value, this.selected ? 1 : 0, .16);
+
+            const op = mat.shader.uniforms.globalOpacity;
+            op.value = MathUtils.lerp(op.value, this.hidden ? 0 : 1, .16);
         }
     }
 }

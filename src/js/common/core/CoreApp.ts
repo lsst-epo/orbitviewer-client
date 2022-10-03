@@ -1,6 +1,6 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
-import { AmbientLight, Clock, Group, PerspectiveCamera, PointLight, SphereGeometry, TextureLoader } from "three";
+import { AmbientLight, Clock, Group, PerspectiveCamera, PointLight, TextureLoader } from "three";
 import { css2D } from "../../production/ui/popups/Css2D";
 import { initPopups, popups, resizePopups } from "../../production/ui/popups/PopupsManager";
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/popups/Raycaster";
@@ -12,24 +12,31 @@ import { VFXRenderer } from "../gfx/VFXRenderer";
 import { Planet } from "../solar/Planet";
 import { SolarClock } from "../solar/SolarClock";
 import { buildSimWithData, particles } from "../solar/SolarParticlesManager";
-import { OrbitElements } from "../solar/SolarSystem";
 import { mapOrbitElements, OrbitDataElements } from "../solar/SolarUtils";
 import { SunLightHelper } from "../solar/SunLightHelper";
 import { CAMERA_POSITION, CLOCK_SETTINGS, DEV } from "./Globals";
 
 import Stats from 'three/examples/jsm/libs/stats.module.js';
+import { LOCATION } from "../../production/pagination/History";
 import { hideLoader } from "../../production/ui/loader";
+import { EllipticalPath } from "../solar/EllipticalPath";
 import { Sun } from "../solar/Sun";
-import { CameraManager } from "./CameraManager";
-
-const GEO = new SphereGeometry(1, 32, 32);
-
-const data = new Array<OrbitElements>();
+import { CameraManager, DEFAULT_CAM_POS } from "./CameraManager";
 
 const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
 
 export const solarClock = new SolarClock(new Clock());
+
+export const orbitPaths:Array<EllipticalPath> = [];
+
+export type SingletonApp = {
+    instance:CoreApp;
+}
+
+export const CoreAppSingleton:SingletonApp = {
+    instance: null
+}
 
 export const SUN = {
     instance: null
@@ -52,12 +59,16 @@ export class CoreApp extends WebGLSketch {
     vfx:VFXRenderer;
     sun:Sun;
 
+    private launched:boolean = false;
+
     constructor() {
         super(window.innerWidth, window.innerHeight, {
             alpha: false,
             antialias: true,
             near: 0.01
         }, false);
+
+        CoreAppSingleton.instance = this;
 
         document.body.appendChild(this.domElement);
         this.domElement.classList.add('view');
@@ -173,6 +184,7 @@ export class CoreApp extends WebGLSketch {
             
 			this.planets.add(planet);
 			this.planetPaths.add(planet.orbitPath.ellipse);
+            orbitPaths.push(planet.orbitPath);
 
             updateRaycasterWatch([planet]);
 
@@ -189,6 +201,7 @@ export class CoreApp extends WebGLSketch {
 
 			this.dwarfPlanets.add(planet);
 			this.dwarfPlanetPaths.add(planet.orbitPath.ellipse);
+            orbitPaths.push(planet.orbitPath);
 
             updateRaycasterWatch([planet]);
 		}
@@ -213,8 +226,7 @@ export class CoreApp extends WebGLSketch {
 	}
 
     launch() {
-        this.camera.position.z = 10;
-        this.camera.position.y = 3;
+        this.camera.position.copy(DEFAULT_CAM_POS);
         this.camera.lookAt(this.scene.position);
 
         // Init controls
@@ -244,6 +256,43 @@ export class CoreApp extends WebGLSketch {
         this.solarClock.start();
 
         hideLoader();
+
+        if(LOCATION.current.id != 'orbit-viewer') {
+            this.lock();
+            CameraManager.goToTarget(this.sun, true);
+        }
+
+        this.launched = true;
+    }
+
+    goToIntroView () {
+        this.lock();
+        CameraManager.goToTarget(this.sun, true);
+    }
+
+    goToDefaultView () {
+        this.unlock();
+        CameraManager.reset();
+    }
+
+    lock() {
+        particles.highlighted = false;
+        this.sun.highlight = true;
+
+        for(let i=0; i<orbitPaths.length; i++) {
+            const path = orbitPaths[i];
+            path.hidden = true;
+        }
+    }
+
+    unlock() {
+        particles.highlighted = true;
+        this.sun.highlight = false;
+        
+        for(let i=0; i<orbitPaths.length; i++) {
+            const path = orbitPaths[i];
+            path.hidden = false;
+        }
     }
 
     clockChanged():boolean {

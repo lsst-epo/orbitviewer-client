@@ -1,9 +1,10 @@
-import { Mesh, Object3D, SphereGeometry } from "three";
+import { gsap } from "gsap/gsap-core";
+import { Mesh, Object3D, SphereGeometry, Vector3 } from "three";
+import { InteractiveObject } from "../../production/ui/expandable-items/Raycaster";
 import { SunMaterial } from "../gfx/SunMaterial";
+import { PLANET_SCALE } from "./Planet";
 import { KM2AU, SUN_RADIUS } from "./SolarSystem";
 import { SunParticles } from "./SunParticles";
-import { gsap } from "gsap/gsap-core";
-import { PLANET_SCALE } from "./Planet";
 
 const GEO = new SphereGeometry(1, 32, 32);
 
@@ -15,9 +16,13 @@ export const SUN_SCALE = {
 /**
  * GFX Asset for the Sun
  */
-export class Sun extends Object3D {
+export class Sun extends Object3D implements InteractiveObject {
     mesh:Mesh;
     particles:SunParticles;
+    selected:boolean = false;
+    target:Object3D = this;
+    lockedDistance:number = .6;
+    lockedOffset:Vector3 = new Vector3();
 
     constructor() {
         super();
@@ -42,6 +47,7 @@ export class Sun extends Object3D {
         gsap.killTweensOf(this.scale);
         const scl = value ? SUN_SCALE.max : SUN_SCALE.min;
         gsap.to(this.scale, {x: scl, y: scl, z: scl, ease: 'power2.inOut', duration: 3});
+        this.selected = value;
     }
 
     update(time:number) {

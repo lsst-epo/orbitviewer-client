@@ -3,6 +3,7 @@
 uniform float time;
 in float vWeight;
 uniform float selected;
+uniform float globalOpacity;
 in vec3 pos;
 uniform vec3 bodyPos;
 uniform float dRadius;

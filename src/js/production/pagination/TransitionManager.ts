@@ -5,6 +5,7 @@ import { OrbitControlsIn, OrbitControlsOut } from './animations/OrbitControls';
 import { FadeIn, FadeOut } from './animations/Fade';
 import gsap from 'gsap'
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
+import { CoreAppSingleton } from '../../common/core/CoreApp';
 gsap.registerPlugin(ScrollToPlugin);
 
 
@@ -41,6 +42,12 @@ export const TriggerTransition = (skip:boolean = false) => {
 	}
 
 	Transition();
+
+	if(LOCATION.current.id != 'orbit-viewer') {
+		CoreAppSingleton.instance.goToIntroView();
+	} else {
+		CoreAppSingleton.instance.goToDefaultView();
+	}
 }
 
 const Transition = () => {

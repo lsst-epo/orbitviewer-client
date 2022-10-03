@@ -117,17 +117,17 @@ export class Popup {
 		if(!this.visible) return;
 		if(!!!this.ref) return;
 
-		this.container.position.copy(this.ref.position);	
+		this.container.position.copy(this.ref.target.position);	
 		
-		const d = this.ref.position.distanceTo(CAMERA_POSITION);
+		const d = this.ref.target.position.distanceTo(CAMERA_POSITION);
 		
 		if(d > 80){
-			this.container.element.style.opacity = 0;
+			this.container.element.style.opacity = '0';
 			return;
 		}
 		const s = MathUtils.clamp( MathUtils.map(d, 5, 150, 1, 0.1), 0.1, 1);
 		this.containerElement.style.transform = `scale3d(${s}, ${s}, 1)`;
-		this.container.element.style.opacity = 1;
+		this.container.element.style.opacity = '1';
 
 
 	}

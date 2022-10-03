@@ -10,7 +10,7 @@ diffuseColor.a *= material.transmissionAlpha + 0.1;
 float w = vWeight;
 
 outgoingLight = mix(outgoingLight * w, vec3(.9), selected);
-float alpha = mix(w, 1.0, selected);
+float alpha = mix(w * globalOpacity, 1.0, selected);
 
 float d = distance(bodyPos, pos);
 
@@ -24,7 +24,7 @@ pc_fragColor = vec4( outgoingLight, alpha * diffuseColor.a );
 #if defined( USE_COLOR ) || defined( USE_INSTANCING_COLOR )
 	totalEmissiveRadiance *= vColor;
 #endif
-gGlow = vec4(totalEmissiveRadiance, 1.0);
+gGlow = vec4(totalEmissiveRadiance, alpha);
 #else
 gGlow = vec4(0.0);
 #endif

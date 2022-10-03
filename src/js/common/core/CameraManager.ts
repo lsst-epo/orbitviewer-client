@@ -6,6 +6,8 @@ import { CONTROLS, DEV } from "./Globals";
 
 import { gsap } from "gsap/gsap-core";
 
+export const DEFAULT_CAM_POS:Vector3 = new Vector3 (0,3,10);
+
 export enum CameraMode {
     ORBIT,
     LOCKED,
@@ -43,6 +45,8 @@ class CameraController {
     controls:OrbitControls;
     mode:CameraMode = CameraMode.DISABLED;
     cam:PerspectiveCamera;
+    private orbit:boolean = false;
+    private currentTarget:InteractiveObject = null;
 
     get active():boolean {
         return this.initialized;
@@ -64,7 +68,7 @@ class CameraController {
         this.controls.zoomSpeed = s.zoomSpeed;
     }
 
-    goToTarget(target:InteractiveObject) {
+    goToTarget(target:InteractiveObject, orbitAround:boolean=false) {
         if(!this.initialized) return console.warn("CameraController not initialized! Please run CameraManager.init() first.");
         this.killTweens();
         this.mode = CameraMode.LOCKED;
@@ -78,6 +82,8 @@ class CameraController {
         TARGET.obj.lookAt(origin);
         TARGET.prevPos.copy(this.cam.position);
         TARGET.prevRot.copy(this.cam.quaternion);
+        this.orbit = orbitAround;
+        this.currentTarget = target;
     }
 
     private killTweens() {
@@ -89,15 +95,25 @@ class CameraController {
         if(!this.initialized) return console.warn("CameraController not initialized! Please run CameraManager.init() first.");
         this.mode = CameraMode.DISABLED;
         this.killTweens();
+        this.orbit = false;
 
         const pos = TARGET.prevPos;
         const quat = TARGET.prevRot;
 
-        gsap.to(this.cam.position, {x: pos.x, y: pos.y, z: pos.z, duration: 3, ease: 'power2.inOut', onComplete: () => {
+        gsap.to(this.cam.position, {x: pos.x, y: pos.y, z: pos.z, duration: 3, ease: 'power2.inOut', onUpdate:() => {
+            this.cam.lookAt(origin);
+        }, onComplete: () => {
             this.mode = CameraMode.ORBIT;
             this.killTweens();
         }});
-        gsap.to(this.cam.quaternion, {x: quat.x, y: quat.y, z: quat.z, w: quat.w, duration: 3, ease: 'power2.inOut'});
+        // gsap.to(this.cam.quaternion, {x: quat.x, y: quat.y, z: quat.z, w: quat.w, duration: 3, ease: 'power2.inOut'});
+    }
+
+    reset() {
+        if(!this.initialized) return console.warn("CameraController not initialized! Please run CameraManager.init() first.");
+        TARGET.prevPos.copy(DEFAULT_CAM_POS);
+        TARGET.prevRot.set(0,0,0,1);
+        this.unlock();
     }
 
     update() {
@@ -105,10 +121,18 @@ class CameraController {
         this.controls.enabled = this.mode === CameraMode.ORBIT;
         if(this.controls.enabled) this.controls.update();
         if(this.mode === CameraMode.LOCKED) {
-            this.cam.position.lerp(TARGET.obj.position, CameraSettings.traveling.easing);
-            // this.cam.quaternion.slerp(TARGET.obj.quaternion, CameraSettings.traveling.easing);
-            this.cam.lookAt(origin);
-            // this.cam.updateMatrix();
+            if(this.orbit) {
+                const t = performance.now() * .001 * .025;
+                tmp.copy(this.currentTarget.target.position);
+                tmp.x += this.currentTarget.lockedDistance * Math.cos(t);
+                tmp.z += this.currentTarget.lockedDistance * Math.sin(t);
+                tmp.y += .25 * Math.sin(t * 1.5);
+                this.cam.position.lerp(tmp, CameraSettings.traveling.easing);
+                this.cam.lookAt(this.currentTarget.target.position);
+            } else {
+                this.cam.position.lerp(TARGET.obj.position, CameraSettings.traveling.easing);
+                this.cam.lookAt(origin);
+            }
         }
     }
 }
