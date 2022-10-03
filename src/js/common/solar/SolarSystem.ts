@@ -25,6 +25,7 @@ export type OrbitElements = {
     q?:number;
     Tp?:number;
     type:OrbitType;
+    category:string;
 }
 
 export enum OrbitType {

@@ -1,6 +1,8 @@
+import { OrbitDataElements } from "../solar/SolarUtils";
 
+export type SolarCategory = 'trans-neptunian-objects'|'near-earth-objects'|'interstellar-objects'|'comets'|'centaurs'|'asteroids'|'planets-moons';
 
-export const getCategory = (item: Object) => {
+export const getCategory = (item: OrbitDataElements) => {
 
 	let category = '';
 
@@ -8,7 +10,7 @@ export const getCategory = (item: Object) => {
 
 		switch(property){
 
-			case 'is_tno':		
+			case 'is_tno':
 				if(!item[property])	break;
 				category = 'trans-neptunian-objects';
 				break;

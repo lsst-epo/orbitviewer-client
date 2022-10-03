@@ -16,7 +16,12 @@ export type OrbitDataElements = {
     n:number;
     tperi?:number;
     peri:number;
-    category:string
+    is_tno:boolean;
+    is_neo:boolean;
+    is_iso:boolean;
+    is_comet:boolean;
+    is_centaur:boolean;
+    is_asteroid:boolean;
 }
 
 export function getOrbitType(el:OrbitDataElements): OrbitType {

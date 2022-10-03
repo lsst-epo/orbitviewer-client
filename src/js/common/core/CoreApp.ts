@@ -59,7 +59,7 @@ export class CoreApp extends WebGLSketch {
     vfx:VFXRenderer;
     sun:Sun;
 
-    private launched:boolean = false;
+        
 
     constructor() {
         super(window.innerWidth, window.innerHeight, {
@@ -171,6 +171,7 @@ export class CoreApp extends WebGLSketch {
 
 		for(const el of d) {
 			const mel = mapOrbitElements(el);
+            mel.category = 'planets-moons';
 
 			const planet = new Planet(el.id, false, mel);
 
@@ -193,6 +194,7 @@ export class CoreApp extends WebGLSketch {
 	createDwarfPlanets(d:Array<OrbitDataElements>) {
 		for(const el of d) {
 			const mel = mapOrbitElements(el);
+            mel.category = 'planets-moons';
 			const planet = new Planet(el.id, true, mel, {
                 color: 0xFA6868
             });
