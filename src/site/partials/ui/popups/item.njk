@@ -61,6 +61,11 @@
 							<div class="item-position"></div>
 							<div class="item-range"></div>
 						</div>
+
+						<div class="slide-legend">
+							<p>{{ generic[lang].popups.overviewStrings[4] }}</p>
+							<p>{{ generic[lang].popups.overviewStrings[5] }}</p>
+						</div>
 					</div>
 					{# todo share button #}
 					<button class="ui__button ui__button-thin">{{ generic[lang].strings.share }}</button>
@@ -73,7 +78,7 @@
 				<div class="head">
 					<p>{{ generic[lang].popups.context }}</p>
 				</div>
-				<div class="content">
+				<div class="content overview">
 					<div>
 						{{ element.text | safe }}
 					</div>
@@ -88,7 +93,7 @@
 			<div class="content">
 				<div>
 					<p>{{ generic[lang].popups.detailedDataStrings[0] }}</p>
-					
+					<h3>Lorem</h3>
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.detailedDataStrings[1] }}</p>
@@ -106,7 +111,7 @@
 					<p>{{ generic[lang].popups.detailedDataStrings[4] }}</p>
 					<p>{{ generic[lang].popups.detailedDataStrings[5] }}</p>
 					<p>{{ generic[lang].popups.detailedDataStrings[6] }}</p>
-					{# todo share button #}
+
 					<button class="ui__button ui__button-thin">{{ generic[lang].popups.detailedDataStrings[7] }}</button>
 				</div>
 			</div>
