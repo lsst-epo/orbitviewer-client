@@ -36,6 +36,26 @@ export enum OrbitType {
     Hyperbolic
 }
 
+export function cloneOrbitElements(src:OrbitElements):OrbitElements {
+    return {
+        id: src.id,
+        N: src.N,
+        a: src.a,
+        e: src.e,
+        name: src.name,
+        G: src.G,
+        i: src.i,
+        H: src.H,
+        w: src.w,
+        M: src.M,
+        n: src.n,
+        q: src.q,
+        Tp: src.Tp,
+        type: src.type,
+        category: src.category
+    }
+}
+
 export function getCartesianCoordinates(v:number, r:number, el:OrbitElements, target:Vector3=new Vector3()):Vector3 {
     // convert to 3D cartesian coordinates
     const N = el.N * DEG_TO_RAD;

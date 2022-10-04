@@ -3,7 +3,7 @@ import { BufferGeometry, ColorRepresentation, DoubleSide, Line, Mesh, MeshPhongM
 import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { EllipticalPath } from "./EllipticalPath";
-import { calculateOrbitByType, DEG_TO_RAD, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";
+import { calculateOrbitByType, cloneOrbitElements, DEG_TO_RAD, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { initMaterial } from "../gfx/ShaderLib";
 import { LineBasicMaterial } from "three";
@@ -31,6 +31,7 @@ export class Planet extends Object3D implements InteractiveObject {
     parent:Object3D = new Object3D();
     mesh:Mesh;
     data:OrbitElements;
+    clonedData:OrbitElements;
     orbitPath:EllipticalPath;
     rotationSpeed:number; 
     private _selected:boolean = false;
@@ -51,10 +52,10 @@ export class Planet extends Object3D implements InteractiveObject {
         if(!this.dwarf) {
             opts.mapURL = `/assets/textures/2k_${this.type}.jpg`;
             // console.log(id, _data.i);
-            
         }
 
-        this.data = _data;        
+        this.data = _data;
+        this.clonedData = cloneOrbitElements(_data);
         this.name = id;
 
         let fresnelWidth = .005;
@@ -257,4 +258,15 @@ export const PlanetLockedMap:Record<PlanetId,CameraLockPosition> = {
         distance: .1,
         offset: new Vector3(-.016, .01, 0)
     }
+}
+
+export const PlanetDataMap:Record<PlanetId,OrbitElements> = {
+    earth: null,
+    mercury: null,
+    venus: null,
+    mars: null,
+    jupiter: null,
+    saturn: null,
+    uranus: null,
+    neptune: null
 }
