@@ -1,3 +1,4 @@
+import gsap from "gsap";
 import { disablePopup } from "./PopupsManager";
 
 
@@ -46,9 +47,7 @@ export class PopupInfo {
 
 	addEventListeners(){
 
-		this.dom.querySelector('.close-item').addEventListener('click', (ev) => {			
-			console.log('clicj¡k', this.name, this.active);
-			
+		this.dom.querySelector('.close-item').addEventListener('click', (ev) => {						
 			if(!this.active) return;
 			ev.stopPropagation();
 			ev.preventDefault();
@@ -74,8 +73,51 @@ export class PopupInfo {
 	show(){
 		if(this.active) return;
 		this.active = true;
-		this.sections[0].classList.add('active');
+
+		gsap.set(this.sections, {
+			height: 0,
+			transformOrigin: '50% 0%'
+		})
+		gsap.set(this.closeButton, {
+			scale: 0,
+			transformOrigin: '50% 50%'
+		})
+
+		const cover = this.dom.querySelector('.cover');
+		const rect = cover.getBoundingClientRect();
+
+		gsap.set(cover, {
+			height: 0,
+		})
+
 		this.dom.classList.add('active');
+
+		const tl = gsap.timeline({ paused: true, delay: 4 })
+
+		tl
+			.addLabel('start')
+			.to(this.closeButton, {
+				scale: 1,
+				duration: 1,
+				ease: 'power2.inOut'
+			}, 'start')
+			.to(this.dom.querySelector('.cover'), {
+				height: rect.height,
+				duration: 1,
+				ease: 'power2.inOut'
+			}, 'start')
+			.to(this.sections, {
+				height: '37px',
+				stagger: 1.2,
+				duration: 1,
+				ease: 'power2.inOut',
+				clearProps: 'all',
+				onComplete: () => {
+					this.sections[0].classList.add('active');
+				}
+			})
+
+			tl.play();
 	}
 
 	hide(){

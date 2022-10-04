@@ -64,6 +64,7 @@
 	.hidden-tabs {
 		width: 100%;
 		background: var(--white-0);
+		overflow: hidden;
 
 		color: var(--black-0);
 
@@ -151,7 +152,7 @@
 
 	&.active {
 
-		transition-delay: 2s;
+		transition-delay: 4s;
 
 		opacity: 1;
 		z-index: 2;

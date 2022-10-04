@@ -30,7 +30,6 @@ export const initPopups = () => {;
 }
 
 export function enablePopup(name: string) {
-	console.log('ENABLE');
 	
 	RAYCASTER.active = false;
 	CoreAppSingleton.instance.lock();
