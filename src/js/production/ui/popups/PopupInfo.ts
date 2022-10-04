@@ -39,7 +39,7 @@ export class PopupInfo {
 			for(const content of contents) {
 				content.style.height = 'auto';
 				const r = content.getBoundingClientRect();
-				content.style.setProperty('--height', `${r.height + 20 }px`);
+				content.style.setProperty('--height', `${r.height}px`);
 				content.style.height = '';
 			}
 		}

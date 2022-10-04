@@ -112,6 +112,10 @@
 				border-bottom: 1px solid var(--white-1);
 
 				&:last-of-type {
+					padding: var(--distance-5) var(--distance-10) var(--distance-10) var(--distance-10);
+				}
+
+				&:last-of-type {
 					border-bottom: none;
 				}
 			}
