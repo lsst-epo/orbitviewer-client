@@ -8,6 +8,9 @@ export const DEV = DEV_MODE;
 export const TARGET = TARGET_MODE;
 export const TOOL_VERSION = VERSION;
 
+export const HASURA_URL = `https://hasura-e3g4rcii3q-uc.a.run.app/api/rest`;
+
+
 export const PATHS = {
 	uploads: '/uploads',
 	assets: '/assets',

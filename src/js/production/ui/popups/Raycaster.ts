@@ -50,7 +50,7 @@ const checkIntersects = () => {
 const raycasterClick = () => {
 
 	if(!RAYCASTER.active) return;
-	if(RAYCASTER.watch.length === 0) return;
+	if(RAYCASTER.watch.length === 0) return;		
 
 	const intersects = checkIntersects();
 	if(!intersects) {
@@ -74,9 +74,8 @@ const clickedElement = (element:any) => {
 		console.log('No popup by this name:', element.name);
 		return
 	}
-		
+			
 	enablePopup(item.name);
-
 }
 
 export const updateRaycasterWatch = (elements:Array<Object3D>) => {

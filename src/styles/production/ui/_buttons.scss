@@ -39,6 +39,12 @@
 	color: var(--white-0);
 }
 
+.ui__button.ui__button-thin {
+	height: calc(25px + 1em);
+	padding: var(--distance-10);
+	@include bold-4;
+}
+
 // Arrows
 .button_arrow {
 	svg {

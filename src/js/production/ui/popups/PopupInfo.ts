@@ -1,3 +1,5 @@
+import gsap from "gsap";
+import { OrbitElements } from "../../../common/solar/SolarSystem";
 import { disablePopup } from "./PopupsManager";
 
 
@@ -10,6 +12,8 @@ export class PopupInfo {
 	closeButton: HTMLElement;
 
 	sections:NodeListOf<HTMLElement>;
+
+	mel: OrbitElements;
 
 	constructor(el){
 		this.dom = el;
@@ -28,7 +32,25 @@ export class PopupInfo {
 
 	loaded(){
 		this.addEventListeners();
+		this.addData();
 		this.setSize();
+	}
+
+	addAData(){
+
+		const distanceSun = this.dom.querySelector('[data="sun-distance"]') as HTMLElement;
+		const a = this.mel.a; // Element distance
+
+		distanceSun.classList.remove('slide-loading');
+		
+	}
+
+	addData(){
+
+		const name = this.dom.querySelector('[data="name"]') as HTMLElement;
+		name.innerText = this.mel.fulldesignation;		
+
+
 	}
 
 	setSize(){
@@ -38,7 +60,7 @@ export class PopupInfo {
 			for(const content of contents) {
 				content.style.height = 'auto';
 				const r = content.getBoundingClientRect();
-				content.style.setProperty('--height', `${r.height + 20 }px`);
+				content.style.setProperty('--height', `${r.height}px`);
 				content.style.height = '';
 			}
 		}
@@ -46,7 +68,10 @@ export class PopupInfo {
 
 	addEventListeners(){
 
-		this.dom.querySelector('.close-item').addEventListener('click', (ev) => {			
+		this.dom.querySelector('.close-item').addEventListener('click', (ev) => {						
+			if(!this.active) return;
+			ev.stopPropagation();
+			ev.preventDefault();
 			disablePopup();
 		})
 
@@ -57,7 +82,11 @@ export class PopupInfo {
 		})
 
 		for(const section of this.sections){
-			section.querySelector('.head').addEventListener('click', () => {				
+			section.querySelector('.head').addEventListener('click', () => {	
+				if(section.classList.contains('active')) {
+					section.classList.remove('active');			
+					return;
+				}
 				for(const section of this.sections) section.classList.remove('active');
 				section.classList.add('active');
 			})
@@ -67,12 +96,68 @@ export class PopupInfo {
 	}
 
 	show(){
+		if(this.active) return;
 		this.active = true;
-		this.sections[0].classList.add('active');
+
+		const sectionRect = this.sections[0].getBoundingClientRect();
+
+		gsap.set(this.sections, {
+			height: 0,
+			transformOrigin: '50% 0%'
+		})
+		gsap.set(this.closeButton, {
+			scale: 0,
+			transformOrigin: '50% 50%'
+		})
+
+		const cover = this.dom.querySelector('.cover');
+		const coverRect = cover.getBoundingClientRect();
+
+		gsap.set(cover, {
+			height: 0,
+		})
+
 		this.dom.classList.add('active');
+
+		const tl = gsap.timeline({ paused: true, delay: 4 })
+
+		tl
+			.addLabel('start')
+			.to(this.closeButton, {
+				scale: 1,
+				duration: 1,
+				ease: 'power2.inOut',
+				clearProps: 'all',
+			}, 'start')
+			.to(this.dom.querySelector('.cover'), {
+				height: coverRect.height,
+				duration: 1,
+				ease: 'power2.inOut',
+				clearProps: 'height',
+			}, 'start')
+			.to(this.sections, {
+				height: sectionRect.height,
+				stagger: 1.2,
+				duration: 1,
+				ease: 'power2.inOut',
+				clearProps: 'all',
+				onComplete: () => {
+
+					// Prevents user spamclicking 
+					let active = false;
+					for(const section of this.sections){
+						if(section.classList.contains('active')) active = true;
+					}
+					if(!active)	this.sections[0].classList.add('active');
+				}
+			})
+
+			tl.play();
 	}
 
 	hide(){
+		if(!this.active) return;
+		
 		this.active = false;
 		this.dom.classList.remove('active');
 		for(const section of this.sections) section.classList.remove('active');

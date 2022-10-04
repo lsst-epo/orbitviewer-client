@@ -22,6 +22,7 @@ import { hideLoader } from "../../production/ui/loader";
 import { EllipticalPath } from "../solar/EllipticalPath";
 import { Sun } from "../solar/Sun";
 import { CameraManager, DEFAULT_CAM_POS } from "./CameraManager";
+import { getMinMaxAByCategory } from "../data/Categories";
 
 const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
@@ -141,12 +142,13 @@ export class CoreApp extends WebGLSketch {
                         this.onDataLoaded();
                     });
                 }).catch(() => {
-                    alert('Database fetch error.')
+                    console.error('Database fetch error.')
                 });
                         
             });
 
         });
+
     }
 
     resize(width: number, height: number): void {
@@ -180,6 +182,7 @@ export class CoreApp extends WebGLSketch {
             const popup = popups.find(x => x.name === planet.name);            
             if(popup) {
                 popup.label.ref = planet;
+                popup.info.mel = mel;
                 popup.label.loaded();
                 popup.info.loaded();
             }

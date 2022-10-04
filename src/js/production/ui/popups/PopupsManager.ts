@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { CoreAppSingleton, solarClock } from "../../../common/core/CoreApp";
+import { getMinMaxAByCategory } from "../../../common/data/Categories";
 import { OrbitControlsIn, OrbitControlsOut } from "../../pagination/animations/OrbitControls";
 import { LOCATION } from "../../pagination/History";
 import { broadcastPanelsClose } from "../panels/PanelsManager";
@@ -27,10 +28,12 @@ export const initPopups = () => {;
 		});
 	}
 
+	// Fetch data min max for popups - no need to rush it
+	getMinMaxAByCategory();
 }
 
 export function enablePopup(name: string) {
-
+	
 	RAYCASTER.active = false;
 	CoreAppSingleton.instance.lock();
 
@@ -50,20 +53,21 @@ export function enablePopup(name: string) {
 	hideUI();
 }
 
-export function disablePopup() {
+export function disablePopup() {	
+	
+	for(const popup of popups) {		
+		popup.label.unselect();
+		popup.info.hide();
+	}
 
 	CameraManager.unlock();
-	RAYCASTER.active = true;
 	CoreAppSingleton.instance.unlock();
 
 	solarClock.resume();
 
 	document.querySelector('.popups-labels').classList.remove('hidden');
-	
-	for(const popup of popups) {
-		popup.label.unselect();
-		popup.info.hide();
-	}
+
+	RAYCASTER.active = true;
 
 	showUI();
 }
@@ -72,6 +76,12 @@ export const resizePopups = () => {
 	for(const popup of popups) {
 		// popup.label.onResize();
 		popup.info.onResize();
+	}
+}
+
+export const applyAFieldToPopups = () => {
+	for(const popup of popups){
+		popup.info.addAData();
 	}
 }
 
