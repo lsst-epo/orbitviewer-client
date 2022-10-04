@@ -20,7 +20,7 @@
 	</div>
 </div>
 
-<div class="popup-info" data-name="{{ element.elementID }}">	
+<div class="popup-info" data-name="{{ element.elementID }}" data-category="{{ cat.slug }}">	
 
 	<button class="close-item">
 		{% include "ui/icons/times-circle.njk" %}
@@ -42,7 +42,7 @@
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.overviewStrings[1] }}</p>
-					<h3 data="name">Lorem</h3>
+					<h3 data="name">Loading...</h3>
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.overviewStrings[2] }}</p>
@@ -96,24 +96,56 @@
 			<div class="content">
 				<div>
 					<p>{{ generic[lang].popups.detailedDataStrings[0] }}</p>
-					<h3>Lorem</h3>
+					<h3 data="name">Loading...</h3>
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.detailedDataStrings[1] }}</p>
-					<h3>Lorem</h3>
+					<div class="orbital-elements">
+
+						<p class="label cell-1">a<span data="a"></span></p>
+						<div class="slide slide-simple cell-2" style="--item-position: 50%;">
+							<p>0</p>
+							<div class="slide-bg">
+								<div class="item-position"></div>
+							</div>
+							<p>100</p>
+						</div>
+
+						<p class="label cell-3">e<span data="e"></span></p>
+						<div class="slide slide-simple cell-4" style="--item-position: 50%;">
+							<p>0</p>
+							<div class="slide-bg">
+								<div class="item-position"></div>
+							</div>
+							<p>1</p>
+						</div>
+
+						<p class="label cell-5">i<span data="incl"></span></p>
+						<div class="slide slide-simple cell-6" style="--item-position: 50%;">
+							<p>0º</p>
+							<div class="slide-bg">
+								<div class="item-position"></div>
+							</div>
+							<p>180º</p>
+						</div>
+
+						<p class="label cell-7">ω<span data="peri"></span></p>
+						<p class="label cell-8">Ω<span data="node"></span></p>
+						<p class="label cell-9">v<span data="m"></span></p>
+					</div>
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.detailedDataStrings[2] }}</p>
-					<h3>Lorem</h3>
+					<h3 data="brightness">Loading...</h3>
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.detailedDataStrings[3] }}</p>
-					<h3>Lorem</h3>
+					<h3 data="date">Loading...</h3>
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.detailedDataStrings[4] }}</p>
-					<p>{{ generic[lang].popups.detailedDataStrings[5] }}</p>
-					<p>{{ generic[lang].popups.detailedDataStrings[6] }}</p>
+					<p>{{ generic[lang].popups.detailedDataStrings[5] }}<span data="far-sun">0 au</span></p>
+					<p>{{ generic[lang].popups.detailedDataStrings[6] }}<span data="far-earth">0 au</span></p>
 
 					<button class="ui__button ui__button-thin">{{ generic[lang].popups.detailedDataStrings[7] }}</button>
 				</div>

@@ -15,9 +15,6 @@ export class css2D {
 		document.body.appendChild(renderer.domElement);
 		renderer.domElement.classList.add('popups-wrapper', 'popups-labels')
 		renderer.setSize(width, height);
-
-		initPopups();
-
 	}
 
 	static render(camera:PerspectiveCamera) {
