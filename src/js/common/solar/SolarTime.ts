@@ -1,8 +1,5 @@
 const SEC_TO_HOURS = 1 / 3600;
 
-export const timerEl = document.createElement('div');
-timerEl.className = "timer";
-
 class SolarTime {
     private _d:number;
 
@@ -23,8 +20,6 @@ class SolarTime {
         this._d = 367*y - 7 * ( y + (m+9)/12 ) / 4 - 3 * ( ( y + (m-9)/7 ) / 100 + 1 ) / 4 + 275*m/9 + D - 730515
         this._d += UT/24.0;
 
-        timerEl.innerHTML = `${d}`;
-
         return this._d;
     }
 
@@ -35,8 +30,6 @@ class SolarTime {
         const MJD = JD2MJD(JD);
 
         this._d = MJD;
-
-        timerEl.innerHTML = `${d}`;
 
         return this._d;
     }

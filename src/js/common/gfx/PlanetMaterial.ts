@@ -27,6 +27,8 @@ export class PlanetMaterial extends MeshPhongMaterial {
         this.sunIntensity = opts2.sunIntensity || 1;
         this.selected = opts2.selected != undefined ? opts2.selected : false;
 
+        // this.wireframe = true;
+
         if(!this.defines) {
             this.defines = {};
         }

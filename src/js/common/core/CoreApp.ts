@@ -104,8 +104,7 @@ export class CoreApp extends WebGLSketch {
 
         particles.init(this.renderer);
         this.scene.add(particles.points);
-        // this.scene.add(this.particles.mesh);
-
+        
         this.sunLight = new PointLight(0xffffff, .5, 400, 2);
         this.scene.add(this.sunLight);
         this.sunLightHelper = new SunLightHelper(this.sunLight, 0x999900, 0xcc0000);
@@ -118,7 +117,7 @@ export class CoreApp extends WebGLSketch {
         console.log('Core App init');
 
         // background
-        const tex = new TextureLoader().load('/assets/textures/8k_stars.jpg', (t) => {
+        new TextureLoader().load('/assets/textures/8k_stars.jpg', (t) => {
             this.vfx.bg = t;
             this.vfx.needsBGUpdate = true;
         });
@@ -187,6 +186,8 @@ export class CoreApp extends WebGLSketch {
 			this.planets.add(planet);
 			this.planetPaths.add(planet.orbitPath.ellipse);
             orbitPaths.push(planet.orbitPath);
+
+            // this.scene.add(planet.sunLine);
 
             updateRaycasterWatch([planet]);
 

@@ -1,11 +1,13 @@
 import { MathUtils } from "@jocabola/math";
-import { ColorRepresentation, DoubleSide, Mesh, MeshPhongMaterial, Object3D, SphereGeometry, TextureLoader, Vector3 } from "three";
+import { BufferGeometry, ColorRepresentation, DoubleSide, Line, Mesh, MeshPhongMaterial, Object3D, SphereGeometry, TextureLoader, Vector3 } from "three";
 import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { EllipticalPath } from "./EllipticalPath";
 import { calculateOrbitByType, DEG_TO_RAD, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { initMaterial } from "../gfx/ShaderLib";
+import { LineBasicMaterial } from "three";
+import { BufferAttribute } from "three";
 
 export const PLANET_GEO = new SphereGeometry(1, 32, 32);
 const tLoader = new TextureLoader();
@@ -21,7 +23,12 @@ export type PlanetId = 'mercury'|'venus'|'earth'|'mars'|'jupiter'|'saturn'|'uran
 
 const gltfLoader = new GLTFLoader();
 
+const L_DUMMY = initMaterial(new LineBasicMaterial({
+    color: 0xff0000
+}));
+
 export class Planet extends Object3D implements InteractiveObject {
+    parent:Object3D = new Object3D();
     mesh:Mesh;
     data:OrbitElements;
     orbitPath:EllipticalPath;
@@ -33,6 +40,7 @@ export class Planet extends Object3D implements InteractiveObject {
     target:Object3D;
     lockedDistance:number = 0;
     lockedOffset:Vector3 = new Vector3();
+    sunLine:Line;
 
     constructor(id: PlanetId, _data:OrbitElements, opts:PlanetOptions={}) {
         super();
@@ -42,6 +50,8 @@ export class Planet extends Object3D implements InteractiveObject {
 
         if(!this.dwarf) {
             opts.mapURL = `/assets/textures/2k_${this.type}.jpg`;
+            // console.log(id, _data.i);
+            
         }
 
         this.data = _data;        
@@ -78,10 +88,18 @@ export class Planet extends Object3D implements InteractiveObject {
             sunIntensity: sunIntensity
         });
 
+        const lineGeo = new BufferGeometry();
+        const pos = new Float32Array([0,0,0,10,10,10]);
+        lineGeo.setAttribute('position', new BufferAttribute(pos, 3));
+        this.sunLine = new Line(lineGeo, L_DUMMY);
+        // console.log(this.sunLine);
+        
+
         this.orbitPath = new EllipticalPath(_data, scl*.8);
 
         this.mesh = new Mesh(PLANET_GEO, this.material);
-        this.add(this.mesh);
+        this.parent.add(this.mesh);
+        this.add(this.parent);
         this.target = this;
         // this.add(this.orbitPath.ellipse)
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
@@ -103,8 +121,8 @@ export class Planet extends Object3D implements InteractiveObject {
         // this.rotationSpeed = Random.randf(-1, 1);
         if(!this.dwarf) {
             const rt = PlanetRotationMap[this.type] as PlanetRotationData;
-            this.rotationSpeed = DEG_TO_RAD * rt.period;
-            this.mesh.rotation.z = DEG_TO_RAD * rt.axialTilt;
+            this.rotationSpeed = DEG_TO_RAD * (360 / rt.period);
+            this.parent.rotation.z = DEG_TO_RAD * -(rt.axialTilt + _data.i);
         } else {
             this.rotationSpeed = 0;
         }
@@ -112,7 +130,19 @@ export class Planet extends Object3D implements InteractiveObject {
 
     update(d:number) {
         calculateOrbitByType(this.data, d, OrbitType.Elliptical, this.position);
-        this.mesh.rotation.y = d * this.rotationSpeed;
+        if(this.rotationSpeed > 0) {
+            const rt = PlanetRotationMap[this.type] as PlanetRotationData;
+            this.mesh.rotation.y = rt.meridian * DEG_TO_RAD + d * this.rotationSpeed;
+        }
+
+        const pos = this.sunLine.geometry.attributes.position;
+        const arr = pos.array as Float32Array;
+        arr[3] = this.position.x;
+        arr[4] = this.position.y;
+        arr[5] = this.position.z;
+        
+        pos.needsUpdate = true;
+
         // this.mesh.updateMatrixWorld();
         this.material.update();
         this.orbitPath.update(d, this.position, this.scale.x);
@@ -143,40 +173,49 @@ export const PlanetRadiusMap:Record<PlanetId,number> = {
 export type PlanetRotationData = {
     axialTilt:number;
     period:number;
+    meridian:number;
 }
 
 export const PlanetRotationMap:Record<PlanetId, PlanetRotationData> = {
     mercury: {
         axialTilt: 0.034,
-        period: 58.6462
+        period: 58.6462,
+        meridian: 329.5988
     },
     venus: {
         axialTilt: 177.36,
-        period: 243.018
+        period: 243.018,
+        meridian: 160.20
     },
     earth: {
         axialTilt: 23.4392811,
-        period: 1
+        period: 1,
+        meridian: 0
     },
     mars: {
         axialTilt: 25.19,
-        period: 1.02595676
+        period: 1.02595676,
+        meridian: 176.049863
     },
     jupiter: {
         axialTilt: 3.13,
-        period: 0.41354
+        period: 0.41354,
+        meridian: 284.95
     },
     saturn: {
         axialTilt: 26.73,
-        period: 0.44401
+        period: 0.44401,
+        meridian: 38.90
     },
     uranus: {
         axialTilt: 97.77,
-        period: 0.71833
+        period: 0.71833,
+        meridian: 203.81
     },
     neptune: {
         axialTilt: 28.32,
-        period: 0.67125
+        period: 0.67125,
+        meridian: 249.978
     }
 }
 
