@@ -24,9 +24,6 @@ export class Panel implements PanelsListener {
 	}
 
 	create(){
-
-		
-		
 	}
 
 	closePanel(){

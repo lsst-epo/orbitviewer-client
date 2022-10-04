@@ -1,5 +1,5 @@
 import { Object3D, OrthographicCamera, PerspectiveCamera, Raycaster, Vector3 } from "three";
-import { popups } from "./PopupsManager";
+import { enablePopup, popups } from "./PopupsManager";
 
 export interface InteractiveObject {
 	selected:boolean;
@@ -75,7 +75,7 @@ const clickedElement = (element:any) => {
 		return
 	}
 		
-	item.show();
+	enablePopup(item.name);
 
 }
 

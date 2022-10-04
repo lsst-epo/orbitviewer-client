@@ -1,4 +1,3 @@
-import { copy } from "fs-extra";
 import { Object3D, PerspectiveCamera, Quaternion, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { InteractiveObject } from "../../production/ui/popups/Raycaster";

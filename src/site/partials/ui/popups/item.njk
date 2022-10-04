@@ -8,57 +8,54 @@
 	{% endif %}
 {% endfor %}
 
-	<div class="popup" data-name="{{ element.elementID }}">	
-		<div class="item-scale-wrapper">
-			<div class="item-wrapper">
+<div class="popup-label" data-name="{{ element.elementID }}">
+	<div class="icon">
 
-				<button class="close-item">
-					{% include "ui/icons/times-circle.njk" %}
-				</button>
+		{{ filterIcon(cat.slug, cat.title, cat.mainColor ) }}
 
-				<div class="cover" style="background-image: url(/assets/ceres-lorem.jpeg);">
-
-					<div class="icon">
-
-						{{ filterIcon(cat.slug, cat.title, cat.mainColor ) }}
-
-						<div class="icon-text">
-							<h3>{{ element.title }}</h3>
-							<p>{{ generic[lang]['popups'].tap }}</p>
-						</div>
-					</div>
-				</div>
-				
-				<div class="hidden-tabs">
-
-					<section>
-						<div class="head">
-							<p>{{ generic[lang]['popups'].overview }}</p>
-						</div>
-						<div class="content">
-							<p>Pending</p>
-						</div>
-					</section>
-
-					<section>
-						<div class="head">
-							<p>{{ generic[lang]['popups'].context }}</p>
-						</div>
-						<div class="content">
-							{{ element.text | safe }}
-						</div>
-					</section>
-
-					<section>
-						<div class="head">
-							<p>{{ generic[lang]['popups'].data }}</p>
-						</div>
-						<div class="content">
-							<p>Pending</p>
-						</div>
-					</section>
-				</div>
-
-			</div>
+		<div class="icon-text">
+			<h3>{{ element.title }}</h3>
+			<p>{{ generic[lang]['popups'].tap }}</p>
 		</div>
 	</div>
+</div>
+
+<div class="popup-info" data-name="{{ element.elementID }}">	
+
+	<button class="close-item">
+		{% include "ui/icons/times-circle.njk" %}
+	</button>
+
+	<div class="cover" style="background-image: url(/assets/ceres-lorem.jpeg);"></div>
+	
+	<div class="hidden-tabs">
+
+		<section>
+			<div class="head">
+				<p>{{ generic[lang]['popups'].overview }}</p>
+			</div>
+			<div class="content">
+				<p>Pending</p>
+			</div>
+		</section>
+
+		<section>
+			<div class="head">
+				<p>{{ generic[lang]['popups'].context }}</p>
+			</div>
+			<div class="content">
+				{{ element.text | safe }}
+			</div>
+		</section>
+
+		<section>
+			<div class="head">
+				<p>{{ generic[lang]['popups'].data }}</p>
+			</div>
+			<div class="content">
+				<p>Pending</p>
+			</div>
+		</section>
+	</div>
+
+</div>

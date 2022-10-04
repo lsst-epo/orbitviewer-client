@@ -1,5 +1,4 @@
 import { Size } from "@jocabola/gfx";
-import { Vector3 } from "three";
 
 /**
  * DEV_MODE is injected by esbuild
