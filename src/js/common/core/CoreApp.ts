@@ -2,9 +2,8 @@ import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
 import { AmbientLight, Clock, Group, PerspectiveCamera, PointLight, TextureLoader } from "three";
 import { css2D } from "../../production/ui/popups/Css2D";
-import { popups, resizePopups } from "../../production/ui/popups/PopupsManager";
+import { initPopups, linkPlanetToPopup, resizePopups } from "../../production/ui/popups/PopupsManager";
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/popups/Raycaster";
-import { getEntryById } from "../data/DataManager";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/FiltersManager";
 import { initShaders } from "../gfx/shaders";
@@ -19,10 +18,10 @@ import { CLOCK_SETTINGS, DEV } from "./Globals";
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { LOCATION } from "../../production/pagination/History";
 import { hideLoader } from "../../production/ui/loader";
+import { getMinMaxPlanetsA } from "../data/Categories";
 import { EllipticalPath } from "../solar/EllipticalPath";
 import { Sun } from "../solar/Sun";
 import { CameraManager, DEFAULT_CAM_POS } from "./CameraManager";
-import { getMinMaxAByCategory } from "../data/Categories";
 
 const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
@@ -82,8 +81,9 @@ export class CoreApp extends WebGLSketch {
 
         initShaders();
         
-
         css2D.init(window.innerWidth, window.innerHeight);
+
+        initPopups();
 
         initRaycaster();
 
@@ -126,12 +126,15 @@ export class CoreApp extends WebGLSketch {
         
 
         io.load(window.location.origin + `/assets/data/${PLANETS}`, (res) => {
-            const d = JSON.parse(res)
-            this.createPlanets(d);
+            const planetsData = JSON.parse(res)
+            
+            getMinMaxPlanetsA(planetsData);
+
+            this.createPlanets(planetsData);
 
             io.load(window.location.origin + `/assets/data/${DWARF_PLANETS}`, (res) => {
-                const d = JSON.parse(res);
-                this.createDwarfPlanets(d);
+                const dwarfData = JSON.parse(res);
+                this.createDwarfPlanets(dwarfData);
 
                 getSolarSystemElements().then((res) => {
                     
@@ -162,7 +165,7 @@ export class CoreApp extends WebGLSketch {
     onDataLoaded() {
         console.log('Data Loaded');
 
-        const globals = getEntryById('globals').data;
+        // const globals = getEntryById('globals').data;
         // this.updateMeshSettings(globals['demo'] as DemoType);
 
         // --------------------------------------------- Launch        
@@ -180,13 +183,7 @@ export class CoreApp extends WebGLSketch {
 
 			const planet = new Planet(el.id as PlanetId, mel);
 
-            const popup = popups.find(x => x.name === planet.name);            
-            if(popup) {
-                popup.label.ref = planet;
-                popup.info.mel = mel;
-                popup.label.loaded();
-                popup.info.loaded();
-            }
+            linkPlanetToPopup(planet);
             
 			this.planets.add(planet);
 			this.planetPaths.add(planet.orbitPath.ellipse);
@@ -205,6 +202,8 @@ export class CoreApp extends WebGLSketch {
 			const planet = new Planet(null, mel, {
                 color: 0xFA6868
             });
+
+            linkPlanetToPopup(planet);
 
 			this.dwarfPlanets.add(planet);
 			this.dwarfPlanetPaths.add(planet.orbitPath.ellipse);

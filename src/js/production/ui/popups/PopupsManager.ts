@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { CoreAppSingleton, solarClock } from "../../../common/core/CoreApp";
-import { getMinMaxAByCategory } from "../../../common/data/Categories";
+import { Planet } from "../../../common/solar/Planet";
 import { OrbitControlsIn, OrbitControlsOut } from "../../pagination/animations/OrbitControls";
 import { LOCATION } from "../../pagination/History";
 import { broadcastPanelsClose } from "../panels/PanelsManager";
@@ -10,7 +10,6 @@ import { PopupLabel } from "./PopupLabel";
 import { RAYCASTER } from "./Raycaster";
 
 export const popups: Array<{name: string, label: PopupLabel, info: PopupInfo}> = [];
-
 
 export const initPopups = () => {;
 
@@ -27,9 +26,16 @@ export const initPopups = () => {;
 			info: new PopupInfo(infoItem)
 		});
 	}
+}
 
-	// Fetch data min max for popups - no need to rush it
-	getMinMaxAByCategory();
+export const linkPlanetToPopup = (planet:Planet) => {
+	const popup = popups.find(x => x.name === planet.name);            
+	if(popup) {
+			popup.label.ref = planet;
+			popup.info.data = planet.data;
+			popup.label.loaded();
+			popup.info.loaded();
+	}
 }
 
 export function enablePopup(name: string) {
@@ -80,6 +86,9 @@ export const resizePopups = () => {
 }
 
 export const applyAFieldToPopups = () => {
+	// Already did that with fake data
+	// Todo
+	return;
 	for(const popup of popups){
 		popup.info.addAData();
 	}

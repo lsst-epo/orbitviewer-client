@@ -20,7 +20,7 @@
 	</div>
 </div>
 
-<div class="popup-info" data-name="{{ element.elementID }}">	
+<div class="popup-info" data-name="{{ element.elementID }}" data-category="{{ cat.slug }}">	
 
 	<button class="close-item">
 		{% include "ui/icons/times-circle.njk" %}
@@ -42,7 +42,7 @@
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.overviewStrings[1] }}</p>
-					<h3 data="name">Lorem</h3>
+					<h3 data="name">Loading...</h3>
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.overviewStrings[2] }}</p>
@@ -96,7 +96,7 @@
 			<div class="content">
 				<div>
 					<p>{{ generic[lang].popups.detailedDataStrings[0] }}</p>
-					<h3>Lorem</h3>
+					<h3 data="name">Loading...</h3>
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.detailedDataStrings[1] }}</p>

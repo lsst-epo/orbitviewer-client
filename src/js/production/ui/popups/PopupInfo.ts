@@ -1,4 +1,6 @@
+import { MathUtils } from "@jocabola/math";
 import gsap from "gsap";
+import { CategoriesMinMaxA } from "../../../common/data/Categories";
 import { OrbitElements } from "../../../common/solar/SolarSystem";
 import { disablePopup } from "./PopupsManager";
 
@@ -13,7 +15,7 @@ export class PopupInfo {
 
 	sections:NodeListOf<HTMLElement>;
 
-	mel: OrbitElements;
+	data: OrbitElements;
 
 	constructor(el){
 		this.dom = el;
@@ -27,19 +29,50 @@ export class PopupInfo {
 	}
 
 	onResize(){
+
 		this.setSize();
+
 	}
 
 	loaded(){
+
 		this.addEventListeners();
 		this.addData();
 		this.setSize();
+
 	}
 
 	addAData(){
 
 		const distanceSun = this.dom.querySelector('[data="sun-distance"]') as HTMLElement;
-		const a = this.mel.a; // Element distance
+		const category = this.dom.getAttribute('data-category');
+
+		if(!category) return
+
+		// Todo ara es fake perque sino no queda be
+		const totalMin = 0; // CategoriesMinMaxA.total.min;
+		const totalMax = 50; // CategoriesMinMaxA.total.max;
+
+		const aMin = CategoriesMinMaxA[category].min;
+		const aMax = CategoriesMinMaxA[category].max;
+ 
+		// Set marker position
+		const itemA = this.data.a;				
+		const itemPosition = MathUtils.map(itemA, totalMin, totalMax, 0, 100);
+		distanceSun.style.setProperty('--item-position', `${itemPosition}%`);
+
+		// Set range size
+		const diff = aMax - aMin;
+		const rangeSize = MathUtils.map(diff, totalMin, totalMax, 0, 100);
+		distanceSun.style.setProperty('--item-range', `${rangeSize}%`);
+
+		// Set range size
+		const rightSide = MathUtils.map(aMin, totalMin, totalMax, 0, 100);
+		const leftSide = MathUtils.map(aMax, totalMin, totalMax, 0, 100);
+		const center = (leftSide - rightSide) / 2;
+		distanceSun.style.setProperty('--item-range-position', `${center}%`);
+		
+
 
 		distanceSun.classList.remove('slide-loading');
 		
@@ -47,8 +80,12 @@ export class PopupInfo {
 
 	addData(){
 
-		const name = this.dom.querySelector('[data="name"]') as HTMLElement;
-		name.innerText = this.mel.fulldesignation;		
+		if(!this.data) return;
+
+		const names = this.dom.querySelectorAll('[data="name"]') as NodeListOf<HTMLElement>;
+		for(const name of names) name.innerText = this.data.fulldesignation;
+		
+		this.addAData();
 
 
 	}
