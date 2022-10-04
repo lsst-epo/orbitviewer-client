@@ -58,8 +58,7 @@ export class PopupInfo {
  
 		// Set marker position
 		const itemA = this.data.a;				
-		const itemPosition = MathUtils.map(itemA, totalMin, totalMax, 0, 100);
-		distanceSun.style.setProperty('--item-position', `${itemPosition}%`);
+		this.applyItemPosition(distanceSun, itemA, totalMin, totalMax)
 
 		// Set range size
 		const diff = aMax - aMin;
@@ -78,6 +77,12 @@ export class PopupInfo {
 		
 	}
 
+	// Sliders
+	applyItemPosition(dom:HTMLElement, n:number, min:number, max:number){		
+		const itemPosition = MathUtils.map(n, min, max, 0, 100);
+		dom.style.setProperty('--item-position', `${itemPosition}%`);
+	}
+
 	addData(){
 
 		if(!this.data) return;
@@ -87,12 +92,18 @@ export class PopupInfo {
 
 		const a = this.dom.querySelector('[data="a"]') as HTMLElement;
 		a.innerText = this.data.a.toFixed(2);
+		const slideA = this.dom.querySelector('[data-slider="a"]') as HTMLElement;
+		this.applyItemPosition(slideA, this.data.a, 0, 100);
 
 		const e = this.dom.querySelector('[data="e"]') as HTMLElement;
 		e.innerText = this.data.e.toFixed(2);
+		const slideE = this.dom.querySelector('[data-slider="e"]') as HTMLElement;
+		this.applyItemPosition(slideE, this.data.e, 0, 1);
 
 		const i = this.dom.querySelector('[data="incl"]') as HTMLElement;
 		i.innerText = this.data.incl.toFixed(2);
+		const slideI = this.dom.querySelector('[data-slider="incl"]') as HTMLElement;
+		this.applyItemPosition(slideI, this.data.incl, 0, 180);
 
 		const peri = this.dom.querySelector('[data="peri"]') as HTMLElement;
 		peri.innerText = this.data.peri.toFixed(2);
@@ -107,7 +118,6 @@ export class PopupInfo {
 		b.innerText = this.data.mpch.toFixed(2);
 		
 		this.addAData();
-
 
 	}
 
@@ -149,8 +159,6 @@ export class PopupInfo {
 				section.classList.add('active');
 			})
 		}
-
-
 	}
 
 	show(){
@@ -195,8 +203,8 @@ export class PopupInfo {
 			}, 'start')
 			.to(this.sections, {
 				height: sectionRect.height,
-				stagger: 1.2,
-				duration: 1,
+				stagger: 0.5,
+				duration: 0.8,
 				ease: 'power2.inOut',
 				clearProps: 'all',
 				onComplete: () => {
