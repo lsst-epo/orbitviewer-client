@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { CoreAppSingleton, solarClock } from "../../../common/core/CoreApp";
+import { getMinMaxAByCategory } from "../../../common/data/Categories";
 import { OrbitControlsIn, OrbitControlsOut } from "../../pagination/animations/OrbitControls";
 import { LOCATION } from "../../pagination/History";
 import { broadcastPanelsClose } from "../panels/PanelsManager";
@@ -27,6 +28,8 @@ export const initPopups = () => {;
 		});
 	}
 
+	// Fetch data min max for popups - no need to rush it
+	getMinMaxAByCategory();
 }
 
 export function enablePopup(name: string) {
@@ -73,6 +76,12 @@ export const resizePopups = () => {
 	for(const popup of popups) {
 		// popup.label.onResize();
 		popup.info.onResize();
+	}
+}
+
+export const applyAFieldToPopups = () => {
+	for(const popup of popups){
+		popup.info.addAData();
 	}
 }
 

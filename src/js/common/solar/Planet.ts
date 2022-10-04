@@ -88,9 +88,9 @@ export class Planet extends Object3D implements InteractiveObject {
         // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
 
         if(id === 'saturn') {
-            console.log('Houston, we\'ve got Saturn!');
+            // console.log('Houston, we\'ve got Saturn!');
             gltfLoader.load('/assets/models/ring.glb', (gltf) => {
-                console.log(gltf.scene);
+                // console.log(gltf.scene);
                 gltf.scene.scale.setScalar(2);
                 gltf.scene.children[0].material = initMaterial(new MeshPhongMaterial({
                     side: DoubleSide,

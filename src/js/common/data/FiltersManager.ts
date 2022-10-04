@@ -1,9 +1,6 @@
 import { hideLoader, showLoader } from "../../production/ui/loader";
-import { VISUAL_SETTINGS } from "../core/Globals";
+import { HASURA_URL, VISUAL_SETTINGS } from "../core/Globals";
 import { buildSimWithData } from "../solar/SolarParticlesManager";
-
-const HASURA_URL = `https://hasura-e3g4rcii3q-uc.a.run.app/api/rest`;
-
 
 // Filters
 export type Filters = {

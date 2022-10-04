@@ -76,6 +76,7 @@
 
 			display: flex;
 			justify-content: space-between;
+			align-items: center;
 
 			cursor: pointer;
 			pointer-events: all;
@@ -94,6 +95,26 @@
 				opacity: 0;
 				transition: opacity 0.3s ease-in-out;
 				pointer-events: none;
+			}
+
+			.cross {
+				width: 12px;
+				height: 2px;
+				background-color: var(--black-0);
+				position: relative;
+
+				&:before {
+					content: '';
+					width: 12px;
+					height: 2px;
+					background-color: var(--black-0);
+					transform-origin: center;
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%,-50%) rotate(90deg);
+					transition: transform 0.5s ease-in-out;
+				}
 			}
 		}
 
@@ -150,6 +171,10 @@
 
 				&:after {
 					opacity: 1;
+				}
+
+				.cross:before {
+					transform: translate(-50%, -50%) rotate(180deg);
 				}
 			}
 
@@ -208,11 +233,15 @@
 	height: auto;
 	display: flex;
 	flex-direction: column;
-			overflow: hidden;
+	overflow: hidden;
 
 	--item-position: 0%;
 	--item-range: 5%;
 	--item-range-position: 5%;
+
+	&.slide-loading {
+		opacity: 0.2;
+	}
 
 	.labels {
 		display: flex;

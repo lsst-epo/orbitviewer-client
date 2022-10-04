@@ -1,4 +1,5 @@
 import gsap from "gsap";
+import { OrbitElements } from "../../../common/solar/SolarSystem";
 import { disablePopup } from "./PopupsManager";
 
 
@@ -11,6 +12,8 @@ export class PopupInfo {
 	closeButton: HTMLElement;
 
 	sections:NodeListOf<HTMLElement>;
+
+	mel: OrbitElements;
 
 	constructor(el){
 		this.dom = el;
@@ -29,7 +32,25 @@ export class PopupInfo {
 
 	loaded(){
 		this.addEventListeners();
+		this.addData();
 		this.setSize();
+	}
+
+	addAData(){
+
+		const distanceSun = this.dom.querySelector('[data="sun-distance"]') as HTMLElement;
+		const a = this.mel.a; // Element distance
+
+		distanceSun.classList.remove('slide-loading');
+		
+	}
+
+	addData(){
+
+		const name = this.dom.querySelector('[data="name"]') as HTMLElement;
+		name.innerText = this.mel.fulldesignation;		
+
+
 	}
 
 	setSize(){
