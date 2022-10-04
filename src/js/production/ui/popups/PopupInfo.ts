@@ -47,6 +47,11 @@ export class PopupInfo {
 	addEventListeners(){
 
 		this.dom.querySelector('.close-item').addEventListener('click', (ev) => {			
+			console.log('clicj¡k', this.name, this.active);
+			
+			if(!this.active) return;
+			ev.stopPropagation();
+			ev.preventDefault();
 			disablePopup();
 		})
 
@@ -67,12 +72,15 @@ export class PopupInfo {
 	}
 
 	show(){
+		if(this.active) return;
 		this.active = true;
 		this.sections[0].classList.add('active');
 		this.dom.classList.add('active');
 	}
 
 	hide(){
+		if(!this.active) return;
+		
 		this.active = false;
 		this.dom.classList.remove('active');
 		for(const section of this.sections) section.classList.remove('active');

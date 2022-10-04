@@ -50,7 +50,7 @@ export class ResolutionPanel extends Panel {
 			buildSimWithData(d, false);
 			hideLoader();
 		}).catch(() => {
-			alert('Database fetch error.')
+			console.error('Database fetch error.')
 		});
 	}
 

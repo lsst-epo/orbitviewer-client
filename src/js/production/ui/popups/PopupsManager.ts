@@ -30,7 +30,8 @@ export const initPopups = () => {;
 }
 
 export function enablePopup(name: string) {
-
+	console.log('ENABLE');
+	
 	RAYCASTER.active = false;
 	CoreAppSingleton.instance.lock();
 
@@ -50,20 +51,21 @@ export function enablePopup(name: string) {
 	hideUI();
 }
 
-export function disablePopup() {
+export function disablePopup() {	
+	
+	for(const popup of popups) {		
+		popup.label.unselect();
+		popup.info.hide();
+	}
 
 	CameraManager.unlock();
-	RAYCASTER.active = true;
 	CoreAppSingleton.instance.unlock();
 
 	solarClock.resume();
 
 	document.querySelector('.popups-labels').classList.remove('hidden');
-	
-	for(const popup of popups) {
-		popup.label.unselect();
-		popup.info.hide();
-	}
+
+	RAYCASTER.active = true;
 
 	showUI();
 }

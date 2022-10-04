@@ -106,7 +106,7 @@ export const applyFilters = (domFilters: NodeListOf<HTMLInputElement>) => {
 
 		hideLoader();
 	}).catch(() => {
-		alert('Database fetch error')
+		console.error('Database fetch error')
 	});
 
 }

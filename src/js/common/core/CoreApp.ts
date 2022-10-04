@@ -142,7 +142,7 @@ export class CoreApp extends WebGLSketch {
                         this.onDataLoaded();
                     });
                 }).catch(() => {
-                    alert('Database fetch error.')
+                    console.error('Database fetch error.')
                 });
                         
             });
