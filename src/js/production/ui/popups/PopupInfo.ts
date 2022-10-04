@@ -117,7 +117,13 @@ export class PopupInfo {
 				ease: 'power2.inOut',
 				clearProps: 'all',
 				onComplete: () => {
-					this.sections[0].classList.add('active');
+
+					// Prevents user spamclicking 
+					let active = false;
+					for(const section of this.sections){
+						if(section.classList.contains('active')) active = true;
+					}
+					if(!active)	this.sections[0].classList.add('active');
 				}
 			})
 

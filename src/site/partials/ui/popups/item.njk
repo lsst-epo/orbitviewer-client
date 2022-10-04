@@ -49,22 +49,37 @@
 				</div>
 				<div>
 					<p>{{ generic[lang].popups.overviewStrings[3] }}</p>
+
+					<div class="slide">
+						
+						<div class="labels">
+							<p>{{ generic[lang].strings.near }}</p>
+							<p>{{ generic[lang].strings.far }}</p>
+						</div>
+						
+						<div class="slide-bg">
+							<div class="item-position"></div>
+							<div class="item-range"></div>
+						</div>
+					</div>
 					{# todo share button #}
 					<button class="ui__button ui__button-thin">{{ generic[lang].strings.share }}</button>
 				</div>
 			</div>
 		</section>
 
-		<section>
-			<div class="head">
-				<p>{{ generic[lang].popups.context }}</p>
-			</div>
-			<div class="content">
-				<div>
-					{{ element.text | safe }}
+		{% if element.text %}
+			<section>
+				<div class="head">
+					<p>{{ generic[lang].popups.context }}</p>
 				</div>
-			</div>
-		</section>
+				<div class="content">
+					<div>
+						{{ element.text | safe }}
+					</div>
+				</div>
+			</section>
+		{% endif %}
 
 		<section>
 			<div class="head">

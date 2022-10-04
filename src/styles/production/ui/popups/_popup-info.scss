@@ -1,6 +1,7 @@
 .popup-info {
 	width: 220px;
 	height: auto;
+	z-index: 1;
 
 	position: absolute;
 	top: 50%;
@@ -106,7 +107,7 @@
 			transition: 0.8s ease-in-out;
 			transition-property: all;
 
-			div {
+			>div {
 				padding:var(--distance-5)  var(--distance-10);
 				border-bottom: 1px solid var(--white-1);
 
@@ -116,6 +117,7 @@
 			}
 
 			button {
+				margin-top: var(--distance-10);
 				color: var(--white-0);
 			}
 
@@ -195,5 +197,71 @@
 		right: 50%;
 		width: 40px;
 		height: 40px;
+	}
+}
+
+.popup-info .slide {
+	width: 100%;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+			overflow: hidden;
+
+	--item-position: 0%;
+	--item-range: 5%;
+	--item-range-position: 5%;
+
+	.labels {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+	}
+
+	.slide-bg {
+		height: 15px;
+		background-color: var(--white-1);
+		position: relative;
+	}
+
+	.item-position,
+	.item-range {
+		height: 100%;
+		position: absolute;
+		top: 0;
+		transform: translateX(-50%);
+	}
+
+	.item-position {
+		z-index: 1;
+		width: 2px;
+		height: 100%;
+		position: absolute;
+		left: var(--item-position);
+		top: 0;
+		
+		background-color: var(--black-0);
+
+		&:before {
+			content: '';
+			width: 12px;
+			height: 12px;
+			background-color: var(--blue-1);
+			clip-path: polygon(100% 50%, 50% 100%, 0% 50%);
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translate(-50%, -120%);
+		}
+	}
+
+	.item-range {
+		left: var(--item-range-position);
+		width: var(--item-range);
+		transform: translateX(-50%);
+		background-color: var(--blue-1);
+	}
+
+	> div {
+		width: 100%;
 	}
 }
