@@ -6,6 +6,7 @@ import { EllipticalPath } from "./EllipticalPath";
 import { calculateOrbitByType, DEG_TO_RAD, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { initMaterial } from "../gfx/ShaderLib";
+import { isPortrait } from "../../production/utils/Helpers";
 
 export const PLANET_GEO = new SphereGeometry(1, 32, 32);
 const tLoader = new TextureLoader();
@@ -31,8 +32,8 @@ export class Planet extends Object3D implements InteractiveObject {
     type:string;
     dwarf:boolean = false;
     target:Object3D;
-    lockedDistance:number = 0;
-    lockedOffset:Vector3 = new Vector3();
+    // lockedDistance:number = 0;
+    // lockedOffset:Vector3 = new Vector3();
 
     constructor(id: PlanetId, _data:OrbitElements, opts:PlanetOptions={}) {
         super();
@@ -60,9 +61,9 @@ export class Planet extends Object3D implements InteractiveObject {
             fresnelWidth = MathUtils.lerp(fresnelWidth, fresnelWidth*10, s);
             sunIntensity = MathUtils.lerp(.5, .05, s);
 
-            const lock = PlanetLockedMap[this.type];
-            this.lockedDistance = lock.distance;
-            this.lockedOffset.copy(lock.offset);
+            // const lock = PlanetLockedMap[this.type];
+            // this.lockedDistance = lock.distance;
+            // this.lockedOffset.copy(lock.offset);
             
         } else {
             this.scale.multiplyScalar(.003);
@@ -108,6 +109,26 @@ export class Planet extends Object3D implements InteractiveObject {
         } else {
             this.rotationSpeed = 0;
         }
+    }
+
+    get lockedDistance():number {
+
+        if(!this.dwarf) {
+            const lock = isPortrait() ? PlanetLockedMapPortrait[this.type] : PlanetLockedMap[this.type];
+            return lock.distance;
+        }
+
+        return 0       
+    }
+
+    get lockedOffset():Vector3 {
+
+        if(!this.dwarf) {
+            const lock = isPortrait() ? PlanetLockedMapPortrait[this.type] : PlanetLockedMap[this.type];
+            return lock.offset;
+        }
+
+        return new Vector3();          
     }
 
     update(d:number) {
@@ -217,5 +238,40 @@ export const PlanetLockedMap:Record<PlanetId,CameraLockPosition> = {
     neptune: {
         distance: .15,
         offset: new Vector3(-.018, .01, 0)
+    }
+}
+
+export const PlanetLockedMapPortrait:Record<PlanetId,CameraLockPosition> = {
+    mercury: {
+        distance: .025,
+        offset: new Vector3(0, -0.005, 0)
+    },
+    venus: {
+        distance: .038,
+        offset: new Vector3(0, -0.005, 0)
+    },
+    earth: {
+        distance: .038,
+        offset: new Vector3(0, -0.005, 0)
+    },
+    mars: {
+        distance: .03,
+        offset: new Vector3(0, -0.005, 0)
+    },
+    jupiter: {
+        distance: .45,
+        offset: new Vector3(0, -0.07, 0)
+    },
+    saturn: {
+        distance: .5,
+        offset: new Vector3(0, -0.08, 0)
+    },
+    uranus: {
+        distance: .2,
+        offset: new Vector3(0, -0.03, 0)
+    },
+    neptune: {
+        distance: .2,
+        offset: new Vector3(0, -0.03, 0)
     }
 }

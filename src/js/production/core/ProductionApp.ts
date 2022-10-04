@@ -1,6 +1,7 @@
 import { CoreApp } from "../../common/core/CoreApp";
 import { historyInit, LOCATION, onChange } from "../pagination/History";
 import { PAGES } from "../pagination/PagesRecap";
+import { setDeviceHeight, setDeviceType, setWindowRatioMode } from "../utils/Helpers";
 
 export class ProductionApp extends CoreApp {
 
@@ -13,24 +14,12 @@ export class ProductionApp extends CoreApp {
         this.resize();
     }
 
-    setDeviceHeight(){        
-        const doc = document.documentElement
-        doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
-    }
-
-    setDeviceType(){        
-        const doc = document.documentElement;
-        doc.classList.remove('desktop', 'device');
-        
-        // 1024 same in media queries
-        if(window.innerWidth > 1024) doc.classList.add('desktop');
-        else doc.classList.add('device')
-    }
 
     resize(width: number = window.innerWidth, height: number = window.innerHeight): void {
         super.resize(width, height);
-        this.setDeviceHeight();
-        this.setDeviceType();
+        setDeviceHeight();
+        setDeviceType();
+        setWindowRatioMode();
         for(const page of PAGES) page.class.onResize();
     }
 

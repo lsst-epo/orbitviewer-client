@@ -15,6 +15,10 @@
 	opacity: 0;
 	transition: opacity 1s ease-in-out;
 
+	&, * {
+		pointer-events: none;
+	}
+
 	.close-item {
 		position: absolute;
 		z-index: 2;
@@ -150,6 +154,7 @@
 		transition-delay: 2s;
 
 		opacity: 1;
+		z-index: 2;
 
 		.close-item {
 			cursor: pointer;
@@ -161,5 +166,22 @@
 				pointer-events: all;
 			}
 		}
+	}
+}
+
+.portrait .popup-info {
+	left: 50%;
+	top: unset;
+	bottom: 20px;
+	
+	transform: translate(-50%,0);
+	
+	max-width: 300px;
+	width: calc(100% - var(--distance-30));
+
+	.close-item{
+		right: 50%;
+		width: 40px;
+		height: 40px;
 	}
 }
