@@ -1,5 +1,6 @@
 import { Vector3 } from "three";
 import { SolarCategory } from "../data/Categories";
+import { PlanetDataMap, PlanetId } from "./Planet";
 import { OrbitDataElements } from "./SolarUtils";
 
 export const DEG_TO_RAD = Math.PI / 180;
@@ -58,7 +59,7 @@ export function cloneOrbitElements(src:OrbitElements):OrbitElements {
     }
 }
 
-export function getCartesianCoordinates(v:number, r:number, el:OrbitElements, target:Vector3=new Vector3()):Vector3 {
+export function getCartesianCoordinates(v:number, r:number, el:OrbitElements, target:Vector3=new Vector3(), convert:boolean=true):Vector3 {
     // convert to 3D cartesian coordinates
     const N = el.N * DEG_TO_RAD;
     const w = el.w * DEG_TO_RAD;
@@ -69,8 +70,8 @@ export function getCartesianCoordinates(v:number, r:number, el:OrbitElements, ta
     const zh = r * ( Math.sin(v+w) * Math.sin(i) );
 
     // Double check coordinates conversion with them!
-    // target.set(xh,yh,zh);
-    target.set(xh,zh,-yh); // convert from z up to y up (y must be also inverted to convert into Z)
+    if(!convert) target.set(xh,yh,zh);
+    else target.set(xh,zh,-yh); // convert from z up to y up (y must be also inverted to convert into Z)
 
     return target;
 }
@@ -89,6 +90,12 @@ export function calculateOrbitByType(el:OrbitElements, d:number, type:OrbitType=
 
 export function calculateOrbit(el:OrbitElements, d:number, target:Vector3= new Vector3()):Vector3 {
     return calculateOrbitByType(el, d, el.type, target);
+}
+
+function getMeanAnomaly(id:PlanetId, d:number):number {
+    const el = PlanetDataMap[id];
+    if(el === null) return 0;
+    return (el.M + el.n * d) * DEG_TO_RAD;
 }
 
 export function keplerCalc(el:OrbitElements, d:number, target:Vector3= new Vector3()):Vector3 {
@@ -117,6 +124,56 @@ export function keplerCalc(el:OrbitElements, d:number, target:Vector3= new Vecto
 
     const v = Math.atan2( yv, xv );
     const r = Math.sqrt( xv*xv + yv*yv );
+
+    if(el.id === 'jupiter' || el.id === 'saturn' || el.id === 'uranus') {
+        // ---  Perturbations ----
+        const Mj = getMeanAnomaly('jupiter', d);
+        const Ms = getMeanAnomaly('saturn', d);
+        const Mu = getMeanAnomaly('uranus', d);
+
+        getCartesianCoordinates(v, r, el, target, false);
+
+        // convert coords to lat lon
+        let lonecl = Math.atan2( target.y, target.x );
+        let latecl = Math.atan2( target.z, Math.sqrt(target.x*target.x+target.y*target.y) );
+
+        if(this.type === 'jupiter') {
+            lonecl += -0.332 * Math.sin(2*Mj - 5*Ms - 67.6 * DEG_TO_RAD);
+            lonecl += -0.056 * Math.sin(2*Mj - 2*Ms + 21 * DEG_TO_RAD);
+            lonecl += +0.042 * Math.sin(3*Mj - 5*Ms + 21 * DEG_TO_RAD);
+            lonecl += -0.036 * Math.sin(Mj - 2*Ms);
+            lonecl += +0.022 * Math.cos(Mj - Ms);
+            lonecl += +0.023 * Math.sin(2*Mj - 3*Ms + 52 * DEG_TO_RAD);
+            lonecl += -0.016 * Math.sin(Mj - 5*Ms - 69 * DEG_TO_RAD);
+        }
+
+        if(this.type === 'saturn') {
+            lonecl += +0.812 * Math.sin(2*Mj - 5*Ms - 67.6 * DEG_TO_RAD);
+            lonecl += -0.229 * Math.cos(2*Mj - 4*Ms - 2 * DEG_TO_RAD);
+            lonecl += +0.119 * Math.sin(Mj - 2*Ms - 3 * DEG_TO_RAD);
+            lonecl += +0.046 * Math.sin(2*Mj - 6*Ms - 69 * DEG_TO_RAD);
+            lonecl += +0.014 * Math.sin(Mj - 3*Ms + 32 * DEG_TO_RAD);
+
+            latecl += -0.020 * Math.cos(2*Mj - 4*Ms - 2 * DEG_TO_RAD);
+            latecl += +0.018 * Math.sin(2*Mj - 6*Ms - 49 * DEG_TO_RAD);
+
+        }
+
+        if(this.type === 'uranus') {
+            lonecl += +0.040 * Math.sin(Ms - 2*Mu + 6 * DEG_TO_RAD);
+            lonecl += +0.035 * Math.sin(Ms - 3*Mu + 33 * DEG_TO_RAD);
+            lonecl += -0.015 * Math.sin(Mj - Mu + 20 * DEG_TO_RAD);
+        }
+
+        const xh = r * Math.cos(lonecl) * Math.cos(latecl)
+        const yh = r * Math.sin(lonecl) * Math.cos(latecl)
+        const zh = r * Math.sin(latecl);
+
+        target.x = xh;
+        target.y = zh;
+        target.z = -yh;
+        return target;
+    }
 
     return getCartesianCoordinates(v, r, el, target);
 }

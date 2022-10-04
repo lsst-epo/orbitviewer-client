@@ -32,7 +32,6 @@ export class Planet extends Object3D implements InteractiveObject {
     parent:Object3D = new Object3D();
     mesh:Mesh;
     data:OrbitElements;
-    clonedData:OrbitElements;
     orbitPath:EllipticalPath;
     rotationSpeed:number; 
     private _selected:boolean = false;
@@ -57,7 +56,6 @@ export class Planet extends Object3D implements InteractiveObject {
         }
 
         this.data = _data;
-        this.clonedData = cloneOrbitElements(_data);
         this.name = id;
 
         let fresnelWidth = .005;
@@ -152,44 +150,7 @@ export class Planet extends Object3D implements InteractiveObject {
         return new Vector3();          
     }
 
-    private getMeanAnomaly(id:PlanetId, d:number):number {
-        const el = PlanetDataMap[id];
-        return (el.M + el.n * d) * DEG_TO_RAD;
-    }
-
     update(d:number) {
-        // ---  Perturbations ----
-        const Mj = this.getMeanAnomaly('jupiter', d);
-        const Ms = this.getMeanAnomaly('saturn', d);
-        const Mu = this.getMeanAnomaly('uranus', d);
-
-        if(this.type === 'jupiter') {
-            this.data.N = this.clonedData.N;
-            this.data.N += -0.332 * Math.sin(2*Mj - 5*Ms - 67.6 * DEG_TO_RAD);
-            this.data.N += -0.056 * Math.sin(2*Mj - 2*Ms + 21 * DEG_TO_RAD);
-            this.data.N += +0.042 * Math.sin(3*Mj - 5*Ms + 21 * DEG_TO_RAD);
-            this.data.N += -0.036 * Math.sin(Mj - 2*Ms);
-            this.data.N += +0.022 * Math.cos(Mj - Ms);
-            this.data.N += +0.023 * Math.sin(2*Mj - 3*Ms + 52 * DEG_TO_RAD);
-            this.data.N += -0.016 * Math.sin(Mj - 5*Ms - 69 * DEG_TO_RAD);
-        }
-
-        if(this.type === 'saturn') {
-            this.data.N = this.clonedData.N;
-            this.data.N += +0.812 * Math.sin(2*Mj - 5*Ms - 67.6 * DEG_TO_RAD);
-            this.data.N += -0.229 * Math.cos(2*Mj - 4*Ms - 2 * DEG_TO_RAD);
-            this.data.N += +0.119 * Math.sin(Mj - 2*Ms - 3 * DEG_TO_RAD);
-            this.data.N += +0.046 * Math.sin(2*Mj - 6*Ms - 69 * DEG_TO_RAD);
-            this.data.N += +0.014 * Math.sin(Mj - 3*Ms + 32 * DEG_TO_RAD);
-        }
-
-        if(this.type === 'uranus') {
-            this.data.N = this.clonedData.N;
-            this.data.N += +0.040 * Math.sin(Ms - 2*Mu + 6 * DEG_TO_RAD);
-            this.data.N += +0.035 * Math.sin(Ms - 3*Mu + 33 * DEG_TO_RAD);
-            this.data.N += -0.015 * Math.sin(Mj - Mu + 20 * DEG_TO_RAD);
-        }
-
         calculateOrbitByType(this.data, d, OrbitType.Elliptical, this.position);
         if(this.rotationSpeed > 0) {
             const rt = PlanetRotationMap[this.type] as PlanetRotationData;
