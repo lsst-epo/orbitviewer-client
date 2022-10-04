@@ -140,3 +140,15 @@ body {
 
 	font-weight: 900;
 }
+@mixin bold-4 {
+	
+	font-size: 0.7rem;
+
+	@include desktop {
+		font-size: 0.8rem;
+	}
+
+	line-height: 1em;
+
+	font-weight: 900;
+}

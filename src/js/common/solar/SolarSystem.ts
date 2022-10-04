@@ -13,6 +13,7 @@ export const SUN_RADIUS = 695700; // in KM
 
 export type OrbitElements = {
     id:string;
+    fulldesignation: string;
     N:number;
     a:number;
     e:number;

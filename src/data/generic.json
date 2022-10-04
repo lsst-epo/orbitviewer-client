@@ -102,7 +102,25 @@
 			"tap": "Tap to expand",
 			"overview": "Overview",
 			"context": "Context information",
-			"data": "Detailed data"
+			"detailedData": "Detailed data",
+			"overviewStrings": [
+				"Type of object:",
+				"Name:",
+				"Diameter:",
+				"Distance from the Sun:",
+				"Range of the Main asteroids belt in the Solar System",
+				"This object current position"
+			],
+			"detailedDataStrings": [
+				"Object ID",
+				"Orbital elements",
+				"Brightness",
+				"When it will be closest to the Sun?",
+				"How far is it today?",
+				"From the Sun:",
+				"From the Earth:",
+				"See this object in Skyviewer"
+			]
 		}
 	},
 	"es": {
@@ -209,7 +227,25 @@
 			"tap": "ES - Tap to expand",
 			"overview": "ES - Overview",
 			"context": "ES - Context information",
-			"data": "ES - Detailed data"
+			"detailedData": "ES - Detailed data",
+			"overviewStrings": [
+				"ES - Type of object:",
+				"ES - Name:",
+				"ES - Diameter:",
+				"ES - Distance from the Sun:",
+				"ES - Range of the Main asteroids belt in the Solar System",
+				"ES - This object current position"
+			],
+			"detailedDataStrings": [
+				"ES - Object ID",
+				"ES - Orbital elements",
+				"ES - Brightness",
+				"ES - When it will be closest to the Sun?",
+				"ES - How far is it today?",
+				"ES - From the Sun:",
+				"ES - From the Earth:",
+				"ES - See this object in Skyviewer"
+			]
 		}
 	}
 }

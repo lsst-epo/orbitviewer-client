@@ -1,11 +1,9 @@
 import { MathUtils } from "@jocabola/math";
-import gsap from "gsap";
 import { Vector3 } from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { css2D } from "./Css2D";
-import { PopupInfo } from "./PopupInfo";
-import { disablePopup, enablePopup } from "./PopupsManager";
+import { enablePopup } from "./PopupsManager";
 import { InteractiveObject } from "./Raycaster";
 
 export class PopupLabel {
