@@ -61,7 +61,11 @@ export class PopupInfo {
 		})
 
 		for(const section of this.sections){
-			section.querySelector('.head').addEventListener('click', () => {				
+			section.querySelector('.head').addEventListener('click', () => {	
+				if(section.classList.contains('active')) {
+					section.classList.remove('active');			
+					return;
+				}
 				for(const section of this.sections) section.classList.remove('active');
 				section.classList.add('active');
 			})

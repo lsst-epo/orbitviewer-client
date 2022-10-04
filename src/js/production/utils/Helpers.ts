@@ -17,7 +17,7 @@ export const setDeviceType = () => {
 	const doc = document.documentElement;
 	doc.classList.remove('desktop', 'device');
 
-	// 1024 same in media queries
+	// 1024 same in media queries	
 	if(window.innerWidth > 1024) doc.classList.add('desktop');
 	else doc.classList.add('device')
 }
