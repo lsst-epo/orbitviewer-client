@@ -107,7 +107,7 @@
 			transition-property: all;
 
 			div {
-				padding: var(--distance-10);
+				padding:var(--distance-5)  var(--distance-10);
 				border-bottom: 1px solid var(--white-1);
 
 				&:last-of-type {
