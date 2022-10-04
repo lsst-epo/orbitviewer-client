@@ -102,6 +102,9 @@ export class PopupInfo {
 
 		const m = this.dom.querySelector('[data="m"]') as HTMLElement;
 		m.innerText = this.data.M.toFixed(2);
+
+		const b = this.dom.querySelector('[data="brightness"]') as HTMLElement;
+		b.innerText = this.data.mpch.toFixed(2);
 		
 		this.addAData();
 
