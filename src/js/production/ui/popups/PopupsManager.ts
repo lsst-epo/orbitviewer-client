@@ -2,6 +2,7 @@ import gsap from "gsap";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { CoreAppSingleton, solarClock } from "../../../common/core/CoreApp";
 import { Planet } from "../../../common/solar/Planet";
+import { OrbitDataElements } from "../../../common/solar/SolarUtils";
 import { OrbitControlsIn, OrbitControlsOut } from "../../pagination/animations/OrbitControls";
 import { LOCATION } from "../../pagination/History";
 import { broadcastPanelsClose } from "../panels/PanelsManager";
@@ -28,11 +29,11 @@ export const initPopups = () => {;
 	}
 }
 
-export const linkPlanetToPopup = (planet:Planet) => {
+export const linkPlanetToPopup = (planet:Planet, data:OrbitDataElements) => {
 	const popup = popups.find(x => x.name === planet.name);            
 	if(popup) {
 			popup.label.ref = planet;
-			popup.info.data = planet.data;
+			popup.info.data = data;
 			popup.label.loaded();
 			popup.info.loaded();
 	}

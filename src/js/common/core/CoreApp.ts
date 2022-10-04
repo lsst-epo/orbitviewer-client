@@ -183,7 +183,7 @@ export class CoreApp extends WebGLSketch {
 
 			const planet = new Planet(el.id as PlanetId, mel);
 
-            linkPlanetToPopup(planet);
+            linkPlanetToPopup(planet, el);
             
 			this.planets.add(planet);
 			this.planetPaths.add(planet.orbitPath.ellipse);
@@ -203,7 +203,7 @@ export class CoreApp extends WebGLSketch {
                 color: 0xFA6868
             });
 
-            linkPlanetToPopup(planet);
+            linkPlanetToPopup(planet, el);
 
 			this.dwarfPlanets.add(planet);
 			this.dwarfPlanetPaths.add(planet.orbitPath.ellipse);

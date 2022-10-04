@@ -1,7 +1,7 @@
 import { MathUtils } from "@jocabola/math";
 import gsap from "gsap";
 import { CategoriesMinMaxA } from "../../../common/data/Categories";
-import { OrbitElements } from "../../../common/solar/SolarSystem";
+import { OrbitDataElements } from "../../../common/solar/SolarUtils";
 import { disablePopup } from "./PopupsManager";
 
 
@@ -15,7 +15,7 @@ export class PopupInfo {
 
 	sections:NodeListOf<HTMLElement>;
 
-	data: OrbitElements;
+	data: OrbitDataElements;
 
 	constructor(el){
 		this.dom = el;
@@ -84,6 +84,24 @@ export class PopupInfo {
 
 		const names = this.dom.querySelectorAll('[data="name"]') as NodeListOf<HTMLElement>;
 		for(const name of names) name.innerText = this.data.fulldesignation;
+
+		const a = this.dom.querySelector('[data="a"]') as HTMLElement;
+		a.innerText = this.data.a.toFixed(2);
+
+		const e = this.dom.querySelector('[data="e"]') as HTMLElement;
+		e.innerText = this.data.e.toFixed(2);
+
+		const i = this.dom.querySelector('[data="incl"]') as HTMLElement;
+		i.innerText = this.data.incl.toFixed(2);
+
+		const peri = this.dom.querySelector('[data="peri"]') as HTMLElement;
+		peri.innerText = this.data.peri.toFixed(2);
+
+		const node = this.dom.querySelector('[data="node"]') as HTMLElement;
+		node.innerText = this.data.node.toFixed(2);
+
+		const m = this.dom.querySelector('[data="m"]') as HTMLElement;
+		m.innerText = this.data.M.toFixed(2);
 		
 		this.addAData();
 
