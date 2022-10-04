@@ -68,14 +68,6 @@
 
 		color: var(--black-0);
 
-		section {
-			border-bottom: 1px solid var(--white-2);
-
-			&:last-of-type {
-				border-bottom: none;
-			}
-		}
-
 		.head {
 			background-color: var(--white-1);
 

@@ -74,6 +74,8 @@ export class PopupInfo {
 		if(this.active) return;
 		this.active = true;
 
+		const sectionRect = this.sections[0].getBoundingClientRect();
+
 		gsap.set(this.sections, {
 			height: 0,
 			transformOrigin: '50% 0%'
@@ -84,7 +86,7 @@ export class PopupInfo {
 		})
 
 		const cover = this.dom.querySelector('.cover');
-		const rect = cover.getBoundingClientRect();
+		const coverRect = cover.getBoundingClientRect();
 
 		gsap.set(cover, {
 			height: 0,
@@ -102,12 +104,12 @@ export class PopupInfo {
 				ease: 'power2.inOut'
 			}, 'start')
 			.to(this.dom.querySelector('.cover'), {
-				height: rect.height,
+				height: coverRect.height,
 				duration: 1,
 				ease: 'power2.inOut'
 			}, 'start')
 			.to(this.sections, {
-				height: '37px',
+				height: sectionRect.height,
 				stagger: 1.2,
 				duration: 1,
 				ease: 'power2.inOut',
