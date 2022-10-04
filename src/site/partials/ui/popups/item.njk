@@ -32,25 +32,43 @@
 
 		<section>
 			<div class="head">
-				<p>{{ generic[lang]['popups'].overview }}</p>
+				<p>{{ generic[lang].popups.overview }}</p>
 			</div>
 			<div class="content">
-				<p>Pending</p>
+				<div>
+					<p>{{ generic[lang].popups.overviewStrings[0] }}</p>
+					<h3>Lorem</h3>
+				</div>
+				<div>
+					<p>{{ generic[lang].popups.overviewStrings[1] }}</p>
+					<h3>Lorem</h3>
+				</div>
+				<div>
+					<p>{{ generic[lang].popups.overviewStrings[2] }}</p>
+					<h3>Lorem</h3>
+				</div>
+				<div>
+					<p>{{ generic[lang].popups.overviewStrings[3] }}</p>
+					{# todo share button #}
+					<button class="ui__button ui__button-thin">{{ generic[lang].strings.share }}</button>
+				</div>
 			</div>
 		</section>
 
 		<section>
 			<div class="head">
-				<p>{{ generic[lang]['popups'].context }}</p>
+				<p>{{ generic[lang].popups.context }}</p>
 			</div>
 			<div class="content">
-				{{ element.text | safe }}
+				<div>
+					{{ element.text | safe }}
+				</div>
 			</div>
 		</section>
 
 		<section>
 			<div class="head">
-				<p>{{ generic[lang]['popups'].data }}</p>
+				<p>{{ generic[lang].popups.detailedData }}</p>
 			</div>
 			<div class="content">
 				<p>Pending</p>

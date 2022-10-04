@@ -49,8 +49,6 @@
 	}
 
 	.cover {
-		position: relative;
-
 		width: 100%;
 
 		@include aspect-ratio(16, 9);
@@ -100,12 +98,33 @@
 
 		.content {
 			overflow: hidden;
-			padding: 0 var(--distance-10);
 			height: 0px;
 
-			transition: 0.4s ease-in-out;
+			display: flex;
+			flex-direction: column;
+
+			transition: 0.8s ease-in-out;
 			transition-property: all;
 
+			div {
+				padding: var(--distance-10);
+				border-bottom: 1px solid var(--white-1);
+
+				&:last-of-type {
+					border-bottom: none;
+				}
+			}
+
+			button {
+				color: var(--white-0);
+			}
+
+			// Big texts 
+			h3 {
+				@include light-2;
+			}
+
+			// Default text
 			p {
 				@include light-3;
 
@@ -131,7 +150,6 @@
 
 			.content {
 
-				padding: var(--distance-10);
 				height: var(--height);
 
 				p {
@@ -155,7 +173,8 @@
 		}
 
 		.hidden-tabs {
-			.head {
+			.head,
+			button {
 				pointer-events: all;
 			}
 		}

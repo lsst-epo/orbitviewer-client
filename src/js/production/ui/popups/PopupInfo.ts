@@ -101,12 +101,14 @@ export class PopupInfo {
 			.to(this.closeButton, {
 				scale: 1,
 				duration: 1,
-				ease: 'power2.inOut'
+				ease: 'power2.inOut',
+				clearProps: 'all',
 			}, 'start')
 			.to(this.dom.querySelector('.cover'), {
 				height: coverRect.height,
 				duration: 1,
-				ease: 'power2.inOut'
+				ease: 'power2.inOut',
+				clearProps: 'height',
 			}, 'start')
 			.to(this.sections, {
 				height: sectionRect.height,
