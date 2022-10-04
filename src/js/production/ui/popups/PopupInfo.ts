@@ -69,7 +69,7 @@ export class PopupInfo {
 		// Set range size
 		const rightSide = MathUtils.map(aMin, totalMin, totalMax, 0, 100);
 		const leftSide = MathUtils.map(aMax, totalMin, totalMax, 0, 100);
-		const center = (leftSide - rightSide) / 2;
+		const center = (leftSide + rightSide) / 2;
 		distanceSun.style.setProperty('--item-range-position', `${center}%`);
 		
 
