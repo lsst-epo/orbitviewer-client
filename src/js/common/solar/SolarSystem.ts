@@ -40,6 +40,7 @@ export enum OrbitType {
 export function cloneOrbitElements(src:OrbitElements):OrbitElements {
     return {
         id: src.id,
+        fulldesignation: src.fulldesignation,
         N: src.N,
         a: src.a,
         e: src.e,
