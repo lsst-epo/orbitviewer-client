@@ -1,4 +1,5 @@
 import { Size } from "@jocabola/gfx";
+import { isMobile } from "@jocabola/utils";
 
 /**
  * DEV_MODE is injected by esbuild
@@ -62,7 +63,7 @@ export function getParticleCount(s:Size) {
 }
 
 export const VISUAL_SETTINGS = {
-	current: 'low',
+	current: isMobile() ? 'medium' : 'high',
 	low: getParticleCount(GPU_SIM_SIZES.low),
 	medium: getParticleCount(GPU_SIM_SIZES.medium),
 	high: getParticleCount(GPU_SIM_SIZES.high),

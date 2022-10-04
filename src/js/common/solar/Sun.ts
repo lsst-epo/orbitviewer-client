@@ -52,9 +52,10 @@ export class Sun extends Object3D implements InteractiveObject {
     }
 
     update(time:number) {
+        const t = performance.now() * .001;
         const sunMat = this.mesh.material as SunMaterial;
-        sunMat.update(time, this);
-        this.particles.update(time);
+        sunMat.update(t, this);
+        this.particles.update(t);
         if(sunMat.shaderRef) {
             sunMat.shaderRef.uniforms.vertexAmp.value = MathUtils.lerp(
                 sunMat.shaderRef.uniforms.vertexAmp.value,
