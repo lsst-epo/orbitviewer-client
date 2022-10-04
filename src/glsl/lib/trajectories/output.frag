@@ -16,7 +16,7 @@ float d = distance(bodyPos, pos);
 
 alpha *= smoothstep(dRadius*2.0, 8.0*dRadius, d);
 
-// if(alpha < .1) discard;
+if(alpha < .01) discard;
 
 pc_fragColor = vec4( outgoingLight, alpha * diffuseColor.a );
 
