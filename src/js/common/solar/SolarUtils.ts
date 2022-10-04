@@ -13,6 +13,7 @@ export type OrbitDataElements = {
     H?:number;
     q?:number;
     M:number;
+    mpch:number;
     n:number;
     tperi?:number;
     peri:number;

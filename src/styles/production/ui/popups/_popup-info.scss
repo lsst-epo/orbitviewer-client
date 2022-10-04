@@ -363,7 +363,7 @@
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: repeat(4, 1fr);
-	grid-column-gap: 5px;
+	grid-column-gap: 8px;
 	grid-row-gap: 0px;
 
 	.cell-1 { grid-area: 1 / 1 / 2 / 2; }
@@ -382,8 +382,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: var(--distance-5) var(--distance-10);
-		margin: var(--distance-5) 0;
+		padding: 2px var(--distance-10);
+		margin: 4px 0;
 
 		span {
 			@include normal-1;
