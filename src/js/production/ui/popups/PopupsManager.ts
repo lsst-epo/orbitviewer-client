@@ -16,6 +16,12 @@ export const initPopups = () => {;
 
 	const items = document.querySelectorAll('.popup-label');	
 
+	// Disable popups
+	const closePopups = document.querySelector('.popups-close');
+	closePopups.addEventListener('click', () => {
+		disablePopup();
+	})
+
 	for(const item of items){	
 
 		const name = item.getAttribute('data-name');
@@ -26,6 +32,7 @@ export const initPopups = () => {;
 			label: new PopupLabel(item),
 			info: new PopupInfo(infoItem)
 		});
+		
 	}
 }
 
@@ -57,6 +64,8 @@ export function enablePopup(name: string) {
 		}
 	}
 
+	document.body.classList.add('popups-active');
+
 	hideUI();
 }
 
@@ -73,6 +82,7 @@ export function disablePopup() {
 	solarClock.resume();
 
 	document.querySelector('.popups-labels').classList.remove('hidden');
+	document.body.classList.remove('popups-active');
 
 	RAYCASTER.active = true;
 

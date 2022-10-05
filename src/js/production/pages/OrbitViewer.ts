@@ -1,17 +1,22 @@
 import { CameraManager } from "../../common/core/CameraManager";
-import { onChange } from "../pagination/History";
 import { Search } from "../partials/Search";
+import { addPanelListener, PanelsListener } from "../ui/panels/PanelsManager";
 import { popups } from "../ui/popups/PopupsManager";
 import { RAYCASTER } from "../ui/popups/Raycaster";
 import { Page } from "./Page";
 
 
-export class OrbitViewer extends Page {
+export class OrbitViewer extends Page implements PanelsListener {
+	customizeViewWrapper: HTMLElement;
 	load(resolve: any): void {
 	
 		new Search(this.dom);
 
+		this.customizeViewWrapper = this.dom.querySelector('.customize-view');
+
 		super.load(resolve)
+
+		addPanelListener(this);
 
 	}
 
@@ -24,6 +29,11 @@ export class OrbitViewer extends Page {
 		RAYCASTER.active = false;
 	}
 
+	closePanel(): void {
+		if(!this.customizeViewWrapper.classList.contains('active')) return;
+		this.customizeViewWrapper.classList.remove('active');
+	}
+
 	addEventListeners(): void {
 	
 		this.addCustomizeView();
@@ -34,17 +44,16 @@ export class OrbitViewer extends Page {
 
 	addCustomizeView(){
 
-		const wrapper = this.dom.querySelector('.customize-view');
+		
 
-		const btn = wrapper.querySelector('.customize-view-icon');
+		const btn = this.customizeViewWrapper.querySelector('.customize-view-icon');
 		btn.addEventListener('click', () => {
-			wrapper.classList.toggle('active');
+			this.customizeViewWrapper.classList.toggle('active');
 		})
 
 		document.addEventListener('keydown', (e) => {			
 			if(e.key != 'Escape') return;
-			if(!wrapper.classList.contains('active')) return;
-			wrapper.classList.remove('active');
+			this.closePanel();
 		})
 
 

@@ -1,5 +1,12 @@
 
 <div class="popups-wrapper popups-infos">
+
+	<div class="popups-close">
+		<button>
+				{% include "ui/icons/times.njk" %}
+		</button>
+	</div>
+
 	{% for element in solarSystemElements[lang] %}
 		{% include "ui/popups/item.njk" %}
 	{% endfor %}
