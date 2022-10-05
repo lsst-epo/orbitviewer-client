@@ -25,3 +25,9 @@
 		}
 	}
 }
+
+.controls-disabled [data-template="orbit-viewer"]{
+	&, * {
+		pointer-events: none;
+	}
+}

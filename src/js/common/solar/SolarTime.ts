@@ -39,4 +39,8 @@ export function JD2MJD(jd:number): number {
     return jd - 2400000.5;
 }
 
+export function MJD2JD(mjd:number): number {
+    return mjd + 2400000.5;
+}
+
 export const SolarTimeManager = new SolarTime();

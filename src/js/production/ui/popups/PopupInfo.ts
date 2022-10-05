@@ -1,7 +1,8 @@
 import { MathUtils } from "@jocabola/math";
 import gsap from "gsap";
 import { CategoriesMinMaxA } from "../../../common/data/Categories";
-import { OrbitDataElements } from "../../../common/solar/SolarUtils";
+import { getClosestDateToSun, getDistanceFromEarthNow, getDistanceFromSunNow, OrbitDataElements } from "../../../common/solar/SolarUtils";
+import { formatDateString } from "../../utils/Dates";
 import { disablePopup } from "./PopupsManager";
 
 
@@ -71,8 +72,6 @@ export class PopupInfo {
 		const center = (leftSide + rightSide) / 2;
 		distanceSun.style.setProperty('--item-range-position', `${center}%`);
 		
-
-
 		distanceSun.classList.remove('slide-loading');
 		
 	}
@@ -116,6 +115,19 @@ export class PopupInfo {
 
 		const b = this.dom.querySelector('[data="brightness"]') as HTMLElement;
 		b.innerText = this.data.mpch.toFixed(2);
+
+		// Fill data
+		const date = getClosestDateToSun(this.data);		
+		const dClosest = this.dom.querySelector('[data="date"]') as HTMLElement;
+		dClosest.innerText = formatDateString(date);
+
+		// Distance sun
+		const dSun = this.dom.querySelector('[data="far-sun"]') as HTMLElement;
+		const dEarth = this.dom.querySelector('[data="far-earth"]') as HTMLElement;
+		dSun.innerText = `${getDistanceFromSunNow(this.data).toFixed(2)} au`;
+		dEarth.innerText = `${getDistanceFromEarthNow(this.data).toFixed(2)} au`;
+		
+		console.log(getDistanceFromEarthNow(this.data));
 		
 		this.addAData();
 
@@ -203,8 +215,8 @@ export class PopupInfo {
 			}, 'start')
 			.to(this.sections, {
 				height: sectionRect.height,
-				stagger: 0.5,
-				duration: 0.8,
+				stagger: 0.1,
+				duration: 0.5,
 				ease: 'power2.inOut',
 				clearProps: 'all',
 				onComplete: () => {

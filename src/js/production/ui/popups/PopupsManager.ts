@@ -39,10 +39,15 @@ export const initPopups = () => {;
 export const linkPlanetToPopup = (planet:Planet, data:OrbitDataElements) => {
 	const popup = popups.find(x => x.name === planet.name);            
 	if(popup) {
-			popup.label.ref = planet;
-			popup.info.data = data;
-			popup.label.loaded();
-			popup.info.loaded();
+		popup.label.ref = planet;
+		popup.info.data = data;
+	}
+}
+
+export const popupsLoaded = () => {
+	for(const popup of popups) {
+		popup.label.loaded();
+		popup.info.loaded();
 	}
 }
 

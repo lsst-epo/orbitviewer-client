@@ -22,8 +22,9 @@
 
 	.popups-close {
 		@extend .back-button;
-		transition: opacity 1s ease-in-out;
+		transition: opacity 0.5s ease-in-out;
 		opacity: 0;
+		
 		&, * {
 			pointer-events: none;
 		}
@@ -32,6 +33,7 @@
 
 .popups-active .popups-close {
 	transition-delay: 4s;
+	transition-duration: 1s;
 	opacity: 1;
 	&, * {
 		pointer-events: all;

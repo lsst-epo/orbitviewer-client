@@ -2,7 +2,7 @@ import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
 import { AmbientLight, Clock, Group, PerspectiveCamera, PointLight, TextureLoader } from "three";
 import { css2D } from "../../production/ui/popups/Css2D";
-import { initPopups, linkPlanetToPopup, resizePopups } from "../../production/ui/popups/PopupsManager";
+import { initPopups, linkPlanetToPopup, popupsLoaded, resizePopups } from "../../production/ui/popups/PopupsManager";
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/popups/Raycaster";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/FiltersManager";
@@ -22,6 +22,7 @@ import { getMinMaxPlanetsA } from "../data/Categories";
 import { EllipticalPath } from "../solar/EllipticalPath";
 import { Sun } from "../solar/Sun";
 import { CameraManager, DEFAULT_CAM_POS } from "./CameraManager";
+import { JD2MJD } from "../solar/SolarTime";
 
 const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
@@ -163,6 +164,7 @@ export class CoreApp extends WebGLSketch {
 
     onDataLoaded() {
         console.log('Data Loaded');
+        popupsLoaded();
 
         // const globals = getEntryById('globals').data;
         // this.updateMeshSettings(globals['demo'] as DemoType);
@@ -174,9 +176,10 @@ export class CoreApp extends WebGLSketch {
     createPlanets(d:Array<OrbitDataElements>) {
 
         // Overwrite name so we can create fake items
-        let i = 0;
-
 		for(const el of d) {
+
+            el.tperi = JD2MJD(el.tperi);
+
 			const mel = mapOrbitElements(el);
             mel.category = 'planets-moons';
 
@@ -192,12 +195,14 @@ export class CoreApp extends WebGLSketch {
 
             updateRaycasterWatch([planet]);
 
-            i++;
 		}
 	}
 
 	createDwarfPlanets(d:Array<OrbitDataElements>) {
 		for(const el of d) {
+            
+            el.tperi = JD2MJD(el.tperi);
+
 			const mel = mapOrbitElements(el);
             mel.category = 'planets-moons';
 			const planet = new Planet(null, mel, {

@@ -1,5 +1,11 @@
+import { Vector3 } from "three";
 import { getCategory } from "../data/Categories";
-import { OrbitElements, OrbitType } from "./SolarSystem"
+import { PlanetDataMap } from "./Planet";
+import { calculateOrbit, OrbitElements, OrbitType } from "./SolarSystem"
+import { MJD2JD, SolarTimeManager } from "./SolarTime";
+
+const tmp1 = new Vector3();
+const tmp2 = new Vector3();
 
 export type OrbitDataElements = {
     id:string;
@@ -98,3 +104,47 @@ export const openFileDialog = (accept, callback) => {
 	// dispatch a click event to open the file dialog
 	inputElement.dispatchEvent(new MouseEvent('click'));
 };
+
+export function getClosestDateToSun(data:OrbitDataElements):Date {
+
+    const jd = MJD2JD(data.tperi);    
+
+    const unixMs = ( jd - 2440587.5) * 86400000;
+
+    const date = new Date(unixMs);
+
+    return date;
+}
+
+export function getDistanceFromSunNow(data:OrbitDataElements): number {
+
+    const date = new Date();
+    const mjd = SolarTimeManager.getMJDonDate(date);
+
+    const mel = mapOrbitElements(data);
+
+    calculateOrbit(mel, mjd, tmp1);
+
+    return tmp1.length()
+}
+
+export function getDistanceFromEarthNow(data:OrbitDataElements): number {
+
+    const date = new Date();
+    const mjd = SolarTimeManager.getMJDonDate(date);
+
+    const mel = mapOrbitElements(data);
+
+    calculateOrbit(mel, mjd, tmp1);
+
+    const earthData = PlanetDataMap.earth;
+    console.log(earthData);
+    
+    if(!earthData) return 0;
+    
+    calculateOrbit(earthData, mjd, tmp2);
+    // console.log(tmp1, tmp2, tmp2.distanceTo(tmp1));
+    
+    
+    return tmp2.distanceTo(tmp1);
+}

@@ -195,7 +195,7 @@ export class GPUSim {
         console.log(this.totalItems, value.length);
         
         for(let i=0; i<Math.min(this.totalItems, value.length); i++) {
-            arr[i] = 1;
+            arr[i] = 1;            
         }
 
         for(let i=value.length; i<this.totalItems; i++) {

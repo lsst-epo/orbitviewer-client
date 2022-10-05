@@ -2,6 +2,8 @@ import { LOCATION } from "../History";
 
 export const OrbitControlsOut = (tl:GSAPTimeline, label:string, dom:HTMLElement = LOCATION.previous.class.dom) => {
 
+	document.body.classList.add('controls-disabled');
+
 	const left = dom.querySelectorAll('[data-animation-type="control-left"]');
 	if(left.length > 0){
 		tl.to(left, {
@@ -32,6 +34,9 @@ export const OrbitControlsOut = (tl:GSAPTimeline, label:string, dom:HTMLElement 
 
 }
 export const OrbitControlsIn = (tl:GSAPTimeline, label:string) => {
+
+	document.body.classList.remove('controls-disabled');
+
 	const dom = LOCATION.current.class.dom;
 	const control = dom.querySelectorAll('[data-animation-type^="control-"]');
 
