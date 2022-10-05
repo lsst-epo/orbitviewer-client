@@ -41,10 +41,19 @@
 
 			ellipse {
 				fill: var(--red-0);
+				stroke-width: 1;
+				stroke: var(--red-0);
+				transition: stroke 0.5s ease-in-out;
 			}
 
 			path {
 				fill: var(--white-1);
+			}
+		}
+
+		&:hover {
+			ellipse {
+				stroke: var(--white-1);
 			}
 		}
 	}
@@ -82,6 +91,8 @@
 			pointer-events: all;
 			position: relative;
 
+			transition: background-color 0.4s ease-in-out;
+
 			&:after {
 				content: '';
 				position: absolute;
@@ -116,6 +127,13 @@
 					transition: transform 0.5s ease-in-out;
 				}
 			}
+
+			&:hover {
+				background-color: var(--blue-1-alpha);
+				&:after {
+					opacity: 0.2;
+				}
+			}
 		}
 
 		.content {
@@ -141,7 +159,7 @@
 				}
 			}
 
-			button {
+			.ui__button {
 				margin-top: var(--distance-10);
 				color: var(--white-0);
 			}
@@ -204,7 +222,7 @@
 
 		.hidden-tabs {
 			.head,
-			button {
+			.ui__button {
 				pointer-events: all;
 			}
 		}
