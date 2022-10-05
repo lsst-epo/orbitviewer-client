@@ -206,8 +206,6 @@ export const getMinMaxPlanetsA = (d:Array<OrbitDataElements>) => {
 	CategoriesMinMaxA['planets-moons'].min = min;
 	CategoriesMinMaxA['planets-moons'].max = max;
 
-	console.log(CategoriesMinMaxA['planets-moons']);
-	
-
 	getMinMaxAByCategory();
+	
 }
