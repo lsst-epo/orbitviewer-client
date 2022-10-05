@@ -56,22 +56,27 @@
 		stroke-width: 3;
 	}
 }
-.ui__button.has-arrow {
-	.button_arrow {
+.ui__button.button_arrow {
+
+	svg {
 		display: none;
 		@include desktop { display: flex;	}
 	}
-
+	
 	@include desktop {
 		display: flex;
 		justify-content: space-between;
 
-		.button_arrow {
-			width: 20px;
+		&.button_arrow {
+			svg {
+				width: 20px;
+			}
 		}
 
-		.arrow-next {
-			order: 1;
+		&.arrow-next {
+			svg {
+				order: 1;
+			}
 		}
 
 		&:has(.arrow-prev){

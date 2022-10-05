@@ -68,6 +68,9 @@ export class OrbitViewer extends Page implements PanelsListener {
 
 	update(): void {
 		super.update();
-		for(const popup of popups) popup.label.update();
+		for(const popup of popups) {
+			popup.label.visible = popup.visible;
+			popup.label.update();
+		}
 	}
 }

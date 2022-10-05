@@ -10,7 +10,7 @@ import { PopupInfo } from "./PopupInfo";
 import { PopupLabel } from "./PopupLabel";
 import { RAYCASTER } from "./Raycaster";
 
-export const popups: Array<{name: string, label: PopupLabel, info: PopupInfo}> = [];
+export const popups: Array<{name: string, visible: boolean, category: string, label: PopupLabel, info: PopupInfo}> = [];
 
 export const initPopups = () => {;
 
@@ -25,10 +25,12 @@ export const initPopups = () => {;
 	for(const item of items){	
 
 		const name = item.getAttribute('data-name');
-		const infoItem = document.querySelector(`.popup-info[data-name="${name}"]`);
+		const infoItem = document.querySelector(`.popup-info[data-name="${name}"]`);		
 
 		popups.push({
 			name,
+			visible: false,
+			category: '',
 			label: new PopupLabel(item),
 			info: new PopupInfo(infoItem)
 		});
@@ -36,10 +38,11 @@ export const initPopups = () => {;
 	}
 }
 
-export const linkPlanetToPopup = (planet:SolarElement, data:OrbitDataElements) => {
-	const popup = popups.find(x => x.name === planet.name);            
+export const linkPlanetToPopup = (solarElement:SolarElement, data:OrbitDataElements) => {
+	const popup = popups.find(x => x.name === solarElement.name);            
 	if(popup) {
-		popup.label.ref = planet;
+		popup.category = solarElement.category;
+		popup.label.ref = solarElement;
 		popup.info.data = data;
 	}
 }
@@ -48,6 +51,7 @@ export const popupsLoaded = () => {
 	for(const popup of popups) {
 		popup.label.loaded();
 		popup.info.loaded();
+		popup.visible = true;
 	}
 }
 

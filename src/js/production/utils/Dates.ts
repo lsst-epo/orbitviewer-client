@@ -34,7 +34,7 @@ export const formatDateString = (date:Date) => {
 
 	const isES = document.documentElement.getAttribute('lang') === 'es-ES';	
 
-	const formattedDate = isES ? `${d.d}/${d.m}/${d.y}` : `${d.m}/${d.d}/${d.y}`;
+	const formattedDate = isES ? `${d.d}.${d.m}.${d.y}` : `${d.m}.${d.d}.${d.y}`;
 
 	return formattedDate;
 }

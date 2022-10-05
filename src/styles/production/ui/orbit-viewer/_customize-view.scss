@@ -31,7 +31,7 @@
 
 			opacity: 0;
 			pointer-events: none;
-			transition: opacity 0.2s ease-in-out;
+			transition: opacity 0.5s ease-in-out;
 		}
 
 		svg {
@@ -42,7 +42,7 @@
 		svg .chev {
 			transform-origin: 50% 90%;
 			transform: rotate(0deg);
-			transition: transform 0.2s ease-in-out;
+			transition: transform 0.5s ease-in-out;
 		}
 
 		path {

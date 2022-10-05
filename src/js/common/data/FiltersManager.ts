@@ -1,4 +1,6 @@
 import { hideLoader, showLoader } from "../../production/ui/loader";
+import { hidePopupsByCategory, popups } from "../../production/ui/popups/PopupsManager";
+import { CoreAppSingleton } from "../core/CoreApp";
 import { HASURA_URL, VISUAL_SETTINGS } from "../core/Globals";
 import { buildSimWithData } from "../solar/SolarParticlesManager";
 
@@ -13,6 +15,17 @@ export type Filters = {
 
 	planets: boolean
 }
+
+const CategoryToFilter:Record<string, string> = {
+	'asteroids': 'asteroids',
+	'centaurs': 'centaurs',
+	'comets': 'comets',
+	'interstellar-objects': 'interestellarObjects',
+	'near-earth-objects': 'nearEarthObjects',
+	'planets-moons': 'planets',
+	'trans-neptunian-objects': 'transNeptunianObjects'
+}
+
 
 const filters:Filters = {
 	asteroids: true,
@@ -75,7 +88,7 @@ export const saveSelectedFilters = (domFilters:NodeListOf<HTMLInputElement>):Boo
 				filters.transNeptunianObjects = filter.checked;
 				break;
 			case 'planets-moons':
-				needsUpdate = filters.planets != filter.checked ? true : needsUpdate;
+				needsUpdate = needsUpdate;
 				filters.planets = filter.checked;
 				break;
 
@@ -91,7 +104,10 @@ export const applyFilters = (domFilters: NodeListOf<HTMLInputElement>) => {
 	
 	const needsUpdate = saveSelectedFilters(domFilters);	
 
-	if(!needsUpdate) return;
+	if(!needsUpdate) {
+		applyFilterSolarElements();
+		return
+	}
 
 	broadcastFilterChange();
 
@@ -181,8 +197,7 @@ export async function getSolarSystemElementsByFilter() {
 	
 	const url = `${HASURA_URL}/orbit-elements-by-filter/${VISUAL_SETTINGS[VISUAL_SETTINGS.current]}/${filters.asteroids}/${filters.centaurs}/${filters.comets}/${filters.interestellarObjects}/${filters.nearEarthObjects}/${filters.transNeptunianObjects}`;	
 
-	// Todo si planets false amagar els planetes
-	// si planets true ensenyar els planetes
+	applyFilterSolarElements();
 
 	const response = await fetch(url, {
 		headers: {
@@ -190,4 +205,19 @@ export async function getSolarSystemElementsByFilter() {
 		}
 	})
 	return await response.json();
+}
+
+const applyFilterSolarElements = () => {
+	// Hide all solarElements with given category
+	const items = CoreAppSingleton.instance.solarElements;
+	for(let i = 0, len = items.length; i < len; i++){
+		const item = items[i];		
+		item.visible = filters[CategoryToFilter[item.category]];
+	}
+
+	// Show hide labels & popups by category
+	for(const popup of popups){
+		popup.visible = filters[CategoryToFilter[popup.category]];
+	}
+
 }

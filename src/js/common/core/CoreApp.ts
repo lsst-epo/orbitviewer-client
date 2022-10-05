@@ -18,7 +18,7 @@ import { CLOCK_SETTINGS, DEV } from "./Globals";
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { LOCATION } from "../../production/pagination/History";
 import { hideLoader } from "../../production/ui/loader";
-import { getMinMaxPlanetsA } from "../data/Categories";
+import { categories, getMinMaxPlanetsA } from "../data/Categories";
 import { fetchSolarElements } from "../data/FetchSolarElements";
 import { EllipticalPath } from "../solar/EllipticalPath";
 import { SolarElement } from "../solar/SolarElement";
@@ -44,7 +44,6 @@ export const SUN = {
 }
 
 let solarItems = data.solarItems;
-const categories = data.categories;
 
 export class CoreApp extends WebGLSketch {
     solarClock:SolarClock = solarClock;
