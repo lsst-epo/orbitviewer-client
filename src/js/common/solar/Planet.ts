@@ -190,11 +190,11 @@ export const PlanetLockedMap:Record<PlanetId,CameraLockPosition> = {
     },
     jupiter: {
         distance: .5,
-        offset: new Vector3(-.05, .02, 0) // Ok
+        offset: new Vector3(-.05, .06, 0) // Ok
     },
     saturn: {
         distance: .35,
-        offset: new Vector3(-.025, .025, 0) // Ok
+        offset: new Vector3(-.025, -.04, 0) // Ok
     },
     uranus: {
         distance: .15,
@@ -237,7 +237,7 @@ export const PlanetLockedMapPortrait:Record<PlanetId,CameraLockPosition> = {
     },
     neptune: {
         distance: .2,
-        offset: new Vector3(0, -0.03, 0)
+        offset: new Vector3(0.02, -0.04, 0)
     }
 }
 

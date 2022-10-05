@@ -119,8 +119,9 @@ class CameraController {
     private updateTarget() {
         const target = this.currentTarget;
         const R = sphericalCoords.radius;
-        const x = R * Math.cos(sphericalCoords.angle) + .001 * Math.cos(performance.now() * .0005 + 1);;
-        const y = sphericalCoords.elevation + .001 * Math.sin(performance.now() * .0005);
+        const d = target ? target.lockedDistance * .025 : .001;
+        const x = R * Math.cos(sphericalCoords.angle) + d * Math.cos(performance.now() * .0005 + 1);;
+        const y = sphericalCoords.elevation + d * Math.sin(performance.now() * .0005);
         const z = R * Math.sin(sphericalCoords.angle);
 
         TARGET.obj.position.set(x,y,z);

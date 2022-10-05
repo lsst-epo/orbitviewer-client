@@ -18,7 +18,8 @@ const COMP = new ShaderMaterial({
         tBackground: {value: null},
         tScene: {value: null},
         tGlow: {value: null},
-        glowStrength: {value: 1.8}
+        glowStrength: {value: 1.8},
+        vignette: {value: 0.5}
     },
     transparent: true
 });
@@ -142,6 +143,7 @@ export class VFXRenderer {
         this.rnd.setRenderTarget(null);
 
         // final comp
+        COMP.uniforms.vignette.value = CameraManager.dofPower;
         COMP.uniforms.tBackground.value = this.bgRT.texture;
         COMP.uniforms.tScene.value = CameraManager.dofPower > .0001 ? this.dofRT.texture : this.sceneRT.texture[0];
         COMP.uniforms.tGlow.value = this.glow.texture;
