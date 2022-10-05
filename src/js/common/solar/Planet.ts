@@ -1,14 +1,11 @@
 import { MathUtils } from "@jocabola/math";
-import { BufferGeometry, ColorRepresentation, DoubleSide, Line, Mesh, MeshPhongMaterial, Object3D, SphereGeometry, TextureLoader, Vector3 } from "three";
-import { InteractiveObject } from "../../production/ui/popups/Raycaster";
-import { PlanetMaterial } from "../gfx/PlanetMaterial";
-import { EllipticalPath } from "./EllipticalPath";
-import { calculateOrbitByType, cloneOrbitElements, DEG_TO_RAD, KM2AU, OrbitElements, OrbitType } from "./SolarSystem";
+import { ColorRepresentation, DoubleSide, LineBasicMaterial, MeshPhongMaterial, SphereGeometry, TextureLoader, Vector3 } from "three";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { initMaterial } from "../gfx/ShaderLib";
-import { LineBasicMaterial } from "three";
-import { BufferAttribute } from "three";
 import { isPortrait } from "../../production/utils/Helpers";
+import { PlanetMaterial } from "../gfx/PlanetMaterial";
+import { initMaterial } from "../gfx/ShaderLib";
+import { DwarfPlanet } from "./DwarfPlanet";
+import { cloneOrbitElements, DEG_TO_RAD, KM2AU, OrbitElements } from "./SolarSystem";
 
 export const PLANET_GEO = new SphereGeometry(1, 32, 32);
 const tLoader = new TextureLoader();
@@ -28,84 +25,21 @@ const L_DUMMY = initMaterial(new LineBasicMaterial({
     color: 0xff0000
 }));
 
-export class Planet extends Object3D implements InteractiveObject {
-    parent:Object3D = new Object3D();
-    mesh:Mesh;
-    data:OrbitElements;
-    orbitPath:EllipticalPath;
+
+export class Planet extends DwarfPlanet {
+
     rotationSpeed:number; 
-    private _selected:boolean = false;
-    material:PlanetMaterial;
     type:PlanetId;
-    dwarf:boolean = false;
-    target:Object3D;
-  
-    sunLine:Line;
-    // lockedDistance:number = 0;
-    // lockedOffset:Vector3 = new Vector3();
 
     constructor(id: PlanetId, _data:OrbitElements, opts:PlanetOptions={}) {
-        super();
+        super(id, _data, opts);
 
-        this.type = id; 
-        this.dwarf = id === null;
-
-        if(!this.dwarf) {
-            opts.mapURL = `/assets/textures/2k_${this.type}.jpg`;
-            // console.log(id, _data.i);
-        }
-
-        this.data = _data;
-        this.name = id;
-
-        let fresnelWidth = .005;
-        let sunIntensity = .5;
-        let scl = .003;
-
-        if(!this.dwarf) {
-            // console.log(PlanetRadiusMap[this.type] * KM2AU);
-            PlanetDataMap[this.type] = cloneOrbitElements(_data);
-            scl = PlanetRadiusMap[this.type] * KM2AU * PLANET_SCALE;
-            this.scale.multiplyScalar(scl);
-            // correct fresnel
-            const s = MathUtils.smoothstep(0, 0.234, scl);
-            fresnelWidth = MathUtils.lerp(fresnelWidth, fresnelWidth*10, s);
-            sunIntensity = MathUtils.lerp(.5, .05, s);
-
-            // const lock = PlanetLockedMap[this.type];
-            // this.lockedDistance = lock.distance;
-            // this.lockedOffset.copy(lock.offset);
-            
-        } else {
-            this.scale.multiplyScalar(.003);
-        }
-
-        this.material = new PlanetMaterial({
-            color: opts.color ? opts.color : 0xffffff,
-            shininess: 0,
-            map: opts.mapURL ? tLoader.load(opts.mapURL) : null
-        }, {
-            fresnelColor: 0x000033,
-            fresnelWidth: fresnelWidth,
-            sunIntensity: sunIntensity
-        });
-
-        const lineGeo = new BufferGeometry();
-        const pos = new Float32Array([0,0,0,10,10,10]);
-        lineGeo.setAttribute('position', new BufferAttribute(pos, 3));
-        this.sunLine = new Line(lineGeo, L_DUMMY);
-        // console.log(this.sunLine);
+        // console.log(PlanetRadiusMap[this.type] * KM2AU);
+        PlanetDataMap[this.type] = cloneOrbitElements(_data);
+        let scl = PlanetRadiusMap[this.type] * KM2AU * PLANET_SCALE;
+        this.scale.set(scl, scl, scl);
+        // correct fresnel
         
-
-        this.orbitPath = new EllipticalPath(_data, scl*.8);
-
-        this.mesh = new Mesh(PLANET_GEO, this.material);
-        this.parent.add(this.mesh);
-        this.add(this.parent);
-        this.target = this;
-        // this.add(this.orbitPath.ellipse)
-        // this.mesh.rotateZ(Random.randf(-Math.PI/4, Math.PI/4));
-
         if(id === 'saturn') {
             // console.log('Houston, we\'ve got Saturn!');
             gltfLoader.load('/assets/models/ring.glb', (gltf) => {
@@ -121,64 +55,53 @@ export class Planet extends Object3D implements InteractiveObject {
         }
 
         // this.rotationSpeed = Random.randf(-1, 1);
-        if(!this.dwarf) {
-            const rt = PlanetRotationMap[this.type] as PlanetRotationData;
-            this.rotationSpeed = DEG_TO_RAD * (360 / rt.period);
-            this.parent.rotation.z = DEG_TO_RAD * -(rt.axialTilt + _data.i);
-        } else {
-            this.rotationSpeed = 0;
-        }
+        const rt = PlanetRotationMap[this.type] as PlanetRotationData;
+        this.rotationSpeed = DEG_TO_RAD * (360 / rt.period);
+        this.parent.rotation.z = DEG_TO_RAD * -(rt.axialTilt + _data.i);
+    
+    }
+
+    initMaterial(opts?: PlanetOptions): PlanetMaterial {
+
+        opts.mapURL = `/assets/textures/2k_${this.type}.jpg`;
+
+        let fresnelWidth = .005;
+        let sunIntensity = .5;
+        const scl = PlanetRadiusMap[this.type] * KM2AU * PLANET_SCALE;
+
+        const s = MathUtils.smoothstep(0, 0.234, scl);
+        fresnelWidth = MathUtils.lerp(fresnelWidth, fresnelWidth*10, s);
+        sunIntensity = MathUtils.lerp(.5, .05, s);
+
+        this.material = new PlanetMaterial({
+            color: opts.color ? opts.color : 0xffffff,
+            shininess: 0,
+            map: opts.mapURL ? tLoader.load(opts.mapURL) : null
+        }, {
+            fresnelColor: 0x000033,
+            fresnelWidth: fresnelWidth,
+            sunIntensity: sunIntensity
+        });
+
+        return this.material;
     }
 
     get lockedDistance():number {
-
-        if(!this.dwarf) {
-            const lock = isPortrait() ? PlanetLockedMapPortrait[this.type] : PlanetLockedMap[this.type];
-            return lock.distance;
-        }
-
-        return 0       
+        const lock = isPortrait() ? PlanetLockedMapPortrait[this.type] : PlanetLockedMap[this.type];
+        return lock.distance;
     }
 
     get lockedOffset():Vector3 {
-
-        if(!this.dwarf) {
-            const lock = isPortrait() ? PlanetLockedMapPortrait[this.type] : PlanetLockedMap[this.type];
-            return lock.offset;
-        }
-
-        return new Vector3();          
+        const lock = isPortrait() ? PlanetLockedMapPortrait[this.type] : PlanetLockedMap[this.type];
+        return lock.offset;
     }
 
     update(d:number) {
-        calculateOrbitByType(this.data, d, OrbitType.Elliptical, this.position);
-        if(this.rotationSpeed > 0) {
-            const rt = PlanetRotationMap[this.type] as PlanetRotationData;
-            this.mesh.rotation.y = rt.meridian * DEG_TO_RAD + d * this.rotationSpeed;
-        }
-
-        const pos = this.sunLine.geometry.attributes.position;
-        const arr = pos.array as Float32Array;
-        arr[3] = this.position.x;
-        arr[4] = this.position.y;
-        arr[5] = this.position.z;
-        
-        pos.needsUpdate = true;
-
-        // this.mesh.updateMatrixWorld();
-        this.material.update();
-        this.orbitPath.update(d, this.position, this.scale.x);
+        super.update(d);
+        const rt = PlanetRotationMap[this.type] as PlanetRotationData;
+        this.mesh.rotation.y = rt.meridian * DEG_TO_RAD + d * this.rotationSpeed;
     }
 
-    set selected(value:boolean) {
-        this._selected = value;
-        this.orbitPath.selected = value;
-        // this.material.selected = value;
-    }
-
-    get selected():boolean {
-        return this._selected;
-    }
 }
 
 export const PlanetRadiusMap:Record<PlanetId,number> = {

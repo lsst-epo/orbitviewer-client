@@ -164,7 +164,7 @@ const testObject = {
 
 export async function getMinMaxAByCategory () {
 
-	console.log('Loading "A"...');
+	// console.log('Loading "A"...');
 	
 	const data = DEV ? testObject : await getA();
 	
@@ -190,6 +190,7 @@ export async function getMinMaxAByCategory () {
 	CategoriesMinMaxA['trans-neptunian-objects'].max = data.tnoMax.length ? data.tnoMax[0].a : null;
 
 	console.log('"A" Loaded:', CategoriesMinMaxA);
+	
 	applyAFieldToPopups();
 
 }
@@ -207,5 +208,5 @@ export const getMinMaxPlanetsA = (d:Array<OrbitDataElements>) => {
 	CategoriesMinMaxA['planets-moons'].max = max;
 
 	getMinMaxAByCategory();
-	
+
 }

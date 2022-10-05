@@ -25,7 +25,7 @@
 		"fulldesignation": "Pluto (999)",
 		"datetime_jd": 2451545.0,
 		"datetime_str": "A.D. 2000-Jan-01 12:00:00.0000",
-		"mpch": null,
+		"mpch": 0,
 		"mpcg": null,
 		"e": 0.2494361373,
 		"q": 29.700185749,

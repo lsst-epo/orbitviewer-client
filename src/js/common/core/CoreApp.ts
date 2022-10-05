@@ -23,6 +23,7 @@ import { EllipticalPath } from "../solar/EllipticalPath";
 import { Sun } from "../solar/Sun";
 import { CameraManager, DEFAULT_CAM_POS } from "./CameraManager";
 import { JD2MJD } from "../solar/SolarTime";
+import { DwarfPlanet } from "../solar/DwarfPlanet";
 
 const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
@@ -205,7 +206,7 @@ export class CoreApp extends WebGLSketch {
 
 			const mel = mapOrbitElements(el);
             mel.category = 'planets-moons';
-			const planet = new Planet(null, mel, {
+			const planet = new DwarfPlanet(el.id, mel, {
                 color: 0xFA6868
             });
 
