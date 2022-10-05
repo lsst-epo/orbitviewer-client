@@ -59,7 +59,7 @@ export class PopupLabel {
 		this.css2DElement.position.copy(this.ref.target.position);	
 
 		const d = this.ref.target.position.distanceTo(CameraManager.cam.position);
-		const alpha = MathUtils.clamp( MathUtils.map(d, 80, 150, 1, 0), 0, 1).toString();
+		const alpha = MathUtils.clamp( MathUtils.map(d, 200, 250, 1, 0), 0, 1).toString();
 
 		this.css2DElement.element.style.opacity = alpha;
 
