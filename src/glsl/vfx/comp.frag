@@ -7,9 +7,22 @@ uniform sampler2D tGlow;
 uniform float glowStrength;
 uniform float vignette;
 
+vec3 rgbSplit(sampler2D tex, vec2 uv) {
+    vec2 dir = .25 * (vec2(-1.0) * uv);
+    normalize( dir );
+    vec2 value = dir * mix(.0001, .008, vignette);
+    
+    vec4 c1 = texture2D( tex, uv - value );
+    vec4 c2 = texture2D( tex, uv );
+    vec4 c3 = texture2D( tex, uv + value );
+
+    return vec3( c1.r, c2.g, c3.b );
+}
+
 void main () {
     vec4 bg = texture2D(tBackground, vUv);
-    vec4 scene = texture2D(tScene, vUv);
+    // vec4 scene = texture2D(tScene, vUv);
+    vec4 scene = vec4(rgbSplit(tScene, vUv), 1.0);
     vec4 glow = texture2D(tGlow, vUv);
 
     float alpha = step(.0001, (scene.r+scene.g+scene.b) / 3.0);
