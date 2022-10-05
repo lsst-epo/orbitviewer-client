@@ -6,6 +6,8 @@ import { OrbitDataElements } from "../solar/SolarUtils";
 
 export type SolarCategory = 'trans-neptunian-objects'|'near-earth-objects'|'interstellar-objects'|'comets'|'centaurs'|'asteroids'|'planets-moons';
 
+export const categories = data.categories;
+
 /**
  * Sorted by pririty (lowest index in the array holds higher priority)
  */
@@ -39,14 +41,19 @@ export const getCategory = (item: OrbitDataElements):SolarCategory => {
 	return categoriesSort[k];
 }
 
+const getCategoryColor = (slug:string) : Color => {
+	const category = categories.find(x => x.slug === slug);
+	return new Color(category.mainColor);
+}
+
 export const CategoryColorMap:Record<SolarCategory,Color> = {
-	'asteroids': new Color("#FDD56D"),
-	'centaurs': new Color("#36B3FF"),
-	'comets': new Color("#7EEA00"),
-	'interstellar-objects': new Color("#A8F0ED"),
-	'near-earth-objects': new Color("#FAAA58"),
-	'planets-moons': new Color("#ffffff"),
-	'trans-neptunian-objects': new Color("#98F79A")
+	'asteroids': getCategoryColor('asteroids'),
+	'centaurs': getCategoryColor('centaurs'),
+	'comets':  getCategoryColor('comets'),
+	'interstellar-objects': getCategoryColor('interstellar-objects'),
+	'near-earth-objects':  getCategoryColor('near-earth-objects'),
+	'planets-moons':  getCategoryColor('planets-moons'),
+	'trans-neptunian-objects':  getCategoryColor('trans-neptunian-objects')
 }
 
 export const CategoriesMinMaxA = {
