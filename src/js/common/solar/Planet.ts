@@ -27,6 +27,7 @@ const L_DUMMY = initMaterial(new LineBasicMaterial({
 
 
 export class Planet extends SolarElement {
+    material: PlanetMaterial;
 
     rotationSpeed:number; 
     type:PlanetId;
@@ -100,6 +101,7 @@ export class Planet extends SolarElement {
         super.update(d);
         const rt = PlanetRotationMap[this.type] as PlanetRotationData;
         this.mesh.rotation.y = rt.meridian * DEG_TO_RAD + d * this.rotationSpeed;
+        this.material.update();
     }
 
 }

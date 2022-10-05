@@ -8,7 +8,9 @@
 	<script>
 		const data = {
 			tours: {{ tours.en | dump | safe }},
-			guidedExperiencesTours: {{ guidedExperiencesTours.en | dump | safe }}
+			guidedExperiencesTours: {{ guidedExperiencesTours.en | dump | safe }},
+			solarItems: {{ solarSystemElements[lang] | dump | safe}},
+			categories: {{ categories[lang] | dump | safe }}
 		};
 	</script>
 

@@ -1,3 +1,4 @@
+import { MeshPhongMaterial } from "three";
 import { BufferAttribute, BufferGeometry, ColorRepresentation, Line, LineBasicMaterial, Mesh, Object3D, SphereGeometry, Vector3 } from "three";
 import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { isPortrait } from "../../production/utils/Helpers";
@@ -28,13 +29,11 @@ export class SolarElement extends Object3D implements InteractiveObject {
     data:OrbitElements;
     orbitPath:EllipticalPath;
     private _selected:boolean = false;
-    material:PlanetMaterial;
+    material:MeshPhongMaterial;
     target:Object3D;
-		type: string;
+	type: string;
   
     sunLine:Line;
-    // lockedDistance:number = 0;
-    // lockedOffset:Vector3 = new Vector3();
 
     constructor(id:string, _data:OrbitElements, opts:PlanetOptions={}) {
         super();
@@ -61,23 +60,15 @@ export class SolarElement extends Object3D implements InteractiveObject {
          
     }
 
-		initMaterial(opts:PlanetOptions = {}){
+    initMaterial(opts:PlanetOptions = {}){
 
-			let fresnelWidth = .005;
-			let sunIntensity = .5;
+        this.material = initMaterial(new MeshPhongMaterial({
+            color: opts.color ? opts.color : 0xffffff,
+            shininess: 0
+        })) as MeshPhongMaterial;
 
-			this.material = new PlanetMaterial({
-							color: opts.color ? opts.color : 0xffffff,
-							shininess: 0,
-							map: null
-			}, {
-							fresnelColor: 0x000033,
-							fresnelWidth: fresnelWidth,
-							sunIntensity: sunIntensity
-			});
-
-			return this.material;
-		}
+        return this.material;
+    }
 
     get lockedDistance():number {
         return isPortrait() ? lockedPosition.portrait.distance : lockedPosition.landscape.distance;
@@ -99,7 +90,7 @@ export class SolarElement extends Object3D implements InteractiveObject {
         // pos.needsUpdate = true;
 
         // this.mesh.updateMatrixWorld();
-        this.material.update();
+        // this.material.update();
         this.orbitPath.update(d, this.position, this.scale.x);
     }
 
