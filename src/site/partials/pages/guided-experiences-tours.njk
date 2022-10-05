@@ -7,12 +7,12 @@
 
     <div class="buttons__wrapper">
 
-      <a href="{{ '/' + lang + '/' + experience.tourPicker[0].slug | url}}" class="ui__button">
+      <a href="{{ '/' + lang + '/' + experience.tourPicker[0].slug | url}}" class="ui__button button_arrow arrow-prev">
         {% include "ui/icons/arrow-prev.njk" %}
         <p>{{ generic[lang].strings.back }}</p>
       </a>
 
-      <button data-button="initialSlide-0-next" class="ui__button">
+      <button data-button="initialSlide-0-next" class="ui__button button_arrow arrow-next">
         {% include "ui/icons/arrow-next.njk" %}
         <p>{{ generic[lang]['strings']['tour-start'] }}</p>
       </button>
@@ -62,12 +62,12 @@
           </button>
         {% endif %}
 
-        <button data-button="{{ slide.typeHandle + '-' + loop.index + 'prev' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' else 'has-arrow' }}">
+        <button data-button="{{ slide.typeHandle + '-' + loop.index + 'prev' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' else 'button_arrow arrow-prev' }}">
           {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/icons/arrow-prev.njk" %}{% endif %}
           <p>Back</p>
         </button>
 
-        <button data-button="{{ slide.typeHandle + '-' + loop.index + 'next' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' else 'has-arrow' }}">
+        <button data-button="{{ slide.typeHandle + '-' + loop.index + 'next' }}" class="ui__button {{ 'square_button' if slide.typeHandle == 'defaultSlide' else 'button_arrow arrow-next' }}">
           {% if slide.typeHandle != 'defaultSlide' %}{% include "ui/icons/arrow-next.njk" %}{% endif %}
           <p>Next</p>
         </button>
