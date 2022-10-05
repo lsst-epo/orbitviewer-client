@@ -138,13 +138,10 @@ export function getDistanceFromEarthNow(data:OrbitDataElements): number {
     calculateOrbit(mel, mjd, tmp1);
 
     const earthData = PlanetDataMap.earth;
-    console.log(earthData);
     
     if(!earthData) return 0;
     
-    calculateOrbit(earthData, mjd, tmp2);
-    // console.log(tmp1, tmp2, tmp2.distanceTo(tmp1));
-    
+    calculateOrbit(earthData, mjd, tmp2);    
     
     return tmp2.distanceTo(tmp1);
 }

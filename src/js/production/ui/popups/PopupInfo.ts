@@ -126,9 +126,7 @@ export class PopupInfo {
 		const dEarth = this.dom.querySelector('[data="far-earth"]') as HTMLElement;
 		dSun.innerText = `${getDistanceFromSunNow(this.data).toFixed(2)} au`;
 		dEarth.innerText = `${getDistanceFromEarthNow(this.data).toFixed(2)} au`;
-		
-		console.log(getDistanceFromEarthNow(this.data));
-		
+				
 		this.addAData();
 
 	}
