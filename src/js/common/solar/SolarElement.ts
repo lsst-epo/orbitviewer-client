@@ -92,6 +92,8 @@ export class SolarElement extends Object3D implements InteractiveObject {
         // this.mesh.updateMatrixWorld();
         // this.material.update();
         this.orbitPath.update(d, this.position, this.scale.x);
+
+        this.orbitPath.ellipse.visible = this.visible;
     }
 
     set selected(value:boolean) {
@@ -103,6 +105,7 @@ export class SolarElement extends Object3D implements InteractiveObject {
     get selected():boolean {
         return this._selected;
     }
+    
 }
 
 

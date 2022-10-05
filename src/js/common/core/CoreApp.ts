@@ -31,8 +31,6 @@ const DWARF_PLANETS = "dwarf_planet_elems.json";
 
 export const solarClock = new SolarClock(new Clock());
 
-export const orbitPaths:Array<EllipticalPath> = [];
-
 export type SingletonApp = {
     instance:CoreApp;
 }
@@ -51,11 +49,7 @@ const categories = data.categories;
 export class CoreApp extends WebGLSketch {
     solarClock:SolarClock = solarClock;
 
-    planets:Group = new Group();
-    SolarElements:Group = new Group();
-
-    planetPaths:Group = new Group();
-    dwarfPlanetPaths:Group = new Group();
+    solarElements:Array<SolarElement> = []
 
     sunLight:PointLight;
     sunLightHelper:SunLightHelper;
@@ -102,12 +96,6 @@ export class CoreApp extends WebGLSketch {
         this.sun = sun;
         SUN.instance = sun;
         // this.renderer.physicallyCorrectLights = true;
-
-        this.scene.add(this.planets);
-        this.scene.add(this.SolarElements);
-
-        this.scene.add(this.planetPaths);
-        this.scene.add(this.dwarfPlanetPaths);
 
         particles.init(this.renderer);
         this.scene.add(particles.points);
@@ -205,9 +193,9 @@ export class CoreApp extends WebGLSketch {
             // Remove planets form solar items
             solarItems = solarItems.filter(e => e.elementID !== el.id)
             
-			this.planets.add(planet);
-			this.planetPaths.add(planet.orbitPath.ellipse);
-            orbitPaths.push(planet.orbitPath);         
+			this.solarElements.push(planet);
+            this.scene.add(planet);
+            this.scene.add(planet.orbitPath.ellipse);
 
             // this.scene.add(planet.sunLine);
 
@@ -235,9 +223,9 @@ export class CoreApp extends WebGLSketch {
             // Remove dwarfs form solar items
             solarItems = solarItems.filter(e => e.elementID !== el.id)
 
-			this.SolarElements.add(planet);
-			this.dwarfPlanetPaths.add(planet.orbitPath.ellipse);
-            orbitPaths.push(planet.orbitPath);
+            this.solarElements.push(planet);
+            this.scene.add(planet);
+            this.scene.add(planet.orbitPath.ellipse);
 
             updateRaycasterWatch([planet]);
 		}
@@ -258,35 +246,12 @@ export class CoreApp extends WebGLSketch {
 
             linkPlanetToPopup(planet, el);
 
-            this.SolarElements.add(planet);
-            this.dwarfPlanetPaths.add(planet.orbitPath.ellipse);
-            orbitPaths.push(planet.orbitPath);
+            this.solarElements.push(planet);
+            this.scene.add(planet);
+            this.scene.add(planet.orbitPath.ellipse);
 
             updateRaycasterWatch([planet]);
         }
-        console.log(d);
-        
-        // export async function createElements(elements:Array<any>, data:OrbitDataElements) {
-
-        // 	let ids = [];
-        // 	for(const el of elements){
-        // 		const id = el.elementID;
-        // 		ids.push(id);
-        // 	}	
-
-        // 	const items = await fetchItems(ids);
-
-        // 	for(const item of items){
-        // 		createElement(item.id, item)
-        // 	}
-        // }
-
-        // const createElement = (id: string, data:OrbitDataElements) => {
-        // 	const mel = mapOrbitElements(data);
-        // 	const solarElement = new SolarElement(id, mel);
-        // 	linkPlanetToPopup(solarElement, data);
-        // 	solarElements.push(solarElement)	
-        // }
     }
 
 	playPause() {
@@ -363,8 +328,8 @@ export class CoreApp extends WebGLSketch {
         particles.highlighted = false;
         this.sun.highlight = true;
 
-        for(let i=0; i<orbitPaths.length; i++) {
-            const path = orbitPaths[i];
+        for(let i=0; i<this.solarElements.length; i++) {
+            const path = this.solarElements[i].orbitPath;
             path.hidden = true;
         }
     }
@@ -374,17 +339,17 @@ export class CoreApp extends WebGLSketch {
         particles.highlighted = true;
         this.sun.highlight = false;
         
-        for(let i=0; i<orbitPaths.length; i++) {
-            const path = orbitPaths[i];
+        for(let i=0; i<this.solarElements.length; i++) {
+            const path = this.solarElements[i].orbitPath;
             path.hidden = false;
         }
     }
 
     set planetsVisibility(value:boolean) {
-        this.planets.visible = value;
-        this.planetPaths.visible = value;
-        this.SolarElements.visible = value;
-        this.dwarfPlanetPaths.visible = value;
+
+        for(let i = 0, len = this.solarElements.length; i < len; i++) {
+            this.solarElements[i].visible = value;
+        }
     }
 
     clockChanged():boolean {
@@ -403,14 +368,8 @@ export class CoreApp extends WebGLSketch {
 		
 		particles.update(d, this.camera as PerspectiveCamera);
 		
-		for(const c of this.planets.children) {
-			const p = c as Planet;
-			p.update(d);
-		}
-
-		for(const c of this.SolarElements.children) {
-			const p = c as Planet;
-			p.update(d);
+		for(let i = 0, len = this.solarElements.length; i < len; i++) {
+			this.solarElements[i].update(d);
 		}
 
         this.sun.update(solarClock.time);
