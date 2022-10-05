@@ -1,6 +1,6 @@
 .zoom-controller {
 
-	--size: 35vh;
+	--size: 30vh;
 
 	position: absolute;
 	top: 50%;
@@ -53,22 +53,33 @@
 		pointer-events: all;
 	}
 
-	input:before,
-	input:after {
-		display: inline-block;
-		pointer-events: none;
+	div {
+		position: absolute;
+		left: 50%;
+		width: 14px;
+		height: 2px;
+		background: var(--white-0);
+		top: 50%;
+	
+
+		&:first-of-type {
+			transform: translate(-90%, -16vh);
+			&:after {
+				content: '';
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				width: 14px;
+				height: 2px;
+				background: var(--white-0);
+				transform-origin: center;
+				transform: translate(-50%,-50%) rotate(90deg);
+			}
+		}
+
+		&:last-of-type {
+			transform: translate(-90%, 17.5vh);
+		}
 		
-		@include light-1;
-		font-size: 2rem;
-
-		transform: translateY(-0.5em) rotate(-90deg);
-		padding: 0 var(--distance-5);
-	}
-
-	input:after {
-		content: '+';
-	}
-	input:before {
-		content: '-';
 	}
 }
