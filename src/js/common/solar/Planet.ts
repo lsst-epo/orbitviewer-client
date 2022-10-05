@@ -48,7 +48,7 @@ export class Planet extends SolarElement {
                 gltf.scene.scale.setScalar(2);
                 gltf.scene.children[0].material = initMaterial(new MeshPhongMaterial({
                     side: DoubleSide,
-                    transparent: true,
+                    // transparent: true,
                     map: tLoader.load(`/assets/textures/2k_saturn_ring_alpha.png`)
                 }));
                 this.mesh.add(gltf.scene);

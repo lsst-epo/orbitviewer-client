@@ -4,6 +4,7 @@ import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { CONTROLS, DEV } from "./Globals";
 
 import { gsap } from "gsap/gsap-core";
+import { MathUtils } from "@jocabola/math";
 
 export const DEFAULT_CAM_POS:Vector3 = new Vector3 (0,3,10);
 
@@ -62,6 +63,9 @@ class CameraController {
     private orbit:boolean = false;
     private currentTarget:InteractiveObject = null;
     private unlocking:boolean = false;
+    aperture:number = 500;
+    focalDistance:number = 0;
+    dofPower:number = 0;
 
     get active():boolean {
         return this.initialized;
@@ -81,6 +85,9 @@ class CameraController {
         this.controls.enableDamping = true;
         this.controls.dampingFactor = s.damping;
         this.controls.zoomSpeed = s.zoomSpeed;
+
+        /* this.cam['aperture'] = this.aperture;
+        this.cam['focalDistance'] = this.focalDistance; */
 
         const sc = this.getSC(DEFAULT_CAM_POS);
         this.copySC(sc, sphericalCoords);
@@ -112,8 +119,8 @@ class CameraController {
     private updateTarget() {
         const target = this.currentTarget;
         const R = sphericalCoords.radius;
-        const x = R * Math.cos(sphericalCoords.angle);
-        const y = sphericalCoords.elevation;
+        const x = R * Math.cos(sphericalCoords.angle) + .001 * Math.cos(performance.now() * .0005 + 1);;
+        const y = sphericalCoords.elevation + .001 * Math.sin(performance.now() * .0005);
         const z = R * Math.sin(sphericalCoords.angle);
 
         TARGET.obj.position.set(x,y,z);
@@ -207,10 +214,15 @@ class CameraController {
         if(!this.initialized) return;
         this.controls.enabled = this.mode === CameraMode.ORBIT;
         if(this.controls.enabled) {
+            // this.aperture = 200;
+            // this.focalDistance = 10;
+            this.dofPower = MathUtils.lerp(this.dofPower, 0, .016);
             this.controls.update();
             this.refreshSC();
         }
         if(this.mode === CameraMode.LOCKED) {
+            this.focalDistance = this.currentTarget.lockedDistance;
+            this.aperture = 1;
             if(this.orbit) {
                 const t = performance.now() * .001 * .025;
                 tmp.copy(this.currentTarget.target.position);
@@ -223,6 +235,7 @@ class CameraController {
                 this.updateTarget();
                 this.cam.position.lerp(TARGET.obj.position, CameraSettings.traveling.easing);
                 if(this.unlocking) {
+                    this.dofPower = MathUtils.lerp(this.dofPower, 0, .016);
                     if(this.measureSCDiff(sphericalCoords, prevSC) < .0001) {
                         this.killTweens();
                         this.mode = CameraMode.ORBIT;
@@ -230,7 +243,11 @@ class CameraController {
                 }
             }
             this.cam.lookAt(origin);
+            if(!this.unlocking) this.dofPower = MathUtils.lerp(this.dofPower, 1, .016);
         }
+
+        /* this.cam['aperture'] = MathUtils.lerp(this.cam['aperture'] , this.aperture, .16);
+        this.cam['focalDistance'] = MathUtils.lerp(this.cam['focalDistance'], this.focalDistance, .16); */
     }
 }
 

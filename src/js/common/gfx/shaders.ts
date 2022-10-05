@@ -1,5 +1,6 @@
 import { ShaderChunk } from 'three';
 
+import depth from '../../../glsl/includes/depth.glsl';
 import fbm3D from '../../../glsl/includes/fbm3D.glsl';
 import fbm4D from '../../../glsl/includes/fbm4D.glsl';
 import fresnel_frag from '../../../glsl/includes/fresnel/frag.glsl';
@@ -15,6 +16,7 @@ import sun_pars_vert from '../../../glsl/includes/sun/pars_vert.glsl';
 import sun_pos_out from '../../../glsl/includes/sun/pos_out.glsl';
 
 export function initShaders() {
+    ShaderChunk['depth'] = depth
     ShaderChunk['fbm3D'] = fbm3D
     ShaderChunk['fbm4D'] = fbm4D
     ShaderChunk['fresnel_frag'] = fresnel_frag
