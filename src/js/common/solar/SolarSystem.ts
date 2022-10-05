@@ -1,7 +1,6 @@
 import { Vector3 } from "three";
 import { SolarCategory } from "../data/Categories";
 import { PlanetDataMap, PlanetId } from "./Planet";
-import { OrbitDataElements } from "./SolarUtils";
 
 export const DEG_TO_RAD = Math.PI / 180;
 export const E_CONVERGE_MAX_ITERATIONS = 10;
@@ -10,6 +9,7 @@ export const E_CONVERGENCE_THRESHOLD = .001 * Math.PI / 180;
 export const K = 0.01720209895;
 
 export const KM2AU = 6.6846e-9;
+export const AU2KM = 1 / KM2AU;
 export const SUN_RADIUS = 695700; // in KM
 
 export type OrbitElements = {
