@@ -270,12 +270,12 @@ export class CoreApp extends WebGLSketch {
 
         hideLoader();
 
+        this.launched = true;
+
         if(LOCATION.current.id != 'orbit-viewer') {
             this.lock();
             CameraManager.goToTarget(this.sun, true);
         }
-
-        this.launched = true;
     }
 
     goToIntroView () {
