@@ -13,8 +13,8 @@ const L_DUMMY = initMaterial(new LineBasicMaterial({
 
 const lockedPosition = {
 	portrait: {
-		distance: .015,
-		offset: new Vector3(.0015, .0015, 0)
+		distance: .03,
+		offset: new Vector3(0, -.0055, 0)
 	},
 	landscape: {
 		distance: .03,
@@ -22,7 +22,7 @@ const lockedPosition = {
 	}
 }
 
-export class DwarfPlanet extends Object3D implements InteractiveObject {
+export class SolarElement extends Object3D implements InteractiveObject {
     parent:Object3D = new Object3D();
     mesh:Mesh;
     data:OrbitElements;
@@ -43,7 +43,7 @@ export class DwarfPlanet extends Object3D implements InteractiveObject {
         this.type = id;
         this.name = id;
 
-        let scl = .003;
+        let scl = .001;
 
         this.scale.multiplyScalar(scl);
 

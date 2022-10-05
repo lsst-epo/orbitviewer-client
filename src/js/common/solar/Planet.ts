@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { isPortrait } from "../../production/utils/Helpers";
 import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { initMaterial } from "../gfx/ShaderLib";
-import { DwarfPlanet } from "./DwarfPlanet";
+import { SolarElement } from "./SolarElement";
 import { cloneOrbitElements, DEG_TO_RAD, KM2AU, OrbitElements } from "./SolarSystem";
 
 export const PLANET_GEO = new SphereGeometry(1, 32, 32);
@@ -26,7 +26,7 @@ const L_DUMMY = initMaterial(new LineBasicMaterial({
 }));
 
 
-export class Planet extends DwarfPlanet {
+export class Planet extends SolarElement {
 
     rotationSpeed:number; 
     type:PlanetId;

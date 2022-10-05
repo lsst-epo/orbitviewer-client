@@ -23,7 +23,7 @@ import { EllipticalPath } from "../solar/EllipticalPath";
 import { Sun } from "../solar/Sun";
 import { CameraManager, DEFAULT_CAM_POS } from "./CameraManager";
 import { JD2MJD } from "../solar/SolarTime";
-import { DwarfPlanet } from "../solar/DwarfPlanet";
+import { SolarElement } from "../solar/SolarElement";
 
 const PLANETS = "planet_elems.json";
 const DWARF_PLANETS = "dwarf_planet_elems.json";
@@ -48,7 +48,7 @@ export class CoreApp extends WebGLSketch {
     solarClock:SolarClock = solarClock;
 
     planets:Group = new Group();
-    dwarfPlanets:Group = new Group();
+    SolarElements:Group = new Group();
 
     planetPaths:Group = new Group();
     dwarfPlanetPaths:Group = new Group();
@@ -100,7 +100,7 @@ export class CoreApp extends WebGLSketch {
         // this.renderer.physicallyCorrectLights = true;
 
         this.scene.add(this.planets);
-        this.scene.add(this.dwarfPlanets);
+        this.scene.add(this.SolarElements);
 
         this.scene.add(this.planetPaths);
         this.scene.add(this.dwarfPlanetPaths);
@@ -206,13 +206,13 @@ export class CoreApp extends WebGLSketch {
 
 			const mel = mapOrbitElements(el);
             mel.category = 'planets-moons';
-			const planet = new DwarfPlanet(el.id, mel, {
+			const planet = new SolarElement(el.id, mel, {
                 color: 0xFA6868
             });
 
             linkPlanetToPopup(planet, el);
 
-			this.dwarfPlanets.add(planet);
+			this.SolarElements.add(planet);
 			this.dwarfPlanetPaths.add(planet.orbitPath.ellipse);
             orbitPaths.push(planet.orbitPath);
 
@@ -315,7 +315,7 @@ export class CoreApp extends WebGLSketch {
     set planetsVisibility(value:boolean) {
         this.planets.visible = value;
         this.planetPaths.visible = value;
-        this.dwarfPlanets.visible = value;
+        this.SolarElements.visible = value;
         this.dwarfPlanetPaths.visible = value;
     }
 
@@ -340,7 +340,7 @@ export class CoreApp extends WebGLSketch {
 			p.update(d);
 		}
 
-		for(const c of this.dwarfPlanets.children) {
+		for(const c of this.SolarElements.children) {
 			const p = c as Planet;
 			p.update(d);
 		}
