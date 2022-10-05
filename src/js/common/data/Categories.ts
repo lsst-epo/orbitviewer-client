@@ -189,7 +189,7 @@ export async function getMinMaxAByCategory () {
 	CategoriesMinMaxA['trans-neptunian-objects'].min = data.tnoMin.length ? data.tnoMin[0].a : null;
 	CategoriesMinMaxA['trans-neptunian-objects'].max = data.tnoMax.length ? data.tnoMax[0].a : null;
 
-	console.log('"A" Loaded:', CategoriesMinMaxA);
+	// console.log('"A" Loaded:', CategoriesMinMaxA);
 	
 	applyAFieldToPopups();
 

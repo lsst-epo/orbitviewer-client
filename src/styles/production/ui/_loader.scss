@@ -11,14 +11,14 @@
 	height: 100%;
 
 
-	background-color: rgba(0,0,0,0.75);
+	background-color: rgba(0,0,0,1);
 
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
 	opacity: 0;
-	transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
 
 	&, * {
 		pointer-events: none;

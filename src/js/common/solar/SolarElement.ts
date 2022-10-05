@@ -32,6 +32,7 @@ export class SolarElement extends Object3D implements InteractiveObject {
     material:MeshPhongMaterial;
     target:Object3D;
 	type: string;
+    category: string;
   
     sunLine:Line;
 
@@ -41,6 +42,7 @@ export class SolarElement extends Object3D implements InteractiveObject {
         this.data = _data;
         this.type = id;
         this.name = id;
+        this.category = _data.category;
 
         let scl = .001;
 

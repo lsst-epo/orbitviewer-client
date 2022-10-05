@@ -56,6 +56,11 @@ export class PopupLabel {
 	update(){		
 		if(!!!this.ref) return;
 
+		if(!this.visible){
+			this.dom.classList.add('hidden');
+			return;
+		} else this.dom.classList.remove('hidden');
+
 		this.css2DElement.position.copy(this.ref.target.position);	
 
 		const d = this.ref.target.position.distanceTo(CameraManager.cam.position);
