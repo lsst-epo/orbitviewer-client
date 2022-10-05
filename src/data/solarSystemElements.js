@@ -13,7 +13,8 @@ async function getPage() {
         elementDiameter
 				elementCategory {
 					slug
-				}					
+				}
+        viewInSkyviewerLink			
 		}
   `;
 
