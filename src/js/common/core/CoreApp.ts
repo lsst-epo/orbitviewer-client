@@ -167,7 +167,9 @@ export class CoreApp extends WebGLSketch {
 	}
 
     onDataLoaded() {
+        
         console.log('Data Loaded');
+
         popupsLoaded();
 
         // const globals = getEntryById('globals').data;
@@ -283,6 +285,7 @@ export class CoreApp extends WebGLSketch {
         });
 
         if(DEV) {
+
             const stats = new Stats();
             document.body.appendChild(stats.domElement);
             stats.domElement.style.left = '100px';
@@ -295,9 +298,9 @@ export class CoreApp extends WebGLSketch {
                 stats.end();
             }
             this.start(customAnimate);
-        } else {
-            this.start();
-        }
+
+        } else this.start();
+
         this.solarClock = solarClock;
         this.solarClock.start();
 
