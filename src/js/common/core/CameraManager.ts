@@ -158,7 +158,7 @@ class CameraController {
         return sc;
     }
 
-    goToTarget(target:InteractiveObject, orbitAround:boolean=false) {
+    goToTarget(target:InteractiveObject, orbitAround:boolean=false, unlockAfter:boolean=false) {
         if(!this.initialized) return console.warn("CameraController not initialized! Please run CameraManager.init() first.");
         this.killTweens();
         this.mode = CameraMode.LOCKED;
@@ -175,7 +175,13 @@ class CameraController {
                 angle: sc.angle,
                 elevation: sc.elevation,
                 duration: 4,
-                ease: "expo.inOut"
+                ease: "expo.inOut",
+                onComplete: () => {
+                    sphericalCoords.angle = sphericalCoords.angle % (2 * Math.PI);
+                    if(unlockAfter) {
+                        this.mode = CameraMode.ORBIT;
+                    }
+                }
             }
         );
         this.orbit = orbitAround;

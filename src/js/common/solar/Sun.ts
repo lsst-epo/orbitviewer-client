@@ -80,14 +80,14 @@ export class Sun extends Object3D implements InteractiveObject {
 
         const sel = this.selected;
 
-        const cd = MathUtils.smoothstep(100, 10000, camPos.length());
+        const cd = MathUtils.smoothstep(10, 10000, camPos.length());
         sunMat.emissiveIntensity = MathUtils.lerp(sunMat.emissiveIntensity, sel ? MathUtils.lerp(1.8, 100, cd) : 1.6, .016);
         const scl = SUN_RADIUS * KM2AU * PLANET_SCALE * MathUtils.lerp(1, sel ? 50 : 5, cd);
         const s = MathUtils.lerp(this.scale.x, scl, .016);
         this.scale.setScalar(scl);
         let pscl = MathUtils.lerp(
             this.particles.mesh.scale.x,
-            sel ? MathUtils.lerp(1.6,5.6,cd) : 1.1,
+            sel ? MathUtils.lerp(1.1,1.6,MathUtils.smoothstep(10, 20, camPos.length())) : 1.1,
             .16
         );
         this.particles.mesh.scale.setScalar(pscl);

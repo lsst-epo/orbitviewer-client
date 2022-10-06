@@ -48,7 +48,7 @@ export class PopupLabel {
 		this.ref.selected = true;
 		this.dom.classList.add('selected');
 		// if(this.ref.closeUp) CameraManager.goToTarget(this.ref);
-		CameraManager.goToTarget(this.ref);
+		CameraManager.goToTarget(this.ref, false, true);
 	}
 
 	unselect(){
