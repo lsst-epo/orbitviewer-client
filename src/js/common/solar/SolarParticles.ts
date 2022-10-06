@@ -35,16 +35,8 @@ const MAT = new ShaderMaterial({
             value: 1
         }
     },
-    blending: NormalBlending
+    // blending: NormalBlending
 });
-
-const SCALE = {
-    min: .00012,
-    max: .5
-};
-
-const dummy = new Object3D();
-const tmp = new Vector3();
 
 export class SolarParticles {
     private _data:Array<OrbitElements> = [];
@@ -163,7 +155,7 @@ export class SolarParticles {
     set highlighted(value:boolean) {
         const u = MAT.uniforms;
         gsap.killTweensOf(u.opacity);
-        gsap.to(u.opacity, {value: value ? 1 : .25, duration: 2});
+        gsap.to(u.opacity, {value: value ? 1 : .2, duration: 2});
     }
 
     /**

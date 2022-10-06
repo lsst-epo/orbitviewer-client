@@ -1,7 +1,7 @@
 precision highp float;
 
 in float alive;
-// in float depth;
+in float depth;
 // uniform sampler2D map;
 // uniform sampler2D normalMap;
 // uniform sampler2D alphaMap;
@@ -17,16 +17,16 @@ void main () {
     vec2 st = vec2(-1.0) + 2.0 * uv;
     float d = 1.0 - distance(vec2(0.), st);
 
-    // d = (1.0-depth) * smoothstep(0.25, 1.0, d);
-
     d = smoothstep(0.25, 1.0, d);
+
+    // d *= mix(.2, 1., 1.0-d);
 
     d *= opacity;
 
     /* vec4 map = texture(map, uv);
     float alpha = texture(alphaMap, uv).r; */
 
-    if(d < .01) discard;
+    if(d < .1) discard;
 
     vec3 color = vColor;
 

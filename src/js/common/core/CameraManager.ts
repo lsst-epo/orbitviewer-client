@@ -64,6 +64,7 @@ class CameraController {
     private orbit:boolean = false;
     private currentTarget:InteractiveObject = null;
     private unlocking:boolean = false;
+    private prevDistance:number;
     aperture:number = 500;
     focalDistance:number = 0;
     dofPower:number = 0;
@@ -131,16 +132,16 @@ class CameraController {
         const target = this.currentTarget;
         const R = sphericalCoords.radius;
         const d = target ? target.lockedDistance * .025 : .001;
-        const x = R * Math.cos(sphericalCoords.angle) + d * Math.cos(performance.now() * .0005 + 1);;
-        const y = sphericalCoords.elevation + d * Math.sin(performance.now() * .0005);
+        let x = R * Math.cos(sphericalCoords.angle);
+        let y = sphericalCoords.elevation;
         const z = R * Math.sin(sphericalCoords.angle);
 
+        if(!this.unlocking) {
+            x += d * Math.cos(performance.now() * .0005 + 1);
+            y += d * Math.sin(performance.now() * .0005);
+        }
+
         TARGET.obj.position.set(x,y,z);
-        /* if(target) {
-            TARGET.obj.translateX(target.lockedOffset.x);
-            TARGET.obj.translateY(target.lockedOffset.y);
-            TARGET.obj.translateZ(target.lockedOffset.z);
-        } */
     }
 
     private getTargetSC(target:InteractiveObject):ShpericalCoords {
@@ -167,12 +168,6 @@ class CameraController {
         const sc = this.getTargetSC(target);
 
         this.unlocking = false;
-
-        const duration = MathUtils.lerp(
-            4,
-            6,
-            MathUtils.smoothstep(0, 30, target.lockedDistance)
-        );
 
         gsap.to(
             sphericalCoords, {
@@ -207,17 +202,21 @@ class CameraController {
         this.orbit = false;
 
         this.unlocking = true;
+        this.currentTarget = null;
+
+        this.prevDistance = 10000000;
 
         gsap.to(sphericalCoords, {
             radius: prevSC.radius,
             angle: prevSC.angle,
             elevation: prevSC.elevation,
-            duration: 3,
-            ease: 'power2.inOut',
-            onComplete: () => {
+            duration: 4,
+            ease: 'expo.inOut',
+            /* onComplete: () => {
                 this.mode = CameraMode.ORBIT;
                 this.killTweens();
-            }
+                this.unlocking = false;
+            } */
         });
     }
 
@@ -239,7 +238,7 @@ class CameraController {
             this.refreshSC();
         }
         if(this.mode === CameraMode.LOCKED) {
-            this.focalDistance = this.currentTarget.lockedDistance;
+            this.focalDistance = this.currentTarget?.lockedDistance;
 
             this.aperture = 1;
             if(this.orbit) {
@@ -252,17 +251,21 @@ class CameraController {
                 // this.cam.lookAt(this.currentTarget.target.position);
             } else {
                 this.updateTarget();
+                
                 this.cam.position.lerp(TARGET.obj.position, CameraSettings.traveling.easing);
                 if(this.unlocking) {
                     this.dofPower = MathUtils.lerp(this.dofPower, 0, .016);
-                    if(this.measureSCDiff(sphericalCoords, prevSC) < .0001) {
+                    const dist = this.measureSCDiff(sphericalCoords, prevSC);
+                    if(dist === this.prevDistance) {
                         this.killTweens();
                         this.mode = CameraMode.ORBIT;
+                        this.unlocking = false;
                     }
+                    this.prevDistance = dist;
                 }
             }
             this.cam.lookAt(origin);
-            if(!this.unlocking) this.dofPower = MathUtils.lerp(this.dofPower, this.currentTarget.closeUp ? 1 : 0, .016);
+            if(!this.unlocking) this.dofPower = MathUtils.lerp(this.dofPower, this.currentTarget?.closeUp ? 1 : 0, .016);
         }
 
         /* this.cam['aperture'] = MathUtils.lerp(this.cam['aperture'] , this.aperture, .16);

@@ -5,7 +5,7 @@ attribute vec2 simUV;
 
 out float alive;
 out vec3 vColor;
-// out float depth;
+out float depth;
 
 void main () {
     vec4 cP = texture(computedPosition, simUV);
@@ -15,12 +15,12 @@ void main () {
 
     vec3 pos = cP.rgb;
 
-    /* depth = smoothstep(
-        1.0,
-        100.0,
-        length(cameraPosition-pos)
-    ); */
+    depth = smoothstep(
+        2000.0,
+        10000.0,
+        distance(cameraPosition,pos)
+    );
 
-    gl_PointSize = 8.0;
+    gl_PointSize = mix(8.0, 2.0, depth);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
 }
