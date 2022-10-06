@@ -15,15 +15,11 @@ export class Input {
 
 	}
 
-	create(){
+	create(){}
 
-	}
+	checkState(){}
 
-	addEventListeners(){
-		
-	}
+	addEventListeners(){}
 
-	update(){
-		
-	}
+	update(){}
 }

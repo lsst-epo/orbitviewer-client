@@ -44,8 +44,7 @@
 			"customize-view": "Customize your view. Toggle On/Off",
 			"customize-view-options": [
 				"Background Stars",
-				"Observed positions",
-				"Discovered by Rubin"
+				"Labels & Orbits"
 			]
 		},
 		"menus": {
@@ -168,8 +167,7 @@
 			"customize-view": "ES - Customize your view. Toggle On/Off",
 			"customize-view-options": [
 				"ES - Background Stars",
-				"ES - Observed positions",
-				"ES - Discovered by Rubin"
+				"ES - Labels & Orbits"
 			]
 		},
 		"menus": {

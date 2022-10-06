@@ -11,9 +11,7 @@ async function getPage() {
       seoTitle
       seoDescription
       seoImage {
-        ... on cantoDam_Asset {
-          url
-        }
+        url(quality: 90)
       }
       landingCenterTitle
       landingVersion

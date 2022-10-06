@@ -12,9 +12,7 @@ async function getPage() {
 					seoTitle
 					seoDescription
 					seoImage {
-						... on cantoDam_Asset {
-							url
-						}
+						url(quality: 90)
 					}
 					id
 					title
