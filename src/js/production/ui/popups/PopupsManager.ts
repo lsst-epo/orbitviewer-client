@@ -92,6 +92,13 @@ export function disablePopup() {
 	showUI();
 }
 
+export const updatePopups = () => {
+	for(const popup of popups) {
+		popup.label.visible = popup.visible;
+		popup.label.update();
+	}
+}
+
 export const resizePopups = () => {
 	for(const popup of popups) {
 		// popup.label.onResize();

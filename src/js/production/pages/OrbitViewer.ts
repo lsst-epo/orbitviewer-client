@@ -1,17 +1,21 @@
 import { CameraManager } from "../../common/core/CameraManager";
 import { Search } from "../partials/Search";
 import { addPanelListener, PanelsListener } from "../ui/panels/PanelsManager";
-import { popups } from "../ui/popups/PopupsManager";
+import { popups, updatePopups } from "../ui/popups/PopupsManager";
 import { Page } from "./Page";
 
 
 export class OrbitViewer extends Page implements PanelsListener {
 	customizeViewWrapper: HTMLElement;
+	active:boolean = false;
+
+	bgStars: HTMLInputElement;
 	load(resolve: any): void {
 	
 		new Search(this.dom);
 
 		this.customizeViewWrapper = this.dom.querySelector('.customize-view');
+		this.bgStars = this.customizeViewWrapper.querySelector('input[name="background-stars"]');
 
 		super.load(resolve)
 
@@ -19,8 +23,8 @@ export class OrbitViewer extends Page implements PanelsListener {
 
 	}
 
-	closePanel(): void {
-		if(!this.customizeViewWrapper.classList.contains('active')) return;
+	closePanel(): void {						
+		if(!this.active) return;
 		this.customizeViewWrapper.classList.remove('active');
 	}
 
@@ -32,20 +36,49 @@ export class OrbitViewer extends Page implements PanelsListener {
 		
 	}
 
+	hide(): void {
+		super.hide();
+		
+		if(this.bgStars.checked) return;
+		
+		this.bgStars.checked = true;
+		for(const input of this.inputs.inputs){
+			if(input.name === 'background-stars') input.checkState();
+		}
+		this.toggleStars();
+	}
+
+	toggleStars(){
+		console.log('Toggle stars here');
+	}
+
+	togglePanel(){		
+
+		this.active = !this.active;
+		this.customizeViewWrapper.classList.toggle('active');
+
+		if(this.active){
+			this.customizeViewWrapper.classList.add('to-front');
+		} else {
+			setTimeout(() => {
+				this.customizeViewWrapper.classList.remove('to-front');
+			}, 500);
+		}
+
+	}
+	
 	addCustomizeView(){
 
-		
-
+		// Handles main tab
 		const btn = this.customizeViewWrapper.querySelector('.customize-view-icon');
 		btn.addEventListener('click', () => {
-			this.customizeViewWrapper.classList.toggle('active');
+			this.togglePanel();
 		})
 
-		document.addEventListener('keydown', (e) => {			
-			if(e.key != 'Escape') return;
-			this.closePanel();
+		// Sub tabs
+		this.bgStars.addEventListener('change', () => {
+			this.toggleStars();			
 		})
-
 
 	}
 
@@ -58,9 +91,6 @@ export class OrbitViewer extends Page implements PanelsListener {
 
 	update(): void {
 		super.update();
-		for(const popup of popups) {
-			popup.label.visible = popup.visible;
-			popup.label.update();
-		}
+		updatePopups();
 	}
 }

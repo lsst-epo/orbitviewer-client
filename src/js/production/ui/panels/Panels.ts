@@ -1,6 +1,7 @@
 import { FilterPanel } from "./FilterPanel";
 import { LanguagePanel } from "./LanguagePanel";
 import { Panel } from "./Panel";
+import { broadcastPanelsClose } from "./PanelsManager";
 import { ResolutionPanel } from "./ResolutionPanel";
 import { TimePickerPanel } from "./TimePickerPanel";
 import { TourSortPanel } from "./TourSortPanel";
@@ -47,22 +48,10 @@ export class Panels {
 	addListeners(){
 
 		document.addEventListener('keydown', (e) => {			
-
 			if(e.key != 'Escape') return;
-
-			const activePanel = this.panels.find(x => x.active);
-			
-			if(!activePanel) return;
-
-			e.preventDefault();
-			activePanel.togglePanel();
-
+			broadcastPanelsClose();
 		})
 
-	}
-
-	leave(){
-		for(const p of this.panels) p.leave();
 	}
 
 	update(){					

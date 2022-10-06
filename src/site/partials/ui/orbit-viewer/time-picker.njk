@@ -23,7 +23,7 @@
 			
 			<p>{{ generic[lang].strings.past }}</p>		
 			<p>{{ generic[lang].strings.future }}</p>
-			<input type="range" min="-1" max="1" step="0.00001" class="custom-input" data-timer="1">
+			<input type="range" min="-1" max="1" step="0.00001" class="custom-input" name="time-picker-range" data-timer="1">
 			{% include "ui/icons/time-picker-chevs.njk" %}
 
 		</div>
@@ -49,7 +49,7 @@
 	</div>
 
 	<div class="sub-panel">
-		<div class="input-wrapper date-picker custom-input" data-date="1">
+		<div class="input-wrapper date-picker custom-input" name="date-picker" data-date="1">
 
 				<input type="date">
 
