@@ -171,7 +171,7 @@ export class PopupInfo {
 		}
 	}
 
-	show(){
+	show(closeUp:boolean = true){
 		if(this.active) return;
 		this.active = true;
 
@@ -195,7 +195,8 @@ export class PopupInfo {
 
 		this.dom.classList.add('active');
 
-		const tl = gsap.timeline({ paused: true, delay: 4 })
+		const delay = closeUp ? 4 : 0;	
+		const tl = gsap.timeline({ paused: true, delay })
 
 		tl
 			.addLabel('start')

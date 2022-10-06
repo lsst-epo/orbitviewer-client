@@ -31,7 +31,6 @@
 	}
 }
 
-
 .popups-active .popups-close {
 	transition-delay: 4s;
 	transition-duration: 1s;
@@ -48,6 +47,15 @@
 .popups-wrapper.popups-labels.hidden {
 	transition-delay: 0s;
 	opacity: 0;
+
+	&, * {
+		pointer-events: none;
+	}
+}
+
+.popups-no-closeup .popups-wrapper.popups-labels .popup-label:not(.selected) {
+	transition-delay: 0s;
+	opacity: 0 !important;
 
 	&, * {
 		pointer-events: none;

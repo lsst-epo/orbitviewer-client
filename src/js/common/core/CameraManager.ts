@@ -1,3 +1,4 @@
+
 import { Object3D, PerspectiveCamera, Quaternion, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { InteractiveObject } from "../../production/ui/popups/Raycaster";
@@ -185,6 +186,7 @@ class CameraController {
 
     unlock() {
         if(!this.initialized) return console.warn("CameraController not initialized! Please run CameraManager.init() first.");
+        if(!this.currentTarget) return
         this.mode = CameraMode.LOCKED;
         this.killTweens();
         this.orbit = false;
@@ -222,7 +224,8 @@ class CameraController {
             this.refreshSC();
         }
         if(this.mode === CameraMode.LOCKED) {
-            this.focalDistance = this.currentTarget.lockedDistance;
+            if(this.currentTarget) this.focalDistance = this.currentTarget.lockedDistance;
+
             this.aperture = 1;
             if(this.orbit) {
                 const t = performance.now() * .001 * .025;

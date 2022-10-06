@@ -1,12 +1,10 @@
-import { MeshPhongMaterial } from "three";
-import { BufferAttribute, BufferGeometry, ColorRepresentation, Line, LineBasicMaterial, Mesh, Object3D, SphereGeometry, Vector3 } from "three";
+import { BufferAttribute, BufferGeometry, Line, LineBasicMaterial, Mesh, MeshPhongMaterial, Object3D, Vector3 } from "three";
 import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { isPortrait } from "../../production/utils/Helpers";
-import { PlanetMaterial } from "../gfx/PlanetMaterial";
 import { initMaterial } from "../gfx/ShaderLib";
 import { EllipticalPath } from "./EllipticalPath";
 import { PlanetOptions, PLANET_GEO } from "./Planet";
-import { calculateOrbitByType, DEG_TO_RAD, OrbitElements, OrbitType } from "./SolarSystem";
+import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 
 const L_DUMMY = initMaterial(new LineBasicMaterial({
     color: 0xff0000
@@ -33,6 +31,7 @@ export class SolarElement extends Object3D implements InteractiveObject {
     target:Object3D;
 	type: string;
     category: string;
+    closeUp: boolean = false;
   
     sunLine:Line;
 
@@ -56,6 +55,7 @@ export class SolarElement extends Object3D implements InteractiveObject {
         this.orbitPath = new EllipticalPath(_data, scl*.8);
 
         this.mesh = new Mesh(PLANET_GEO, this.initMaterial(opts));
+        this.mesh.visible = false;
         this.parent.add(this.mesh);
         this.add(this.parent);
         this.target = this;

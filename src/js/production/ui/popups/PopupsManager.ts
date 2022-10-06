@@ -60,18 +60,15 @@ export function enablePopup(name: string) {
 	RAYCASTER.active = false;
 	CoreAppSingleton.instance.lock();
 
-	document.querySelector('.popups-labels').classList.add('hidden');
-
 	solarClock.pause();
 	broadcastPanelsClose();
 
-	for(const popup of popups) {
-		
-		if(popup.name === name) {
-			popup.label.select();
-			popup.info.show();
-		}
-	}
+	const popup = popups.find(x => x.name === name);
+	if(!popup) return
+	popup.label.select();
+	popup.info.show(popup.label.ref.closeUp);
+	if(!popup.label.ref.closeUp) document.body.classList.add('popups-no-closeup');
+	else document.querySelector('.popups-labels').classList.add('hidden');
 
 	document.body.classList.add('popups-active');
 
@@ -92,6 +89,7 @@ export function disablePopup() {
 
 	document.querySelector('.popups-labels').classList.remove('hidden');
 	document.body.classList.remove('popups-active');
+	document.body.classList.remove('popups-no-closeup');
 
 	RAYCASTER.active = true;
 

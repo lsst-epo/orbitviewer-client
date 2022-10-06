@@ -6,6 +6,7 @@ export interface InteractiveObject {
 	target:Object3D;
 	lockedDistance:number;
 	lockedOffset:Vector3;
+	closeUp: boolean;
 }
 
 export const RAYCASTER = {

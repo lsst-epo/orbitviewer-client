@@ -46,20 +46,22 @@ export class PopupLabel {
 
 	select(){
 		this.ref.selected = true;
-		CameraManager.goToTarget(this.ref);
+		this.dom.classList.add('selected');
+		if(this.ref.closeUp) CameraManager.goToTarget(this.ref);
 	}
 
 	unselect(){
 		this.ref.selected = false;
+		this.dom.classList.remove('selected');
 	}
 
 	update(){		
 		if(!!!this.ref) return;
 
-		if(!this.visible){
-			this.dom.classList.add('hidden');
-			return;
-		} else this.dom.classList.remove('hidden');
+		// if(!this.visible){
+		// 	this.dom.classList.add('hidden');
+		// 	return;
+		// } else this.dom.classList.remove('hidden');
 
 		this.css2DElement.position.copy(this.ref.target.position);	
 

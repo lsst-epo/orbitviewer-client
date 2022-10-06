@@ -21,9 +21,9 @@ export type PlanetId = 'mercury'|'venus'|'earth'|'mars'|'jupiter'|'saturn'|'uran
 
 const gltfLoader = new GLTFLoader();
 
-const L_DUMMY = initMaterial(new LineBasicMaterial({
-    color: 0xff0000
-}));
+// const L_DUMMY = initMaterial(new LineBasicMaterial({
+//     color: 0xff0000
+// }));
 
 
 export class Planet extends SolarElement {
@@ -34,6 +34,10 @@ export class Planet extends SolarElement {
 
     constructor(id: PlanetId, _data:OrbitElements, opts:PlanetOptions={}) {
         super(id, _data, opts);
+
+        this.mesh.visible = true;
+
+        this.closeUp = true;
 
         // console.log(PlanetRadiusMap[this.type] * KM2AU);
         PlanetDataMap[this.type] = cloneOrbitElements(_data);
