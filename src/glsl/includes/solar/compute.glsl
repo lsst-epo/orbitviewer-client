@@ -2,6 +2,8 @@ const float E_CONVERGENCE_THRESHOLD = radians(.001);
 const float K = 0.01720209895;
 #define MAX_E_ITERATIONS 100
 
+#define PLANET_SCALE 100.0
+
 struct OrbitElements {
     float N;
     float a;
@@ -45,9 +47,9 @@ vec3 getCartesianCoordinates(float v, float r, OrbitElements el) {
     float w = radians(el.w);
     float i = radians(el.i);
 
-    float xh = r * ( cos(N) * cos(v+w) - sin(N) * sin(v+w) * cos(i) );
-    float yh = r * ( sin(N) * cos(v+w) + cos(N) * sin(v+w) * cos(i) );
-    float zh = r * ( sin(v+w) * sin(i) );
+    float xh = PLANET_SCALE * r * ( cos(N) * cos(v+w) - sin(N) * sin(v+w) * cos(i) );
+    float yh = PLANET_SCALE * r * ( sin(N) * cos(v+w) + cos(N) * sin(v+w) * cos(i) );
+    float zh = PLANET_SCALE * r * ( sin(v+w) * sin(i) );
 
     return vec3(xh,zh,-yh);
 }

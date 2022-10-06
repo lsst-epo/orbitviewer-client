@@ -47,7 +47,8 @@ export class PopupLabel {
 	select(){
 		this.ref.selected = true;
 		this.dom.classList.add('selected');
-		if(this.ref.closeUp) CameraManager.goToTarget(this.ref);
+		// if(this.ref.closeUp) CameraManager.goToTarget(this.ref);
+		CameraManager.goToTarget(this.ref);
 	}
 
 	unselect(){
@@ -63,9 +64,10 @@ export class PopupLabel {
 		// 	return;
 		// } else this.dom.classList.remove('hidden');
 
-		this.css2DElement.position.copy(this.ref.target.position);	
+		this.css2DElement.position.copy(this.ref.position);
+		return;
 
-		const d = this.ref.target.position.distanceTo(CameraManager.cam.position);
+		const d = this.ref.position.distanceTo(CameraManager.cam.position);
 		const alpha = MathUtils.clamp( MathUtils.map(d, 200, 250, 1, 0), 0, 1).toString();
 
 		this.css2DElement.element.style.opacity = alpha;

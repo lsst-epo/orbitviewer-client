@@ -1,4 +1,4 @@
-import { BufferAttribute, BufferGeometry, Line, LineBasicMaterial, Mesh, MeshPhongMaterial, Object3D, Vector3 } from "three";
+import { Box3, BufferAttribute, BufferGeometry, Line, LineBasicMaterial, Mesh, MeshPhongMaterial, Object3D, Vector3 } from "three";
 import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { isPortrait } from "../../production/utils/Helpers";
 import { initMaterial } from "../gfx/ShaderLib";
@@ -10,7 +10,7 @@ const L_DUMMY = initMaterial(new LineBasicMaterial({
     color: 0xff0000
 }));
 
-const lockedPosition = {
+/* const lockedPosition = {
 	portrait: {
 		distance: .03,
 		offset: new Vector3(0, -.0055, 0)
@@ -19,7 +19,7 @@ const lockedPosition = {
 		distance: .03,
 		offset: new Vector3(.01, 0, 0)
 	}
-}
+} */
 
 export class SolarElement extends Object3D implements InteractiveObject {
     parent:Object3D = new Object3D();
@@ -32,6 +32,17 @@ export class SolarElement extends Object3D implements InteractiveObject {
 	type: string;
     category: string;
     closeUp: boolean = false;
+
+    lockedPosition = {
+        portrait: {
+            distance: .03,
+            offset: new Vector3(0, -.0055, 0)
+        },
+        landscape: {
+            distance: .03,
+            offset: new Vector3(.01, 0, 0)
+        }
+    }
   
     sunLine:Line;
 
@@ -59,7 +70,22 @@ export class SolarElement extends Object3D implements InteractiveObject {
         this.parent.add(this.mesh);
         this.add(this.parent);
         this.target = this;
-         
+
+        // this.target = new Object3D();
+        const min = this.boundingBox.min;
+        const max = this.boundingBox.max;
+
+        const center = max.clone().sub(min);
+
+        // this.target.position.copy(center);
+
+        console.log(id, center.y, max.y, min.y);
+        
+
+        this.lockedPosition.landscape.distance = max.length() * 2;
+        this.lockedPosition.landscape.offset.set(0,max.length()+center.y,0);
+        // this.target.position.add(max);
+        // this.target.position.y += 10;
     }
 
     initMaterial(opts:PlanetOptions = {}){
@@ -72,12 +98,18 @@ export class SolarElement extends Object3D implements InteractiveObject {
         return this.material;
     }
 
+    get boundingBox(): Box3 {
+        return this.orbitPath.boundingBox;
+    }
+
     get lockedDistance():number {
-        return isPortrait() ? lockedPosition.portrait.distance : lockedPosition.landscape.distance;
+        const t = isPortrait() ? this.lockedPosition.portrait : this.lockedPosition.landscape;
+        return t.distance;
     }
 
     get lockedOffset():Vector3 {
-        return isPortrait() ? lockedPosition.portrait.offset : lockedPosition.landscape.offset;          
+        const t = isPortrait() ? this.lockedPosition.portrait : this.lockedPosition.landscape;
+        return t.offset;
     }
 
     update(d:number) {

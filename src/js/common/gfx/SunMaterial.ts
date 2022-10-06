@@ -32,7 +32,11 @@ export class SunMaterial extends MeshPhongMaterial {
         }
 
         shader.uniforms['fresnelWidth'] = {
-            value: 0.0025
+            value: 0.25
+        }
+
+        shader.uniforms['glowStrength'] = {
+            value: 2
         }
 
         shader.uniforms['vertexAmp'] = {
@@ -57,10 +61,10 @@ export class SunMaterial extends MeshPhongMaterial {
         const min = MathUtils.lerp(.0025, .02, p);
         const max = MathUtils.lerp(.1, .1, p);
 
-        u.fresnelWidth.value = MathUtils.mix(
+        /* u.fresnelWidth.value = MathUtils.mix(
             min,
             max,
             MathUtils.smoothstep(0.08, 5, d)
-        )
+        ) */
     }
 }

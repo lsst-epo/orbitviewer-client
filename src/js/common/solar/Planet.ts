@@ -55,6 +55,16 @@ export class Planet extends SolarElement {
                     // transparent: true,
                     map: tLoader.load(`/assets/textures/2k_saturn_ring_alpha.png`)
                 }));
+                /* gltf.scene.children[0].material = new PlanetMaterial({
+                    side: DoubleSide,
+                    // transparent: true,
+                    map: tLoader.load(`/assets/textures/2k_saturn_ring_alpha.png`)
+                }, {
+                    fresnelWidth: .000001,
+                    fresnelColor: 0x000033,
+                    sunIntensity: .05
+
+                }); */
                 this.mesh.add(gltf.scene);
             })
         }

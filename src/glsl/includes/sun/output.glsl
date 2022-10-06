@@ -18,4 +18,4 @@ vec3 col = mix(outgoingLight*.5, outgoingLight, r);
 #include <fresnel_frag>
 
 gl_FragColor = vec4(col, diffuseColor.a );
-gGlow = vec4(col*fresnelTerm*2.0, fresnelTerm);
+gGlow = vec4(col*fresnelTerm*glowStrength, glowStrength*fresnelTerm);

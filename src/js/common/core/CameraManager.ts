@@ -7,7 +7,7 @@ import { CONTROLS, DEV } from "./Globals";
 import { gsap } from "gsap/gsap-core";
 import { MathUtils } from "@jocabola/math";
 
-export const DEFAULT_CAM_POS:Vector3 = new Vector3 (0,3,10);
+export const DEFAULT_CAM_POS:Vector3 = new Vector3 (0,300,1000);
 
 export enum CameraMode {
     ORBIT,
@@ -17,8 +17,8 @@ export enum CameraMode {
 
 export const CameraSettings = {
     orbit: {
-        min: 0.05,
-        max: 600,
+        min: CONTROLS.min,
+        max: CONTROLS.max,
         damping: .1,
         zoomSpeed: 1.2
     },
@@ -95,14 +95,24 @@ class CameraController {
         this.copySC(sc, prevSC);
     }
 
-    private getSC(p:Vector3):ShpericalCoords {
-        const R = Math.sqrt(p.x*p.x+p.z*p.z);
-        const angle = Math.atan2(p.z, p.x);
+    private getSC(p:Vector3, offset:Vector3=null):ShpericalCoords {
+        let x = p.x;
+        let y = p.y;
+        let z = p.z;
+
+        if(offset) {
+            x += offset.x;
+            y += offset.y;
+            z += offset.z;
+        }
+
+        const R = Math.sqrt(x*x+z*z);
+        const angle = Math.atan2(z, x);
 
         return {
             angle: angle,
             radius: R,
-            elevation: p.y
+            elevation: y
         }
     }
 
@@ -126,22 +136,22 @@ class CameraController {
         const z = R * Math.sin(sphericalCoords.angle);
 
         TARGET.obj.position.set(x,y,z);
-        if(target) {
+        /* if(target) {
             TARGET.obj.translateX(target.lockedOffset.x);
             TARGET.obj.translateY(target.lockedOffset.y);
             TARGET.obj.translateZ(target.lockedOffset.z);
-        }
+        } */
     }
 
-    private getTargetSC(target:Object3D):ShpericalCoords {
-        const sc = this.getSC(target.position);
+    private getTargetSC(target:InteractiveObject):ShpericalCoords {
+        const sc = this.getSC(target.position, target.lockedOffset);
         const dA = Math.abs(sphericalCoords.angle - sc.angle);
 
         if(dA > Math.PI) {
             console.log('correct angle');
             
-            if(sc.angle > Math.PI) sc.angle -= 2*Math.PI;
-            else sc.angle += 2*Math.PI;
+            if(sc.angle > Math.PI) sc.angle += 2*Math.PI;
+            else sc.angle -= 2*Math.PI;
         }
 
         return sc;
@@ -154,9 +164,15 @@ class CameraController {
         this.currentTarget = target;
         this.refreshSC();
         this.copySC(sphericalCoords, prevSC);
-        const sc = this.getTargetSC(target.target);
+        const sc = this.getTargetSC(target);
 
         this.unlocking = false;
+
+        const duration = MathUtils.lerp(
+            4,
+            6,
+            MathUtils.smoothstep(0, 30, target.lockedDistance)
+        );
 
         gsap.to(
             sphericalCoords, {
@@ -186,7 +202,6 @@ class CameraController {
 
     unlock() {
         if(!this.initialized) return console.warn("CameraController not initialized! Please run CameraManager.init() first.");
-        if(!this.currentTarget) return
         this.mode = CameraMode.LOCKED;
         this.killTweens();
         this.orbit = false;
@@ -224,7 +239,7 @@ class CameraController {
             this.refreshSC();
         }
         if(this.mode === CameraMode.LOCKED) {
-            if(this.currentTarget) this.focalDistance = this.currentTarget.lockedDistance;
+            this.focalDistance = this.currentTarget.lockedDistance;
 
             this.aperture = 1;
             if(this.orbit) {
@@ -247,7 +262,7 @@ class CameraController {
                 }
             }
             this.cam.lookAt(origin);
-            if(!this.unlocking) this.dofPower = MathUtils.lerp(this.dofPower, 1, .016);
+            if(!this.unlocking) this.dofPower = MathUtils.lerp(this.dofPower, this.currentTarget.closeUp ? 1 : 0, .016);
         }
 
         /* this.cam['aperture'] = MathUtils.lerp(this.cam['aperture'] , this.aperture, .16);

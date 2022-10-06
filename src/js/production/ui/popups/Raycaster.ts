@@ -1,7 +1,7 @@
 import { Object3D, OrthographicCamera, PerspectiveCamera, Raycaster, Vector3 } from "three";
 import { enablePopup, popups } from "./PopupsManager";
 
-export interface InteractiveObject {
+export interface InteractiveObject extends Object3D {
 	selected:boolean;
 	target:Object3D;
 	lockedDistance:number;

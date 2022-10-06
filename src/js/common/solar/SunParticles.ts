@@ -21,7 +21,10 @@ export const P_MAT = new ShaderMaterial({
             value: new Color(0xffffff)
         },
         fresnelWidth: {
-            value: .5
+            value: .99
+        },
+        glowStrength: {
+            value: 2
         }
     },
     // visible: false,
@@ -43,7 +46,7 @@ export class SunParticles {
             P_MAT
         );
 
-        mesh.scale.setScalar(radius);
+        mesh.scale.setScalar(1.1);
         this.mesh = mesh;
     }
 

@@ -64,7 +64,8 @@ export class CoreApp extends WebGLSketch {
         super(window.innerWidth, window.innerHeight, {
             alpha: false,
             antialias: true,
-            near: 0.01
+            near: 0.01,
+            far: 100000
         }, false);
 
         CoreAppSingleton.instance = this;

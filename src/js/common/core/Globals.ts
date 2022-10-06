@@ -29,8 +29,8 @@ export const TOKEN = {
 };
 
 export const CONTROLS = {
-	min: 0.25,
-	max: 600,
+	min: 5,
+	max: 60000,
 	orbit: null
 }
 

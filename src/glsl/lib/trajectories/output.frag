@@ -14,11 +14,13 @@ float alpha = mix(w * globalOpacity, 1.0, selected);
 
 float d = distance(bodyPos, pos);
 
-alpha *= smoothstep(dRadius*2.0, 8.0*dRadius, d);
+alpha *= smoothstep(dRadius*80.0, 300.0*dRadius, d);
 
 if(alpha < .01) discard;
 
 pc_fragColor = vec4( outgoingLight, alpha * diffuseColor.a );
+
+// pc_fragColor = vec4( w );
 
 #ifdef EMISSIVE
 #if defined( USE_COLOR ) || defined( USE_INSTANCING_COLOR )

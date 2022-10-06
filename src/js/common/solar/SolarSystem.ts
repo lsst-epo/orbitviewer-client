@@ -1,6 +1,6 @@
 import { Vector3 } from "three";
 import { SolarCategory } from "../data/Categories";
-import { PlanetDataMap, PlanetId } from "./Planet";
+import { PlanetDataMap, PlanetId, PLANET_SCALE } from "./Planet";
 
 export const DEG_TO_RAD = Math.PI / 180;
 export const E_CONVERGE_MAX_ITERATIONS = 10;
@@ -70,8 +70,8 @@ export function getCartesianCoordinates(v:number, r:number, el:OrbitElements, ta
     const zh = r * ( Math.sin(v+w) * Math.sin(i) );
 
     // Double check coordinates conversion with them!
-    if(!convert) target.set(xh,yh,zh);
-    else target.set(xh,zh,-yh); // convert from z up to y up (y must be also inverted to convert into Z)
+    if(!convert) target.set(xh * PLANET_SCALE,yh * PLANET_SCALE,zh * PLANET_SCALE);
+    else target.set(xh * PLANET_SCALE,zh * PLANET_SCALE,-yh * PLANET_SCALE); // convert from z up to y up (y must be also inverted to convert into Z)
 
     return target;
 }
@@ -165,9 +165,9 @@ export function keplerCalc(el:OrbitElements, d:number, target:Vector3= new Vecto
             lonecl += -0.015 * Math.sin(Mj - Mu + 20 * DEG_TO_RAD);
         }
 
-        const xh = r * Math.cos(lonecl) * Math.cos(latecl)
-        const yh = r * Math.sin(lonecl) * Math.cos(latecl)
-        const zh = r * Math.sin(latecl);
+        const xh = PLANET_SCALE * r * Math.cos(lonecl) * Math.cos(latecl)
+        const yh = PLANET_SCALE * r * Math.sin(lonecl) * Math.cos(latecl)
+        const zh = PLANET_SCALE * r * Math.sin(latecl);
 
         target.x = xh;
         target.y = zh;

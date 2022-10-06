@@ -163,7 +163,7 @@ export class SolarParticles {
     set highlighted(value:boolean) {
         const u = MAT.uniforms;
         gsap.killTweensOf(u.opacity);
-        gsap.to(u.opacity, {value: value ? 1 : .25, duration: 2});
+        gsap.to(u.opacity, {value: value ? 1 : .35, duration: 2});
     }
 
     /**

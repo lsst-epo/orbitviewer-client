@@ -6,5 +6,6 @@
 in vec3 vPosition;
 
 uniform float time;
+uniform float glowStrength;
 
 layout (location = 1) out vec4 gGlow;
