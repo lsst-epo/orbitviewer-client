@@ -18,7 +18,7 @@
 	opacity: 0;
 
 	transition: opacity 1s ease-in-out;
-	transition-delay: 1.5s;
+	transition-delay: 0s;
 
 	.popups-close {
 		@extend .back-button;
@@ -28,6 +28,17 @@
 		&, * {
 			pointer-events: none;
 		}
+	}
+}
+
+.customize-labels-fast-transition.page__orbit-viewer .popups-wrapper {
+	transition-delay: 0s;
+}
+
+.customize-labels-hidden.page__orbit-viewer .popups-wrapper {
+	opacity: 0;
+	&, * {
+		pointer-events: none;
 	}
 }
 
@@ -42,6 +53,7 @@
 
 .page__orbit-viewer .popups-wrapper {
 	opacity: 1;
+	transition-delay: 1.5s;
 }
 
 .popups-wrapper.popups-labels.hidden {

@@ -1,8 +1,8 @@
 import { CameraManager } from "../../common/core/CameraManager";
-import { CoreApp, CoreAppSingleton } from "../../common/core/CoreApp";
+import { CoreAppSingleton } from "../../common/core/CoreApp";
 import { Search } from "../partials/Search";
 import { addPanelListener, PanelsListener } from "../ui/panels/PanelsManager";
-import { popups, updatePopups } from "../ui/popups/PopupsManager";
+import { updatePopups } from "../ui/popups/PopupsManager";
 import { Page } from "./Page";
 
 
@@ -10,13 +10,15 @@ export class OrbitViewer extends Page implements PanelsListener {
 	customizeViewWrapper: HTMLElement;
 	active:boolean = false;
 
-	bgStars: HTMLInputElement;
+	bgStarsInput: HTMLInputElement;
+	toggleLabelsInput: HTMLInputElement;
 	load(resolve: any): void {
 	
 		new Search(this.dom);
 
 		this.customizeViewWrapper = this.dom.querySelector('.customize-view');
-		this.bgStars = this.customizeViewWrapper.querySelector('input[name="background-stars"]');
+		this.bgStarsInput = this.customizeViewWrapper.querySelector('input[name="background-stars"]');
+		this.toggleLabelsInput = this.customizeViewWrapper.querySelector('input[name="toggle-labels"]');
 
 		super.load(resolve)
 
@@ -40,15 +42,30 @@ export class OrbitViewer extends Page implements PanelsListener {
 	hide(): void {
 		super.hide();
 		
-		if(!this.bgStars.checked) {
-			this.bgStars.checked = true;
-			for(const input of this.inputs.inputs) input.checkState();
+		if(!this.bgStarsInput.checked) {
+			this.bgStarsInput.checked = true;
 			this.toggleStars();
 		}
+
+		if(!this.toggleLabelsInput.checked) {
+			this.toggleLabelsInput.checked = true;
+			this.toggleLabels();
+		}
+
+		for(const input of this.inputs.inputs) input.checkState();
 	}
 
 	toggleStars(){
-		CoreAppSingleton.instance.backgroundVisibility = this.bgStars.checked;
+		CoreAppSingleton.instance.backgroundVisibility = this.bgStarsInput.checked;
+	}
+
+	toggleLabels(){
+		document.body.classList.toggle('customize-labels-hidden');
+		document.body.classList.add('customize-labels-fast-transition');
+		setTimeout(() => {
+			document.body.classList.remove('customize-labels-fast-transition');
+		}, 500);
+		CoreAppSingleton.instance.planetsVisibility = this.toggleLabelsInput.checked;
 	}
 
 	togglePanel(){		
@@ -75,8 +92,11 @@ export class OrbitViewer extends Page implements PanelsListener {
 		})
 
 		// Sub tabs
-		this.bgStars.addEventListener('change', () => {
+		this.bgStarsInput.addEventListener('change', () => {
 			this.toggleStars();			
+		})
+		this.toggleLabelsInput.addEventListener('change', () => {
+			this.toggleLabels();			
 		})
 
 	}
