@@ -270,9 +270,7 @@ export class TimePickerPanel extends Panel {
 
 	update(){
 
-		if(!this.active) {
-			if(this.value === 0 && this.range.valueAsNumber === 0) return;
-		}
+		if(!this.active) return;
 
 		this.value = parseFloat(this.range.value);
 		

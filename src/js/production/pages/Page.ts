@@ -1,3 +1,4 @@
+import { solarClock } from "../../common/core/CoreApp";
 import { Inputs } from "../ui/inputs/Inputs";
 import { Panels } from "../ui/panels/Panels";
 import { broadcastPanelsClose } from "../ui/panels/PanelsManager";
@@ -33,6 +34,7 @@ export class Page {
 
 	hide(){		
 		broadcastPanelsClose();
+		solarClock.pause();
 	}
 	
 	disable () {

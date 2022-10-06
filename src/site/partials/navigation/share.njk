@@ -1,0 +1,17 @@
+<div class="panel" data-panel="share-nav">
+
+	<div class="panel-top panel-separator">
+
+		<div class="panel-top-content">
+			<h3>{{ generic[lang].menus['share-menu'].title }}</h3>
+			<h2>{{ generic[lang].menus['share-menu'].subtitle }}</h2>
+		</div>
+
+		{{ panelTimes('share-nav') }}
+
+	</div>
+
+	<div class="panel-section">
+		{% include "ui/share-buttons.njk" %}
+	</div>
+</div>
