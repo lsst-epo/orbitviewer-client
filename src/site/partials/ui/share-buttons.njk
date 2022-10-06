@@ -1,25 +1,27 @@
-<a class="share-button facebook" href="">
+<a class="share-button facebook" target="_blank" data-text="{{ globals[lang].seo.seoTitle }}">
 	<div class="icon">
 		{% include "ui/icons/facebook.njk" %}
 	</div>
 	<p>{{ generic[lang].menus['share-menu'].facebook }}</p>
 </a>
 
-<a class="share-button twitter" href="">
+<a class="share-button twitter" target="_blank" data-text="{{ globals[lang].seo.seoTitle }}">
 	<div class="icon">
 		{% include "ui/icons/twitter.njk" %}
 	</div>
 	<p>{{ generic[lang].menus['share-menu'].twitter }}</p>
 </a>
 
-<a class="share-button get-url" href="">
+<button class="share-button get-url copy-button" no-history="true">
+	<h4 class="copy">{{ generic[lang].menus['share-menu']['copied'] }}</h4>
 	<div class="icon">
 		{% include "ui/icons/get-url.njk" %}
 	</div>
 	<p>{{ generic[lang].menus['share-menu']['get-url'] }}</p>
-</a>
+</button>
 
-<a class="share-button email" href="">
+<a class="share-button email copy-button" no-history="true" data-subject="{{ generic[lang].menus['share-menu']['mail-subject'] }}" data-body="{{ generic[lang].menus['share-menu']['mail-body'] }}">
+	<h4 class="copy">{{ generic[lang].menus['share-menu']['copied'] }}</h4>
 	<div class="icon">
 		{% include "ui/icons/email.njk" %}
 	</div>
