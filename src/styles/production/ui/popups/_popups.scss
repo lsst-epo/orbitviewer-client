@@ -73,3 +73,9 @@
 		pointer-events: none;
 	}
 }
+
+.popups-no-closeup .popups-wrapper.popups-labels .popup-label.selected {
+	.icon-text p {
+		opacity: 0;
+	}
+}
