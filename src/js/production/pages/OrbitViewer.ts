@@ -1,4 +1,5 @@
 import { CameraManager } from "../../common/core/CameraManager";
+import { CoreApp, CoreAppSingleton } from "../../common/core/CoreApp";
 import { Search } from "../partials/Search";
 import { addPanelListener, PanelsListener } from "../ui/panels/PanelsManager";
 import { popups, updatePopups } from "../ui/popups/PopupsManager";
@@ -39,17 +40,15 @@ export class OrbitViewer extends Page implements PanelsListener {
 	hide(): void {
 		super.hide();
 		
-		if(this.bgStars.checked) return;
-		
-		this.bgStars.checked = true;
-		for(const input of this.inputs.inputs){
-			if(input.name === 'background-stars') input.checkState();
+		if(!this.bgStars.checked) {
+			this.bgStars.checked = true;
+			for(const input of this.inputs.inputs) input.checkState();
+			this.toggleStars();
 		}
-		this.toggleStars();
 	}
 
 	toggleStars(){
-		console.log('Toggle stars here');
+		CoreAppSingleton.instance.backgroundVisibility = this.bgStars.checked;
 	}
 
 	togglePanel(){		
