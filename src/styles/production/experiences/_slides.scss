@@ -111,6 +111,10 @@
 }
 
 [data-slide="funFactSlide"] {
+	.icon {
+		background-color: transparent;
+		color: var(--white-0);
+	}
 	.media {
 		justify-content: flex-start;
 	}

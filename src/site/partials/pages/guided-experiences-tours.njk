@@ -31,7 +31,9 @@
             {% if slide.typeHandle == 'introSlide' %}
               <div class="thumb" style="background-image: url(/assets/ceres-lorem.jpeg); "></div>
             {% else %}
-              <div class="icon"></div>
+              <div class="icon">
+                {% include "ui/icons/fun-fact.njk" %}
+              </div>
             {% endif %}
           </div>
 
