@@ -2,7 +2,6 @@ import { CameraManager } from "../../common/core/CameraManager";
 import { Search } from "../partials/Search";
 import { addPanelListener, PanelsListener } from "../ui/panels/PanelsManager";
 import { popups } from "../ui/popups/PopupsManager";
-import { RAYCASTER } from "../ui/popups/Raycaster";
 import { Page } from "./Page";
 
 
@@ -18,15 +17,6 @@ export class OrbitViewer extends Page implements PanelsListener {
 
 		addPanelListener(this);
 
-	}
-
-	show(): void {
-		RAYCASTER.active = true;
-	}
-
-	hide(): void {
-		super.hide();
-		RAYCASTER.active = false;
 	}
 
 	closePanel(): void {

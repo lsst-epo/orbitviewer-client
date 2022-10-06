@@ -8,7 +8,6 @@ import { LOCATION } from "../../pagination/History";
 import { broadcastPanelsClose } from "../panels/PanelsManager";
 import { PopupInfo } from "./PopupInfo";
 import { PopupLabel } from "./PopupLabel";
-import { RAYCASTER } from "./Raycaster";
 
 export const popups: Array<{name: string, visible: boolean, category: string, label: PopupLabel, info: PopupInfo}> = [];
 
@@ -57,7 +56,6 @@ export const popupsLoaded = () => {
 
 export function enablePopup(name: string) {
 	
-	RAYCASTER.active = false;
 	CoreAppSingleton.instance.lock();
 
 	solarClock.pause();
@@ -90,8 +88,6 @@ export function disablePopup() {
 	document.querySelector('.popups-labels').classList.remove('hidden');
 	document.body.classList.remove('popups-active');
 	document.body.classList.remove('popups-no-closeup');
-
-	RAYCASTER.active = true;
 
 	showUI();
 }

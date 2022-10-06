@@ -77,11 +77,6 @@ html {
 	background-color: var(--black-0);
 }
 
-body {
-	&.raycaster-click {
-		cursor: pointer;
-	}
-}
 
 .to-front {
 	z-index: $toFrontIndex;

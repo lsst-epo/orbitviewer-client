@@ -1,10 +1,9 @@
 import { MathUtils } from "@jocabola/math";
-import { gsap } from "gsap/gsap-core";
 import { Mesh, Object3D, SphereGeometry, Vector3 } from "three";
-import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { CameraManager } from "../core/CameraManager";
 import { SunMaterial } from "../gfx/SunMaterial";
 import { PLANET_SCALE } from "./Planet";
+import { InteractiveObject } from "./SolarElement";
 import { KM2AU, SUN_RADIUS } from "./SolarSystem";
 import { P_MAT, SunParticles } from "./SunParticles";
 

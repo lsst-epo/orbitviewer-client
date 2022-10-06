@@ -2,9 +2,9 @@ import { MathUtils } from "@jocabola/math";
 import { Vector3 } from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CameraManager } from "../../../common/core/CameraManager";
+import { InteractiveObject } from "../../../common/solar/SolarElement";
 import { css2D } from "./Css2D";
 import { enablePopup } from "./PopupsManager";
-import { InteractiveObject } from "./Raycaster";
 
 export class PopupLabel {
 	dom: HTMLElement;
@@ -26,7 +26,7 @@ export class PopupLabel {
 		this.css2DElement = new CSS2DObject(this.dom);
 		css2D.add(this.css2DElement);
 
-		this.container = this.dom.querySelector('.item-scale-wrapper');
+		this.container = this.dom.querySelector('.icon');
 		
 		this.name = this.dom.getAttribute('data-name');	
 
@@ -59,18 +59,11 @@ export class PopupLabel {
 	update(){		
 		if(!!!this.ref) return;
 
-		// if(!this.visible){
-		// 	this.dom.classList.add('hidden');
-		// 	return;
-		// } else this.dom.classList.remove('hidden');
-
 		this.css2DElement.position.copy(this.ref.position);
-		return;
 
-		const d = this.ref.position.distanceTo(CameraManager.cam.position);
-		const alpha = MathUtils.clamp( MathUtils.map(d, 200, 250, 1, 0), 0, 1).toString();
-
-		this.css2DElement.element.style.opacity = alpha;
+		const d = this.ref.position.distanceTo(CameraManager.cam.position);		
+		const scale = MathUtils.clamp(MathUtils.map(d, 5000, 60000, 1, 0.2), 0.2, 1);
+		this.container.style.transform = `translate(-50%, 50%) scale3d(${scale}, ${scale}, 1)`;
 
 	}
 }

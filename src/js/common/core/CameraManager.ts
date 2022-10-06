@@ -1,11 +1,11 @@
 
-import { Object3D, PerspectiveCamera, Quaternion, Vector3 } from "three";
+import { Object3D, PerspectiveCamera, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { CONTROLS, DEV } from "./Globals";
 
-import { gsap } from "gsap/gsap-core";
 import { MathUtils } from "@jocabola/math";
+import { gsap } from "gsap/gsap-core";
+import { InteractiveObject } from "../solar/SolarElement";
 
 export const DEFAULT_CAM_POS:Vector3 = new Vector3 (0,300,1000);
 

@@ -195,7 +195,7 @@ export class PopupInfo {
 
 		this.dom.classList.add('active');
 
-		const delay = closeUp ? 4 : 0;	
+		const delay = closeUp ? 4 : 2;	
 		const tl = gsap.timeline({ paused: true, delay })
 
 		tl

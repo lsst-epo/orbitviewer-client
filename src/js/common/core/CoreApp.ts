@@ -3,7 +3,6 @@ import { io } from "@jocabola/io";
 import { AmbientLight, Clock, PerspectiveCamera, PointLight, TextureLoader } from "three";
 import { css2D } from "../../production/ui/popups/Css2D";
 import { initPopups, linkPlanetToPopup, popupsLoaded, resizePopups } from "../../production/ui/popups/PopupsManager";
-import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/popups/Raycaster";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/FiltersManager";
 import { initShaders } from "../gfx/shaders";
@@ -83,8 +82,6 @@ export class CoreApp extends WebGLSketch {
         css2D.init(window.innerWidth, window.innerHeight);
 
         initPopups();
-
-        initRaycaster();
 
 
         this.vfx = new VFXRenderer(this.renderer, window.innerWidth, window.innerHeight);
@@ -196,9 +193,6 @@ export class CoreApp extends WebGLSketch {
             this.scene.add(planet.orbitPath.ellipse);
 
             // this.scene.add(planet.sunLine);
-
-            updateRaycasterWatch([planet]);
-
 		}
 	}
 
@@ -225,7 +219,6 @@ export class CoreApp extends WebGLSketch {
             this.scene.add(planet);
             this.scene.add(planet.orbitPath.ellipse);
 
-            updateRaycasterWatch([planet]);
 		}
 
 	}
@@ -248,7 +241,6 @@ export class CoreApp extends WebGLSketch {
             this.scene.add(planet);
             this.scene.add(planet.orbitPath.ellipse);
 
-            updateRaycasterWatch([planet]);
         }
     }
 
@@ -362,8 +354,6 @@ export class CoreApp extends WebGLSketch {
 
     update() {
 		super.update();
-
-        updateRaycaster(this.camera);
 
 		CameraManager.update();
 

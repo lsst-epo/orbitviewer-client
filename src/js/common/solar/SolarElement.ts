@@ -1,10 +1,18 @@
 import { Box3, BufferAttribute, BufferGeometry, Line, LineBasicMaterial, Mesh, MeshPhongMaterial, Object3D, Vector3 } from "three";
-import { InteractiveObject } from "../../production/ui/popups/Raycaster";
 import { isPortrait } from "../../production/utils/Helpers";
 import { initMaterial } from "../gfx/ShaderLib";
 import { EllipticalPath } from "./EllipticalPath";
 import { PlanetOptions, PLANET_GEO } from "./Planet";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
+
+export interface InteractiveObject extends Object3D {
+	selected:boolean;
+	target:Object3D;
+	lockedDistance:number;
+	lockedOffset:Vector3;
+	closeUp: boolean;
+}
+
 
 const L_DUMMY = initMaterial(new LineBasicMaterial({
     color: 0xff0000
@@ -74,7 +82,7 @@ export class SolarElement extends Object3D implements InteractiveObject {
         const min = this.boundingBox.min;
         const max = this.boundingBox.max;
         const center = max.clone().sub(min);
-
+        
         this.lockedPosition.landscape.distance = max.length() * 2;
         this.lockedPosition.landscape.offset.set(0,max.length()+center.y,0);
     }
