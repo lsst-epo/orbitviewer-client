@@ -4,6 +4,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	width: 100%;
 
 	.icon {
 		width: var(--icon-big);
@@ -62,5 +63,48 @@
 	}
 	svg {
 		width: 20px;
+	}
+}
+
+[data-panel="share-nav"]{
+	.share-button {
+		flex-direction: row-reverse;
+		justify-content: space-between;
+		margin-bottom: var(--distance-30);
+		padding: 0 var(--distance-20);
+
+		p {
+			@include bold-3;
+		}
+
+		&:hover {
+			p {
+				color: var(--blue-0);
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
+.copy-button {
+	position: relative;
+
+	.copy {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		margin: 0;
+		@include light-3;
+		opacity: 0;
+		transition: 0.4s;
+	}
+
+	&.copied {
+		.copy {
+			transition: 0.6s ease-in-out;
+			opacity: 1;
+			transform: translate(-50%, -100%)
+		}
 	}
 }

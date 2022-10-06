@@ -27,7 +27,7 @@ export const historyLinksEventListener = () => {
 	
 	for(const link of links){
 
-		if(link.hasAttribute('data-onchange') || link.hasAttribute('target')) continue;
+		if(link.hasAttribute('data-onchange') || link.hasAttribute('target') || link.hasAttribute('no-history')) continue;
 
 		if (link.href.indexOf(hostname)) {	
 			

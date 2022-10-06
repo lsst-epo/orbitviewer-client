@@ -62,7 +62,10 @@
 				"get-url": "Get URL",
 				"facebook": "Facebook",
 				"twitter": "Twitter",
-				"email": "Email"
+				"email": "Email",
+				"copied": "Copied",
+				"mail-subject": "Subject",
+				"mail-body": "Body:"
 			},
 			"filter-menu": {
 				"title": "Filtering tool",
@@ -186,7 +189,10 @@
 				"get-url": "ES - Get URL",
 				"facebook": "ES - Facebook",
 				"twitter": "ES - Twitter",
-				"email": "ES - Email"
+				"email": "ES - Email",
+				"copied": "ES - Copied",
+				"mail-subject": "ES - Subject",
+				"mail-body": "ES - Body:"
 			},
 			"filter-menu": {
 				"title": "ES - Filtering tool",

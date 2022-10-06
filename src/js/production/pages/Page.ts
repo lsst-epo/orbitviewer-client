@@ -1,4 +1,5 @@
 import { solarClock } from "../../common/core/CoreApp";
+import { shareInit } from "../partials/Share";
 import { Inputs } from "../ui/inputs/Inputs";
 import { Panels } from "../ui/panels/Panels";
 import { broadcastPanelsClose } from "../ui/panels/PanelsManager";
@@ -46,6 +47,8 @@ export class Page {
 		this.loaded = true;	
 		this.onLoaded();
 		this.addEventListeners();
+
+		shareInit(this.dom);
 
 		this.inputs = new Inputs(this.dom);
 		this.panels = new Panels(this.dom);
