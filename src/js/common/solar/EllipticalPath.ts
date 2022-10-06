@@ -126,17 +126,13 @@ export class EllipticalPath {
                 this.ellipse.add(l2);
                 l2.position.set(-dR*i, 0, 0); 
 
-                /* const l2 = new Line(geo, mat);
-                this.ellipse.add(l2);
-                l2.position.set(0, .0001*i, 0);  */
-
                 const l3 = new Line(geo, mat);
                 this.ellipse.add(l3);
                 l3.position.set(0, 0, dR*i); 
 
-                /* const l4 = new Line(geo, mat);
+                const l4 = new Line(geo, mat);
                 this.ellipse.add(l4);
-                l4.position.set(0, 0, -dR*i);  */
+                l4.position.set(0, 0, -dR*i); 
             }
         } else {
             this.boundingBox = new Box3(

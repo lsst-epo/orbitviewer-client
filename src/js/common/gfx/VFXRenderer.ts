@@ -51,6 +51,7 @@ export class VFXRenderer {
     bgCamera:PerspectiveCamera = new PerspectiveCamera(45, 1);
     skybox:Skybox;
     needsBGUpdate:boolean = false;
+    enableBackground:boolean = true;
 
     constructor(renderer:WebGLRenderer, width:number, height:number) {
         this.rnd = renderer;
@@ -144,7 +145,7 @@ export class VFXRenderer {
 
         // final comp
         COMP.uniforms.vignette.value = CameraManager.dofPower;
-        COMP.uniforms.tBackground.value = this.bgRT.texture;
+        COMP.uniforms.tBackground.value = this.enableBackground ? this.bgRT.texture : null;
         COMP.uniforms.tScene.value = CameraManager.dofPower > .0001 ? this.dofRT.texture : this.sceneRT.texture[0];
         COMP.uniforms.tGlow.value = this.glow.texture;
 

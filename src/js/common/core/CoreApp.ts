@@ -1,6 +1,6 @@
 import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
-import { AmbientLight, Clock, Group, PerspectiveCamera, PointLight, TextureLoader } from "three";
+import { AmbientLight, Clock, PerspectiveCamera, PointLight, TextureLoader } from "three";
 import { css2D } from "../../production/ui/popups/Css2D";
 import { initPopups, linkPlanetToPopup, popupsLoaded, resizePopups } from "../../production/ui/popups/PopupsManager";
 import { initRaycaster, updateRaycaster, updateRaycasterWatch } from "../../production/ui/popups/Raycaster";
@@ -20,7 +20,6 @@ import { LOCATION } from "../../production/pagination/History";
 import { hideLoader } from "../../production/ui/loader";
 import { categories, getMinMaxPlanetsA } from "../data/Categories";
 import { fetchSolarElements } from "../data/FetchSolarElements";
-import { EllipticalPath } from "../solar/EllipticalPath";
 import { SolarElement } from "../solar/SolarElement";
 import { JD2MJD } from "../solar/SolarTime";
 import { Sun } from "../solar/Sun";
@@ -171,9 +170,6 @@ export class CoreApp extends WebGLSketch {
         console.log('Data Loaded');
 
         popupsLoaded();
-
-        // const globals = getEntryById('globals').data;
-        // this.updateMeshSettings(globals['demo'] as DemoType);
 
         // --------------------------------------------- Launch        
         this.launch();
@@ -353,6 +349,11 @@ export class CoreApp extends WebGLSketch {
         for(let i = 0, len = this.solarElements.length; i < len; i++) {
             this.solarElements[i].visible = value;
         }
+    }
+
+    set backgroundVisibility(value:boolean) {
+        if(!this.started) return;
+        this.vfx.enableBackground = value;
     }
 
     clockChanged():boolean {

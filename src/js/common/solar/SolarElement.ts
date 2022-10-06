@@ -71,21 +71,12 @@ export class SolarElement extends Object3D implements InteractiveObject {
         this.add(this.parent);
         this.target = this;
 
-        // this.target = new Object3D();
         const min = this.boundingBox.min;
         const max = this.boundingBox.max;
-
         const center = max.clone().sub(min);
-
-        // this.target.position.copy(center);
-
-        console.log(id, center.y, max.y, min.y);
-        
 
         this.lockedPosition.landscape.distance = max.length() * 2;
         this.lockedPosition.landscape.offset.set(0,max.length()+center.y,0);
-        // this.target.position.add(max);
-        // this.target.position.y += 10;
     }
 
     initMaterial(opts:PlanetOptions = {}){
