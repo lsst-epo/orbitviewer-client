@@ -25,6 +25,9 @@ export const P_MAT = new ShaderMaterial({
         },
         glowStrength: {
             value: 2
+        },
+        highlighted: {
+            value: 0
         }
     },
     // visible: false,

@@ -3,6 +3,7 @@ precision highp float;
 const vec3 color1 = vec3(1.0, .1, .05);
 const vec3 color2 = vec3(0.89, 0.65, 0);
 uniform float time;
+uniform float highlighted;
 #include <noise4D>
 #include <fbm4D>
 #include <fresnel_pars_frag>
@@ -18,9 +19,11 @@ void main () {
     float d = 1.0 - distance(st, vec2(0.)); */
     #include <fresnel_frag>
     // fresnelTerm = smoothstep(.5, 1.0, fresnelTerm);
-    float f = fbm(vec4(vPosition * 500.0, time * .8), 5);
+    float fP = mix(60.0, 500.0, highlighted);
+    float f = fbm(vec4(vPosition * fP, time * .8), 5);
     f = smoothstep(-1., 1., f);
-    float mask = snoise(vec4(vPosition * 10.25, time * .1));
+    float vP = mix(1.25, 10.25, highlighted);
+    float mask = snoise(vec4(vPosition * vP, time * .1));
     f *= smoothstep(-.25, 1., mask);
     float alpha = fresnelTerm*f;
     if(alpha < .01) discard;

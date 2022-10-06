@@ -1,5 +1,4 @@
-import { MathUtils } from "@jocabola/math";
-import { ColorRepresentation, DoubleSide, LineBasicMaterial, MeshPhongMaterial, SphereGeometry, TextureLoader, Vector3 } from "three";
+import { ColorRepresentation, DoubleSide, MeshPhongMaterial, SphereGeometry, TextureLoader, Vector3 } from "three";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { isPortrait } from "../../production/utils/Helpers";
 import { PlanetMaterial } from "../gfx/PlanetMaterial";
@@ -55,14 +54,15 @@ export class Planet extends SolarElement {
                     // transparent: true,
                     map: tLoader.load(`/assets/textures/2k_saturn_ring_alpha.png`)
                 }));
-                /* gltf.scene.children[0].material = new PlanetMaterial({
+                /* const s = PlanetShaderSettings[this.type];
+                gltf.scene.children[0].material = new PlanetMaterial({
                     side: DoubleSide,
                     // transparent: true,
                     map: tLoader.load(`/assets/textures/2k_saturn_ring_alpha.png`)
                 }, {
-                    fresnelWidth: .000001,
-                    fresnelColor: 0x000033,
-                    sunIntensity: .05
+                    fresnelWidth: s.fresnelWidth,
+                    fresnelColor: s.fresnelColor,
+                    sunIntensity: s.sunIntensity
 
                 }); */
                 this.mesh.add(gltf.scene);
@@ -80,22 +80,16 @@ export class Planet extends SolarElement {
 
         opts.mapURL = `/assets/textures/2k_${this.type}.jpg`;
 
-        let fresnelWidth = .005;
-        let sunIntensity = .5;
-        const scl = PlanetRadiusMap[this.type] * KM2AU * PLANET_SCALE;
-
-        const s = MathUtils.smoothstep(0, 0.234, scl);
-        fresnelWidth = MathUtils.lerp(fresnelWidth, fresnelWidth*10, s);
-        sunIntensity = MathUtils.lerp(.5, .05, s);
+        const s = PlanetShaderSettings[this.type];
 
         this.material = new PlanetMaterial({
             color: opts.color ? opts.color : 0xffffff,
             shininess: 0,
             map: opts.mapURL ? tLoader.load(opts.mapURL) : null
         }, {
-            fresnelColor: 0x000033,
-            fresnelWidth: fresnelWidth,
-            sunIntensity: sunIntensity
+            fresnelColor: s.fresnelColor,
+            fresnelWidth: s.fresnelWidth,
+            sunIntensity: s.sunIntensity
         });
 
         return this.material;
@@ -180,6 +174,55 @@ export const PlanetRotationMap:Record<PlanetId, PlanetRotationData> = {
     }
 }
 
+export type ShaderSettings = {
+    fresnelWidth: number;
+    fresnelColor: ColorRepresentation;
+    sunIntensity:number;
+}
+
+export const PlanetShaderSettings:Record<PlanetId,ShaderSettings> = {
+    mercury: {
+        fresnelColor: 0x010111,
+        fresnelWidth: .002,
+        sunIntensity: 7.5
+    },
+    venus: {
+        fresnelColor: 0x010111,
+        fresnelWidth: .004,
+        sunIntensity: 1.5
+    },
+    earth: {
+        fresnelColor: 0x010133,
+        fresnelWidth: .005,
+        sunIntensity: 2.5
+    },
+    mars: {
+        fresnelColor: 0x330101,
+        fresnelWidth: .004,
+        sunIntensity: 2.5
+    },
+    jupiter: {
+        fresnelColor: 0x000000,
+        fresnelWidth: .04,
+        sunIntensity: 0.5
+    },
+    saturn: {
+        fresnelColor: 0x010101,
+        fresnelWidth: .04,
+        sunIntensity: .5
+    },
+    uranus: {
+        fresnelColor: 0x000000,
+        fresnelWidth: .1,
+        sunIntensity: 0.25
+    },
+    neptune: {
+        fresnelColor: 0x010111,
+        fresnelWidth: .1,
+        sunIntensity: .2
+    }
+}
+
 export type CameraLockPosition = {
     distance: number;
     offset: Vector3;
@@ -192,14 +235,14 @@ export const PlanetLockedMap:Record<PlanetId,CameraLockPosition> = {
     },
     venus: {
         distance: .033,
-        offset: new Vector3(.001, .0018, 0) // OK
+        offset: new Vector3(.001, .0025, 0) // OK
     },
     earth: {
         distance: .03,
-        offset: new Vector3(.0025, .0025, 0) // Ok
+        offset: new Vector3(.0025, .005, 0) // Ok
     },
     mars: {
-        distance: .025,
+        distance: .02,
         offset: new Vector3(.005, .0025, 0) // Ok
     },
     jupiter: {
@@ -212,11 +255,11 @@ export const PlanetLockedMap:Record<PlanetId,CameraLockPosition> = {
     },
     uranus: {
         distance: .15,
-        offset: new Vector3(-.01, .01, 0) // ok
+        offset: new Vector3(-.01, .02, 0) // ok
     },
     neptune: {
         distance: .15,
-        offset: new Vector3(-.009, .01, 0)
+        offset: new Vector3(-.009, .02, 0)
     }
 }
 

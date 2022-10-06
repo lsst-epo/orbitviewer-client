@@ -7,4 +7,4 @@ diffuseColor.a *= material.transmissionAlpha + 0.1;
 #endif
 
 gl_FragColor = vec4( outgoingLight, diffuseColor.a );
-gGlow = vec4(fresCol, 1.0);
+gGlow = vec4(0.);//vec4(fresCol * 2.0 * fresnelTerm, fresnelTerm);

@@ -88,13 +88,18 @@ export class Sun extends Object3D implements InteractiveObject {
         this.scale.setScalar(scl);
         let pscl = MathUtils.lerp(
             this.particles.mesh.scale.x,
-            sel ? MathUtils.lerp(1.1,1.6,cd) : 1.1,
-            .016
+            sel ? MathUtils.lerp(1.6,5.6,cd) : 1.1,
+            .16
         );
         this.particles.mesh.scale.setScalar(pscl);
         P_MAT.uniforms.glowStrength.value = MathUtils.lerp(
             P_MAT.uniforms.glowStrength.value,
             sel ? 5 : 3,
+            .016
+        );
+        P_MAT.uniforms.highlighted.value = MathUtils.lerp(
+            P_MAT.uniforms.highlighted.value,
+            sel ? 1 : 0,
             .016
         );
     }
