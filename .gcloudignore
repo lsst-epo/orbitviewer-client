@@ -1,0 +1,4 @@
+node_modules
+backups
+yarn.lock
+server/node_modules

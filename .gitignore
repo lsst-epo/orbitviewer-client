@@ -153,3 +153,6 @@ back-end/dist
 package-lock.json
 */package-lock.json
 
+# Added by erosas
+app.yaml
+.vscode
