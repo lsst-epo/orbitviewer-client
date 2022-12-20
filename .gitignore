@@ -145,13 +145,7 @@ _cache
 
 */.DS_Store
 */node_modules
-*/yarn.lock
-yarn.lock
-back-end/yarn.lock
-front-end/yarn.lock
 back-end/dist
-package-lock.json
-*/package-lock.json
 
 # Added by erosas
 app.yaml
