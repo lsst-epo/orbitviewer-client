@@ -1,5 +1,4 @@
-import { solarClock } from "../../../common/core/CoreApp";
-import { formatDate, getFormatDate } from "../../utils/Dates";
+import { getFormatDate } from "../../utils/Dates";
 import { Input } from "./Input";
 
 

@@ -2,7 +2,7 @@
 {# ITEMS #}
 <div class="tour-preview-item">
 	
-	<div class="thumb" style="background-image: url(/assets/ceres-lorem.jpeg);"></div>
+	<div class="thumb" style="background-image: url({{ experience.tourPreview[0].url }});"></div>
 	
 	<div class="text">
 	
@@ -13,7 +13,7 @@
 			<div class="duration">
 				<h4>Duration</h4>
 				{% include "ui/icons/stopwatch.njk" %}
-				<p>5m</p>
+				<p>{{ experience.duration }}m</p>
 			</div>
 			
 			<div class="complexity">

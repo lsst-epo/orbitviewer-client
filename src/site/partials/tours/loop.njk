@@ -4,7 +4,7 @@
 
 			{% if experience.tourPicker[0].slug == tour.slug %}
 
-				<a href="{{ '/' + lang + '/' + tour.slug + '/' + experience.slug | url }}">
+				<a data-search="{{ experience.title }}" href="{{ '/' + lang + '/' + tour.slug + '/' + experience.slug | url }}" style="--date: {{ loop.index0 }}; --duration: {{experience.duration}}; --complexity: {{experience.complexity}};">
 					{% include "tours/preview.njk" %}
 				</a>
 

@@ -1,3 +1,4 @@
+import { DEV } from "../../../common/core/Globals";
 import { getLanguage } from "../../pagination/PagesRecap";
 import { Panel } from "./Panel";
 
@@ -40,14 +41,14 @@ export class LanguagePanel extends Panel {
 		apply.addEventListener('click', () => {
 			const val = this.getActiveInputLanguage();
 			if(val === this.currentLanguage){
-				console.log('Same language');
+				if(DEV) ('Same language');
 				return;
 			}
 			this.changeLanguage(val)
 		})
 		reset.addEventListener('click', () => {
 			if(this.currentLanguage === 'en'){
-				console.log('EN is default language');
+				if(DEV) console.log('EN is default language');
 				return;
 			}
 			this.changeLanguage();

@@ -1,7 +1,7 @@
 import { FboUtils, Size } from "@jocabola/gfx";
 import { BufferAttribute, BufferGeometry, FloatType, NearestFilter, OrthographicCamera, Points, Scene, ShaderMaterial, Texture, WebGLRenderer, WebGLRenderTarget } from "three";
-import { GPU_SIM_SIZES, VISUAL_SETTINGS } from "../core/Globals";
-import { OrbitElements } from "./SolarSystem";
+import { DEV, GPU_SIM_SIZES, VISUAL_SETTINGS } from "../core/Globals";
+import { EPOCH, OrbitElements } from "./SolarSystem";
 
 export type SimQuality = 'low'|'medium'|'high'|'ultra';
 
@@ -86,6 +86,7 @@ export class GPUSim {
         const n = new Float32Array(count);
         const Tp = new Float32Array(count);
         const q = new Float32Array(count);
+        const epoch = new Float32Array(count);
         const type = new Float32Array(count);
 
         for(let i=0; i<siz.width; i++) {
@@ -152,6 +153,11 @@ export class GPUSim {
         );
 
         geo.setAttribute(
+            'epoch',
+            new BufferAttribute(epoch, 1)
+        );
+
+        geo.setAttribute(
             'type', 
             new BufferAttribute(type, 1)
         );
@@ -163,7 +169,7 @@ export class GPUSim {
         return this.fbo.texture;
     }
 
-    private updateDataBuffer(id:string, data:Array<OrbitElements>) {
+    private updateDataBuffer(id:string, data:Array<OrbitElements>, defaultValue:number=0) {
         const geo = this.points.geometry;
         const attr = geo.attributes[id];
         if(!attr) {
@@ -173,7 +179,7 @@ export class GPUSim {
         const arr = attr.array as Float32Array;
 
         for(let i=0; i<Math.min(this.totalItems, data.length); i++) {
-            arr[i] = data[i][id];
+            arr[i] = data[i][id] ? data[i][id] : defaultValue;
             // console.log(data[i][id]);
         }
 
@@ -191,8 +197,7 @@ export class GPUSim {
         const alive = geo.attributes.alive;
         const arr = alive.array as Float32Array;
 
-
-        console.log(this.totalItems, value.length);
+        if(DEV) console.log('Total Items:',this.totalItems, 'Value Lenght:', value.length);
         
         for(let i=0; i<Math.min(this.totalItems, value.length); i++) {
             arr[i] = 1;            
@@ -211,6 +216,7 @@ export class GPUSim {
         this.updateDataBuffer('n', value);
         this.updateDataBuffer('Tp', value);
         this.updateDataBuffer('q', value);
+        this.updateDataBuffer('epoch', value, EPOCH);
         this.updateDataBuffer('type', value);
 
         alive.needsUpdate = true;

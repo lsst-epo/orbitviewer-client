@@ -1,0 +1,19 @@
+---
+layout: base
+pageTemplate: orbit-viewer
+pagination:
+  alias: soe
+  data: solarSystemElements.en
+  size: 1
+permalink: "/{{ lang }}/orbit-viewer/{{ soe.slug | slug }}/"
+eleventyComputed:
+ 	title: "{{ orbitViewer[lang].seoTitle }}"
+	description: "{{ orbitViewer[lang].seoDescription }}"
+	image: "{{ orbitViewer[lang].seoImage }}"
+---
+
+<script>
+	window.solarSystemSelectedElement = {{ soe | dump | safe }};
+</script>
+
+{% include "pages/orbit-viewer.njk" %}

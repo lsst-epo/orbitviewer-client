@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
 import { getCategory } from "../data/Categories";
-import { PlanetDataMap } from "./Planet";
-import { calculateOrbit, OrbitElements, OrbitType } from "./SolarSystem"
+import { PlanetDataMap, PLANET_SCALE } from "./Planet";
+import { calculateOrbit, EPOCH, getMeanAnomaly, OrbitElements, OrbitType } from "./SolarSystem";
 import { MJD2JD, SolarTimeManager } from "./SolarTime";
 
 const tmp1 = new Vector3();
@@ -20,6 +20,7 @@ export type OrbitDataElements = {
     q?:number;
     M:number;
     mpch:number;
+    epoch:number;
     n:number;
     tperi?:number;
     peri:number;
@@ -59,6 +60,7 @@ export function mapOrbitElements(dEl:OrbitDataElements):OrbitElements {
         n: dEl.n,
         q: dEl.q,
         Tp: dEl.tperi,
+        epoch: dEl.epoch != undefined ? dEl.epoch : EPOCH,
         type: getOrbitType(dEl),
         category: getCategory(dEl)
     }    
@@ -70,21 +72,6 @@ export function getTypeStr(type:OrbitType): string {
     if(type === OrbitType.Parabolic) return 'Parabolic';
     if(type === OrbitType.NearParabolic) return 'NearParabolic';
     return 'Hyperbolic';
-}
-
-export function getDataString(dEl:OrbitDataElements):string {
-    const type = getOrbitType(dEl);
-    return `
-        ${dEl.Name}
-        Node: ${dEl.Node}
-        a: ${dEl.a}
-        e: ${dEl.e}
-        i: ${dEl.i}
-        Peri: ${dEl.Peri}
-        M: ${dEl.M}
-        n: ${dEl.n}
-        Orbit Type: ${getTypeStr(type)}
-    `;
 }
 
 export const openFileDialog = (accept, callback) => {
@@ -107,13 +94,12 @@ export const openFileDialog = (accept, callback) => {
 
 export function getClosestDateToSun(data:OrbitDataElements):Date {
 
-    const jd = MJD2JD(data.tperi);    
+    const d = SolarTimeManager.getMJDonDate(new Date());
+    const mel = mapOrbitElements(data);
+    const M = getMeanAnomaly(mel, d) % 360;
+    const tperi = MJD2JD(d + (360-M) / mel.n);
 
-    const unixMs = ( jd - 2440587.5) * 86400000;
-
-    const date = new Date(unixMs);
-
-    return date;
+    return SolarTimeManager.JD2Date(tperi);
 }
 
 export function getDistanceFromSunNow(data:OrbitDataElements): number {
@@ -125,7 +111,7 @@ export function getDistanceFromSunNow(data:OrbitDataElements): number {
 
     calculateOrbit(mel, mjd, tmp1);
 
-    return tmp1.length()
+    return tmp1.length() / PLANET_SCALE;
 }
 
 export function getDistanceFromEarthNow(data:OrbitDataElements): number {
@@ -143,5 +129,5 @@ export function getDistanceFromEarthNow(data:OrbitDataElements): number {
     
     calculateOrbit(earthData, mjd, tmp2);    
     
-    return tmp2.distanceTo(tmp1);
+    return tmp2.distanceTo(tmp1) / PLANET_SCALE;
 }

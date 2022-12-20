@@ -28,14 +28,22 @@ export class ZoomRange extends Input {
 
 	}
 
+	updateZoomClass(value){
+		if(value > 0.2) document.body.classList.add('zoom-out');
+		else document.body.classList.remove('zoom-out');
+	}
+
 	update(){
 			
 		// If it's changing update controls with new value
+
 		if(this.changing){
 
 			const value = MathUtils.map(this.value, 0, 1, CONTROLS.min, CONTROLS.max);			
 			CONTROLS.orbit.minDistance = value - 0.0000000000001;
 			CONTROLS.orbit.maxDistance = value + 0.0000000000001;
+			
+			this.updateZoomClass(this.value);
 
 			return;
 		}
@@ -43,8 +51,11 @@ export class ZoomRange extends Input {
 		// Update input with current zoom value
 		const distance = CONTROLS.orbit.getDistance();
 		const value = MathUtils.map(distance, CONTROLS.min, CONTROLS.max, 0, 1);
-
 		this.dom.value = value.toString();
+		this.updateZoomClass(value);
+
+
+		
 		
 		
 	}

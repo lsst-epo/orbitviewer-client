@@ -19,6 +19,14 @@ export class Checkbox extends Input {
 		this.tl.play();
 	}
 
+	get checked():boolean {
+		return this.dom.checked;
+	}
+
+	set checked(value:boolean) {
+		this.dom.checked = value;
+	}
+
 	checkState(playAnimation:boolean = true){
 
 		const parent = this.dom.parentElement;

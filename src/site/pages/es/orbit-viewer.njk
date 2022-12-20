@@ -4,5 +4,11 @@ pageTemplate: orbit-viewer
 eleventyComputed:
   title: "{{ orbitViewer[lang].seoTitle }}"
   description: "{{ orbitViewer[lang].seoDescription }}"
+  image: "{{ orbitViewer[lang].seoImage }}"
 ---
+
+<script>
+	window.solarSystemSelectedElement = null;
+</script>
+
 {% include "pages/orbit-viewer.njk" %}

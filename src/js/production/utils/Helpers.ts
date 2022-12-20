@@ -23,6 +23,6 @@ export const setDeviceType = () => {
 }
 
 export const setDeviceHeight = () => {
-	const doc = document.documentElement
+	const doc = document.documentElement;	
 	doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
 }

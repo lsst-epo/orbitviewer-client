@@ -10,10 +10,12 @@
 			"far": "Far",
 			"past": "Past",
 			"future": "Future",
+			"present": "Present",
 			"back": "Back",
 			"next": "Next",
 			"share": "Share",
 			"search": "Search",
+			"no-results": "No objects found",
 			"complexity": "Complexity",
 			"duration": "Duration",
 			"easy": "Easy",
@@ -36,10 +38,11 @@
 			"current-date": "Current date:",
 			"date-explanation": "Slide right/left to go forward/backwards in time",
 			"go-date": "Go to date",
-			"tours-back": "Back to guided experiences",
-			"tour-start": "Let's start",
-			"tour-fun-fact": "Fun fact",
+			"tours-back": "Back to",
+			"tours-start": "Let's start",
+			"tours-fun-fact": "Fun fact",
 			"search-placeholder": "Write and click search",
+			"search-placeholder-tours": "Write your search",
 			"search-random": "Show me one random object!",
 			"customize-view": "Customize your view. Toggle On/Off",
 			"customize-view-options": [
@@ -57,7 +60,7 @@
 				"how-to-use": "How to use the Orbit Viewer"
 			},
 			"share-menu": {
-				"title": "Share Skyviewer",
+				"title": "Share Orbitviewer",
 				"subtitle": "Let people know about us!",
 				"get-url": "Get URL",
 				"facebook": "Facebook",
@@ -96,7 +99,7 @@
 				"ultra": ["Ultra", "(Uses more more resources)"]
 			},
 			"about-menu": {
-				"title": "About skyviewer",
+				"title": "About Orbitviewer",
 				"subtitle": "Credits"
 			}
 		},
@@ -121,7 +124,7 @@
 				"How far is it today?",
 				"From the Sun:",
 				"From the Earth:",
-				"See this object in Skyviewer"
+				"See this object in Orbitviewer"
 			]
 		}
 	},
@@ -136,10 +139,12 @@
 			"far": "ES - Far",
 			"past": "ES - Past",
 			"future": "ES - Future",
+			"present": "ES - Present",
 			"back": "ES - Back",
 			"next": "ES - Next",
 			"share": "ES - Share",
 			"search": "ES - Search",
+			"no-results": "ES - No objects found",
 			"complexity": "ES - Complexity",
 			"duration": "ES - Duration",
 			"easy": "ES - Easy",
@@ -162,10 +167,11 @@
 			"current-date": "ES - Current date:",
 			"date-explanation": "ES - Slide right/left to go forward/backwards in time",
 			"go-date": "ES - Go to date",
-			"tours-back": "ES - Back to guided experiences",
-			"tour-start": "ES - Let's start",
-			"tour-fun-fact": "ES - Fun fact",
+			"tours-back": "ES - Back to",
+			"tours-start": "ES - Let's start",
+			"tours-fun-fact": "ES - Fun fact",
 			"search-placeholder": "ES - Write and click search",
+			"search-placeholder-tours": "ES - Write your search",
 			"search-random": "ES - Show me one random object!",
 			"customize-view": "ES - Customize your view. Toggle On/Off",
 			"customize-view-options": [
@@ -184,7 +190,7 @@
 				"resolution": "ES - Resolution settings"
 			},
 			"share-menu": {
-				"title": "ES - Share Skyviewer",
+				"title": "ES - Share Orbitviewer",
 				"subtitle": "ES - Let people know about us!",
 				"get-url": "ES - Get URL",
 				"facebook": "ES - Facebook",
@@ -223,7 +229,7 @@
 				"ultra": ["ES - Ultra", "ES - (Uses more more resources)"]
 			},
 			"about-menu": {
-				"title": "ES - About skyviewer",
+				"title": "ES - About Orbitviewer",
 				"subtitle": "ES - Credits"
 			}
 		},
@@ -248,7 +254,7 @@
 				"ES - How far is it today?",
 				"ES - From the Sun:",
 				"ES - From the Earth:",
-				"ES - See this object in Skyviewer"
+				"ES - See this object in Orbitviewer"
 			]
 		}
 	}

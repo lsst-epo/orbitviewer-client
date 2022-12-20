@@ -9,5 +9,6 @@ permalink: "{{ '/' + lang + '/' + experience.tourPicker[0].slug + '/' + experien
 eleventyComputed:
   title: "{{ experience[lang].seoTitle }}"
   description: "{{ experience[lang].seoDescription }}"
+  image: "{{ experience[lang].seoImage }}"
 ---
 {% include "pages/guided-experiences-tours.njk" %}

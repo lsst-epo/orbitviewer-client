@@ -1,6 +1,13 @@
 {% from 'tours/loop.njk' import loop as loop %}
 {% from 'ui/panel-times.njk' import panelTimes as panelTimes %}
 
+<div class="back-button navigation-item">
+  <a href="{{ '/' + lang + '/guided-experiences' | url }}">
+    {% include "ui/icons/times.njk" %}
+    {# {% include "ui/icons/arrow-prev.njk" %} #}
+  </a>
+</div>
+
 <div class="page-content" data-animation-type="fade">
 
   <div class="tours-header">
@@ -24,8 +31,7 @@
       <p>{{ generic[lang].strings.search }}</p>
 
       <div class="active-search">
-        <input type="text" name="tour-search">
-        <label for="tour-search">{{ generic[lang]['strings']['search-placeholder'] }}</label>
+        <input type="text" name="tour-search" placeholder="{{ generic[lang]['strings']['search-placeholder-tours'] }}">
       </div>
 
     </button>
@@ -33,15 +39,17 @@
   </div>
 
   {# ACTIVE TOURS #}
-  <div class="tours-list">
-    {{ loop(guidedExperiencesTours[lang], tour, lang ) }}
+  <div class="tours-list-wrapper">
+    <div class="tours-list">
+      {{ loop(guidedExperiencesTours[lang], tour, lang ) }}
+    </div>
   </div>
 
   <div class="buttons__wrapper">
 
-    <a href="{{ '/' + lang + '/guided-experiences' | url }}" class="ui__button button_arrow arrow-prev">
+    <a href="{{ '/' + lang + '/guided-experiences' | url }}" class="ui__button button__icon arrow-prev">
       {% include "ui/icons/arrow-prev.njk" %}
-      <p>{{ generic[lang]['strings']['tours-back'] }}</p>
+      <p>{{ generic[lang]['strings']['tours-back'] + ' ' + guidedExperiences[lang].title }}</p>
     </a>
 
   </div>
@@ -126,19 +134,6 @@
     </ul>
 
   </div>
-
-  <div class="bottom-buttons">
-
-    <button data-button="sort-apply" class="ui__button">
-      <p>{{ generic[lang].menus['sort-menu']['apply-sort'] }}</p>
-    </button>
-
-    <button data-button="sort-reset" class="ui__button ghost-button">
-      <p>{{ generic[lang].menus['sort-menu']['reset-sort'] }}</p>
-    </button>
-
-  </div>
-
 
 </div>
 

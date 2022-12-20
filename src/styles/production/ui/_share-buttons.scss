@@ -37,7 +37,7 @@
 		background-color: var(--teal-1);
 	}
 	svg {
-		width: 20px;
+		width: 40%;
 	}
 }
 .share-button.facebook {
@@ -45,7 +45,7 @@
 		background-color: #3d5a99;
 	}
 	svg {
-		width: 11px;
+		width: 25%;
 		transform: translateX(-1px);
 	}
 }
@@ -54,15 +54,15 @@
 		background-color: #0f8fff;
 	}
 	svg {
-		width: 19px;
+		width: 50%;
 	}
 }
 .share-button.email {
 	.icon {
-		background-color: var(--teal-2);
+		background-color: var(--teal-1-2);
 	}
 	svg {
-		width: 20px;
+		width: 50%;
 	}
 }
 
@@ -102,9 +102,21 @@
 
 	&.copied {
 		.copy {
-			transition: 0.6s ease-in-out;
+			transition: 0.2s ease-in-out;
 			opacity: 1;
-			transform: translate(-50%, -100%)
+			transform: translate(-50%, -110%)
 		}
+	}
+}
+
+.popups-infos {
+	.copy {
+		color: var(--black-2);
+		@include bold-3;
+	}
+
+	.copy-button.copied .copy {
+		transition: 0.2s ease-in-out;
+		transform: translate(-50%, -125%)
 	}
 }

@@ -15,10 +15,10 @@ export const historyTriggerLink = (slug:string = null) => {
 	onChange(slug);
 }
 
-export const historyBack = () => {
-	const page = LOCATION.previous ? LOCATION.previous : getPage('landing')			
-	historyTriggerLink(page.slug);
-}
+// export const historyBack = () => {
+// 	const page = LOCATION.previous ? LOCATION.previous : getPage('landing')			
+// 	historyTriggerLink(page.slug);
+// }
 
 export const historyLinksEventListener = () => {
 
@@ -28,8 +28,8 @@ export const historyLinksEventListener = () => {
 	for(const link of links){
 
 		if(link.hasAttribute('data-onchange') || link.hasAttribute('target') || link.hasAttribute('no-history')) continue;
-
-		if (link.href.indexOf(hostname)) {	
+		
+		if (link.href.indexOf(hostname) != -1) {	
 			
 			link.setAttribute('data-onchange', 'true');
 			
@@ -38,13 +38,15 @@ export const historyLinksEventListener = () => {
 				e.stopPropagation();				
 				onChange(link.getAttribute('href'));
 			});
+		} else {
+			link.setAttribute('target', '_blank');
 		}
 	}
 }
 
 // INIT
 export const historyInit = () => {			
-	console.log('History init');
+	if(DEV) console.log('History init');
 	
 	pagesRecap();
 	
@@ -72,14 +74,14 @@ export const onChange = (url:string = window.location.pathname) => {
 	
 	// CHECK IF PAGE IS LOADING
 	if(TRANSITIONS.inProgress){
-		console.log('Page transition already in progress');
+		if(DEV) ('Page transition already in progress');
 		return;
 	}
 
 	// GET PAGE
 	const page = getPage(url);
 
-	console.log('Loading...', page, url);
+	if(DEV) console.log('Loading...', page, url);
 	
 	if(page === LOCATION.current) return;	
 
@@ -122,7 +124,7 @@ const onRequestNotLoaded = (response) => {
 
 const onRequest = () => {
 
-	console.log('Loading complete');
+	if(DEV) console.log('Loading complete');
 	
 	if(!LOCATION.popstate){	
 		window.history.pushState({}, document.title, getUrl(LOCATION.current));
@@ -135,7 +137,7 @@ const onRequest = () => {
 	
 	// RESET LOCATION
 	historyLinksEventListener();
-	TriggerTransition(LOCATION.popstate);
+	TriggerTransition();
 	LOCATION.popstate = false;
 }
 

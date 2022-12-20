@@ -19,16 +19,16 @@ export class Centaurs extends Checkbox {
 			autoAlpha: 0.3
 		})
 
-		gsap.set(dots, {
-			autoAlpha: 0
-		})
-		gsap.set(arrow, {
-			scaleX: 0,
-			transformOrigin: 'center'
-		})
-		gsap.set(stroke, {
-			drawSVG: '0%'
-		})
+		// gsap.set(dots, {
+		// 	autoAlpha: 0
+		// })
+		// gsap.set(arrow, {
+		// 	scaleX: 0,
+		// 	transformOrigin: 'center'
+		// })
+		// gsap.set(stroke, {
+		// 	drawSVG: '0%'
+		// })
 
 		this.tl
 			.addLabel('start')
@@ -43,10 +43,10 @@ export class Centaurs extends Checkbox {
 				stagger: 0.1,
 				duration: 1,
 			}, 'start')
-			.to(stroke, {
-				drawSVG: '100%',
-				duration: 1,
-			}, 'start')
+			// .to(stroke, {
+			// 	drawSVG: '100%',
+			// 	duration: 1,
+			// }, 'start')
 			.to(arrow, {
 				scaleX: 1,
 				duration: 0.2,

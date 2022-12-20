@@ -1,6 +1,6 @@
 
 .panel {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 
@@ -11,6 +11,7 @@
 
 	border: var(--panels-border);
 
+	overflow-x: hidden;
 	overflow-y: auto;
 
 	z-index: $panelIndex;
@@ -59,14 +60,13 @@
 .panel.panel-bottom-center {
 	@extend .panel-bottom;
 
-	@include desktop {
-		transform: translate(-50%, 100%);
-		left: 50%;
+	transform: translate(-50%, 100%);
+	left: 50%;
 
-		&.active {
-			transform: translate(-50%, 0%)
-		}
+	&.active {
+		transform: translate(-50%, 0%)
 	}
+	
 }
 
 .panel-separator {

@@ -4,3 +4,9 @@
 uniform float selected;
 
 layout(location = 1) out vec4 gGlow;
+
+#ifdef EARTH
+uniform sampler2D nightMap;
+uniform sampler2D cloudsMap;
+uniform float time;
+#endif

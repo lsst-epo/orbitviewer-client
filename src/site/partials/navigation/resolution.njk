@@ -1,4 +1,4 @@
-<div class="panel" data-panel="resolution">
+<div class="panel" data-panel="resolution-{{ pageTemplate }}">
 
 	<div class="panel-top panel-separator">
 
@@ -7,7 +7,7 @@
 			<h2>{{ generic[lang].menus['resolution-menu'].subtitle }}</h2>
 		</div>
 
-		{{ panelTimes('resolution') }}
+		{{ panelTimes('resolution-'+pageTemplate) }}
 
 	</div>
  
@@ -51,12 +51,14 @@
 
 	<div class="bottom-buttons">
 
-		<button data-button="resolution-apply" class="ui__button">
+		<button data-button="resolution-apply" class="ui__button button__icon icon__right">
 			<p>{{ generic[lang].strings['apply-selection'] }}</p>
+			{% include "ui/icons/arrow-next.njk" %}
 		</button>
 
-		<button data-button="resolution-reset" class="ui__button ghost-button">
+		<button data-button="resolution-reset" class="ui__button ghost-button button__icon icon__right">
 			<p>{{ generic[lang].strings['reset-default'] }}</p>
+			{% include "ui/icons/reset.njk" %}
 		</button>
 		
 	</div>

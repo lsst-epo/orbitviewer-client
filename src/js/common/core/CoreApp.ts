@@ -2,7 +2,7 @@ import { WebGLSketch } from "@jocabola/gfx";
 import { io } from "@jocabola/io";
 import { AmbientLight, Clock, PerspectiveCamera, PointLight, TextureLoader } from "three";
 import { css2D } from "../../production/ui/popups/Css2D";
-import { initPopups, linkPlanetToPopup, popupsLoaded, resizePopups } from "../../production/ui/popups/PopupsManager";
+import { enablePopup, initPopups, linkSolarElementToPopup, popupsLoaded, resizePopups } from "../../production/ui/popups/PopupsManager";
 import { loadData } from "../data/DataMap";
 import { getSolarSystemElements } from "../data/FiltersManager";
 import { initShaders } from "../gfx/shaders";
@@ -17,7 +17,7 @@ import { CLOCK_SETTINGS, DEV } from "./Globals";
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { LOCATION } from "../../production/pagination/History";
 import { hideLoader } from "../../production/ui/loader";
-import { categories, getMinMaxPlanetsA } from "../data/Categories";
+import { categories, getMinMaxAByCategory, getMinMaxPlanetsA } from "../data/Categories";
 import { fetchSolarElements } from "../data/FetchSolarElements";
 import { SolarElement } from "../solar/SolarElement";
 import { JD2MJD } from "../solar/SolarTime";
@@ -66,6 +66,8 @@ export class CoreApp extends WebGLSketch {
             far: 100000
         }, false);
 
+        console.log('%cSite developed by Fil Studio', "color:white;font-family:system-ui;font-size:1rem;font-weight:bold");
+
         CoreAppSingleton.instance = this;
 
         document.body.appendChild(this.domElement);
@@ -105,7 +107,8 @@ export class CoreApp extends WebGLSketch {
         this.ambientLight = new AmbientLight(0xffffff, 0.35);
         this.scene.add(this.ambientLight);
 
-        console.log('Core App init');
+        if(DEV) console.log('Core App init');
+        
 
         // background
         new TextureLoader().load('/assets/textures/8k_stars.jpg', (t) => {
@@ -113,43 +116,51 @@ export class CoreApp extends WebGLSketch {
             this.vfx.needsBGUpdate = true;
         });
         
-        console.log('Loading Planets...');
+        if(DEV) console.log('Loading Planets...');
         io.load(window.location.origin + `/assets/data/${PLANETS}`, (res) => {
             const planetsData = JSON.parse(res)
             
             getMinMaxPlanetsA(planetsData);
-
+            
             this.createPlanets(planetsData);
 
-            console.log('Loading Dwarf Planets...');
-            io.load(window.location.origin + `/assets/data/${DWARF_PLANETS}`, (res) => {
-                const dwarfData = JSON.parse(res);
-                this.createDwarfPlanets(dwarfData);
+            if(DEV) console.log('Loading A values...');
+            getMinMaxAByCategory().then(() => {                
+      
+                if(DEV) console.log('Loading Dwarf Planets...');
+                io.load(window.location.origin + `/assets/data/${DWARF_PLANETS}`, (res) => {
+                    const dwarfData = JSON.parse(res);
+                    this.createDwarfPlanets(dwarfData);
 
-                console.log('Loading Solar Elements...');                
-                getSolarSystemElements().then((res) => {
-                    
-                    const d = res.mpcorb;       
-                                       
-                    buildSimWithData(d);
-
-                    console.log('Loading Interactive Solar Elements...');
-                    fetchSolarElements(solarItems).then((res) => {
-
-                        const d = res;
-                        this.createSolarItems(d)
-
-                        loadData(()=> {
-                            this.onDataLoaded();
-                        });
-
-                    })
-        
-                }).catch(() => {
-                    console.error('Database fetch error.')
-                });
+                    if(DEV) console.log('Loading Solar Elements...');                
+                    getSolarSystemElements().then((res) => {
                         
-            });
+                        const d = res.mpcorb;       
+                                        
+                        buildSimWithData(d);
+
+                        if(DEV) console.log('Loading Interactive Solar Elements...');
+                        fetchSolarElements(solarItems).then((res) => {
+
+                            const d = res;                            
+                            this.createSolarItems(d)
+
+                            loadData(()=> {
+                                this.onDataLoaded();
+                            });
+
+                        })
+            
+                    }).catch((err) => {
+                        console.log(err);
+                        
+                        console.error('Database fetch error.')
+                    });
+                            
+                });
+
+            
+            })
 
         });
 
@@ -160,15 +171,19 @@ export class CoreApp extends WebGLSketch {
         css2D.setSize(width, height);
         resizePopups();
 		this.vfx.resize(width, height);
+
 	}
 
     onDataLoaded() {
         
-        console.log('Data Loaded');
+        if(DEV) console.log('Data Loaded');
 
         popupsLoaded();
 
-        // --------------------------------------------- Launch        
+        // --------------------------------------------- Launch      
+        document.querySelector('.site__wrapper').classList.remove('loading');  
+        document.querySelector('.site__wrapper').classList.add('loaded');  
+
         this.launch();
     }
 
@@ -184,7 +199,7 @@ export class CoreApp extends WebGLSketch {
 
 			const planet = new Planet(el.id as PlanetId, mel);
 
-            linkPlanetToPopup(planet, el);
+            linkSolarElementToPopup(planet, el);
             // Remove planets form solar items
             solarItems = solarItems.filter(e => e.elementID !== el.id)
             
@@ -211,7 +226,7 @@ export class CoreApp extends WebGLSketch {
                 color: 0xFA6868
             });
 
-            linkPlanetToPopup(planet, el);
+            linkSolarElementToPopup(planet, el);
             // Remove dwarfs form solar items
             solarItems = solarItems.filter(e => e.elementID !== el.id)
 
@@ -227,19 +242,20 @@ export class CoreApp extends WebGLSketch {
 
         for(const el of d) {
 
-            el.tperi = JD2MJD(el.tperi);
-
+            el.tperi = JD2MJD(el.tperi);            
             const mel = mapOrbitElements(el);
+            
             const category = categories.find(x => x.slug === mel.category);
-            const planet = new SolarElement(el.id, mel, {
+            
+            const solarElement = new SolarElement(el.id, mel, {
                 color: category.mainColor
             });
+            
+            linkSolarElementToPopup(solarElement, el);
 
-            linkPlanetToPopup(planet, el);
-
-            this.solarElements.push(planet);
-            this.scene.add(planet);
-            this.scene.add(planet.orbitPath.ellipse);
+            this.solarElements.push(solarElement);
+            this.scene.add(solarElement);
+            this.scene.add(solarElement.orbitPath.ellipse);
 
         }
     }
@@ -274,7 +290,7 @@ export class CoreApp extends WebGLSketch {
 
         if(DEV) {
 
-            const stats = new Stats();
+            const stats = Stats();
             document.body.appendChild(stats.domElement);
             stats.domElement.style.left = '100px';
 
@@ -296,10 +312,27 @@ export class CoreApp extends WebGLSketch {
 
         this.launched = true;
 
+        
         if(LOCATION.current.id != 'orbit-viewer') {
             this.lock();
             CameraManager.goToTarget(this.sun, true);
+        } else {
+            const element = window['solarSystemSelectedElement'];
+
+            if(element) {
+
+                const url = window.location.pathname.split('/');
+                const clean = url.filter(x => x !== '');           
+
+                window.history.pushState('', '', `/${clean[0]}/${clean[1]}/`)
+
+                setTimeout(() => {
+                    enablePopup(element.elementID);
+                }, 100);
+      
+            }
         }
+    
     }
 
     goToIntroView () {
@@ -341,6 +374,15 @@ export class CoreApp extends WebGLSketch {
         for(let i = 0, len = this.solarElements.length; i < len; i++) {
             this.solarElements[i].visible = value;
         }
+
+    }
+
+    set orbitsVisibility(value:boolean) {     
+
+        for(let i = 0, len = this.solarElements.length; i < len; i++) {
+            if(!this.solarElements[i].orbitPath) continue;
+            this.solarElements[i].orbitPath.hidden = value;            
+        }
     }
 
     set backgroundVisibility(value:boolean) {
@@ -348,7 +390,7 @@ export class CoreApp extends WebGLSketch {
         this.vfx.enableBackground = value;
     }
 
-    clockChanged():boolean {
+    clockChanged():boolean {                
         return (CLOCK_SETTINGS.speed !== this.solarClock.secsPerHour);
     }
 
@@ -356,9 +398,9 @@ export class CoreApp extends WebGLSketch {
 		super.update();
 
 		CameraManager.update();
-
-        if(this.clockChanged())this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
-		const d = this.solarClock.update();
+        
+        if(this.clockChanged()) this.solarClock.secsPerHour = CLOCK_SETTINGS.speed;
+		const d = this.solarClock.update();        
 		
 		particles.update(d, this.camera as PerspectiveCamera);
 		

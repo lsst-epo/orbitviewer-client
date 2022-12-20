@@ -38,7 +38,7 @@ export class ResolutionPanel extends Panel {
 		let active = null;
 		for(const option of this.options){			
 			if(option.checked) active = option;
-		}
+		}		
 		if(!active) return;
 
 		if(active.value === VISUAL_SETTINGS.current) return;
