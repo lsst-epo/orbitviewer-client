@@ -34,27 +34,42 @@
 		<h3>{{ generic[lang].menus['filter-menu'].sections[1] }}</h3>
 
 		<div class="distance-input custom-input" name="distance-range" type="double-range" style="--range-1:0;--range-2:1;">
-			<p>{{ generic[lang].strings.near }}</p>
-			<p>{{ generic[lang].strings.far }}</p>
+			<h4>{{ generic[lang].strings.near }}</h4>
+			<h4>{{ generic[lang].strings.far }}</h4>
 
 			<div class="fake-range"></div>
 
-			<div class="handle handle-1"></div>
-			<div class="handle handle-2"></div>
+			<div class="handle handle-1"><div class="handle-grab"><div class="tooltip"></div></div></div>
+			<div class="handle handle-2"><div class="handle-grab"><div class="tooltip"></div></div></div>
 
-			<input type="range" min="0" max="1" value="0" step="0.01" name="near">
-			<input type="range" min="0" max="1" value="1" step="0.01" name="far">
+			<input type="range" min="0" max="1" value="0" step="0.01" name="first">
+			<input type="range" min="0" max="1" value="1" step="0.01" name="second">
+		</div>
+
+		<div class="discovery-input custom-input" name="discovery-range" type="double-range" style="--range-1:0;--range-2:1;">
+			<h4>1850</h4>
+			<h4>{{ generic[lang].strings.present }}</h4>
+
+			<div class="fake-range"></div>
+
+			<div class="handle handle-1"><div class="handle-grab"><div class="tooltip"></div></div></div>
+			<div class="handle handle-2"><div class="handle-grab"><div class="tooltip"></div></div></div>
+
+			<input type="range" min="0" max="1" value="0" step="0.01" name="first">
+			<input type="range" min="0" max="1" value="1" step="0.01" name="second">
 		</div>
 	</div>
 
 	<div class="bottom-buttons">
 
-		<button data-button="filters-apply" class="ui__button">
+		<button data-button="filters-apply" class="ui__button button__icon icon-right">
 			<p>{{ generic[lang].menus['filter-menu']['apply-filter'] }}</p>
+			{% include "ui/icons/arrow-next.njk" %}
 		</button>
 
-		<button data-button="filters-reset" class="ui__button ghost-button">
+		<button data-button="filters-reset" class="ui__button ghost-button button__icon icon-right">
 			<p>{{ generic[lang].menus['filter-menu']['reset-filter'] }}</p>
+			{% include "ui/icons/reset.njk" %}
 		</button>
 
 	</div>

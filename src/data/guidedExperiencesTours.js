@@ -12,7 +12,7 @@ async function getPage() {
 					seoTitle
 					seoDescription
 					seoImage {
-						url(quality: 90)
+						url(quality: 95, width: 500)
 					}
 					id
 					title
@@ -21,6 +21,10 @@ async function getPage() {
 						title
 						slug
 					}
+					tourPreview {
+							url(quality: 95, width: 500)
+					}
+					duration
 					complexity
 					flexible {
 						... on flexible_introSlide_BlockType {
@@ -35,10 +39,29 @@ async function getPage() {
 								slideTitle
 								subTitle
 								slideContent
+								closeUp {
+									... on elements_default_Entry {
+										elementID
+									}
+								}
 						}
 						... on flexible_funFactSlide_BlockType {
 								typeHandle
 								slideContent
+						}
+							... on flexible_shareSlide_BlockType {
+								typeHandle
+								slideTitle
+								slideText
+								linksTitle
+								Link1
+								link1Text
+								link2
+								link2Text
+								link3
+								link3Text
+								link4
+								link4Text
 						}
 					}
 				}

@@ -4,6 +4,7 @@ pageTemplate: index
 eleventyComputed:
   title: "{{ landing[lang].seoTitle }}"
   description: "{{ landing[lang].seoDescription }}"
+  image: "{{ landing[lang].seoImage }}"
 ---
 
 {% include "pages/index.njk" %}

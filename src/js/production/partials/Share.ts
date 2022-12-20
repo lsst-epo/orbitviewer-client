@@ -3,7 +3,7 @@ import { getLanguage } from "../pagination/PagesRecap";
 
 
 export const shareInit = (dom:HTMLElement) => {
-	console.log('Share ready');
+	// console.log('Share ready');
 
 	const mail = dom.querySelectorAll('.share-button.email') as NodeListOf<HTMLLinkElement>;
 	for(const link of mail) shareEmail(link);
@@ -16,20 +16,23 @@ export const shareInit = (dom:HTMLElement) => {
 
 	const fb = dom.querySelectorAll('.share-button.facebook') as NodeListOf<HTMLLinkElement>;
 	for(const link of fb) shareFacebook(link);
+
+	const urlSolarItems = dom.querySelectorAll('.popup-info .copy-button') as NodeListOf<HTMLLinkElement>;
+	for(const link of urlSolarItems) shareURL(link, true);
 	
 	
 }
 
 const shareFacebook = (dom:HTMLLinkElement) => {
 	const text = dom.getAttribute('data-text');
-	dom.removeAttribute('data-text');
-	dom.setAttribute('href', `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${getLanguage()}&quote=${text}`) 
+	dom.removeAttribute('data-text');	
+	dom.setAttribute('href', `https://www.facebook.com/sharer/sharer.php?quote=${text}&u=${window.location.href}`) 
 }
 
 const shareTwitter = (dom:HTMLLinkElement) => {
 	const text = dom.getAttribute('data-text');
 	dom.removeAttribute('data-text');
-	dom.setAttribute('href', `http://twitter.com/share?text=${text}&url=${window.location.origin}/${getLanguage()}`) // &hashtags=hashtag1,hashtag2,hashtag3
+	dom.setAttribute('href', `http://twitter.com/share?text=${text}&url=${window.location.href}`) // &hashtags=hashtag1,hashtag2,hashtag3
 }
 
 const shareEmail = (dom:HTMLLinkElement) => {
@@ -40,17 +43,17 @@ const shareEmail = (dom:HTMLLinkElement) => {
 	dom.removeAttribute('data-subject');
 	dom.removeAttribute('data-body');
 
-	dom.setAttribute('href', `mailto:?subject=${subject};body=${body} ${window.location.origin}/${getLanguage()}`)
+	dom.setAttribute('href', `mailto:?subject=${subject};body=${body} ${window.location.href}`)
 }
 
-const shareURL = (dom:HTMLLinkElement) => {
+const shareURL = (dom:HTMLLinkElement, solarItem:boolean = false) => {
+
+	const url = solarItem ?`${window.location.origin}/${getLanguage()}/orbit-viewer/${dom.getAttribute('data-id')}` : `${window.location.href}`
 
 	dom.addEventListener('click', () => {
 		copied(dom);
-		copyToClipboard(`${window.location.origin}/${getLanguage()}`)
+		copyToClipboard(url)
 	})
-
-
 }
 
 const copied = (dom:HTMLLinkElement) => {

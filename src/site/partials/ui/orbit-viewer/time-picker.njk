@@ -1,10 +1,62 @@
 {% from 'ui/panel-times.njk' import panelTimes as panelTimes %}
 
-<div class="time-picker">
-	<button data-panel-button="time-picker" class="orbit-button" data-animation-type="control-bottom">
-		{% include "ui/icons/time-picker.njk" %}
-	</button>
+<div class="timer" state="0" data-animation-type="fade" style="--thumb-x:0.5">
+	<div class="timer-range"  data-animation-type="control-fade" >
+		<div class="timer-labels">
+			<p>{{ generic[lang].strings.past }}</p>		
+			<p>{{ generic[lang].strings.future }}</p>
+		</div>
+		<div class="fake-range">
+
+			{% include "ui/icons/time-picker-chevs.njk" %}
+
+			<div class="timer-icon">
+				{% include "ui/icons/time-picker.njk" %}
+			</div>
+
+		</div>
+
+		<input type="range" min="-1" max="1" step="0.00001" name="time-picker-range" data-timer="1">
+	</div>
 </div>
+
+
+<div class="panel panel-bottom-center" data-panel="time-picker-subpanel">
+
+	<div class="panel-section">
+		<div class="sub-panel">
+			<div class="input-wrapper date-picker custom-input" name="date-picker" data-date="1">
+
+					<input type="date" min="1900-01-01" max="2100-01-01">
+
+					<div class="date-item">
+						<p>{{ generic[lang].strings.day }}</p>
+						<h4 data-empty="DD"></h4>
+					</div>
+					<div class="date-item">
+						<p>{{ generic[lang].strings.month }}</p>
+						<h4 data-empty="MM"></h4>
+					</div>
+					<div class="date-item">
+						<p>{{ generic[lang].strings.year }}</p>
+						<h4 data-empty="{% if lang == 'en' %}YYYY{% else %}AAAA{% endif %}"></h4>
+					</div>
+
+			</div>
+
+			<div class="buttons-wrapper">
+
+				<button data-button="apply-date" class="ui__button grey-button">{{ generic[lang]['strings']['go-date'] }}</button>
+
+				<button data-button="close-edit" class="ui__button ghost-button">{{ generic[lang].strings.cancel }}</button>
+
+			</div>
+			
+		</div>
+	</div>
+
+</div>
+
 
 <div class="panel panel-bottom-center" data-panel="time-picker">
 
@@ -17,25 +69,8 @@
 		<p>{{ generic[lang]['strings']['date-explanation'] }}</p>
 	</div>
 
-	<div class="panel-section time-picker-input-wrapper">
-
-		<div class="time-picker-input">
-			
-			<p>{{ generic[lang].strings.past }}</p>		
-			<p>{{ generic[lang].strings.future }}</p>
-			<input type="range" min="-1" max="1" step="0.00001" class="custom-input" name="time-picker-range" data-timer="1">
-			{% include "ui/icons/time-picker-chevs.njk" %}
-
-		</div>
-
-		<div class="time-picker-icon-wrapper">
-			<div class="time-picker-icon">
-				<div class="bg"></div>
-				{% include "ui/icons/time-picker.njk" %}
-			</div>
-
-		</div>
-
+	<div class="panel-section timer-spacer">
+		{# Time picker spacing #}
 	</div>
 
 	<div class="panel-section time-picker-details">
@@ -46,36 +81,6 @@
 			<button class="ui__button-small" data-timer="reset">{{ generic[lang].strings.reset }}</button>
 			<button class="ui__button-small" data-timer="edit">{{ generic[lang].strings.edit }}</button>
 		</div>
-	</div>
-
-	<div class="sub-panel">
-		<div class="input-wrapper date-picker custom-input" name="date-picker" data-date="1">
-
-				<input type="date">
-
-				<div class="date-item">
-					<p>{{ generic[lang].strings.day }}</p>
-					<h4 data-empty="DD">DD</h4>
-				</div>
-				<div class="date-item">
-					<p>{{ generic[lang].strings.month }}</p>
-					<h4 data-empty="MM"></h4>
-				</div>
-				<div class="date-item">
-					<p>{{ generic[lang].strings.year }}</p>
-					<h4 data-empty="{% if lang == 'en' %}YYYY{% else %}AAAA{% endif %}"></h4>
-				</div>
-
-		</div>
-
-		<div class="buttons-wrapper">
-
-			<button data-button="apply-date" class="ui__button grey-button">{{ generic[lang]['strings']['go-date'] }}</button>
-
-			<button data-button="close-edit" class="ui__button ghost-button">{{ generic[lang].strings.cancel }}</button>
-
-		</div>
-		
 	</div>
 
 </div>

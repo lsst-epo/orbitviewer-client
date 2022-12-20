@@ -2,7 +2,10 @@ import { MathUtils } from "@jocabola/math";
 import { Vector3 } from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CameraManager } from "../../../common/core/CameraManager";
+import { SolarCategory } from "../../../common/data/Categories";
+import { addFiltersListener, filters, FiltersListener } from "../../../common/data/FiltersManager";
 import { InteractiveObject } from "../../../common/solar/SolarElement";
+import { LOCATION } from "../../pagination/History";
 import { css2D } from "./Css2D";
 import { enablePopup } from "./PopupsManager";
 
@@ -11,6 +14,7 @@ export class PopupLabel {
 	css2DElement: CSS2DObject;
 
 	name: string; 
+	category: SolarCategory;
 
 	container: HTMLElement;
 	ref: InteractiveObject;
@@ -34,6 +38,7 @@ export class PopupLabel {
 
 	loaded(){
 		this.addEventListeners();
+		if(LOCATION.current.id === 'orbit-viewer') this.dom.classList.remove('hidden');
 	}
 
 	addEventListeners(){
@@ -47,7 +52,7 @@ export class PopupLabel {
 	select(){
 		this.ref.selected = true;
 		this.dom.classList.add('selected');
-		// if(this.ref.closeUp) CameraManager.goToTarget(this.ref);
+		if(this.ref.closeUp) this.dom.classList.add('no-info-hidden');		
 		CameraManager.goToTarget(this.ref, false, !this.ref.closeUp);
 	}
 
@@ -58,6 +63,9 @@ export class PopupLabel {
 
 	update(){		
 		if(!!!this.ref) return;
+
+		if(LOCATION.current.id === 'orbit-viewer') this.dom.classList.remove('hidden');
+		else this.dom.classList.add('hidden');
 
 		this.css2DElement.position.copy(this.ref.position);
 

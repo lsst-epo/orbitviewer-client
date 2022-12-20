@@ -9,5 +9,6 @@ permalink: "/{{ lang }}/{{ tour.slug | slug }}/"
 eleventyComputed:
   title: "{{ tour[lang].seoTitle }}"
   description: "{{ tour[lang].seoDescription }}"
+  image: "{{ tour[lang].seoImage }}"
 ---
 {% include "pages/tours.njk" %}

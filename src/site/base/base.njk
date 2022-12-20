@@ -16,10 +16,14 @@
 
 	<body class="{{ 'en-site' if lang == 'en' else 'es-site'}}" style="opacity:0;">
 
-		<div class="site__wrapper">
+		<div class="site__wrapper loading">
 
 			{% block content %}
-				<main data-template="{{ pageTemplate }}" class="page__content">
+				<main data-template="{{ pageTemplate }}" class="page__content">					
+					{% if pageTemplate != 'index' and pageTemplate != 'customize-orbits' %} 
+						{# NAVIGATION #}
+						{% include 'navigation/navigation.njk' %}
+					{% endif %}
 					{{ content | safe }}
 				</main>
 			{% endblock %}

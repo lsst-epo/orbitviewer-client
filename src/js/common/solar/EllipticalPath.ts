@@ -5,7 +5,10 @@ import { PLANET_SCALE } from "./Planet";
 import { calculateOrbitByType, OrbitElements, OrbitType } from "./SolarSystem";
 import { SolarTimeManager } from "./SolarTime";
 
-const MIN_DISTANCE = 5;
+const MIN_DISTANCE = {
+    min: .1,
+    max: 5
+};
 const MIN_POINTS = 10;
 
 /**
@@ -31,9 +34,9 @@ export class EllipticalPath {
         // build path
         const date = new Date();
         const first = new Vector3();
-
+        
         if(el.type != OrbitType.Elliptical) {
-            console.warn("Object does not have an elliptical orbit");
+            console.warn("Object does not have an elliptical orbit", el);
         }
 
         this.type = el.type;
@@ -41,6 +44,7 @@ export class EllipticalPath {
         this.orbitElements = el;
 
         if(el.type === OrbitType.Elliptical) {
+            
             let d = SolarTimeManager.getMJDonDate(date);
             calculateOrbitByType(el, d, OrbitType.Elliptical, first);
             this.pts.push(first);
@@ -51,10 +55,24 @@ export class EllipticalPath {
 
             let curr = new Vector3();
             calculateOrbitByType(el, ++d, OrbitType.Elliptical, curr);
-            const minD = MIN_DISTANCE * el.a;
+
+            const ed = MathUtils.smoothstep(.9, .95, el.e);
+            const dist = MathUtils.lerp(
+                MIN_DISTANCE.min,
+                MIN_DISTANCE.max,
+                1-ed
+            );
+            const step = MathUtils.lerp(
+                .05,
+                1,
+                1-ed
+            );
+
+            const minD = dist * el.a;
             while(this.pts.length < MIN_POINTS || curr.distanceTo(this.pts[0]) > minD) {
                 while(curr.distanceTo(this.pts[this.pts.length-1]) < minD) {
-                    calculateOrbitByType(el, ++d, OrbitType.Elliptical, curr);
+                    d += step;
+                    calculateOrbitByType(el, d, OrbitType.Elliptical, curr);
                 }
 
                 dt.push(d-pD);
@@ -64,7 +82,7 @@ export class EllipticalPath {
 
             const pos = [];
             const weight = [];
-            let k = 0;
+            let k = 0;            
 
             for(const p of this.pts) {
                 pos.push(p.x, p.y, p.z);
@@ -76,6 +94,10 @@ export class EllipticalPath {
             pos.push(p.x, p.y, p.z);
             weight.push(0);
             dt.push(0);
+
+            /* if(el.e > .94) {
+                // console.log(this.pts.length, el.a, dist);
+            } */
 
             const geo = new BufferGeometry();
             geo.setAttribute(
@@ -115,7 +137,7 @@ export class EllipticalPath {
             geo.computeBoundingBox();
             this.boundingBox = geo.boundingBox;
 
-            const dR = Math.min(r/20, .000025) / PLANET_SCALE;
+            const dR = MathUtils.lerp(.001, 1, 1-ed) * Math.min(r/20, .000025) / PLANET_SCALE;          
 
             for (let i=0; i<20; i++) {
                 const l1 = new Line(geo, mat);
@@ -134,6 +156,7 @@ export class EllipticalPath {
                 this.ellipse.add(l4);
                 l4.position.set(0, 0, -dR*i); 
             }
+            
         } else {
             this.boundingBox = new Box3(
                 new Vector3(),
@@ -146,6 +169,7 @@ export class EllipticalPath {
 
     update(d:number, target:Vector3, radius:number) {
         if(this.type !== OrbitType.Elliptical) return;
+        
         const mat = this.material;
         if(mat.shader) {
             mat.shader.uniforms.d.value = d;

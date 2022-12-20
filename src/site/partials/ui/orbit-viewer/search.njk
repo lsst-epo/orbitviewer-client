@@ -10,9 +10,7 @@
 			<input type="text" placeholder="{{ generic[lang]['strings']['search-placeholder'] }}">
 		
 			<button class="search-reset">
-
 				{% include "ui/icons/times-circle.njk" %} 
-
 			</button>
 
 		</div>
@@ -20,13 +18,21 @@
 		<button class="search-cancel">
 			<p>{{ generic[lang].strings.cancel }}</p>
 		</button>
+
+		<div class="search-results">
+			<p class="no-results">{{ generic[lang].strings['no-results'] }}</p>
+			
+			<div class="button-wrapper">
+				<button data-button="random-search" class="ui__button">
+					<p>{{ generic[lang]['strings']['search-random'] }}</p>
+				</button>		
+			</div>	
+		</div>
+
+
+
 	</div>
-</div>
-
-<div class="search-panel">
-
-	<button data-button="random-search" class="ui__button">
-		<p>{{ generic[lang]['strings']['search-random'] }}</p>
-	</button>
 
 </div>
+
+<div class="search-bg"></div>

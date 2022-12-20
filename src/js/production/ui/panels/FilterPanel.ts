@@ -1,9 +1,10 @@
-import { addFiltersListener, applyFilters, FiltersListener, syncFilters } from "../../../common/data/FiltersManager";
+import { addFiltersListener, applyFilters, FiltersListener, resetFilters, syncFilters } from "../../../common/data/FiltersManager";
 import { Panel } from "./Panel";
 
 
 export class FilterPanel extends Panel implements FiltersListener {
 	buttonApply:HTMLButtonElement;
+	buttonReset:HTMLButtonElement;
 	filters:NodeListOf<HTMLInputElement>
 
 	constructor(id){
@@ -17,6 +18,7 @@ export class FilterPanel extends Panel implements FiltersListener {
 		syncFilters(this.filters);
 
 		this.buttonApply = this.dom.querySelector('[data-button="filters-apply"]');
+		this.buttonReset = this.dom.querySelector('[data-button="filters-reset"]');
 	}
 
 	addEventListeners(): void {
@@ -24,6 +26,9 @@ export class FilterPanel extends Panel implements FiltersListener {
 
 		this.buttonApply.addEventListener('click', () => {
 			this.applyFilters();
+		})
+		this.buttonReset.addEventListener('click', () => {
+			this.resetFilters();
 		})
 
 	}
@@ -37,6 +42,10 @@ export class FilterPanel extends Panel implements FiltersListener {
 
 	applyFilters(){
 		applyFilters(this.filters);
+	}
+
+	resetFilters(): void {
+		resetFilters();
 	}
 
 	syncFilters(): void {

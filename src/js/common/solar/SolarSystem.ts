@@ -12,6 +12,8 @@ export const KM2AU = 6.6846e-9;
 export const AU2KM = 1 / KM2AU;
 export const SUN_RADIUS = 695700; // in KM
 
+export const EPOCH = 51445.5;
+
 export type OrbitElements = {
     id:string;
     fulldesignation: string;
@@ -27,6 +29,7 @@ export type OrbitElements = {
     n:number;
     q?:number;
     Tp?:number;
+    epoch?:number;
     type:OrbitType;
     category:SolarCategory;
 }
@@ -54,6 +57,7 @@ export function cloneOrbitElements(src:OrbitElements):OrbitElements {
         n: src.n,
         q: src.q,
         Tp: src.Tp,
+        epoch: src.epoch,
         type: src.type,
         category: src.category
     }
@@ -92,16 +96,18 @@ export function calculateOrbit(el:OrbitElements, d:number, target:Vector3= new V
     return calculateOrbitByType(el, d, el.type, target);
 }
 
-function getMeanAnomaly(id:PlanetId, d:number):number {
+function getPlanetMeanAnomaly(id:PlanetId, d:number):number {
     const el = PlanetDataMap[id];
     if(el === null) return 0;
-    return (el.M + el.n * d) * DEG_TO_RAD;
+    const epoch = el.epoch || 0;
+    return (el.M + el.n * (d-epoch)) * DEG_TO_RAD;
 }
 
 export function keplerCalc(el:OrbitElements, d:number, target:Vector3= new Vector3()):Vector3 {
     // Mean Anomally and Eccentric Anomally
     const e = el.e;
-    const M = (el.M + el.n * d) * DEG_TO_RAD;
+    const epoch = el.epoch != undefined ? el.epoch : EPOCH;
+    const M = (el.M + el.n * (d-epoch)) * DEG_TO_RAD;
     let E = M + e * Math.sin(M) * ( 1.0 + e * Math.cos(M) );
 
     // E convergence check
@@ -127,9 +133,9 @@ export function keplerCalc(el:OrbitElements, d:number, target:Vector3= new Vecto
 
     if(el.id === 'jupiter' || el.id === 'saturn' || el.id === 'uranus') {
         // ---  Perturbations ----
-        const Mj = getMeanAnomaly('jupiter', d);
-        const Ms = getMeanAnomaly('saturn', d);
-        const Mu = getMeanAnomaly('uranus', d);
+        const Mj = getPlanetMeanAnomaly('jupiter', d);
+        const Ms = getPlanetMeanAnomaly('saturn', d);
+        const Mu = getPlanetMeanAnomaly('uranus', d);
 
         getCartesianCoordinates(v, r, el, target, false);
 
@@ -246,4 +252,15 @@ export function hyperbolicCalc(el:OrbitElements, d:number, target:Vector3) {
     const r = a * ( 1 - e*e ) / ( 1 + e * Math.cos(v) );
 
     return getCartesianCoordinates(v, r, el, target);
+}
+
+export function getMeanAnomaly(el:OrbitElements, d:number):number {
+    if(el.type === OrbitType.Hyperbolic) {
+        const a = el.a;
+        const dT = el.Tp;
+        return (d-dT) / (-a)**1.5;
+    }
+
+    const epoch = el.epoch != undefined ? el.epoch : EPOCH;
+    return el.M + el.n * (d-epoch);
 }

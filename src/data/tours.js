@@ -9,6 +9,11 @@ async function getPage() {
   const content = `
       title
       slug
+      ... on tours_Category {
+        tourPreview {
+          url(quality: 95, width: 1200)
+        }
+      }
   `;
 
   for(let i = 1; i <= 2; i++){

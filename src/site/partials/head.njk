@@ -1,12 +1,11 @@
-{# {% set featuredImage = settings.seo.seo_image %}
-{% if image %}
-	{% set featuredImage = image.asset %}
-{% endif %} #}
+{% set featuredImage = globals[lang].seo.seoImage[0].url  %}
+{% if image.length %}
+	{% set featuredImage = image[0].url %}
+{% endif %}
 
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 	<title>{{ globals[lang].seo.seoSiteName}} {{ title or globals[lang].seo.seoTitle }}</title>
 	<meta name="Description" content="{{ description or globals[lang].seo.seoDescription }}">
@@ -18,12 +17,11 @@
 	<meta property="og:url" content="{{ '/' | url }}">
 	<meta property="og:type" content="website">
 	<meta property="og:title" content="{{ title or globals[lang].seo.seoTitle }}">
-	{# <meta property="og:image" content="{% imageUrlFor featuredImage, 600 %}" /> #}
+	<meta property="og:image" content="{{ featuredImage | imageUrl }}" />
 	<meta property="og:description" content="{{ description or globals[lang].seo.seoDescription }}" />
 	<meta property="og:site_name" content="{{ globals[lang].seo.seoTitle }}">
 	<meta property="og:locale" content="en_US">
 
-	{# FAVICON MISSING! #}
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ '/' | url }}assets/favicon/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="{{ '/' | url }}assets/favicon/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="{{ '/' | url }}assets/favicon/favicon-16x16.png">

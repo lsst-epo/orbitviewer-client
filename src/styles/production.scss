@@ -22,14 +22,13 @@
 @import './production/ui/filters';
 @import './production/ui/share-buttons';
 @import './production/ui/inputs/radio';
+@import './production/ui/navigation';
 
 @import './production/animations';
 
 
 // Orbit viewer
 @import './production/ui/orbit-viewer/panel';
-@import './production/ui/orbit-viewer/navigation';
-@import './production/ui/orbit-viewer/back-button';
 @import './production/ui/orbit-viewer/search';
 @import './production/ui/orbit-viewer/filters';
 @import './production/ui/orbit-viewer/customize-view';
@@ -57,9 +56,6 @@
 
 main {
 	z-index: $mainContentIndex;
-
-	color: var(--white-0);
-
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -75,20 +71,22 @@ main {
 
 html {
 	background-color: var(--black-0);
+	color: var(--white-0);
 }
 
+.loading {
+	opacity: 0.5;
+	transition: opacity 0.5s ease-in-out;
+	&, * {
+		pointer-events: none;
+	}
+}
+.loaded {
+	opacity: 1;
+}
 
 .to-front {
 	z-index: $toFrontIndex;
-}
-
-.view {
-	transition: opacity 0.5s ease-in-out;
-	opacity: 0;
-
-	&.loaded {
-		opacity: 1;
-	}
 }
 
 .page__content.disabled {

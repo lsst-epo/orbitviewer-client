@@ -1,15 +1,25 @@
 import gsap from "gsap";
 import { CameraManager } from "../../../common/core/CameraManager";
 import { CoreAppSingleton, solarClock } from "../../../common/core/CoreApp";
+import { DEV } from "../../../common/core/Globals";
 import { SolarElement } from "../../../common/solar/SolarElement";
 import { OrbitDataElements } from "../../../common/solar/SolarUtils";
 import { OrbitControlsIn, OrbitControlsOut } from "../../pagination/animations/OrbitControls";
 import { LOCATION } from "../../pagination/History";
+import { shareInit } from "../../partials/Share";
 import { broadcastPanelsClose } from "../panels/PanelsManager";
 import { PopupInfo } from "./PopupInfo";
 import { PopupLabel } from "./PopupLabel";
 
-export const popups: Array<{name: string, visible: boolean, category: string, label: PopupLabel, info: PopupInfo}> = [];
+export interface PopupInterface {
+ name: string, 
+ visible: boolean, 
+ category: string, 
+ label: PopupLabel, 
+ info: PopupInfo
+}
+
+export const popups: Array<PopupInterface> = [];
 
 export const initPopups = () => {;
 
@@ -35,15 +45,24 @@ export const initPopups = () => {;
 		});
 		
 	}
+
+	shareInit(document.querySelector('.popups-infos'));
+
 }
 
-export const linkPlanetToPopup = (solarElement:SolarElement, data:OrbitDataElements) => {
-	const popup = popups.find(x => x.name === solarElement.name);            
-	if(popup) {
-		popup.category = solarElement.category;
-		popup.label.ref = solarElement;
-		popup.info.data = data;
+export const linkSolarElementToPopup = (solarElement:SolarElement, data:OrbitDataElements) => {
+	const popup = popups.find(x => x.name === solarElement.name);        
+	    
+	if(!popup) {
+		if(DEV) console.log('No popup by this name', solarElement.name);
+		return;
 	}
+
+	const cmsCategory = popup.label.dom.getAttribute('data-category');
+	solarElement.category = cmsCategory;
+	popup.category = solarElement.category;
+	popup.label.ref = solarElement;
+	popup.info.data = data;
 }
 
 export const popupsLoaded = () => {
@@ -54,28 +73,36 @@ export const popupsLoaded = () => {
 	}
 }
 
-export function enablePopup(name: string) {
+export function enablePopup(name: string, info: boolean = true) {
 	
 	CoreAppSingleton.instance.lock();
-
+	
 	solarClock.pause();
 	broadcastPanelsClose();
 
 	const popup = popups.find(x => x.name === name);
 	if(!popup) return
 	popup.label.select();
-	popup.info.show(popup.label.ref.closeUp);
-	if(!popup.label.ref.closeUp) document.body.classList.add('popups-no-closeup');
-	else document.querySelector('.popups-labels').classList.add('hidden');
 
-	document.body.classList.add('popups-active');
+	if(info) {
+		popup.info.show(popup.label.ref.closeUp);
+	} 
+		
+	for(const _popup of popups){
+		if(_popup === popup) continue;
+		_popup.label.dom.classList.add('other-selected-hidden');
+	}
+
+	document.body.classList.add('popups-selected');
 
 	hideUI();
 }
 
 export function disablePopup() {	
 	
-	for(const popup of popups) {		
+	for(const popup of popups) {	
+		popup.label.dom.classList.remove('other-selected-hidden')	
+		popup.label.dom.classList.remove('no-info-hidden')	
 		popup.label.unselect();
 		popup.info.hide();
 	}
@@ -83,18 +110,19 @@ export function disablePopup() {
 	CameraManager.unlock();
 	CoreAppSingleton.instance.unlock();
 
-	solarClock.resume();
+	solarClock.resume()
 
-	document.querySelector('.popups-labels').classList.remove('hidden');
-	document.body.classList.remove('popups-active');
-	document.body.classList.remove('popups-no-closeup');
+	document.body.classList.remove('popups-selected');
+
 
 	showUI();
 }
 
 export const updatePopups = () => {
 	for(const popup of popups) {
-		popup.label.visible = popup.visible;
+		if(popup.visible) popup.label.dom.classList.remove('hidden')
+		else popup.label.dom.classList.add('hidden')
+
 		popup.label.update();
 	}
 }
@@ -103,15 +131,6 @@ export const resizePopups = () => {
 	for(const popup of popups) {
 		// popup.label.onResize();
 		popup.info.onResize();
-	}
-}
-
-export const applyAFieldToPopups = () => {
-	// Already did that with fake data
-	// Todo
-	return;
-	for(const popup of popups){
-		popup.info.addAData();
 	}
 }
 
