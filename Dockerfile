@@ -2,7 +2,7 @@ FROM node:16-alpine AS builder
 WORKDIR /app
 COPY . /app
 
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat yarn
 # RUN yarn --frozen-lockfile
 RUN yarn
 WORKDIR /app/server
