@@ -12,7 +12,8 @@ const mkdirp = require('mkdirp');
 
 const fil = `\u001b[1;35m[fil] `;
 
-const targets = ['production', 'editor'];
+// const targets = ['production', 'editor'];
+const targets = ['production'];
 
 const env = process.env.ELEVENTY_ENV ? process.env.ELEVENTY_ENV.split(':') : [];
 const isProduction = env.indexOf('production') > -1;
