@@ -2,15 +2,16 @@ FROM node:16-alpine AS builder
 WORKDIR /app
 COPY . /app
 
-RUN apk add --no-cache libc6-compat yarn
-# RUN yarn --frozen-lockfile
-RUN yarn
+RUN apk add --no-cache libc6-compat
+
+RUN npm ci
+
 WORKDIR /app/server
-# RUN yarn --frozen-lockfile
-RUN yarn
+RUN npm ci
+
 WORKDIR /app
 
-RUN yarn build
+RUN npm run build
 
 # Production image, copy all the files and run next
 FROM node:16-alpine AS runner
@@ -20,4 +21,4 @@ COPY --from=builder /app/ ./
 
 EXPOSE 8080
 
-CMD ["yarn", "server"]
+CMD ["npm", "run", "server"]
