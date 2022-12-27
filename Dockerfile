@@ -3,11 +3,11 @@ WORKDIR /app
 COPY . /app
 
 RUN apk add --no-cache libc6-compat yarn
-# RUN yarn --frozen-lockfile
-RUN yarn
+RUN yarn --frozen-lockfile
+
 WORKDIR /app/server
-# RUN yarn --frozen-lockfile
-RUN yarn
+RUN yarn --frozen-lockfile
+
 WORKDIR /app
 
 RUN yarn build
