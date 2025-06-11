@@ -52,7 +52,7 @@ jobs:
         project_id: ${{ steps.deploy-info.outputs.environment_project_id }}
     
     - name: Get app.yaml
-      run: gcloud secrets versions access latest --secret=orbitviewer-api-appyaml > app.yaml
+      run: gcloud secrets versions access latest --secret=orbitviewer-client-appyaml > app.yaml
 
     - name: Deploy to App Engine
       run: |
