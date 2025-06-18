@@ -1,5 +1,6 @@
 import { Size } from "@jocabola/gfx";
 import { isMobile } from "@jocabola/utils";
+require('dotenv').config();
 
 /**
  * DEV_MODE is injected by esbuild
