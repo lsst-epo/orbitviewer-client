@@ -78,19 +78,19 @@ export class VFXRenderer {
         this.sceneRT['depthTexture'].format = DepthFormat;
 
         this.blur = new BlurPass(this.sceneRT.texture[0],w, h, {
-            scale: .5,
+            scale: .8,
             radius: 1,
-            iterations: 4,
+            iterations: 3,
             quality: 2
         });
         this.dofRT = new WebGLRenderTarget(w, h);
         // this.dofRT['samples'] = 4;
 
         this.glow = new BlurPass(this.sceneRT.texture[1],w, h, {
-            scale: .3,
+            scale: .4,
             radius: 1,
             iterations: 8,
-            quality: 0
+            quality: 2
         });
     }
 

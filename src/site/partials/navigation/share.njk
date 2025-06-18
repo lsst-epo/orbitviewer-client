@@ -1,4 +1,4 @@
-<div class="panel" data-panel="share-nav">
+<div class="panel" data-panel="share-nav-{{ pageTemplate }}">
 
 	<div class="panel-top panel-separator">
 
@@ -7,7 +7,7 @@
 			<h2>{{ generic[lang].menus['share-menu'].subtitle }}</h2>
 		</div>
 
-		{{ panelTimes('share-nav') }}
+		{{ panelTimes('share-nav-'+pageTemplate) }}
 
 	</div>
 

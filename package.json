@@ -6,11 +6,12 @@
 	"scripts": {
 		"server": "node ./server/server.js",
 		"server-kill": "pkill node",
-		"dev": "yarn glsl && eleventy --serve --watch",
-		"dev-local": "yarn clean && yarn glsl && cross-env ELEVENTY_ENV=localhost eleventy --serve --watch",
-		"build": "yarn glsl && cross-env ELEVENTY_ENV=production eleventy",
+		"dev": "npm run glsl && eleventy --serve --watch",
+		"dev-local": "npm run clean && npm run glsl && cross-env ELEVENTY_ENV=localhost eleventy --serve --watch",
+		"build": "npm run glsl && cross-env ELEVENTY_ENV=production eleventy",
 		"clean": "node ./utils/clean.js",
-		"reset": "yarn clean && yarn build && yarn dev",
+		"publish-dev": "curl -X POST -d '{}' https://api.netlify.com/build_hooks/6347e9f0e7c33a09fbf33383",
+		"reset": "npm run clean && npm run build && npm run dev",
 		"updateData": "node ./database/server.js",
 		"glsl": "node utils/gen_glsl_includes"
 	},

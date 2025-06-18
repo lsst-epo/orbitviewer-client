@@ -12,6 +12,7 @@
 
 	--teal-0: #009fa1;			// Crec que només per les icones de share?
 	--teal-1: #058b8c;
+	--teal-1-2: #016060;
 	--teal-2: #0c4a47;				// Icones actives clicked
 
 	--red-0: #ed4c4c; 				// Banderoles
@@ -46,7 +47,7 @@
 
 	// Panels sizes
 	--default-max-width: 420px;
-	--time-picker-max-width: 500px;
+	--time-picker-max-width: min(100vw, 620px);
 	
 	--panels-border: 1px solid rgba(255, 255, 255, 0.1);
 }

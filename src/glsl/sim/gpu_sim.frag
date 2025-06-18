@@ -7,9 +7,12 @@ flat in OrbitElements els;
 in float isActive;
 
 void main() {
-    if(isActive == 0.0) discard;
-
-    vec3 pos = computePosition(els, d);
+    vec3 pos;
+    if(isActive == 0.0) {
+        pos = vec3(1000000.0);
+    } else {
+        pos = computePosition(els, d);
+    }
 
     gl_FragColor = vec4(pos, 1.0);
     // gl_FragColor = vec4(vec3(1.0), 1.0);

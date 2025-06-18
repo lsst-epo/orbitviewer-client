@@ -3,21 +3,35 @@
 	height: auto;
 	z-index: 1;
 
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
 	position: absolute;
 	top: 50%;
 	left: 20px;
 	transform: translate(0,-50%);
 
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	align-items: center;
-
 	opacity: 0;
 	transition: opacity 1s ease-in-out;
 
-	&, * {
-		pointer-events: none;
+	&:not(.active){
+		&, * {
+			pointer-events: none !important;
+		}
+	}
+
+	.popup-scrolling {
+		width: 100%;
+		height: auto;
+		max-height: 100vh;
+		pointer-events: all;
+
+		// display: flex;
+		// justify-content: center;
+		// flex-direction: column;
+		// align-items: center;
+		overflow-y: auto;
 	}
 
 	.close-item {
@@ -32,7 +46,7 @@
 		top: 0;
 		right: 0;
 
-		transform: translate(50%, -50%);
+		transform: translate(50%, 0%);
 
 		cursor: pointer;
 
@@ -56,6 +70,10 @@
 				stroke: var(--white-1);
 			}
 		}
+	}
+
+	.popup-title {
+		padding: 0.1em;
 	}
 
 	.cover {
@@ -160,7 +178,7 @@
 			}
 
 			.ui__button {
-				margin-top: var(--distance-10);
+				margin-top: var(--distance-20);
 				color: var(--white-0);
 			}
 
@@ -212,6 +230,10 @@
 .popup-info.active {
 	transition-delay: 4s;
 
+	&.no-closeup {
+		transition-delay: 2s;
+	}
+
 	opacity: 1;
 	z-index: 2;
 
@@ -228,9 +250,6 @@
 		}
 	}
 }
-.popups-no-closeup .popup-info.active {
-	transition-delay: 2s;
-}
 
 .portrait .popup-info {
 	left: 50%;
@@ -242,8 +261,7 @@
 	max-width: 300px;
 	width: calc(100% - var(--distance-30));
 
-	.close-item{
-		right: 50%;
+	.close-item {
 		width: 40px;
 		height: 40px;
 	}

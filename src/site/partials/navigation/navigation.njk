@@ -1,15 +1,15 @@
 {% from 'ui/panel-times.njk' import panelTimes as panelTimes %}
 {% from 'navigation/nav-icons/nav-icon.njk' import icon as icon %}
 
-<div class="navigation">
-	<button class="navigation-button" data-panel-button="navigation" data-animation-type="control-left">
+<div class="navigation navigation-item">
+	<button class="navigation-button" data-panel-button="navigation-{{ pageTemplate }}">
 
 		{% include "ui/icons/burguer.njk" %}
 
 	</button>
 </div>
 
-<div class="panel" data-panel="navigation">
+<div class="panel" data-panel="navigation-{{ pageTemplate }}">
 
 	<div class="panel-top panel-separator">
 		<div class="panel-top-content">
@@ -17,7 +17,7 @@
 			<h2>{{ generic[lang].menus.menu.subtitle }}</h2>
 		</div>
 
-		{{ panelTimes('navigation') }}
+		{{ panelTimes('navigation-'+pageTemplate) }}
 		
 	</div>
 
@@ -27,14 +27,14 @@
 		<ul class="menu">
 
 			<li>
-				<button class="menu-item" data-panel-button="lang">
+				<button class="menu-item" data-panel-button="lang-{{ pageTemplate }}">
 					{{ icon('lang', generic[lang].menus['language-menu'].title) }}
 					<p>{{ generic[lang].menus['language-menu'].title }}</p>
 				</button>
 			</li>
 
 			<li>
-				<button class="menu-item" data-panel-button="share-nav">
+				<button class="menu-item" data-panel-button="share-nav-{{ pageTemplate }}">
 					{{ icon('share', generic[lang].menus.menu['share-orbit-viewer'] ) }}
 					<p>{{ generic[lang].menus.menu['share-orbit-viewer'] }}</p>
 				</button>
@@ -48,7 +48,7 @@
 			</li>
 
 			<li>
-				<button class="menu-item" data-panel-button="about">
+				<button class="menu-item" data-panel-button="about-{{ pageTemplate }}">
 					{{ icon('about', generic[lang].menus['about-menu'].title) }}
 					<p>{{ generic[lang].menus['about-menu'].title }}</p>
 				</button>
@@ -62,7 +62,7 @@
 			</li>	
 
 			<li>
-				<button class="menu-item" data-panel-button="resolution">
+				<button class="menu-item" data-panel-button="resolution-{{ pageTemplate }}">
 					{{ icon('resolution', generic[lang].menus['resolution-menu'].title) }}
 					<p>{{ generic[lang].menus['resolution-menu'].title}}</p>
 				</button>

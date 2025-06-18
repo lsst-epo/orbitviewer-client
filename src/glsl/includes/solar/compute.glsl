@@ -16,31 +16,13 @@ struct OrbitElements {
     float n;
     float Tp;
     float q;
+    float epoch;
     int type;
 };
 
 float cbrt(float x) {
     return exp(log(x) / 3.0);
 }
-
-/* // COSH Function (Hyperbolic Cosine)
-float cosh(float val) {
-  float tmp = exp(val);
-  float cosH = (tmp + 1.0 / tmp) / 2.0;
-  return cosH;
-}
-// TANH Function (Hyperbolic Tangent)
-float tanh(float val) {
-  float tmp = exp(val);
-  float tanH = (tmp - 1.0 / tmp) / (tmp + 1.0 / tmp);
-  return tanH;
-}
-// SINH Function (Hyperbolic Sine)
-float sinh(float val) {
-  float tmp = exp(val);
-  float sinH = (tmp - 1.0 / tmp) / 2.0;
-  return sinH;
-} */
 
 vec3 getCartesianCoordinates(float v, float r, OrbitElements el) {
     float N = radians(el.N);
@@ -57,7 +39,7 @@ vec3 getCartesianCoordinates(float v, float r, OrbitElements el) {
 vec3 ellipticalCalc(OrbitElements el, float d) {
     // Mean Anomally and Eccentric Anomally
     float e = el.e;
-    float M = radians(el.M + el.n * d);
+    float M = radians(el.M + el.n * (d-el.epoch));
     float E = M + e * sin(M) * ( 1.0 + e * cos(M) );
 
     // E convergence check

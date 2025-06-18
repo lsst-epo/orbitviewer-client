@@ -28,15 +28,17 @@
 
 }
 
-.distance-input {
+[type="double-range"] {
 	position: relative;
 	display: flex;
 	justify-content: space-between;
 	padding: 0 0 var(--distance-60);
-	margin: 0 10px;
+	margin: 0 0 var(--distance-40);
+	width: 100%;
 
-	p {
+	h4 {
 		@include bold-3;
+		margin-bottom: 0;
 	}
 
 	.fake-range {	
@@ -62,48 +64,61 @@
 
 		position: absolute;
 		bottom: 0;
-		
-		transform: translate(calc(-50% + 13px), -20px);
-		
+				
 		background-color: var(--white-0);
 
-		&.handle-1 {
-			left: calc(var(--range-1) * (100% - 22px))
+		pointer-events: none;
+		
+		&.handle-1 { 
+			transform: translate(calc(50% + 5px), -20px);
+			left: calc(var(--range-1) * (100% - 20px));	
 		}
-		&.handle-2 {
-			left: calc(var(--range-2) * (100% - 22px))
+		&.handle-2 { 
+			transform: translate(calc(50% - 15px), -20px);
+			left: calc(var(--range-2) * (100%));	
+		}
+
+		.handle-grab {
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translate(-50%, 100%);
+
+			width: 22px;
+			height: 22px;
+			background: var(--blue-0);
+			border: 3px solid var(--white-0);
+			border-radius: 22px;
+			pointer-events: all;
+			cursor: pointer;
+		}
+
+		.tooltip {
+			position: absolute;
+			bottom: -8px;
+			left: 50%;
+			padding: 0 5px;
+			background: var(--white-0);
+			transform: translate(-50%, 100%);
+			border-radius: 5px;
+			opacity: 0;
+			transition: opacity 0.2s ease-in-out;
+			text-align: center;
+
+			@include light-2;
+			color: var(--black-1);
+			white-space: nowrap;
+		}
+
+		.tooltip-active .tooltip {
+			opacity: 1;
 		}
 	}
 
 	input {
 		position: absolute;
-		bottom: 20px;
-		left: 0;
-
-		opacity: 1;
-		width: 100%;
-		height: auto;		
-
-		-webkit-appearance: none;
-
-	}
-}
-
-[data-panel="filters"] {
-	input[type=range]::-webkit-slider-thumb {
-		width: 22px;
-		height: 22px;
-		background: var(--blue-0);
-		border: 3px solid var(--white-0);
-		border-radius: 22px;
-		cursor: pointer;
-		pointer-events: all;
-		-webkit-appearance: none;
-	}
-
-	input[type=range]::-webkit-slider-runnable-track {
-		width: 100%;
-		height: 0px;
+		opacity: 0;
+		visibility: hidden;
 		pointer-events: none;
 	}
 }

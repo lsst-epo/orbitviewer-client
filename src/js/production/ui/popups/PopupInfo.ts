@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { CategoriesMinMaxA } from "../../../common/data/Categories";
 import { getClosestDateToSun, getDistanceFromEarthNow, getDistanceFromSunNow, OrbitDataElements } from "../../../common/solar/SolarUtils";
 import { formatDateString } from "../../utils/Dates";
+import { isPortrait } from "../../utils/Helpers";
 import { disablePopup } from "./PopupsManager";
 
 
@@ -26,7 +27,6 @@ export class PopupInfo {
 		this.sections = this.dom.querySelectorAll('section');
 
 		this.closeButton = this.dom.querySelector('.close-item');
-
 	}
 
 	onResize(){
@@ -39,6 +39,7 @@ export class PopupInfo {
 
 		this.addEventListeners();
 		this.addData();
+		this.addAData();
 		this.setSize();
 
 	}
@@ -89,32 +90,32 @@ export class PopupInfo {
 		const names = this.dom.querySelectorAll('[data="name"]') as NodeListOf<HTMLElement>;
 		for(const name of names) name.innerText = this.data.fulldesignation;
 
-		const a = this.dom.querySelector('[data="a"]') as HTMLElement;
-		a.innerText = this.data.a.toFixed(2);
+		const a = this.dom.querySelector('[data="a"]') as HTMLElement;		
+		a.innerText = this.data.a ? this.data.a.toFixed(2) : '0.00';
 		const slideA = this.dom.querySelector('[data-slider="a"]') as HTMLElement;
 		this.applyItemPosition(slideA, this.data.a, 0, 100);
 
 		const e = this.dom.querySelector('[data="e"]') as HTMLElement;
-		e.innerText = this.data.e.toFixed(2);
+		e.innerText = this.data.e ? this.data.e.toFixed(2) : '0.00';
 		const slideE = this.dom.querySelector('[data-slider="e"]') as HTMLElement;
 		this.applyItemPosition(slideE, this.data.e, 0, 1);
 
 		const i = this.dom.querySelector('[data="incl"]') as HTMLElement;
-		i.innerText = this.data.incl.toFixed(2);
+		i.innerText = this.data.incl ? this.data.incl.toFixed(2) : '0.00';
 		const slideI = this.dom.querySelector('[data-slider="incl"]') as HTMLElement;
 		this.applyItemPosition(slideI, this.data.incl, 0, 180);
 
 		const peri = this.dom.querySelector('[data="peri"]') as HTMLElement;
-		peri.innerText = this.data.peri.toFixed(2);
+		peri.innerText = this.data.peri ? this.data.peri.toFixed(2) : '0.00';
 
 		const node = this.dom.querySelector('[data="node"]') as HTMLElement;
-		node.innerText = this.data.node.toFixed(2);
+		node.innerText = this.data.node ? this.data.node.toFixed(2) : '0.00';
 
 		const m = this.dom.querySelector('[data="m"]') as HTMLElement;
-		m.innerText = this.data.M.toFixed(2);
+		m.innerText = this.data.M ? this.data.M.toFixed(2) : '0.00';
 
 		const b = this.dom.querySelector('[data="brightness"]') as HTMLElement;
-		b.innerText = this.data.mpch.toFixed(2);
+		b.innerText = this.data.mpch ? this.data.mpch.toFixed(2) : '0.00';
 
 		// Fill data
 		const date = getClosestDateToSun(this.data);		
@@ -127,8 +128,6 @@ export class PopupInfo {
 		dSun.innerText = `${getDistanceFromSunNow(this.data).toFixed(2)} au`;
 		dEarth.innerText = `${getDistanceFromEarthNow(this.data).toFixed(2)} au`;
 				
-		this.addAData();
-
 	}
 
 	setSize(){
@@ -159,7 +158,19 @@ export class PopupInfo {
 			disablePopup();
 		})
 
+		const cover = this.dom.querySelector('.cover');
+		if(cover) {
+			cover.addEventListener('click', () => {
+				for(const section of this.sections){
+					if(section.classList.contains('active')) return;
+				}
+
+				this.sections[0].classList.add('active');
+			})
+		}
+
 		for(const section of this.sections){
+	
 			section.querySelector('.head').addEventListener('click', () => {	
 				if(section.classList.contains('active')) {
 					section.classList.remove('active');			
@@ -187,30 +198,29 @@ export class PopupInfo {
 		})
 
 		const cover = this.dom.querySelector('.cover');
-		const coverRect = cover.getBoundingClientRect();
+		const coverRect = cover ? cover.getBoundingClientRect() : null;
 
-		gsap.set(cover, {
-			height: 0,
-		})
+		if(cover){
+			gsap.set(cover, {
+				height: 0,
+			})
+		}
 
 		this.dom.classList.add('active');
 
+		if(!closeUp) this.dom.classList.add('no-closeup');
+		
 		const delay = closeUp ? 4 : 2;	
-		const tl = gsap.timeline({ paused: true, delay })
+		const tl = gsap.timeline({ paused: true, delay })		
 
 		tl
 			.addLabel('start')
 			.to(this.closeButton, {
 				scale: 1,
 				duration: 1,
+				delay: 1,
 				ease: 'power2.inOut',
 				clearProps: 'all',
-			}, 'start')
-			.to(this.dom.querySelector('.cover'), {
-				height: coverRect.height,
-				duration: 1,
-				ease: 'power2.inOut',
-				clearProps: 'height',
 			}, 'start')
 			.to(this.sections, {
 				height: sectionRect.height,
@@ -220,6 +230,7 @@ export class PopupInfo {
 				clearProps: 'all',
 				onComplete: () => {
 
+					if(isPortrait()) return;
 					// Prevents user spamclicking 
 					let active = false;
 					for(const section of this.sections){
@@ -229,6 +240,17 @@ export class PopupInfo {
 				}
 			})
 
+			if(cover){
+				tl.add(
+					gsap.to(cover, {
+						height: coverRect.height,
+						duration: 1,
+						ease: 'power2.inOut',
+						clearProps: 'height',
+					})
+				, 'start')
+			}
+
 			tl.play();
 	}
 
@@ -237,6 +259,7 @@ export class PopupInfo {
 		
 		this.active = false;
 		this.dom.classList.remove('active');
+		this.dom.classList.remove('no-closeup');
 		for(const section of this.sections) section.classList.remove('active');
 	}
 

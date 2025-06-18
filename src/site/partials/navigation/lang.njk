@@ -1,4 +1,4 @@
-<div class="panel" data-panel="lang">
+<div class="panel" data-panel="lang-{{ pageTemplate }}">
 
 	<div class="panel-top panel-separator">
 
@@ -7,7 +7,7 @@
 			<h2>{{ generic[lang].menus['language-menu'].subtitle }}</h2>
 		</div>
 
-		{{ panelTimes('lang') }}
+		{{ panelTimes('lang-'+pageTemplate) }}
 
 	</div>
 
@@ -19,7 +19,7 @@
 
 					<li class="ui__radio">
 						<label>
-							<input class="custom-input" type="radio" name="lang" value="en" {{ 'checked' if lang == 'en'}}>
+							<input class="custom-input" type="radio" name="lang" value="en" {{ 'checked' if lang == 'en' }}>
 							<div class="radio-bullet"><div></div></div>English
 						</label>
 					</li>
@@ -39,12 +39,14 @@
 
 	<div class="bottom-buttons">
 
-		<button data-button="language-apply" class="ui__button">
+		<button data-button="language-apply" class="ui__button button__icon icon__right">
 			<p>{{ generic[lang].strings['apply-selection'] }}</p>
+			{% include "ui/icons/arrow-next.njk" %}
 		</button>
 
-		<button data-button="language-reset" class="ui__button ghost-button">
+		<button data-button="language-reset" class="ui__button ghost-button button__icon icon__right">
 			<p>{{ generic[lang].strings['reset-default'] }}</p>
+			{% include "ui/icons/reset.njk" %}
 		</button>
 		
 	</div>

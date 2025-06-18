@@ -1,1 +1,0 @@
-export const COPIES = copies; // injected by 11ty

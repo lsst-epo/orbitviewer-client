@@ -7,6 +7,7 @@ import gsap from 'gsap'
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
 import { CoreAppSingleton } from '../../common/core/CoreApp';
 import { CameraManager } from '../../common/core/CameraManager';
+import { broadcastPanelsClose } from '../ui/panels/PanelsManager';
 gsap.registerPlugin(ScrollToPlugin);
 
 
@@ -26,7 +27,7 @@ export const EndTransition = () => {
 	}
 }
 
-export const TriggerTransition = (skip:boolean = false) => {
+export const TriggerTransition = () => {
 	if(LOCATION.current === null) return;
 	if(TRANSITIONS.inProgress) return;
 
@@ -43,6 +44,8 @@ export const TriggerTransition = (skip:boolean = false) => {
 	}
 
 	Transition();
+
+	broadcastPanelsClose();
 
 	if(!CameraManager.active) return;
 	

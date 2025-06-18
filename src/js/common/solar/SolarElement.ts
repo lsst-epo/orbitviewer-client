@@ -44,7 +44,7 @@ export class SolarElement extends Object3D implements InteractiveObject {
     lockedPosition = {
         portrait: {
             distance: .03,
-            offset: new Vector3(0, -.0055, 0)
+            offset: new Vector3(0, -100, 0)
         },
         landscape: {
             distance: .03,
@@ -62,7 +62,7 @@ export class SolarElement extends Object3D implements InteractiveObject {
         this.name = id;
         this.category = _data.category;
 
-        let scl = .001;
+        let scl = .001;        
 
         this.scale.multiplyScalar(scl);
 
@@ -70,8 +70,9 @@ export class SolarElement extends Object3D implements InteractiveObject {
         const pos = new Float32Array([0,0,0,10,10,10]);
         lineGeo.setAttribute('position', new BufferAttribute(pos, 3));
         this.sunLine = new Line(lineGeo, L_DUMMY);        
-
+        
         this.orbitPath = new EllipticalPath(_data, scl*.8);
+        
 
         this.mesh = new Mesh(PLANET_GEO, this.initMaterial(opts));
         this.mesh.visible = false;
@@ -85,6 +86,8 @@ export class SolarElement extends Object3D implements InteractiveObject {
         
         this.lockedPosition.landscape.distance = max.length() * 2;
         this.lockedPosition.landscape.offset.set(0,max.length()+center.y,0);
+        this.lockedPosition.portrait.distance = max.length() * 2;
+        this.lockedPosition.portrait.offset.set(0,-max.length()-1000,0);
     }
 
     initMaterial(opts:PlanetOptions = {}){

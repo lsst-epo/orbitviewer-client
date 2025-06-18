@@ -10,7 +10,6 @@ export const buildSimWithData = (d:Array<OrbitDataElements>, forceKeep:boolean=f
     if(!forceKeep) {
         data.splice(0, data.length);
     }
-
     for(const el of d) {            
         const mel = mapOrbitElements(el);
         data.push(mel);

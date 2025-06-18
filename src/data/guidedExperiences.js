@@ -11,7 +11,7 @@ async function getPage() {
       seoTitle
       seoDescription
       seoImage {
-        url(quality: 90)
+        url(quality: 95, width: 500)
       }
 			title
 			slug

@@ -3,16 +3,6 @@
 	width: 0;
 	height: 0;
 
-	opacity: 1;
-	transition: opacity 0.5s ease-in-out;
-
-	&.selected {
-		&, * {
-			cursor: default !important;
-			pointer-events: none !important;
-		}
-	}
-
 	.icon {
 		position: absolute;
 		bottom: 0;
@@ -55,6 +45,7 @@
 		h3 {
 			@include bold-3;
 			transition-property: opacity;
+			transition-duration: 0.5s;
 		}
 
 		p {
@@ -66,6 +57,41 @@
 
 	}
 
+}
+
+.popup-label {
+	opacity: 1;
+	transition: opacity 0.5s ease-in-out;
+}
+
+.popup-label.hidden,
+.popup-label.other-selected-hidden,
+.popup-label.filters-hidden,
+.popup-label.no-info-hidden,
+.popup-label.customize-hidden {
+	opacity: 0;
+
+	&, * {
+		pointer-events: none;
+	}
+}
+
+.popup-label.selected:not(.no-info-hidden) {
+	opacity: 1 !important;
+	&, * {
+		cursor: default !important;
+		pointer-events: none !important;
+	}
+	
+	.icon-text p {
+		opacity: 0;
+	}
+}
+
+.zoom-out .popup-label .icon-text {
+	h3, p { 
+		opacity: 0;
+	}
 }
 
 

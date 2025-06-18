@@ -19,6 +19,9 @@ vec3 rgbSplit(sampler2D tex, vec2 uv) {
     return vec3( c1.r, c2.g, c3.b );
 }
 
+const float exposure = 1.3;
+const float gamma = 1.2;
+
 void main () {
     vec4 bg = texture2D(tBackground, vUv);
     // vec4 scene = texture2D(tScene, vUv);
@@ -28,7 +31,11 @@ void main () {
     float alpha = step(.0001, (scene.r+scene.g+scene.b) / 3.0);
 
     vec3 color = mix(bg.rgb, scene.rgb, alpha);
-    color += glow.rgb * glowStrength * glow.a;
+    color += glow.rgb * glowStrength;
+
+    vec3 result = vec3(1.0) - exp(-color.rgb * exposure);
+    // also gamma correct while we're at it       
+    result = pow(result, vec3(1.0 / gamma));
 
     // vignette
     vec2 uv = vUv;

@@ -1,6 +1,6 @@
 import { PerspectiveCamera, Scene } from 'three';
 import { CSS2DObject, CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
-import { initPopups } from './PopupsManager';
+import { DEV } from '../../../common/core/Globals';
 
 const scene = new Scene();
 const renderer = new CSS2DRenderer();
@@ -11,7 +11,7 @@ export class css2D {
 	static init (width:number, height:number) {
 		if(initialized) return;
 		initialized = true;
-		console.log('Init CSS 2D Renderer');
+		if(DEV) console.log('Init CSS 2D Renderer');
 		document.body.appendChild(renderer.domElement);
 		renderer.domElement.classList.add('popups-wrapper', 'popups-labels')
 		renderer.setSize(width, height);

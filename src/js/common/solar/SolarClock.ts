@@ -14,8 +14,8 @@ export class SolarClock {
     private paused:boolean = false;
     private started:boolean = false
     private elapsedTime:number = 0;
-    private speed:number = 1;
-    private targetSpeed:number = 1;
+    private speed:number = 0;
+    private targetSpeed:number = 0;
     private edge1:Date = new Date('1900-01-01T00:00:00');
     private edge2:Date = new Date('2100-01-01T00:00:00');
 
@@ -25,7 +25,7 @@ export class SolarClock {
      */
     constructor(clock:Clock) {
         this.iClock = clock;
-        this.date = new Date();
+        this.date = new Date();        
         this.iClock.stop();
     }
 
@@ -56,7 +56,7 @@ export class SolarClock {
      * The number of hours equivalent per second.
      * 0 means real-time, 1 one hour per second, 2 two hours per second, etc.
      */
-    get secsPerhour():number {
+    get secsPerHour():number {
         return this.targetSpeed;
     }
 
@@ -86,7 +86,7 @@ export class SolarClock {
      * 
      * @param date - The date where the simulation needs to be set. Default: now
      */
-    setDate(date:Date=new Date()) {
+    setDate(date:Date=new Date()) {        
         this.date = date;
     }
 
@@ -136,10 +136,10 @@ export class SolarClock {
             this.speed = this.targetSpeed;
         } else {
             this.speed = MathUtils.lerp(this.speed, this.targetSpeed, .16);
-        }
+        }                
         
         this.date.setTime(this.date.getTime() + dt * 1000 + this.speed * HRSPSEC * dt);
-
+        
         // cap
         if(this.date.getTime() < this.edge1.getTime()) {
             this.date.setTime(this.edge1.getTime())
@@ -147,8 +147,8 @@ export class SolarClock {
 
         if(this.date.getTime() > this.edge2.getTime()) {
             this.date.setTime(this.edge2.getTime())
-        }
-
+        }        
+        
         return SolarTimeManager.getMJDonDate(this.date);
     }
 

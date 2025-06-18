@@ -19,10 +19,6 @@ export class Panel implements PanelsListener {
 
 	}
 
-	leave(){
-		this.closePanel();
-	}
-
 	create(){
 	}
 
@@ -34,6 +30,8 @@ export class Panel implements PanelsListener {
 	}
 
 	togglePanel(){		
+
+		if(!this.active) broadcastPanelsClose();
 
 		this.active = !this.active;
 		this.dom.classList.toggle('active');
@@ -55,7 +53,7 @@ export class Panel implements PanelsListener {
 		if(buttons.length === 0) return;		
 
 		for(const button of buttons){
-			button.addEventListener('click', () => { 								
+			button.addEventListener('click', () => { 							
 				this.togglePanel();
 			})
 		}

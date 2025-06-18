@@ -1,8 +1,11 @@
+import { MathUtils } from "@jocabola/math";
 import { hideLoader, showLoader } from "../../production/ui/loader";
-import { hidePopupsByCategory, popups } from "../../production/ui/popups/PopupsManager";
+import { broadcastPanelsClose } from "../../production/ui/panels/PanelsManager";
+import { popups } from "../../production/ui/popups/PopupsManager";
 import { CoreAppSingleton } from "../core/CoreApp";
 import { HASURA_URL, VISUAL_SETTINGS } from "../core/Globals";
 import { buildSimWithData } from "../solar/SolarParticlesManager";
+import { MJD2JD, SolarTimeManager } from "../solar/SolarTime";
 
 // Filters
 export type Filters = {
@@ -13,7 +16,7 @@ export type Filters = {
 	nearEarthObjects:boolean,
 	transNeptunianObjects:boolean,
 
-	planets: boolean
+	planets: boolean,
 }
 
 const CategoryToFilter:Record<string, string> = {
@@ -26,8 +29,16 @@ const CategoryToFilter:Record<string, string> = {
 	'trans-neptunian-objects': 'transNeptunianObjects'
 }
 
+const TIME_f = 1850;
+const TIME_MAX = new Date().getFullYear();
 
-const filters:Filters = {
+const time = {
+	f: TIME_f,
+	max: TIME_MAX
+};
+
+
+export const filters:Filters = {
 	asteroids: true,
 	centaurs: true,
 	comets: true,
@@ -35,12 +46,39 @@ const filters:Filters = {
 	nearEarthObjects: true,
 	transNeptunianObjects: true,
 
-	planets: true
+	planets: true,
+}
+
+export const distance = {
+	min: 0,
+	max: 999999,
+	value: {
+		min: 0,
+		max: 1
+	},
+	search: {
+		min: 0,
+		max: 999999
+	}
+}
+
+export const discover = {
+	min: SolarTimeManager.getMJDonDate(new Date(1850)),
+	max: SolarTimeManager.getMJDonDate(new Date()),
+	value: {
+		min: 0,
+		max: 1
+	},
+	search: {
+		min: SolarTimeManager.getMJDonDate(new Date(1850)),
+		max: SolarTimeManager.getMJDonDate(new Date())
+	}
 }
 
 // Filters listeners
 export interface FiltersListener {
 	applyFilters(): void;
+	resetFilters():void;
 	syncFilters():void;
 }
 
@@ -103,10 +141,32 @@ export const saveSelectedFilters = (domFilters:NodeListOf<HTMLInputElement>):Boo
 export const applyFilters = (domFilters: NodeListOf<HTMLInputElement>) => {
 	
 	const needsUpdate = saveSelectedFilters(domFilters);	
+	const sameDistance = calculateDistance();
+	const sameDiscover = calculateDiscover();	
 
-	if(!needsUpdate) {
+	if(!needsUpdate && sameDistance && sameDiscover) {
 		applyFilterSolarElements();
+		broadcastPanelsClose();
 		return
+	}
+
+	broadcastFilterChange();
+
+	getSolarSystemElementsByFilter().then( (res) => {		
+		const d = res.mpcorb;                                  
+		buildSimWithData(d, false);
+
+		hideLoader();
+	}).catch(() => {
+		console.error('Database fetch error')
+	});
+
+}
+
+export const resetFilters = () => {
+
+	for(const key in filters){
+		filters[key] = true;
 	}
 
 	broadcastFilterChange();
@@ -167,6 +227,31 @@ const syncFilter = (element:HTMLInputElement) => {
 	}
 }
 
+const calculateDistance = () => {
+
+	const newMin = MathUtils.map(distance.value.min, 0, 1, distance.min, distance.max);
+	const newMax = MathUtils.map(distance.value.max, 0, 1, distance.min, distance.max);
+	
+	const same = newMin === distance.search.min && newMax === distance.search.max;
+
+	distance.search.min = newMin;
+	distance.search.max = newMax;
+
+	return same;
+}
+
+const calculateDiscover = () => {	
+
+	const newMin = MathUtils.map(discover.value.min, 0, 1, discover.min, discover.max);
+	const newMax = MathUtils.map(discover.value.max, 0, 1, discover.min, discover.max);
+
+	const same = newMin === discover.search.min && newMax === discover.search.max;
+
+	discover.search.min = newMin;
+	discover.search.max = newMax;	
+
+	return same;
+}
 
 
 // Filters fetch
@@ -177,33 +262,27 @@ export async function getSolarSystemElements() {
 
 	const response = await fetch(url, {
 		headers: {
-			'X-Hasura-Admin-Secret': '_qfq_tMbyR4brJ@KHCzuJRU7'
+			'X-Hasura-Admin-Secret': process.env.HASURA_SECRET_KEY
 		}
 	})
 	return await response.json();
 }
 
 export async function getSolarSystemElementsByFilter() {
-	
-	showLoader();
 
-	let allFiltersActive = true;
-	for(const filter in filters){
-		if(!filter) allFiltersActive = false;
-	}
-	if(!allFiltersActive){		
-		return await getSolarSystemElements();
-	}
-	
-	const url = `${HASURA_URL}/orbit-elements-by-filter/${VISUAL_SETTINGS[VISUAL_SETTINGS.current]}/${filters.asteroids}/${filters.centaurs}/${filters.comets}/${filters.interestellarObjects}/${filters.nearEarthObjects}/${filters.transNeptunianObjects}`;	
+	showLoader();
+	broadcastPanelsClose();
+		
+	const url = `${HASURA_URL}/orbit-elements-by-filter/${VISUAL_SETTINGS[VISUAL_SETTINGS.current]}/${distance.search.min}/${distance.search.max}/${discover.search.min}/${discover.search.max}/${filters.asteroids}/${filters.centaurs}/${filters.comets}/${filters.interestellarObjects}/${filters.nearEarthObjects}/${filters.transNeptunianObjects}`;	
 
 	applyFilterSolarElements();
 
 	const response = await fetch(url, {
 		headers: {
-			'X-Hasura-Admin-Secret': '_qfq_tMbyR4brJ@KHCzuJRU7'
+			'X-Hasura-Admin-Secret': process.env.HASURA_SECRET_KEY
 		}
-	})
+	});
+	
 	return await response.json();
 }
 
@@ -215,9 +294,10 @@ const applyFilterSolarElements = () => {
 		item.visible = filters[CategoryToFilter[item.category]];
 	}
 
-	// Show hide labels & popups by category
+	// Show hide labels & popups by category	
 	for(const popup of popups){
-		popup.visible = filters[CategoryToFilter[popup.category]];
+		if(!filters[CategoryToFilter[popup.category]]) popup.label.dom.classList.add('filters-hidden')
+		else popup.label.dom.classList.remove('filters-hidden')
 	}
 
 }

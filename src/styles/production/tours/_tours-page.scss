@@ -2,32 +2,85 @@
 	width: 100%;
 
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: flex-start;
+
+	padding: var(--distance-30);
 
 	@include device {
 		border-bottom: 1px solid var(--white-2);
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+		padding-bottom: 0;
 	}
 
 	@include desktop {
-		flex-direction: row;
-		overflow-x: auto;
-		flex-grow: 3;
-		align-items: center;
+		width: auto;
+
 	}
 
-	padding: var(--distance-30) 0;
 
 	a {
 		width: 100%;
-		margin: 0 0 var(--distance-30);
+		max-width: 400px;
+		flex-grow: 0;
+		flex-shrink: 0;
+
+		@include mobile {
+			padding: 0 0 var(--distance-30);
+		}
+	}
+}
+
+.tours-list-wrapper {
+	width: 100%;
+	@include desktop {
+		overflow-x: auto;
+		padding: 0 var(--distance-30);
+	}
+}
+
+
+// Sorts
+.tours-list {
+
+	a.hidden {
+		display: none;
+	}
+
+	&[sort="new"],
+	&[sort="old"]{
+		a {
+			order: var(--date);
+		}
+	}
+
+	&[sort="less-duration"],
+	&[sort="more-duration"]{
+		a {
+			order: var(--duration);
+		}
+	}
+
+	&[sort="less-complexity"],
+	&[sort="more-complexity"] {
+		a {
+			order: var(--complexity);
+		}
+	}
+
+	&[sort="old"],
+	&[sort="more-complexity"],
+	&[sort="more-duration"] {
 
 		@include device {
-			&:last-of-type {
-				margin-bottom: 0;
-			}
+			flex-direction: column-reverse;
+		}
+		@include desktop {
+			flex-direction: row-reverse;
+			justify-content: flex-end;
 		}
 
 	}
 }
+
+

@@ -6,8 +6,8 @@ async function fetchSolarElement (id: string ) {
 	const url = `${HASURA_URL}/orbit-viewer/fetch/${id}`;		
 
 	const response = await fetch(url, {
-		headers: {
-			'X-Hasura-Admin-Secret': '_qfq_tMbyR4brJ@KHCzuJRU7'
+		headers: { 
+			'X-Hasura-Admin-Secret': process.env.HASURA_SECRET_KEY
 		}
 	})
 

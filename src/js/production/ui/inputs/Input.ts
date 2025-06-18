@@ -15,6 +15,10 @@ export class Input {
 
 	}
 
+	reset(){
+		
+	}
+
 	create(){}
 
 	checkState(){}

@@ -1,4 +1,4 @@
-<div class="panel" data-panel="about">
+<div class="panel" data-panel="about-{{ pageTemplate }}">
 
 	<div class="panel-top panel-separator">
 
@@ -7,7 +7,7 @@
 			<h2>{{ generic[lang].menus['about-menu'].subtitle }}</h2>
 		</div>
 
-		{{ panelTimes('about') }}
+		{{ panelTimes('about-'+pageTemplate) }}
 
 	</div>
 

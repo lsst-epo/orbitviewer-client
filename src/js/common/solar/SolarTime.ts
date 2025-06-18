@@ -33,6 +33,27 @@ class SolarTime {
 
         return this._d;
     }
+
+    /**
+     * Returns a Date object at a given MJD
+     * @param mjd MJD
+     * @returns Date Object
+     */
+    MJD2Date(mjd:number):Date {
+        return SolarTimeManager.JD2Date(MJD2JD(mjd));
+    }
+
+    /**
+     * Returns a Date object at a given JD
+     * @param d JD
+     * @returns Date Object
+     */
+     JD2Date(d:number):Date {
+        const unixMs = ( d - 2440587.5) * 86400000;
+        const date = new Date(unixMs);
+
+        return date;
+    }
 }
 
 export function JD2MJD(jd:number): number {

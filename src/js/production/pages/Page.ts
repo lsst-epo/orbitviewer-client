@@ -1,20 +1,18 @@
 import { solarClock } from "../../common/core/CoreApp";
 import { shareInit } from "../partials/Share";
-import { Inputs } from "../ui/inputs/Inputs";
-import { Panels } from "../ui/panels/Panels";
-import { broadcastPanelsClose } from "../ui/panels/PanelsManager";
+import { addInputs, inputs } from "../ui/inputs/InputsManager";
+import { addPanels, broadcastPanelsClose } from "../ui/panels/PanelsManager";
 
 export class Page {
 	dom:HTMLElement = null;
 	active:boolean = false;
 	loaded:boolean = false;
 
-	panels:Panels;
-	inputs:Inputs;
-
 	prepare() {		
 		this.active = true;
+		
 		return new Promise(resolve => {		
+			
 			if(this.loaded){			
 				this.enable(resolve);
 			} else {
@@ -30,12 +28,11 @@ export class Page {
 	}
 
 	show(){
-		
 	}
 
 	hide(){		
 		broadcastPanelsClose();
-		solarClock.pause();
+		for(const input of inputs) input.input.reset();
 	}
 	
 	disable () {
@@ -43,15 +40,17 @@ export class Page {
 		this.active = false;
 	}
 
-	load(resolve){				
+	load(resolve){			
+			
 		this.loaded = true;	
-		this.onLoaded();
-		this.addEventListeners();
 
 		shareInit(this.dom);
 
-		this.inputs = new Inputs(this.dom);
-		this.panels = new Panels(this.dom);
+		addInputs();
+		addPanels();
+
+		this.onLoaded();
+		this.addEventListeners();
 
 		this.enable(resolve);
 	}
@@ -66,12 +65,9 @@ export class Page {
 
 	onResize(){
 		if(!this.active || !this.loaded) return;
-		if(this.panels) this.panels.onResize();
 	}
 
 	update(){		
 		if(!this.active || !this.loaded) return;				
-		if(this.panels) this.panels.update();
-		if(this.inputs) this.inputs.update();
 	}
 }

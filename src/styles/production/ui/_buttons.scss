@@ -30,11 +30,21 @@
 	}
 }
 
+.ui__button.center {
+	text-align: center;
+}
+
 .ui__button.ghost-button,
 .ui__button-small.ghost-button {
 	background-color: transparent;
 	border: 1px solid var(--white-0);
 	color: var(--white-0);
+
+	&:active,
+	&:hover {
+		transition: background-color 0.4s ease-in-out;
+		background-color: rgba(255,255,255,0.15);
+	}
 }
 
 .ui__button.ui__button-thin {
@@ -44,18 +54,14 @@
 }
 
 // Arrows
-.button_arrow {
+.button__icon {
 	svg {
 		height: 1.5em;
-	}
-	path, line {
-		fill: none;
-		stroke: var(--white-0);
-		stroke-width: 3;
+		color: var(--white-0);
 	}
 }
 
-.ui__button.button_arrow {
+.ui__button.button__icon {
 
 	svg {
 		display: none;
@@ -66,21 +72,32 @@
 		display: flex;
 		justify-content: space-between;
 
-		&.button_arrow {
+		p {
+			text-align: right;
+		}
+
+		&.button__icon {
 			svg {
 				width: 20px;
 			}
 		}
 
-		&.arrow-next {
+		&.icon__right {
+			p {
+				text-align: left;
+			}
 			svg {
 				order: 1;
 			}
 		}
 
-		&:has(.arrow-prev){
-			text-align: right;			
-		}
+		// &:has(.arrow-prev){
+		// 	text-align: right;		
+			
+		// 	p {
+		// 		text-align: left;
+		// 	}
+		// }
 	}
 }
 

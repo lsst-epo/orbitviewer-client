@@ -1,7 +1,7 @@
 import { ColorRepresentation, DoubleSide, MeshPhongMaterial, SphereGeometry, TextureLoader, Vector3 } from "three";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { isPortrait } from "../../production/utils/Helpers";
-import { PlanetMaterial } from "../gfx/PlanetMaterial";
+import { PlanetMaterial, PlanetMaterialParameters } from "../gfx/PlanetMaterial";
 import { initMaterial } from "../gfx/ShaderLib";
 import { SolarElement } from "./SolarElement";
 import { cloneOrbitElements, DEG_TO_RAD, KM2AU, OrbitElements } from "./SolarSystem";
@@ -51,7 +51,8 @@ export class Planet extends SolarElement {
                 gltf.scene.scale.setScalar(2);
                 gltf.scene.children[0].material = initMaterial(new MeshPhongMaterial({
                     side: DoubleSide,
-                    // transparent: true,
+                    transparent: true,
+                    depthWrite: false,
                     map: tLoader.load(`/assets/textures/2k_saturn_ring_alpha.png`)
                 }));
                 /* const s = PlanetShaderSettings[this.type];
@@ -82,15 +83,23 @@ export class Planet extends SolarElement {
 
         const s = PlanetShaderSettings[this.type];
 
+        const opts2:PlanetMaterialParameters = {
+            fresnelColor: s.fresnelColor,
+            fresnelWidth: s.fresnelWidth,
+            sunIntensity: s.sunIntensity
+        };
+
+        if(this.type === 'earth') {
+            const loader = new TextureLoader();
+            opts2.nightMap = loader.load(`/assets/textures/2k_${this.type}_nightmap.jpg`)
+            opts2.cloudsMap = loader.load(`/assets/textures/2k_${this.type}_clouds.jpg`)
+        }
+
         this.material = new PlanetMaterial({
             color: opts.color ? opts.color : 0xffffff,
             shininess: 0,
             map: opts.mapURL ? tLoader.load(opts.mapURL) : null
-        }, {
-            fresnelColor: s.fresnelColor,
-            fresnelWidth: s.fresnelWidth,
-            sunIntensity: s.sunIntensity
-        });
+        }, opts2, this.type === "earth");
 
         return this.material;
     }

@@ -31,6 +31,14 @@ export const OrbitControlsOut = (tl:GSAPTimeline, label:string, dom:HTMLElement 
 		}, label)
 	}
 
+	const fade = dom.querySelectorAll('[data-animation-type="control-fade"]');
+	if(fade.length > 0){
+		tl.to(fade, {
+			autoAlpha: 0,
+			duration: 0.3
+		}, label)
+	}
+
 
 }
 export const OrbitControlsIn = (tl:GSAPTimeline, label:string) => {
