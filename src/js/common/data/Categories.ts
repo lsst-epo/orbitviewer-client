@@ -98,7 +98,7 @@ export async function getA() {
 
 	const response = await fetch(url, {
 		headers: {
-			'X-Hasura-Admin-Secret': '_qfq_tMbyR4brJ@KHCzuJRU7'
+			'X-Hasura-Admin-Secret': process.env.HASURA_SECRET_KEY
 		}
 	})
 	return await response.json();

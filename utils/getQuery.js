@@ -5,7 +5,7 @@ require('dotenv').config();
 const env = process.env.ELEVENTY_ENV ? process.env.ELEVENTY_ENV.split(':') : [];
 const isLocalhost = env.indexOf('localhost') > -1;
 
-const url = isLocalhost ? 'http://localhost:8080' : 'https://orbitviewer-api-dot-skyviewer.uw.r.appspot.com';
+const url = isLocalhost ? 'http://localhost:8080' : process.env.ORBITVIEWER_API_ENDPOINT;
 
 // Real deal
 const fetch = (...args) =>
@@ -23,7 +23,7 @@ async function getQuery(query = null) {
 
 	try {
 		// initiate fetch
-		const queryFetch = await fetch(`${url}/api`, {
+		const queryFetch = await fetch(`${url}`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
