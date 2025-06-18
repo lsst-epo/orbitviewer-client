@@ -4,7 +4,7 @@ import { HASURA_URL } from "../core/Globals";
 import { OrbitDataElements } from "../solar/SolarUtils";
 import { distance } from "./FiltersManager";
 
-export type SolarCategory = 'trans-neptunian-objects'|'near-earth-objects'|'interstellar-objects'|'comets'|'centaurs'|'asteroids'|'planets-moons';
+export type SolarCategory = 'trans-neptunian objects'|'near earth objects'|'interstellar objects'|'comets'|'centaurs'|'asteroids'|'planets-moons';
 
 export const categories = data.categories;
 
@@ -15,17 +15,17 @@ export const categoriesSort:Array<SolarCategory> = [
 	'asteroids',
 	'comets',
 	'centaurs',
-	'interstellar-objects',
-	'near-earth-objects',
-	'trans-neptunian-objects'
+	'interstellar objects',
+	'near earth objects',
+	'trans-neptunian objects'
 ]
 
 export const getCategory = (item: OrbitDataElements):SolarCategory => {
 	const avail_categories:Array<SolarCategory> = [];
 
-	if(item.is_tno) avail_categories.push('trans-neptunian-objects');
-	if(item.is_neo) avail_categories.push('near-earth-objects');
-	if(item.is_iso) avail_categories.push('interstellar-objects');
+	if(item.is_tno) avail_categories.push('trans-neptunian objects');
+	if(item.is_neo) avail_categories.push('near earth objects');
+	if(item.is_iso) avail_categories.push('interstellar objects');
 	if(item.is_comet) avail_categories.push('comets');
 	if(item.is_centaur) avail_categories.push('centaurs');
 	if(item.is_asteroid) avail_categories.push('asteroids');
@@ -50,10 +50,10 @@ export const CategoryColorMap:Record<SolarCategory,Color> = {
 	'asteroids': getCategoryColor('asteroids'),
 	'centaurs': getCategoryColor('centaurs'),
 	'comets':  getCategoryColor('comets'),
-	'interstellar-objects': getCategoryColor('interstellar-objects'),
-	'near-earth-objects':  getCategoryColor('near-earth-objects'),
+	'interstellar objects': getCategoryColor('interstellar objects'),
+	'near earth objects':  getCategoryColor('near earth objects'),
 	'planets-moons':  getCategoryColor('planets-moons'),
-	'trans-neptunian-objects':  getCategoryColor('trans-neptunian-objects')
+	'trans-neptunian objects':  getCategoryColor('trans-neptunian objects')
 }
 
 export const CategoriesMinMaxA = {
@@ -77,15 +77,15 @@ export const CategoriesMinMaxA = {
 		min: 0,
 		max: 0
 	},
-	'interstellar-objects': {
+	'interstellar objects': {
 		min: 0,
 		max: 0
 	},
-	'near-earth-objects': {
+	'near earth objects': {
 		min: 0,
 		max: 0
 	},
-	'trans-neptunian-objects': {
+	'trans-neptunian objects': {
 		min: 0,
 		max: 0
 	}
@@ -126,11 +126,14 @@ export async function getMinMaxAByCategory () {
 	CategoriesMinMaxA['comets'].min = find('comet', 'min');
 	CategoriesMinMaxA['comets'].max = find('comet', 'max');
 
-	CategoriesMinMaxA['near-earth-objects'].min = find('neo', 'min');
-	CategoriesMinMaxA['near-earth-objects'].max = find('neo', 'max');
-
-	CategoriesMinMaxA['trans-neptunian-objects'].min = find('tno', 'min');
-	CategoriesMinMaxA['trans-neptunian-objects'].max = find('tno', 'max');
+	CategoriesMinMaxA['interstellar objects'].min = data.isoMin.length ? data.isoMin[0].a : null;
+	CategoriesMinMaxA['interstellar objects'].max = data.isoMax.length ? data.isoMax[0].a : null;
+		
+	CategoriesMinMaxA['near earth objects'].min = data.neoMin.length ? data.neoMin[0].a : null;
+	CategoriesMinMaxA['near earth objects'].max = data.neoMax.length ? data.neoMax[0].a : null;
+		
+	CategoriesMinMaxA['trans-neptunian objects'].min = data.tnoMin.length ? data.tnoMin[0].a : null;
+	CategoriesMinMaxA['trans-neptunian objects'].max = data.tnoMax.length ? data.tnoMax[0].a : null;
 
 	let min = 10000;
 	let max = 0;
