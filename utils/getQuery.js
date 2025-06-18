@@ -7,6 +7,10 @@ const isLocalhost = env.indexOf('localhost') > -1;
 
 const url = isLocalhost ? 'http://localhost:8080' : process.env.ORBITVIEWER_API_ENDPOINT;
 
+console.log("About to log process.env");
+console.log(process.env);
+console.log(`url: ${url}`)
+
 // Real deal
 const fetch = (...args) =>
 import('node-fetch').then(({ default: fetch }) => fetch(...args));
