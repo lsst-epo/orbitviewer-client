@@ -14,6 +14,7 @@ import {
   WebGLRenderTarget,
 } from "three";
 import { BlurPass, type BlurQuality } from "@/components/effects/blur/blurPass";
+import { FIRE_LAYER } from "./layers";
 import type { GFXTier } from "@/lib/solar/quality";
 import vertexShader from "./comp.vert";
 import fragmentShader from "./comp.frag";
@@ -85,7 +86,9 @@ export class Compositor {
   private sceneRT: WebGLRenderTarget;
   private glowRT: WebGLRenderTarget;
   private compRT: WebGLRenderTarget;
+  private sunRT: WebGLRenderTarget;
   private glowBlur: BlurPass;
+  private sunBlur: BlurPass;
 
   private compMaterial: ShaderMaterial;
   private quadScene = new Scene();
@@ -123,6 +126,11 @@ export class Compositor {
       colorSpace: SRGBColorSpace,
     });
 
+    this.sunRT = new WebGLRenderTarget(width, height, {
+      samples: 0,
+      colorSpace: SRGBColorSpace,
+    });
+
     this.glowBlur = new BlurPass(this.glowRT.texture, width, height, {
       scale: tier.blurScale,
       radius: 1,
@@ -130,6 +138,16 @@ export class Compositor {
       iterations: tier.blurIterations,
     });
     this.glowBlur.target.texture.colorSpace = renderer.outputColorSpace;
+
+    // The fire pass keeps its own blur: the legacy used fixed settings here
+    // rather than the tier's, so the sun's plasma looks the same everywhere.
+    this.sunBlur = new BlurPass(this.sunRT.texture, width, height, {
+      scale: 0.5,
+      radius: 1,
+      quality: 2,
+      iterations: 4,
+    });
+    this.sunBlur.target.texture.colorSpace = renderer.outputColorSpace;
 
     this.compMaterial = new ShaderMaterial({
       vertexShader,
@@ -164,7 +182,9 @@ export class Compositor {
     this.sceneRT.setSize(width, height);
     this.glowRT.setSize(width, height);
     this.compRT.setSize(width, height);
+    this.sunRT.setSize(width, height);
     this.glowBlur.setSize(width, height);
+    this.sunBlur.setSize(width, height);
   }
 
   setTier(tier: GFXTier): void {
@@ -250,10 +270,9 @@ export class Compositor {
       this.prepareForSceneRender(scene);
     }
 
-    // 4. The sun's fire pass is not ported yet -- SunMagneticField and the
-    // sun's halo have to land first. Until then the compositor binds a
-    // transparent texture, which the `fire` term in comp.frag adds as zero.
-    const fire = this.emptyTexture;
+    // 4. The sun's fire pass: its halo and magnetic field, blurred into
+    // plasma. See renderFirePass for why this uses layers.
+    const fire = this.renderFirePass(scene, camera);
 
     // 5. Composite.
     const uniforms = this.compMaterial.uniforms;
@@ -275,6 +294,50 @@ export class Compositor {
     this.renderer.setRenderTarget(null);
   }
 
+  /**
+   * Renders the sun's halo and magnetic field, then blurs them.
+   *
+   * The legacy moved the sun into a second scene for this and put it back
+   * afterwards. Reparenting objects React owns would fight the reconciler, so
+   * this switches the camera onto FIRE_LAYER instead: the halo and field lines
+   * live only on that layer, and nothing else in the scene is on it.
+   *
+   * The sun's own body is on both layers, and swaps to an opaque black
+   * material here so its disc occludes the halo behind it rather than letting
+   * it bleed through.
+   */
+  private renderFirePass(scene: Scene, camera: Camera): Texture {
+    const swapped: Array<Mesh> = [];
+
+    scene.traverse((object) => {
+      const mesh = object as Mesh;
+      if (!mesh.userData?.isSun || !mesh.userData.blockMaterial) return;
+      mesh.userData.defaultMaterial = mesh.material;
+      mesh.material = mesh.userData.blockMaterial;
+      swapped.push(mesh);
+    });
+
+    const cameraLayers = camera.layers.mask;
+    camera.layers.set(FIRE_LAYER);
+
+    const background = scene.background;
+    scene.background = null;
+
+    this.renderer.setRenderTarget(this.sunRT);
+    this.renderer.render(scene, camera);
+
+    scene.background = background;
+    camera.layers.mask = cameraLayers;
+
+    for (const mesh of swapped) {
+      mesh.material = mesh.userData.defaultMaterial;
+    }
+
+    this.sunBlur.render(this.renderer);
+
+    return this.sunBlur.texture;
+  }
+
   get texture(): Texture {
     return this.compRT.texture;
   }
@@ -283,7 +346,9 @@ export class Compositor {
     this.sceneRT.dispose();
     this.glowRT.dispose();
     this.compRT.dispose();
+    this.sunRT.dispose();
     this.glowBlur.dispose();
+    this.sunBlur.dispose();
     this.compMaterial.dispose();
     this.screenMaterial.dispose();
     this.quad.geometry.dispose();
