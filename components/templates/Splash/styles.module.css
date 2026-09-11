@@ -1,0 +1,39 @@
+@import url("../../../styles/variables.css");
+
+.splash {
+  display: flex;
+  flex-direction: column;
+  gap: var(--site-margin-large);
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: var(--site-margin-large);
+  text-align: center;
+}
+
+.logo {
+  width: min(320px, 70vw);
+  height: auto;
+}
+
+.title {
+  max-width: 24ch;
+  margin: 0;
+  font-weight: var(--font-semibold);
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+.cta {
+  padding: var(--site-margin-small) var(--site-margin-large);
+  color: var(--color-button-text);
+  text-decoration: none;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-large);
+  transition: background-color 0.2s var(--easing-default);
+}
+
+.cta:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}

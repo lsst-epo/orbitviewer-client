@@ -1,0 +1,24 @@
+@import url("../../../styles/variables.css");
+
+/**
+ * Dev-only viewport indicator, ported from `_debug.scss`. Reads the
+ * --viewport and --touch custom properties that variables.css sets per
+ * breakpoint, so it reports the same value the CSS is actually resolving.
+ */
+.debug {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-tooltip-dialog);
+  padding: var(--space-xs, 4px) var(--site-margin-xsmall);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-turquoise-200);
+  pointer-events: none;
+  background-color: var(--color-backdrop);
+  border-top-left-radius: var(--corner-medium);
+}
+
+.debug::after {
+  content: var(--viewport) " / touch: " var(--touch);
+}

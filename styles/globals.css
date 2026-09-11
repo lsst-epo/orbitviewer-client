@@ -1,0 +1,47 @@
+@import url("./variables.css");
+
+/**
+ * Minimal reset. The legacy `_reset.scss` was a full normalize pass applied
+ * globally; scoping styles into CSS modules removes most of the need, so this
+ * keeps only what a full-viewport WebGL app actually requires.
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-stack);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-turquoise-300);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

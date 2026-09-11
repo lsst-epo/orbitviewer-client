@@ -1,0 +1,48 @@
+@import url("../../../styles/variables.css");
+
+.explorer {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--site-margin-large);
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: var(--site-margin-large);
+}
+
+.title {
+  margin: 0;
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--site-margin-small);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats div {
+  padding: var(--site-margin-small);
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+}
+
+.stats dt {
+  font-size: 0.8125rem;
+  color: var(--color-text-low);
+}
+
+.stats dd {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color-turquoise-200);
+}
