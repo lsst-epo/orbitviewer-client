@@ -1,4 +1,6 @@
 import "@/styles/globals.css";
+// Precompiled by the package; no Sass toolchain is needed to consume it.
+import "@rubin-epo/epo-react-lib/styles.css";
 import { FunctionComponent, PropsWithChildren } from "react";
 import { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
@@ -10,6 +12,7 @@ import { languages } from "@/lib/i18n/settings";
 import { sourceSans3 } from "@/lib/fonts";
 import { getGlobals } from "@/lib/api/craft";
 import { GLOBALS } from "@/lib/static/globals";
+import StyledComponentsRegistry from "@rubin-epo/epo-react-lib/StyledComponentsRegistry";
 import I18NextClientProvider from "@/contexts/i18next";
 import DebugViewport from "@/components/atoms/DebugViewport";
 
@@ -94,10 +97,20 @@ const RootLayout: FunctionComponent<PropsWithChildren<RootProps>> = async ({
             Skyviewer split, and the provider otherwise tries to load its own
             message catalogue and fails. */}
         <NextIntlClientProvider locale={locale} messages={{}}>
-          <I18NextClientProvider locale={locale}>
-            {children}
-            <DebugViewport />
-          </I18NextClientProvider>
+          {/* epo-react-lib is built on styled-components. In the App Router
+              its styles must be collected during the server render and
+              injected into the streamed HTML, or the client generates class
+              names that do not match and React reports a hydration mismatch.
+              The registry is exported by the library itself, so it uses the
+              library's own styled-components instance -- we must not add
+              styled-components as a dependency of our own, or there would be
+              two copies and the styles would silently stop resolving. */}
+          <StyledComponentsRegistry>
+            <I18NextClientProvider locale={locale}>
+              {children}
+              <DebugViewport />
+            </I18NextClientProvider>
+          </StyledComponentsRegistry>
         </NextIntlClientProvider>
       </body>
     </html>
