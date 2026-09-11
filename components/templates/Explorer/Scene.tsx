@@ -31,13 +31,19 @@ registerShaderChunks();
  * Bodies are rendered larger than life. At true scale Earth is 4.2e-5 AU
  * across in a scene spanning tens of AU.
  *
- * 100x matches the legacy `gfx/solar/Planet.ts`, which scaled by
- * `PlanetRadiusMap[type] * KM2AU * PLANET_SCALE * 100`. Even so the planets
- * are sub-pixel at the default system-wide framing -- in the legacy viewer
- * that view was carried by the particle field of tens of thousands of minor
- * bodies, which is not ported yet. Zoom in to see the planets themselves.
+ * !!! TEMPORARY -- MUST BE RESTORED TO 100 BEFORE RELEASE !!!
+ *
+ * The legacy `gfx/solar/Planet.ts` scaled by
+ * `PlanetRadiusMap[type] * KM2AU * PLANET_SCALE * 100`, so 100 is the correct,
+ * faithful value. At 100 the planets are sub-pixel at the default
+ * system-wide framing: in the legacy viewer that view was carried by the
+ * particle field of tens of thousands of minor bodies, which is not ported
+ * yet. 1200 is a development-only exaggeration that keeps the scene legible
+ * until SolarParticles/GPUSim land.
+ *
+ * Tracked in DEVIATIONS.md -- remove this note and the entry together.
  */
-const BODY_RADIUS_SCALE = 100;
+const BODY_RADIUS_SCALE = 1200;
 
 /** Default radius for dwarf planets, which are not in PlanetRadiusMap. */
 const DEFAULT_RADIUS_KM = 1200;
