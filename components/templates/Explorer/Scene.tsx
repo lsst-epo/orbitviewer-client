@@ -14,6 +14,7 @@ import Sun from "@/components/celestial-bodies/sun";
 import Body from "@/components/celestial-bodies/body";
 import OrbitalPath from "@/components/effects/orbital-path";
 import SolarParticles from "@/components/effects/solar-particles";
+import CompositorEffect from "@/components/effects/composite";
 import { useSolarData } from "@/contexts/SolarData";
 import { registerShaderChunks } from "@/lib/glsl";
 
@@ -50,10 +51,15 @@ const BODY_RADIUS_SCALE = 1200;
 /** Default radius for dwarf planets, which are not in PlanetRadiusMap. */
 const DEFAULT_RADIUS_KM = 1200;
 
-/** Drives the simulation clock. Exactly one of these may exist. */
+/**
+ * Drives the simulation clock. Exactly one of these may exist.
+ *
+ * Priority -2 puts it first in the frame: the GPU simulation (-1) samples the
+ * date it sets, and the compositor (1) renders the result.
+ */
 const ClockDriver: FunctionComponent = () => {
   const { advance } = useSolarClock();
-  useFrame((_, delta) => advance(delta));
+  useFrame((_, delta) => advance(delta), -2);
   return null;
 };
 
@@ -108,6 +114,9 @@ const Scene: FunctionComponent = () => {
     <>
       <ClockDriver />
       <Camera />
+
+      {/* Takes over the render loop: scene, glow, blur, composite. */}
+      <CompositorEffect quality={quality} />
 
       {/* The sun is the only light source; everything else is lit by it. */}
       <pointLight position={[0, 0, 0]} intensity={2} decay={0} />

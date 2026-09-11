@@ -60,3 +60,75 @@ export const QUALITY_STORAGE_KEY = "rubin-data-profile";
 
 export const isSimQuality = (value: string): value is SimQuality =>
   (SIM_QUALITIES as Array<string>).includes(value);
+
+/**
+ * Renderer settings per tier. Ported from `QUALITY_TIERS` in
+ * `gfx/core/RubinRenderer.ts`.
+ *
+ * Note glow is off entirely at the low tier -- the bloom pass costs a second
+ * full scene render plus several blur passes, which the lowest tier cannot
+ * afford. Anything relying on glow must degrade gracefully without it.
+ */
+export interface GFXTier {
+  maxPixelRatio: number;
+  /** MSAA samples on the scene target. */
+  maxSamples: number;
+  /** Blur target scale; below 1 blurs cheaper and wider. */
+  blurScale: number;
+  /** Kernel width: 0 = 5-tap, 1 = 9-tap, 2 = 13-tap. */
+  blurQuality: 0 | 1 | 2;
+  blurIterations: number;
+  glowEnabled: boolean;
+  /** Resolution of the Earth cloud layer, for when that effect lands. */
+  cloudsWidth: number;
+}
+
+export const GFX_TIERS: Record<SimQuality, GFXTier> = {
+  low: {
+    maxPixelRatio: 1.5,
+    maxSamples: 1,
+    glowEnabled: false,
+    blurIterations: 2,
+    blurQuality: 0,
+    blurScale: 0.25,
+    cloudsWidth: 512,
+  },
+  medium: {
+    maxPixelRatio: 1.5,
+    maxSamples: 2,
+    glowEnabled: true,
+    blurIterations: 2,
+    blurQuality: 0,
+    blurScale: 0.25,
+    cloudsWidth: 512,
+  },
+  high: {
+    maxPixelRatio: 2,
+    maxSamples: 4,
+    glowEnabled: true,
+    blurIterations: 4,
+    blurQuality: 2,
+    blurScale: 0.5,
+    cloudsWidth: 1024,
+  },
+  ultra: {
+    maxPixelRatio: 3,
+    maxSamples: 4,
+    glowEnabled: true,
+    blurIterations: 4,
+    blurQuality: 2,
+    blurScale: 1,
+    cloudsWidth: 2048,
+  },
+  // The legacy table stopped at "ultra"; ultra2 exists as a simulation size
+  // only, so it inherits ultra's renderer settings.
+  ultra2: {
+    maxPixelRatio: 3,
+    maxSamples: 4,
+    glowEnabled: true,
+    blurIterations: 4,
+    blurQuality: 2,
+    blurScale: 1,
+    cloudsWidth: 2048,
+  },
+};
