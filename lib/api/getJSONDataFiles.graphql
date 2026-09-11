@@ -1,0 +1,9 @@
+query getJSONDataFiles {
+  mpcDataFilesEntries {
+    ... on mpcDataFiles_Entry {
+      title
+      dataFileUrl
+      dataFileQuality
+    }
+  }
+  }

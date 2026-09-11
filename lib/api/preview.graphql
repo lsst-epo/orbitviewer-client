@@ -1,0 +1,3 @@
+query PagePreviewQuery($site: [String], $uri: [String]) {
+  entry(site: $site, uri: $uri) { uri title }
+}

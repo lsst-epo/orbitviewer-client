@@ -1,0 +1,60 @@
+.gallery {
+  max-width: 1200px;
+  margin: auto;
+  padding: 64px 32px;
+}
+
+.gallery h1 {
+  font-size: clamp(32px, 5vw, 54px);
+  margin: 0 0 16px;
+}
+
+.gallery > p {
+  font-size: 20px;
+  line-height: 1.6;
+  max-width: 750px;
+}
+
+.controls {
+  display: flex;
+  gap: 16px;
+  margin: 32px 0;
+  flex-wrap: wrap;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  overflow: hidden;
+  background: #0a1519;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.card:hover {
+  border-color: var(--color-turquoise-300);
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 1.8;
+  object-fit: cover;
+}
+
+.card > div {
+  padding: 24px;
+}
+
+.card h2 {
+  font-size: 26px;
+  margin: 8px 0;
+}
+
+.card span {
+  color: var(--color-text-low);
+}

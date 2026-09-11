@@ -1,0 +1,11 @@
+query getCategories($siteId: [QueryArgument]) {
+    categories(group: "objectTypes", siteId: $siteId) {
+      ... on objectTypes_Category {
+        title
+        slug
+        mainColor
+        objectTypeCode
+        description
+      }
+    }
+  }

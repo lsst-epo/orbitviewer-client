@@ -1,0 +1,9 @@
+query getGlobals($siteId: [QueryArgument]) {
+  globalSets(siteId: $siteId) {
+    ... on defaultSEO_GlobalSet {
+      seoSiteName
+      seoTitle
+      seoDescription
+    }
+  }
+}

@@ -1,0 +1,257 @@
+.explorer {
+  position: relative;
+  height: 100dvh;
+  min-height: 480px;
+  overflow: hidden;
+  background: #000;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.toolbar {
+  position: absolute;
+  top: 80px;
+  left: 16px;
+  display: grid;
+  width: 100px;
+  padding: 8px 0 12px;
+  z-index: 3;
+  background: linear-gradient(120deg, #363636e8, #202020e8);
+  border-radius: 0 0 10px 10px;
+  backdrop-filter: blur(12px);
+}
+
+.toolbar button,
+.toolbar a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  min-height: 72px;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #eee;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.toolbar svg {
+  width: 28px;
+  height: 28px;
+}
+
+.panel {
+  position: absolute;
+  top: 96px;
+  left: 134px;
+  z-index: 4;
+  background: linear-gradient(120deg, #373737f2, #222e);
+  border: 1px solid #ffffff0d;
+  border-radius: 8px;
+  width: 380px;
+  padding: 20px;
+  max-height: calc(100% - 180px);
+  overflow: auto;
+  backdrop-filter: blur(8px);
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panelHead h2 {
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+
+.panel p {
+  line-height: 1.6;
+}
+
+.details {
+  right: 20px;
+  left: auto;
+}
+
+.details dl div {
+  border-bottom: 1px solid var(--color-border);
+  padding: 10px 0;
+}
+
+.details dd {
+  margin: 4px 0 0;
+  color: var(--color-turquoise-200);
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.check {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 0;
+}
+
+.results {
+  list-style: none;
+  padding: 0;
+}
+
+.mapControls button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  background: #272727e8;
+  font-size: 20px;
+}
+
+.results button {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  width: 100%;
+  text-align: left;
+  padding: 12px 4px;
+}
+
+.results button:hover {
+  color: var(--color-turquoise-200);
+  background: var(--color-turquoise-900);
+}
+
+.toolbar button:hover,
+.toolbar a:hover,
+.toolbar button[aria-pressed="true"] {
+  background: #ffffff12;
+  color: #60dfdf;
+}
+
+.panel form {
+  display: grid;
+  gap: 10px;
+}
+
+.time {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: max-content;
+  max-width: calc(100% - 110px);
+}
+
+.mapControls {
+  position: absolute;
+  right: 20px;
+  bottom: 24px;
+  display: grid;
+  gap: 5px;
+  z-index: 3;
+}
+
+.mapControls svg {
+  width: 16px;
+  height: 16px;
+}
+
+.onboarding {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(440px, calc(100% - 40px));
+  padding: 32px;
+  border: 1px solid var(--color-turquoise-700);
+  background: #0a1418f5;
+  border-radius: 10px;
+  z-index: 6;
+  box-shadow: 0 15px 90px #000a;
+}
+
+.onboarding h1 {
+  font-size: 28px;
+}
+
+.onboarding p {
+  line-height: 1.6;
+}
+
+.status {
+  position: absolute;
+  bottom: 110px;
+  left: 20px;
+  max-width: 400px;
+  padding: 8px;
+  font-size: 14px;
+  background: #05090bcc;
+}
+
+@media (width <= 760px) {
+  .panel {
+    width: min(380px, calc(100% - 150px));
+  }
+
+  .details {
+    right: 16px;
+    left: auto;
+  }
+}
+
+@media (width <= 600px) {
+  .toolbar {
+    top: 64px;
+    left: 8px;
+    width: 72px;
+  }
+
+  .toolbar button,
+  .toolbar a {
+    min-height: 64px;
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .panel {
+    top: 78px;
+    left: 88px;
+    right: 8px;
+    width: auto;
+    padding: 16px;
+    max-height: calc(100% - 220px);
+  }
+
+  .time {
+    bottom: 12px;
+    left: 12px;
+    transform: none;
+    width: calc(100% - 80px);
+    max-width: none;
+  }
+
+  .mapControls {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .status {
+    bottom: 160px;
+    max-width: calc(100% - 90px);
+  }
+}

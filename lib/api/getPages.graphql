@@ -1,0 +1,109 @@
+query getPages($siteId: [QueryArgument]) {
+    pagesEntries(siteId: $siteId) {
+      ... on about_Entry {
+    id
+    slug
+    title
+    eyebrowText
+    headerTitle
+    headerBody {
+      html
+      rawHtml
+      markdown
+      plainText
+    }
+    introBody {
+      html
+    }
+    introImage {
+      url @transform(width: 1480, format: "webp")
+    }
+    responsiveBody {
+      html
+      rawHtml
+      markdown
+      plainText
+    }
+    lowSettingLabel
+    lowSettingCount
+    lowSettingImages {
+      url @transform(width: 1220, format: "webp")
+    }
+    mediumSettingLabel
+    mediumSettingCount
+    mediumSettingImages {
+      url @transform(width: 1220, format: "webp")
+    }
+    highSettingLabel
+    highSettingCount
+    highSettingImages {
+      url @transform(width: 1220, format: "webp")
+    }
+    ultraSettingLabel
+    ultraSettingCount
+    ultraSettingImages {
+      url @transform(width: 1220, format: "webp")
+    }
+    observatoryBody {
+      html
+      rawHtml
+      markdown
+      plainText
+    }
+    observatoryImage {
+      urlLarge: url @transform(width: 1920, format: "webp")
+      urlMedium: url @transform(mode: "crop", width: 1440, height: 855, format: "webp")
+      urlSmall: url @transform(mode: "crop", width: 768, height: 456, format: "webp")
+    }
+    footerBody {
+      html
+      rawHtml
+      markdown
+      plainText
+    }
+    footerImage {
+      urlLarge: url @transform(width: 1920, format: "webp")
+      urlMedium: url @transform(mode: "crop", width: 1440, height: 490, format: "webp")
+      urlSmall: url @transform(mode: "crop", width: 768, height: 262, format: "webp")
+    }
+    creditsText {
+      html
+      rawHtml
+      markdown
+      plainText
+    }
+  }
+      ... on howToUse_Entry {
+    id
+    slug
+    title
+    eyebrowText
+    headerText
+    howToUseSection {
+      ... on howToUseSection_section_BlockType{
+        sectionTitle
+        sectionBody {
+          html
+          rawHtml
+          markdown
+          plainText
+        } 
+        sectionImage {
+          url @transform(width: 1200, format: "webp")
+        }
+      }
+    }
+  }
+      ... on landing_Entry {
+    id
+    slug
+    logoImage {
+      url
+    }
+    eyebrowText
+    headlineText
+    buttonLabel
+    discoveryLabel
+  }
+    }
+  }

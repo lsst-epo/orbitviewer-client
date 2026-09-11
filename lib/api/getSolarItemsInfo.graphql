@@ -1,0 +1,20 @@
+query getSolarItemsInfo($siteId: [QueryArgument]) {
+  entries(section: "elements", siteId: $siteId) {
+    ... on elements_default_Entry {
+      title
+      elementID
+      textBody {
+        html
+        plainText
+      }
+      elementPreview {
+        url @transform(width: 800, format: "webp")
+      }
+      elementDiameter
+      elementCategory {
+        slug
+      }
+      viewInSkyviewerLink
+    }
+  }
+}

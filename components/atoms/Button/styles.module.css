@@ -1,0 +1,22 @@
+.button {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 14px;
+  color: var(--color-button-text);
+  background: var(--color-turquoise-900);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--color-button-bg-hover);
+}
+
+.button[aria-pressed="true"] {
+  border-color: var(--color-turquoise-300);
+  background: var(--color-turquoise-800);
+}

@@ -1,0 +1,51 @@
+query getGuidedExperiences($siteId: [QueryArgument]) {
+    guidedExperiencesToursEntries(siteId: $siteId) {
+      ... on tour_Entry {
+        featuredTour
+        title
+        postDate
+        tourPicker {
+          title
+        }
+        tourPreview {
+          title
+          url @transform(width: 600, format: "webp")
+        }
+        duration
+        complexity
+        flexible {
+          ... on introSlide_Entry {
+            thumbnail
+            slideContent
+            subTitle
+            slideTitle
+          }
+          ... on defaultSlide_Entry {
+            slideContent
+            subTitle
+            slideTitle
+            closeUp {
+              ... on elements_default_Entry {
+                elementID
+              }
+            }
+          }
+          ... on funFactSlide_Entry {
+            slideContent
+          }
+          ... on shareSlide_Entry {
+            slideTitle
+            slideText
+            Link1
+            link1Text
+            link2
+            link2Text
+            link3
+            link3Text
+            link4
+            link4Text
+          }
+        }
+      }
+    }
+} 

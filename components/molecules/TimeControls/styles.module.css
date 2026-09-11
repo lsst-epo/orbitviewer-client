@@ -1,0 +1,65 @@
+.controls {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  width: 460px;
+  max-width: 100%;
+  border: 1px solid #ffffff0d;
+  border-radius: 10px;
+  background: linear-gradient(120deg, #373737ed, #222e);
+  backdrop-filter: blur(12px);
+}
+
+.controls button {
+  border: 0;
+  background: transparent;
+  padding: 4px;
+  min-height: 32px;
+}
+
+.controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.controls label:nth-of-type(2) {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+.controls input[type="range"] {
+  flex: 1;
+  width: 100%;
+}
+
+.controls input[type="date"] {
+  background: transparent;
+  border: 0;
+  padding: 4px;
+  color-scheme: dark;
+}
+
+.controls output {
+  min-width: 22px;
+}
+
+@media (width <= 600px) {
+  .controls {
+    gap: 6px;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .controls label {
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  .controls input {
+    max-width: 135px;
+  }
+}
