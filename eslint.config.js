@@ -215,6 +215,23 @@ export default [
   },
 
   {
+    // React Three Fiber components.
+    //
+    // R3F renders through its own reconciler: <mesh>, <pointLight> and
+    // <shaderMaterial> are three.js objects, not DOM elements, and their
+    // props (args, attach, position, intensity, uniforms, ...) are
+    // constructor arguments and object fields. eslint-plugin-react only
+    // knows the HTML property set, so react/no-unknown-property flags every
+    // one of them. The rule has no meaning in these files.
+    files: [
+      "components/celestial-bodies/**/*.tsx",
+      "components/effects/**/*.tsx",
+      "components/templates/Explorer/**/*.tsx",
+    ],
+    rules: { "react/no-unknown-property": 0 },
+  },
+
+  {
     // Modules whose types mirror an external wire format verbatim.
     //
     // Hasura and the MPC dataset are snake_case throughout (mpc_orbits,

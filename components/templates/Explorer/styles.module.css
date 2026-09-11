@@ -3,46 +3,41 @@
 .explorer {
   position: relative;
   width: 100%;
-  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
 }
 
-.placeholder {
+.canvas {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-canvas);
+}
+
+.hud {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: var(--z-toolbar);
   display: flex;
   flex-direction: column;
-  gap: var(--site-margin-large);
-  align-items: center;
-  justify-content: center;
-  min-height: 100dvh;
+  gap: var(--space-xs, 4px);
   padding: var(--site-margin-large);
+  pointer-events: none;
 }
 
-.title {
+.readout {
   margin: 0;
-  font-weight: var(--font-semibold);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-variant-numeric: tabular-nums;
   color: var(--color-text);
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--site-margin-small);
+.live {
+  color: var(--color-turquoise-300);
+}
+
+.meta {
   margin: 0;
-  font-variant-numeric: tabular-nums;
-}
-
-.stats div {
-  padding: var(--site-margin-small);
-  border: 1px solid var(--color-border);
-  border-radius: var(--corner-medium);
-}
-
-.stats dt {
   font-size: 0.8125rem;
   color: var(--color-text-low);
-}
-
-.stats dd {
-  margin: 0;
-  font-size: 1.5rem;
-  color: var(--color-turquoise-200);
 }
