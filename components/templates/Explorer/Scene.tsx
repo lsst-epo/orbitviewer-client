@@ -15,6 +15,7 @@ import Body from "@/components/celestial-bodies/body";
 import OrbitalPath from "@/components/effects/orbital-path";
 import SolarParticles from "@/components/effects/solar-particles";
 import CompositorEffect from "@/components/effects/composite";
+import { useEarthClouds } from "@/components/effects/clouds";
 import { useSolarData } from "@/contexts/SolarData";
 import { registerShaderChunks } from "@/lib/glsl";
 
@@ -66,6 +67,9 @@ const ClockDriver: FunctionComponent = () => {
 const Scene: FunctionComponent = () => {
   const { planets, dwarfPlanets, categories, params } = useExplorer();
   const { elements: mpcElements, quality } = useSolarData();
+
+  // One cloud field for the whole scene; only Earth samples it.
+  const cloudsMap = useEarthClouds(quality);
 
   const planetElements = useMemo<Array<OrbitElements>>(
     () => planets.map((p) => fromPlanetElements(p)),
@@ -156,6 +160,7 @@ const Scene: FunctionComponent = () => {
               radiusKm={radiusKm}
               radiusScale={BODY_RADIUS_SCALE}
               perturbations={perturbations}
+              cloudsMap={id === "earth" ? cloudsMap : null}
             />
           </group>
         );

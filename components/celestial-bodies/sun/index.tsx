@@ -42,7 +42,7 @@ const Sun: FunctionComponent<SunProps> = ({ scale = 1 }) => {
   const haloRef = useRef<Mesh>(null);
   const bodyMaterialRef = useRef<ShaderMaterial>(null);
   const haloMaterialRef = useRef<ShaderMaterial>(null);
-  const { dateRef } = useSolarClock();
+  const { getSimulationTime } = useSolarClock();
 
   const baseUniforms = useMemo(
     () => ({
@@ -101,8 +101,10 @@ const Sun: FunctionComponent<SunProps> = ({ scale = 1 }) => {
 
   useFrame(() => {
     // Surface detail animates against simulation time, so scrubbing the clock
-    // scrubs the granulation with it.
-    const time = dateRef.current.getTime() * 0.001;
+    // scrubs the granulation with it. Relative to the clock's origin, not the
+    // epoch -- see getSimulationTime for why that distinction matters to the
+    // noise functions.
+    const time = getSimulationTime();
     if (bodyMaterialRef.current) {
       bodyMaterialRef.current.uniforms.time.value = time;
     }

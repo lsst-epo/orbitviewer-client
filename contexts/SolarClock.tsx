@@ -50,6 +50,19 @@ interface SolarClockValue {
   advance: (deltaSeconds: number) => void;
   /** Current simulation date as a Modified Julian Date. */
   getMJD: () => number;
+  /**
+   * Simulated seconds elapsed relative to when the clock started, which is
+   * what the shaders animate against.
+   *
+   * Deliberately NOT absolute epoch seconds. Noise functions take this as a
+   * coordinate, and at ~1.79e9 a float32 has worse than 0.1 precision -- the
+   * cloud shader multiplies it up further and degenerates to a flat field.
+   * The legacy `SolarClock.time` had the same relative semantics for exactly
+   * this reason; `sun.frag` additionally guards itself with
+   * `mod(time, 100000.0)`, which is why the sun survives large values and the
+   * clouds do not.
+   */
+  getSimulationTime: () => number;
 }
 
 const SolarClockContext = createContext<SolarClockValue | null>(null);
@@ -71,6 +84,8 @@ const SolarClockProvider: FunctionComponent<
 > = ({ children, initialDate, initialHoursPerSecond = 0 }) => {
   const dateRef = useRef<Date>(initialDate ?? new Date());
   const lastSyncRef = useRef(0);
+  /** Origin for simulation-relative time. Fixed at mount. */
+  const originRef = useRef((initialDate ?? new Date()).getTime() * 0.001);
 
   const [displayDate, setDisplayDate] = useState<Date>(dateRef.current);
   const [hoursPerSecond, setHoursPerSecond] = useState(initialHoursPerSecond);
@@ -118,6 +133,11 @@ const SolarClockProvider: FunctionComponent<
 
   const getMJD = useCallback(() => dateToMJD(dateRef.current), []);
 
+  const getSimulationTime = useCallback(
+    () => dateRef.current.getTime() * 0.001 - originRef.current,
+    []
+  );
+
   const value = useMemo<SolarClockValue>(
     () => ({
       dateRef,
@@ -131,8 +151,10 @@ const SolarClockProvider: FunctionComponent<
       goLive,
       advance,
       getMJD,
+      getSimulationTime,
     }),
     [
+      getSimulationTime,
       displayDate,
       hoursPerSecond,
       isLive,

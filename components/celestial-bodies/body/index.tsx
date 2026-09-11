@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, type FunctionComponent } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { Mesh, Vector3 } from "three";
+import { Mesh, Vector3, type Texture } from "three";
 import { AU2KM, DEG_TO_RAD, KM2AU, PLANET_SCALE } from "@/lib/solar/constants";
 import { calculateOrbit, type PerturbationContext } from "@/lib/solar/orbits";
 import type { OrbitElements } from "@/lib/solar/types";
@@ -12,7 +12,9 @@ import {
   isPlanetId,
   type PlanetRotationData,
 } from "@/lib/solar/planets";
+import { atmosphereFor } from "@/lib/solar/atmospheres";
 import { useSolarClock } from "@/contexts/SolarClock";
+import Atmosphere from "@/components/effects/atmosphere";
 import { BodyMaterial } from "./material";
 import { textureSetFor } from "./textures";
 
@@ -40,6 +42,12 @@ export interface BodyProps {
   radiusScale?: number;
   /** Mean anomalies of the giants, for Schlyter's perturbation terms. */
   perturbations?: PerturbationContext;
+  /**
+   * Procedural cloud layer. Generated once for the whole scene and passed in,
+   * rather than created per body -- only Earth samples it, and the noise is
+   * far too expensive to evaluate thirteen times.
+   */
+  cloudsMap?: Texture | null;
   onClick?: (id: string) => void;
 }
 
@@ -50,11 +58,12 @@ const Body: FunctionComponent<BodyProps> = ({
   radiusKm,
   radiusScale = 1,
   perturbations,
+  cloudsMap = null,
   onClick,
 }) => {
   const meshRef = useRef<Mesh>(null);
   const materialRef = useRef<BodyMaterial>(null);
-  const { dateRef, getMJD } = useSolarClock();
+  const { dateRef, getMJD, getSimulationTime } = useSolarClock();
 
   // Reused across frames; allocating a Vector3 per body per frame is the
   // single easiest way to make this scene stutter.
@@ -90,9 +99,10 @@ const Body: FunctionComponent<BodyProps> = ({
       {
         isEarth,
         nightMap: isEarth ? (nightMap ?? null) : null,
+        cloudsMap: isEarth ? cloudsMap : null,
       }
     );
-  }, [maps, isEarth]);
+  }, [maps, isEarth, cloudsMap]);
 
   // React does not dispose materials it did not create.
   useEffect(() => () => material.dispose(), [material]);
@@ -114,8 +124,10 @@ const Body: FunctionComponent<BodyProps> = ({
       mesh.rotation.y = rotation.meridian * DEG_TO_RAD + turns * Math.PI * 2;
     }
 
-    materialRef.current?.updateTime(dateRef.current.getTime() * 0.001);
+    materialRef.current?.updateTime(getSimulationTime());
   });
+
+  const atmosphere = atmosphereFor(id);
 
   return (
     <mesh
@@ -128,6 +140,9 @@ const Body: FunctionComponent<BodyProps> = ({
     >
       <sphereGeometry args={[1, 64, 32]} />
       <primitive object={material} ref={materialRef} attach="material" />
+      {/* Nested so the shell inherits the body's position and radius; its
+          own scale is then a plain multiple of the surface. */}
+      {atmosphere && <Atmosphere settings={atmosphere} />}
     </mesh>
   );
 };
