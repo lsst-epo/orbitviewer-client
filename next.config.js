@@ -9,6 +9,15 @@ const { env } = await jiti.import("./env");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Next.js writes its own AGENTS.md / CLAUDE.md into the repo root for AI
+  // agents. Disabled because this team keeps agent context in a separate
+  // repo (lsst-epo agentic-context-docs), and a generated file of the same
+  // name at the project root is easy to mistake for that convention.
+  //
+  // If we ever colocate the agent context files in this repo, flip this back
+  // to true -- the generated block is fenced with BEGIN/END markers and sits
+  // alongside hand-written content without clobbering it.
+  agentRules: false,
   images: {
     remotePatterns: [
       // Craft-hosted assets (element previews, page imagery, tour thumbnails).
