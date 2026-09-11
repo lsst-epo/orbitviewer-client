@@ -54,6 +54,9 @@ export const ExplorerParamsSchema = z.object({
 
 export type ExplorerParams = z.infer<typeof ExplorerParamsSchema>;
 
+/** Panels that can occupy the explorer's side rail. */
+export type ExplorerPanel = NonNullable<ExplorerParams["panel"]>;
+
 /**
  * Parses loosely: an unparseable param falls back to its default rather than
  * erroring the page, so a mangled share link still renders the scene.

@@ -1,0 +1,25 @@
+@import url("../../../styles/variables.css");
+
+.loader {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-loader);
+  display: grid;
+  gap: var(--site-margin-large);
+  place-content: center;
+  justify-items: center;
+  pointer-events: none;
+  background-color: var(--color-bg);
+}
+
+.message {
+  margin: 0;
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--color-text-low);
+  text-align: center;
+}
+
+.percent {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}

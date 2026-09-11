@@ -7,6 +7,9 @@ import SolarClockProvider, { useSolarClock } from "@/contexts/SolarClock";
 import SolarDataProvider, { useSolarData } from "@/contexts/SolarData";
 import useClientTranslation from "@/lib/i18n/client";
 import { CAMERA_CLIP } from "@/components/celestial-bodies/camera";
+import Toolbar from "@/components/molecules/Toolbar";
+import Layer from "@/components/atoms/Layer";
+import Loader from "@/components/atoms/Loader";
 import Scene from "./Scene";
 import styles from "./styles.module.css";
 
@@ -45,6 +48,41 @@ const ClockReadout: FunctionComponent<{ locale: string }> = ({ locale }) => {
   );
 };
 
+/**
+ * The explorer's side panels.
+ *
+ * Which one is open lives in the `panel` search param, so the state survives
+ * a reload and is shareable -- the same contract the object detail uses. The
+ * bodies are placeholders; filters, search and the objects list are the next
+ * phases.
+ */
+const Panels: FunctionComponent<{ locale: string }> = ({ locale }) => {
+  const { t } = useClientTranslation(locale);
+  const { params, closePanel } = useExplorer();
+
+  const panels = [
+    { id: "objects" as const, labelKey: "toolbar.objects" },
+    { id: "filters" as const, labelKey: "toolbar.filters" },
+    { id: "search" as const, labelKey: "toolbar.search" },
+  ];
+
+  return (
+    <>
+      {panels.map(({ id, labelKey }) => (
+        <div key={id} id={`explorer-panel-${id}`}>
+          <Layer
+            open={params.panel === id}
+            onClose={closePanel}
+            label={t(labelKey)}
+          >
+            <h2>{t(labelKey)}</h2>
+          </Layer>
+        </div>
+      ))}
+    </>
+  );
+};
+
 /** Dataset download state and object count. */
 const DatasetStatus: FunctionComponent<{
   locale: string;
@@ -72,6 +110,15 @@ const DatasetStatus: FunctionComponent<{
       {selected ? ` · ${selected}` : ""}
     </p>
   );
+};
+
+/** Covers the scene until the dataset has downloaded. */
+const DatasetLoader: FunctionComponent<{ locale: string }> = ({ locale }) => {
+  const { loading, progress } = useSolarData();
+
+  if (!loading) return null;
+
+  return <Loader locale={locale} progress={progress} />;
 };
 
 /**
@@ -110,6 +157,10 @@ const Explorer: FunctionComponent<ExplorerProps> = ({ locale }) => {
               <Scene />
             </Suspense>
           </Canvas>
+
+          <Toolbar locale={locale} />
+          <Panels locale={locale} />
+          <DatasetLoader locale={locale} />
 
           <div className={styles.hud}>
             <ClockReadout locale={locale} />

@@ -1,0 +1,93 @@
+@import url("../../../styles/variables.css");
+
+.toolbar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: var(--z-toolbar);
+  padding: var(--site-margin-small);
+  transform: translateY(-50%);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--site-margin-xsmall);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.item {
+  display: block;
+}
+
+.spaced {
+  margin-top: var(--site-margin-large);
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  width: var(--toolbar-width);
+  padding: var(--site-margin-xsmall);
+  font-family: inherit;
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--color-text-low);
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--corner-medium);
+  transition:
+    color 0.2s var(--easing-default),
+    background-color 0.2s var(--easing-default);
+}
+
+.link:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.link svg {
+  width: 24px;
+  height: 24px;
+}
+
+.active {
+  color: var(--color-button-text);
+  background-color: var(--color-button-bg-hover);
+  border-color: var(--color-border-strong);
+}
+
+.label {
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* On narrow viewports the toolbar becomes a bottom bar. */
+@media (width <= 768px) {
+  .toolbar {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    transform: none;
+  }
+
+  .list {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .spaced {
+    margin-top: 0;
+  }
+
+  .link {
+    width: auto;
+    min-width: 64px;
+  }
+}

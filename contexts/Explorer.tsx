@@ -15,6 +15,7 @@ import type { PlanetOrbitElements } from "@/lib/static/planetOrbits";
 import {
   serializeExplorerParams,
   type ExplorerParams,
+  type ExplorerPanel,
 } from "@/lib/explorer/searchParams";
 
 /**
@@ -46,6 +47,9 @@ interface ExplorerContextValue extends ExplorerData {
   setParams: (next: Partial<ExplorerParams>) => void;
   openObject: (elementId: string) => void;
   closeObject: () => void;
+  /** Opens a panel, or closes it if it is already the open one. */
+  togglePanel: (panel: ExplorerPanel) => void;
+  closePanel: () => void;
 }
 
 const ExplorerContext = createContext<ExplorerContextValue | null>(null);
@@ -92,9 +96,31 @@ const ExplorerProvider: FunctionComponent<
     [setParams]
   );
 
+  const togglePanel = useCallback(
+    (panel: ExplorerPanel) =>
+      // Reads the current panel from the render closure rather than from a
+      // state updater: setParams is a side effect, and calling it inside an
+      // updater would fire twice under StrictMode.
+      setParams({ panel: params.panel === panel ? undefined : panel }),
+    [setParams, params.panel]
+  );
+
+  const closePanel = useCallback(
+    () => setParams({ panel: undefined }),
+    [setParams]
+  );
+
   const value = useMemo<ExplorerContextValue>(
-    () => ({ ...data, params, setParams, openObject, closeObject }),
-    [data, params, setParams, openObject, closeObject]
+    () => ({
+      ...data,
+      params,
+      setParams,
+      openObject,
+      closeObject,
+      togglePanel,
+      closePanel,
+    }),
+    [data, params, setParams, openObject, closeObject, togglePanel, closePanel]
   );
 
   return (
