@@ -1,0 +1,80 @@
+/**
+ * Composes a share image from a snapshot of the scene.
+ *
+ * Ported from `Share.capture`, which rendered the scene again into a
+ * dedicated 1920x1080 WebGLRenderTarget, read the pixels back with
+ * `readRenderTargetPixels`, flipped them row by row in JavaScript because
+ * WebGL's origin is bottom-left, and wrote them through `putImageData`.
+ *
+ * None of that is needed: `drawImage` from the live canvas is already
+ * upright and is done by the compositor, so there is no second render of a
+ * 500,000-object scene and no per-pixel loop.
+ *
+ * The trade-off is that the source is the viewport rather than a fixed
+ * 1920x1080 buffer, so on a small window the snapshot is upscaled. Cropping
+ * to cover keeps the framing honest -- the image shows what was on screen,
+ * never stretched.
+ */
+
+export type ShareLayout = "horizontal" | "vertical" | "square";
+
+export const SHARE_SIZES: Record<
+  ShareLayout,
+  { width: number; height: number }
+> = {
+  horizontal: { width: 1920, height: 1080 },
+  vertical: { width: 1080, height: 1920 },
+  square: { width: 1080, height: 1080 },
+};
+
+/** Branding overlay, sized to match each layout exactly. */
+export const overlayFor = (layout: ShareLayout) =>
+  `/images/social/${layout}.png`;
+
+const loadImage = (src: string): Promise<HTMLImageElement | null> =>
+  new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    // A missing overlay should cost the branding, not the whole image.
+    image.onerror = () => resolve(null);
+    image.src = src;
+  });
+
+export async function composeShareImage(
+  snapshot: HTMLCanvasElement,
+  layout: ShareLayout
+): Promise<HTMLCanvasElement> {
+  const { width, height } = SHARE_SIZES[layout];
+  const output = document.createElement("canvas");
+  output.width = width;
+  output.height = height;
+
+  const context = output.getContext("2d");
+  if (!context) return output;
+
+  context.fillStyle = "#000000";
+  context.fillRect(0, 0, width, height);
+
+  // Cover, centred: the snapshot's aspect ratio is the viewport's and rarely
+  // matches the target, so the overflow is cropped rather than squashed.
+  const scale = Math.max(width / snapshot.width, height / snapshot.height);
+  const drawWidth = snapshot.width * scale;
+  const drawHeight = snapshot.height * scale;
+
+  context.drawImage(
+    snapshot,
+    (width - drawWidth) / 2,
+    (height - drawHeight) / 2,
+    drawWidth,
+    drawHeight
+  );
+
+  const overlay = await loadImage(overlayFor(layout));
+  if (overlay) context.drawImage(overlay, 0, 0, width, height);
+
+  return output;
+}
+
+/** Filename for a downloaded capture, e.g. `orbitviewer-2026-09-11.png`. */
+export const shareFilename = (date: Date = new Date()): string =>
+  `orbitviewer-${date.toISOString().slice(0, 10)}.png`;

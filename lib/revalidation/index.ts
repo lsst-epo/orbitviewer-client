@@ -1,0 +1,55 @@
+"server-only";
+
+import { revalidatePath, revalidateTag } from "next/cache";
+import { languages } from "@/lib/i18n/settings";
+import { getPathname } from "@/lib/i18n/navigation";
+import tagStore from "@/lib/api/tags";
+
+const CRAFT_HOMEPAGE_URI = "__home__";
+
+/**
+ * Next.js 16 requires a cacheLife profile on revalidateTag. "max" expires the
+ * entry outright, matching the previous single-argument behaviour.
+ */
+const REVALIDATE_PROFILE = "max";
+
+/**
+ * Maps a Craft URI to the routes that render it, for every locale.
+ *
+ * About and How to Use are served by the [...uriSegments] catch-all, so their
+ * Craft slug is the path. Landing renders at the locale root.
+ */
+const revalidate = (uri: string) => {
+  const paths: Array<string> = [];
+  const tags = new Set<string>();
+
+  const segments = uri === CRAFT_HOMEPAGE_URI ? [] : uri.split("/");
+  const section = segments.find((part) => part.length > 0);
+
+  languages.forEach((locale) => {
+    const path = getPathname({
+      href: { pathname: `/${segments.join("/")}` },
+      locale,
+    });
+
+    paths.push(path);
+    revalidatePath(path);
+  });
+
+  // Section-level tags so list pages pick up the change too.
+  const sectionTag = section
+    ? tagStore[section as keyof typeof tagStore]
+    : undefined;
+
+  if (sectionTag) {
+    tags.add(sectionTag);
+    revalidateTag(sectionTag, REVALIDATE_PROFILE);
+  }
+
+  tags.add(tagStore.globals);
+  revalidateTag(tagStore.globals, REVALIDATE_PROFILE);
+
+  return { paths, tags: [...tags] };
+};
+
+export default revalidate;

@@ -1,0 +1,343 @@
+{
+  "core": {
+    "languages": {
+      "label": "idiomas",
+      "english": {
+        "shorthand": "en",
+        "full": "English"
+      },
+      "spanish": {
+        "shorthand": "es",
+        "full": "Español"
+      }
+    },
+    "objects": "objetos",
+    "back": "Orbit viewer",
+    "recommended": "recomendado",
+    "loading": "Cargando... esto puede tomar tiempo",
+    "testing": "Probando rendimiento para optimizar tus ajustes...",
+    "close": "Cerrar"
+  },
+  "logo": {
+    "alt": "logo de Orbitviewer del Observatorio Rubin de NSF-DOE"
+  },
+  "exploration": {
+    "low": {
+      "name": "Celulares, tablets y laptops básicos",
+      "title": "Experiencia básica",
+      "objects": "16000",
+      "description": "Perfecta para explorar desde cualquier lugar, con un uso mínimo de datos e imágenes con menor resolución"
+    },
+    "medium": {
+      "name": "Laptops y computadores básicos",
+      "title": "Experiencia esencial",
+      "objects": "65000",
+      "description": "Gran rendimiento en la mayoría de los dispositivos y con imágenes de gran resolución"
+    },
+    "high": {
+      "name": "Laptops de alta gama",
+      "title": "Descubrimiento detallado",
+      "objects": "262000",
+      "description": "Texturas detalladas y mayor número de objetos para una exploración más profunda"
+    },
+    "ultra": {
+      "name": "PC para juegos",
+      "title": "Máxima fidelidad",
+      "objects": "500000",
+      "description": "Máximo detalle con el catálogo celeste completo para una experiencia máxima"
+    }
+  },
+  "navigation": {
+    "aria": "Navegación Principal",
+    "share": "Compartir",
+    "settings": "Ajustes",
+    "language": "Idioma",
+    "exploration": "Modo de exploración",
+    "fullscreen": "Pantalla completa",
+    "help": "Ayuda",
+    "how_to_use": "Cómo utilizarlo",
+    "about": "Acerca de",
+    "back": "Atrás"
+  },
+  "share": {
+    "title": "Compartir",
+    "tabs": {
+      "aria": "Navegación por pestañas",
+      "link": "Enlace",
+      "screen_capture": "Captura de pantalla",
+      "copy": "Copiar",
+      "copied": "copiado",
+      "share_on": "Compartir en"
+    },
+    "aspect_ratio": {
+      "horizontal": "Horizontal",
+      "vertical": "Vertical",
+      "square": "Cuadrado"
+    },
+    "download": "Descargar imagen",
+    "generating": "Generando imagen"
+  },
+  "splash": {
+    "logo": {
+      "alt": "logo del Observatorio Vera C. Rubin de NSF-DOE"
+    },
+    "discoveries": "{{formatted}} discoveries"
+  },
+  "object": {
+    "designation": "Designación",
+    "hero": {
+      "alt": "Imagen astronómica de"
+    },
+    "diameter": "Diámetro",
+    "comparison": "Este objeto comparado con otra %category%",
+    "orbital_elements": {
+      "title": "Elementos orbitales",
+      "aria": "Parámetros orbitales de elementos",
+      "periapsis": {
+        "aria": "Argumento del periastro",
+        "tooltip": "Argumento del perihelio: el \"círculo\" de la órbita"
+      },
+      "longitude": {
+        "aria": "Longitud del nodo ascendente",
+        "tooltip": "Longitud del nodo ascendente: el \"viraje\" de la órbita"
+      },
+      "anomaly": {
+        "aria": "Anomalía verdadera",
+        "tooltip": "Anomalía verdadera: la posición del objeto en su órbita"
+      },
+      "info": "Más sobre"
+    },
+    "closest_sun": {
+      "title": "¿Cuándo estará más cerca del Sol?",
+      "days_left": "días restantes"
+    },
+    "how_far": {
+      "title": "¿Qué tan lejos está hoy?",
+      "from_sun": "Desde el Sol",
+      "from_earth": "Desde la Tierra"
+    },
+    "sun_graph": {
+      "title": "Distancia promedio desde el Sol",
+      "detail": "Eje semimayor (a)"
+    },
+    "deviation_graph": {
+      "title": "Desviación de una órbita circular",
+      "detail": "Excentricidad (e)"
+    },
+    "angle_graph": {
+      "title": "Ángulo de la órbita",
+      "detail": "Inclinación (i)"
+    },
+    "view": {
+      "label": "Vista de cámara",
+      "object": "Objeto",
+      "orbit": "Órbita"
+    },
+    "perihelion_distance": "Máximo acercamiento al Sol"
+  },
+  "onboarding": {
+    "exploration": {
+      "title": "Selecciona tu Modo de Exploración",
+      "action": "Iniciar",
+      "info": "Puedes volver a ajustar tu modo de exploración en el menú de ajustes"
+    },
+    "expedition": {
+      "title": "Elige tu primer tour",
+      "subtitle": "¿No sabes por dónde empezar? Haz un tour guiado para explorar objetos del Sistema Solar y el papel de Rubin en su estudio.",
+      "see_all": "Ver todos los tours",
+      "skip": "Ir al visor"
+    }
+  },
+  "filters": {
+    "title": "Filtros",
+    "reset": "Restaurar",
+    "apply": "Aplicar filtros",
+    "discoveries": "Descubrimientos",
+    "toggle": {
+      "all": "Todos",
+      "rubin": "Rubin",
+      "other": "Otros",
+      "aria": "Filtrar objetos por descubridor"
+    },
+    "distance": "Distancia del Sol",
+    "au": "En Unidades Astronómicas",
+    "discovery": "Fecha de descubrimiento"
+  },
+  "search": {
+    "title": "Buscar",
+    "search_cloud": "Búsqueda en la nube",
+    "not_found_local": "\"{{query}}\" no encontrada en tu catálogo local. Intenta buscando en nuestra base de datos de la nube",
+    "not_found": "\"{{query}}\" no encontrada",
+    "recommended_searches": "Búsquedas recomendadas",
+    "placeholder": "Search by planet, object,..",
+    "hint": "Type at least {{count}} characters"
+  },
+  "timemachine": {
+    "aria": "Seleccionar fechas",
+    "zone": {
+      "utc": "UTC",
+      "local": "Local",
+      "toUtc": "Showing local time. Switch to UTC.",
+      "toLocal": "Showing UTC. Switch to local time."
+    },
+    "toggle": {
+      "aria": "Ocultar los controles de máquina de tiempo"
+    },
+    "live": "En vivo",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "speed": "Velocidad de la simulación",
+    "realtime": "TIEMPO REAL",
+    "expand": "Mostrar la velocidad de la simulación",
+    "region": "Máquina del tiempo"
+  },
+  "toolbar": {
+    "objects": "Objetos",
+    "filters": "Filtros",
+    "search": "Buscar",
+    "guides": "Tours",
+    "aria": "Explorer tools"
+  },
+  "wizard": {
+    "title": "Asistente de inicio",
+    "steps": {
+      "aria": "Paso X de Y"
+    },
+    "content": {
+      "toolbar": "¡Elige qué ver! Selecciona por tipo de objeto, filtra por luminosidad y busca objetos específicos",
+      "time_controls": "Reproduce las órbitas hacia delante o hacia atrás con el control deslizante o salta a una fecha y hora específicas utilizando el calendario",
+      "map_controls": "Puedes restaurar la vista al centro, acercar o alejar la imagen, o ver en pantalla completa",
+      "share_menu": "Comparte tu vista actual con un enlace o una captura de pantalla de tu vista actual. Abre el menú de tres líneas (arriba a la derecha) para obtener información sobre Orbitviewer",
+      "guides": "Explora nuestra colección de recorridos guiados que destacan distintos objetos de interés en el Sistema Solar."
+    },
+    "button_group": {
+      "aria": "Controles de navegación",
+      "skip": "Saltar",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "finish": "Finalizar"
+    }
+  },
+  "objects": {
+    "title": "Selecciona objetos para explorar",
+    "subtitle": "Selecciona qué tipos de órbitas quieres ver",
+    "types": {
+      "planets_moons": {
+        "name": "Planetas y planetas enanos",
+        "description": "Los ocho planetas orbitan alrededor del Sol en trayectorias principalmente circulares y son en su mayoría rocosos o gaseosos. Los planetas interiores (como la Tierra y Marte) son sólidos y pequeños, mientras que los planetas exteriores (como Júpiter y Neptuno) son grandes y gaseosos o helados",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "near_earth_objects": {
+        "name": "Objetos cercanos a la Tierra (NEO)",
+        "description": "Los NEO, por sus siglas en inglés, son asteroides o cometas con órbitas que los acercan a la órbita de la Tierra. La mayoría son inofensivos, pero los científicos los siguen de cerca para controlar cualquier riesgo potencial de impacto. Sus órbitas pueden cambiar con el tiempo debido a la fuerza gravitatoria de los planetas o del Sol",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "asteroids": {
+        "name": "Asteroides del Cinturón Principal",
+        "description": "Estos cuerpos rocosos orbitan alrededor del Sol entre Marte y Júpiter, formando el cinturón de asteroides. Van desde fragmentos del tamaño del polvo hasta objetos del tamaño de un planeta enano, como Ceres. El cinturón de asteroides son restos del Sistema Solar temprano que nunca llegaron a formar un planeta",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "comets": {
+        "name": "Cometas",
+        "description": "Los cometas son cuerpos helados del Sistema Solar exterior que, al pasar cerca del Sol, desarrollan comas brillantes y colas de material desgasificado. Sus órbitas pueden ser cortas y frecuentes o largas y distantes, tardando miles de años en volver",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "centaurs": {
+        "name": "Centauros",
+        "description": "Los centauros orbitan entre Júpiter y Neptuno y a veces tienen rasgos tanto de asteroides como de cometas. Se cree que son objetos poco duraderos e inestables debido a sus encuentros cercanos con la gravedad mucho más fuerte de los planetas gigantes gaseosos. Sus órbitas caóticas los convierten en objetos de estudio fascinantes",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "trans_neptunian_objects": {
+        "name": "Objetos transneptunianos",
+        "description": "Los TNO, por sus siglas en inglés, orbitan alrededor del Sol más allá de Neptuno. Incluyen planetas enanos como Plutón y Eris, junto con millones de objetos más pequeños. Estos mundos distantes y fríos son algunos de los más antiguos del Sistema Solar, con órbitas y superficies que aún conservan pistas sobre sus primeros días",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "interstellar_objects": {
+        "name": "Objetos interestelares",
+        "description": "Se trata de visitantes poco comunes de fuera de nuestro Sistema Solar, que pasan en trayectorias abiertas e hiperbólicas tan rápidas que no están ligados a la gravedad del Sol. A diferencia de los asteroides y cometas que orbitan alrededor del Sol, los objetos interestelares sólo pasan una vez, para no volver jamás. 'Oumuamua (2017) y Borisov (2019) son los únicos ejemplos confirmados hasta ahora",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "trojans": {
+        "name": "Troyanos",
+        "description": "Los troyanos son asteroides que comparten la órbita de un planeta, orbitando juntos alrededor de puntos de estabilidad gravitatoria por delante o por detrás del planeta (llamados puntos de Lagrange). La mayoría de los troyanos conocidos comparten órbitas con Júpiter, pero Neptuno e incluso la Tierra tienen algunos. Sus órbitas únicas los convierten en residentes a largo plazo del Sistema Solar y en trazadores de interacciones gravitatorias con los planetas"
+      }
+    },
+    "sun_star": {
+      "name": "Sol"
+    },
+    "total": "Objetos cercanos a la Tierra",
+    "detected": "Detectado por Rubin",
+    "hidden": "Esconder",
+    "visible": "Mostrar",
+    "previous": "Objetos anteriores",
+    "next": "Más objetos"
+  },
+  "guides": {
+    "index": {
+      "title": "Experiencias guiadas",
+      "subtitle": "¿No sabes por dónde empezar? Haz un tour guiado para explorar objetos del Sistema Solar y el papel de Rubin en su estudio.",
+      "filter": {
+        "newer": "Más recientes primero",
+        "older": "Más antiguos primero",
+        "less_duration": "Más cortos primero",
+        "more_duration": "Más largos primero",
+        "less_complex": "Menos complejos primero",
+        "more_complex": "Más complejos primero"
+      },
+      "search": "Buscar",
+      "count_one": "{{count}} recorrido",
+      "count_other": "{{count}} recorridos",
+      "minutes": "{{count}} min",
+      "empty": "Ningún recorrido coincide con esa búsqueda."
+    },
+    "difficulty": {
+      "easy": "Fácil",
+      "medium": "Intermedio",
+      "hard": "Difícil"
+    },
+    "entry": {
+      "navigation": {
+        "guides": "Tours",
+        "next": "Siguiente",
+        "previous": "Anterior"
+      },
+      "step": "Paso {{current}} de {{total}}",
+      "fun_fact": "¿Sabías que?"
+    }
+  },
+  "modal": {
+    "title": "¿Las cosas andan un poco lentas?",
+    "description": "Hemos notado algunos problemas de rendimiento. Un modo de visualización diferente podría proporcionar una mejor experiencia en tu dispositivo",
+    "action": {
+      "primary": "Cambiar a modo Lite",
+      "secondary": "Tal vez más tarde"
+    }
+  },
+  "toast": {
+    "max_date": {
+      "message": "Se alcanzó la fecha máxima. No se pueden calcular las posiciones futuras. Intenta explorar dentro del rango de tiempo soportado",
+      "aria": "Notificación de fecha máxima"
+    }
+  },
+  "about": {
+    "observatory_title": "Observatorio Vera C. Rubin de NSF–DOE",
+    "credits": "Créditos"
+  },
+  "e404": {
+    "subtitle": "Página no encontrada",
+    "action": "Volver al inicio"
+  },
+  "mapcontrols": {
+    "aria": "Controles de vista",
+    "recenter": "Centrar la vista",
+    "zoom_in": "Acercar",
+    "zoom_out": "Alejar"
+  }
+}

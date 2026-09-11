@@ -1,0 +1,78 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_map_controls.scss`. A vertical stack at the
+   bottom right, clear of the time machine. */
+
+.controls {
+  position: absolute;
+  right: var(--site-margin-large);
+  bottom: var(--site-margin-large);
+  z-index: var(--z-scene_controls);
+  display: grid;
+
+  /* 8px, literal in `_map_controls.scss`. The margin tokens double at
+     `medium`, so one here would space the stack twice as far apart as
+     production's at every desktop width. */
+  gap: 0.5rem;
+}
+
+/* `.button_icon.secondary.small`: the same frozen-glass circle as the
+   navigation trigger, one size down. Not a bordered rounded square -- the
+   legacy has no rectangular buttons over the scene at all. */
+.button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-button-text);
+
+  /* Held zoom: a press that drags off the button must not select text or
+     start a browser gesture on the way. */
+  touch-action: none;
+  cursor: pointer;
+  user-select: none;
+  background: var(--surface-glass);
+  border: 0;
+  border-radius: 50%;
+  backdrop-filter: blur(var(--backdrop-blur));
+}
+
+/* The `gradient_border` mixin's masked 1px edge. Same recipe as the
+   navigation trigger and the toolbar; the tokens carry the gradients. */
+.button::before {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  pointer-events: none;
+  content: "";
+  background: var(--surface-glass-edge);
+  border-radius: inherit;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* A ring, which is how the legacy marks every one of these. */
+.button:hover {
+  color: var(--color-turquoise-300);
+  box-shadow: 0 0 0 2px var(--color-turquoise-700);
+}
+
+.button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (width <= 768px) {
+  .controls {
+    right: var(--site-margin-small);
+
+    /* Above the time machine, which is itself above the toolbar here. */
+    bottom: calc(
+      var(--toolbar-height) + var(--timemachine-height) + 3 *
+        var(--site-margin-small)
+    );
+  }
+}

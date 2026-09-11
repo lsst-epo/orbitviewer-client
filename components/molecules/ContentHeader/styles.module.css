@@ -1,0 +1,56 @@
+@import url("../../../styles/variables.css");
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-logo);
+  display: flex;
+  gap: var(--site-margin-small);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--site-margin-small) var(--site-margin-large);
+  background-color: var(--color-backdrop);
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(var(--backdrop-blur));
+}
+
+/* `.button.ghost.small`, the same pill the object card uses -- no border at
+   rest, one on hover. */
+.back {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  height: 2.5rem;
+  padding-inline: 0.75rem;
+  font-size: 1rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-button-text);
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--corner-medium);
+}
+
+.back:hover {
+  color: var(--color-button-text-hover);
+  border-color: var(--color-border-strong);
+}
+
+.back svg {
+  width: 18px;
+  height: 18px;
+}
+
+.logo {
+  width: auto;
+  height: 24px;
+}
+
+@media (width <= 480px) {
+  .header {
+    padding: var(--site-margin-small);
+  }
+
+  .logo {
+    height: 20px;
+  }
+}

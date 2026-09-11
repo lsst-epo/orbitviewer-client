@@ -1,0 +1,135 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_loader.scss` and `layers/Loader.ts`. The two have
+   to be read together: the stylesheet sizes and places the mark, and the gsap
+   timelines in the layer are what make it a loader rather than a logo. */
+
+.loader {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-loader);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+
+  /* Translucent over a blur, not an opaque fill: the scene is already
+     rendering the planets behind this, and the legacy lets that show through
+     rather than hiding it. Clicks are blocked, as they are there -- there is
+     nothing in the scene to hit until the dataset lands. */
+  background: var(--color-backdrop);
+  backdrop-filter: blur(var(--backdrop-blur));
+
+  /* `Loader.show()` tweened the overlay's opacity over 0.8s on `power1.in`. */
+  animation: loader-in 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) backwards;
+}
+
+.content {
+  display: grid;
+
+  /* 400px/24px in the legacy, where the gap is wider than any margin token. */
+  gap: 1.5rem;
+  justify-items: center;
+  max-width: 25rem;
+  text-align: center;
+}
+
+.mark {
+  width: 5.8125rem;
+  height: 6rem;
+  color: var(--color-turquoise-400);
+
+  /* `scale` and `rotate` rather than two `transform` animations, which would
+     overwrite one another: the entrance tween and the turn run together. */
+  transform-origin: center;
+  animation:
+    loader-turn 50s linear infinite,
+    loader-mark-in 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) backwards;
+}
+
+@media (width >= 768px) {
+  .mark {
+    width: 7.8125rem;
+    height: 8rem;
+  }
+}
+
+.glyph {
+  opacity: 0;
+
+  /* 0.04s apart, which is `stagger` in the second timeline. */
+  animation: loader-glyph 2.66s calc(var(--glyph-index) * 0.04s) infinite
+    backwards;
+}
+
+.message {
+  margin: 0;
+
+  /* `body-medium-regular`. */
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.percent {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-low);
+}
+
+@keyframes loader-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes loader-turn {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes loader-mark-in {
+  from {
+    scale: 0.5;
+  }
+}
+
+/* One cycle of the legacy's second timeline: every glyph fades up over 0.6s on
+   `power3.out`, holds, then fades out over 1s on `power2.out`, and the whole
+   thing repeats -- 2.66s end to end.
+   The one departure: there the fade-out is simultaneous for every glyph, since
+   gsap staggered only the first tween. A single CSS animation cannot stagger
+   one half of its own keyframes, so the exit inherits the 0.56s spread of the
+   entrance. At this speed it reads as the same breathing mark. */
+@keyframes loader-glyph {
+  0% {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  22.6% {
+    opacity: 1;
+    animation-timing-function: linear;
+  }
+
+  62.4% {
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Still legible without any of it: the mark holds, drawn in full. */
+@media (prefers-reduced-motion: reduce) {
+  .loader,
+  .mark,
+  .glyph {
+    animation: none;
+  }
+
+  .glyph {
+    opacity: 1;
+  }
+}

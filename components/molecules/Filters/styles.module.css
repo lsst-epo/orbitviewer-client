@@ -1,0 +1,89 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_filters.scss`. The panel's own shape -- a
+   floating card at the top left rather than a drawer -- is the Layer's
+   `card` side; everything here is what sits inside it. */
+
+.filters {
+  display: grid;
+}
+
+.head {
+  display: flex;
+  gap: var(--site-margin-small);
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* `subtitle-large-regular`, the same size as the heading on the objects
+   takeover -- not a small bold caption. */
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: var(--font-regular);
+  line-height: 1.333;
+  color: var(--color-text);
+}
+
+.body {
+  display: grid;
+}
+
+/* `filters_card_field`: 24px of air above and below, and a rule between
+   consecutive fields rather than a gap. Both literals in the legacy. */
+.body > * {
+  padding: 1.5rem 0;
+}
+
+.body > * + * {
+  border-top: 1px solid var(--color-border);
+}
+
+/**
+ * The Reset button.
+ *
+ * epo-react-lib's Button themes itself by setting three custom properties
+ * (`aButtonTheme` in `styles/mixins/appearance.js`) that its base mixin then
+ * consumes. Overriding those variables rather than the declarations is what
+ * makes this work at all: the mixin sets `color` with `!important`, so the
+ * property itself cannot be overridden from here, but the variable behind it
+ * can.
+ *
+ * `tertiary` is the right shape -- the legacy's Reset is `.button.secondary`,
+ * a bordered ghost -- but the library draws it black-on-white for a light
+ * page. The alternative was `secondary`, which in epo's vocabulary means red;
+ * that is what this button actually rendered as whenever a filter was
+ * changed, reading grey only because `isInactive` holds at the defaults.
+ *
+ * The class is doubled to clear the styled-component's own specificity
+ * without depending on which stylesheet the bundler emits last.
+ */
+.reset.reset {
+  --button-background-color: transparent;
+  --button-border-color: var(--color-border-strong);
+  --button-color: var(--color-turquoise-100);
+
+  /* Size, which the theme variables do not reach. The library's button is
+     `0.81818em` bold in a 6px box padded with its own spacing tokens;
+     `.button.secondary.small` is 2.5rem tall, 1rem semibold, `0 0.75rem`,
+     and rounded to `--corner-medium`. The two spacing tokens are epo's, so
+     those go through variables; the rest are declarations, which land
+     because the doubled class outruns a single styled-component class. */
+  --size-spacing-xs: 0;
+  --size-spacing-m: 0.75rem;
+
+  height: 2.5rem;
+  font-size: 1rem;
+  font-weight: var(--font-semibold);
+  border-radius: var(--corner-medium);
+}
+
+/* The library greys the fill and border out to `--neutral40` when inactive,
+   which puts a light-mode grey on a dark panel. The legacy just dims the
+   ghost it already has. */
+.reset.reset[aria-disabled="true"] {
+  --button-background-color: transparent;
+  --button-border-color: var(--color-border);
+
+  opacity: 0.5;
+}

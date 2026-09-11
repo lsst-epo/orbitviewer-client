@@ -1,0 +1,144 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_wizard.scss`. */
+
+.wizard {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-wizard);
+
+  /* The overlay itself catches nothing: the shades below do the blocking,
+     and the cut-out is genuinely open. */
+  pointer-events: none;
+}
+
+.shade {
+  position: fixed;
+  pointer-events: auto;
+  background-color: rgb(var(--color-black-rgb) / 75%);
+}
+
+.ring {
+  position: fixed;
+  pointer-events: none;
+  border: 1px solid var(--color-turquoise-300);
+  border-radius: var(--corner-medium);
+  box-shadow: 0 0 0 1px rgb(var(--color-black-rgb) / 40%);
+}
+
+/* Tooltip */
+
+.tooltip {
+  position: fixed;
+  bottom: var(--site-margin-large);
+  left: 50%;
+  display: grid;
+  gap: var(--site-margin-xsmall);
+  width: min(26rem, calc(100vw - 2 * var(--site-margin-small)));
+  padding: var(--site-margin-small);
+  pointer-events: auto;
+  background-color: var(--color-grey-800);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-large);
+  transform: translateX(-50%);
+}
+
+.head {
+  display: flex;
+  gap: var(--site-margin-xsmall);
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.steps {
+  margin: 0;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-low);
+}
+
+.body {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-low);
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--site-margin-xsmall);
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--site-margin-xsmall);
+}
+
+.group {
+  display: flex;
+  gap: var(--site-margin-xsmall);
+}
+
+.skip,
+.ghost,
+.primary {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 6px 12px;
+  font-family: var(--font-stack);
+  font-size: 0.875rem;
+  cursor: pointer;
+  border-radius: var(--corner-medium);
+}
+
+.skip,
+.ghost {
+  color: var(--color-button-text);
+  background: none;
+  border: 1px solid var(--color-border);
+}
+
+/* `.button.primary`: turquoise-600 fill, turquoise-100 label. Same
+   inversion the splash and tour-player buttons had. */
+.primary {
+  color: var(--color-turquoise-100);
+  background-color: var(--color-turquoise-600);
+  border: 1px solid var(--color-turquoise-600);
+}
+
+.ghost:disabled {
+  color: var(--color-grey-400);
+  cursor: default;
+}
+
+.skip:hover,
+.ghost:hover:not(:disabled) {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.primary:hover {
+  background-color: var(--color-turquoise-100);
+  border-color: var(--color-turquoise-100);
+}
+
+.skip svg,
+.ghost svg,
+.primary svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Applied when the spotlight is in the lower half of the viewport, so the
+   card never covers the thing it is describing. The legacy pinned it to the
+   bottom and sat on top of the time machine for that whole step. */
+.tooltipTop {
+  top: var(--site-margin-large);
+  bottom: auto;
+}

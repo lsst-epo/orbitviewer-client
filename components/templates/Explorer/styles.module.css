@@ -1,0 +1,33 @@
+@import url("../../../styles/variables.css");
+
+.explorer {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-canvas);
+}
+
+.hud {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: var(--z-toolbar);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs, 4px);
+  padding: var(--site-margin-large);
+  pointer-events: none;
+}
+
+.meta {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-low);
+}
+

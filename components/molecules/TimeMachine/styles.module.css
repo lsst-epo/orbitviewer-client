@@ -1,0 +1,503 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_timemachine.scss`, flattened out of its nesting.
+   The `frozen_glass` and `gradient_border` mixins become a backdrop filter
+   and a plain border; the tokens they used are the same. */
+
+.timemachine {
+  --head-height: 3rem;
+
+  position: absolute;
+
+  /* Centred on the viewport, which means it is not centred on the space
+     beside the toolbar -- the rail simply overlaps the left margin. That is
+     production's `.scene_controls`, a strip inset by `--site-margin-large`
+     on three sides with the controls laid out across it. */
+  right: var(--site-margin-large);
+  bottom: var(--site-margin-large);
+  left: var(--site-margin-large);
+  z-index: var(--z-scene_controls);
+
+  /* Deployed production overrides `--timemachine-width` (24rem, which is
+     still what the legacy's `_variables.scss` says) with 27.5rem on
+     `.scene_controls .timemachine`. The override is what ships. */
+  max-width: 27.5rem;
+  margin: 0 auto;
+
+  /* `frozen_glass` + `gradient_border`, the same pair the toolbar and the
+     object card wear. A flat fill with a hard 1px border reads as a dialog
+     over the scene rather than part of the HUD. */
+  background: var(--surface-glass);
+  border: 0;
+  border-radius: var(--corner-large);
+  backdrop-filter: blur(var(--backdrop-blur));
+  transition:
+    left 0.5s var(--easing-default),
+    max-width 0.5s var(--easing-default);
+}
+
+/* The object detail dock, and only that, moves these along: production shifts
+   the whole control strip to `calc(1rem + 40vw)` under `.object_template`,
+   the same column the dock itself is measured against. A filters or search
+   panel does not move it -- measured on production, which leaves it centred
+   -- because those stop short of the strip on their right edge. */
+.timemachine::before {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  pointer-events: none;
+  content: "";
+  background: var(--surface-glass-edge);
+  border-radius: inherit;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+.shifted {
+  left: calc(1rem + 40vw);
+  max-width: var(--panel-width);
+}
+
+/* 8px, literal in `_timemachine.scss` rather than a margin token -- and the
+   tokens double at `medium`, so reading one here would put twice the inset
+   on the row at every desktop width. */
+.head {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  height: var(--head-height);
+  padding: 0 0.5rem;
+}
+
+/* Play / pause */
+
+.play {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: var(--color-turquoise-400);
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.play svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* The `spinner(large)` mixin: a dim full ring with one bright quarter turning
+   over it, not a ring with a brighter side. Both are 1px in turquoise-500;
+   the arc is the same circle masked to 90deg. */
+.ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, var(--color-turquoise-500) 30%, transparent);
+  border-radius: 50%;
+}
+
+.ring::after {
+  position: absolute;
+  inset: -1px;
+  content: "";
+  border: 1px solid var(--color-turquoise-500);
+  border-radius: 50%;
+  mask: conic-gradient(from 0deg, #000 90deg, transparent 90deg);
+}
+
+/* Paused is a play triangle on its own -- the legacy drops the spinner's
+   border-width to 0 in its `resume` state. */
+.play:not(.playing) .ring {
+  display: none;
+}
+
+.playing .ring::after {
+  animation: spin var(--speed, 4s) linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playing .ring::after {
+    animation: none;
+  }
+}
+
+/* Date */
+
+/* The input and the formatted string share one grid cell, so the string sits
+   over the control rather than beside it. */
+.dateField {
+  display: grid;
+  flex: auto;
+  min-width: 0;
+}
+
+.dateInput,
+.dateDisplay {
+  grid-area: 1 / 1;
+  padding: 0.25rem 0.375rem;
+  font-family: var(--font-stack);
+  font-size: 1rem;
+  color: var(--color-button-text);
+}
+
+.dateInput {
+  min-width: 0;
+  color-scheme: dark;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--corner-medium);
+}
+
+/* Replaced by `.calendar`, which can sit where the legacy puts it and take
+   the same styling as every other control in the row. */
+.dateInput::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+/* The formatted string is painted over this, so the browser's own rendering
+   of the value has to get out of the way -- but only its ink. The control
+   itself stays where it is, takes the click, and comes back the moment it
+   has focus and the segments need to be visible to type into. */
+.dateInput:not(:focus) {
+  color: transparent;
+}
+
+.dateInput:hover {
+  border-color: var(--color-border);
+}
+
+.dateInput:focus-visible {
+  outline: none;
+  border-color: var(--color-turquoise-400);
+}
+
+/* Over the input, and out of its way for the pointer: a click has to reach
+   the control underneath. */
+.dateDisplay {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  border: 1px solid transparent;
+}
+
+.calendar,
+.zone {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0.25rem 0.375rem;
+  font-family: var(--font-stack);
+  color: var(--color-button-text);
+  cursor: pointer;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--corner-medium);
+}
+
+.zone {
+  font-size: 0.6875rem;
+  color: var(--color-grey-200);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.calendar:hover,
+.zone:hover {
+  color: var(--color-button-text-hover);
+  border-color: var(--color-border);
+}
+
+.calendar svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Live */
+
+.live {
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  color: var(--color-text-low);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+}
+
+.liveActive {
+  color: var(--color-turquoise-100);
+  background-color: var(--color-turquoise-800);
+  border-color: var(--color-turquoise-600);
+}
+
+/* Collapse */
+
+.toggle {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 6px;
+  color: var(--color-button-text);
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.toggle:hover {
+  color: var(--color-button-text-hover);
+}
+
+.toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.rate {
+  font-size: 0.75rem;
+  color: var(--color-text-low);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* Speed */
+
+.body {
+  padding: 0.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.speed {
+  position: relative;
+  display: grid;
+  gap: 4px;
+}
+
+/* Name and reading, together. */
+.speedMeta {
+  display: flex;
+  gap: 0.375rem;
+  align-items: baseline;
+}
+
+.speedLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-low);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.speedValue {
+  font-size: 0.75rem;
+  color: var(--color-text);
+  letter-spacing: 0.04em;
+}
+
+/* The rail's own row, so the hints can be placed against the rail rather
+   than against the whole speed block. The rail is this box's first pixels:
+   the library puts it flush with the top and reserves the space below it for
+   a label the legacy floats above instead. */
+.sliderRow {
+  position: relative;
+}
+
+/* The library's slider, restyled to `_rangeslider.scss`.
+
+   Every selector here is doubled. The component is styled-components, which
+   injects at runtime and therefore after this stylesheet; at equal
+   specificity the library wins, so a single class never takes. */
+
+.slider.slider {
+  position: relative;
+}
+
+/* The rail. The library draws it as an 18px bar -- a 2px core inside an 8px
+   white border, which is its light theme and the white track that was
+   showing. The legacy's is 4px of turquoise, bright at both ends and dark in
+   the middle, pinched at the centre by a clip-path: the shape says that the
+   middle of the travel is real time and either end is fast. */
+.slider.slider > div {
+  height: 4px;
+  background: none;
+  border: 0;
+}
+
+/* The rail is drawn on a pseudo-element, not on the element itself, because
+   the thumb is its child and `clip-path` clips descendants -- put the shape
+   on the parent and the thumb is clipped to a 4px sliver of itself. The
+   legacy has no such problem: there the track and the thumb are siblings. */
+.slider.slider > div::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(
+    -90deg,
+    var(--color-turquoise-300) 0%,
+    var(--color-turquoise-700) 50%,
+    var(--color-turquoise-300) 100%
+  );
+  border-radius: 4px;
+  clip-path: polygon(0% 0%, 50% 30%, 100% 0%, 100% 100%, 50% 70%, 0% 100%);
+}
+
+/* The library's own fill, over the rail. It fills from the minimum, which on
+   a signed rate would read as "half speed" at zero, and there is no prop to
+   turn it off. */
+.slider.slider :global(.track) {
+  background: none;
+}
+
+/* 20px of turquoise-600 inside a 3px turquoise-200 ring.
+   Horizontally this needs no correction: the library's own travel already
+   runs over `width - 20px`, whatever size its theme then draws the thumb --
+   measured, a 20px knob lands on the rail's centre at position 0 and a 14px
+   one does not. Vertically it hangs 1.5px low against a 4px rail. */
+.slider.slider :global(.thumb) {
+  width: 20px;
+  height: 20px;
+  margin-top: -1.5px;
+}
+
+.slider.slider :global(.thumb) > div {
+  width: 20px;
+  height: 20px;
+  background: var(--color-turquoise-600);
+  border: 3px solid var(--color-turquoise-200);
+  border-radius: 50%;
+}
+
+.slider.slider :global(.thumb):hover > div,
+.slider.slider :global(.thumb):focus > div {
+  background: var(--color-turquoise-400);
+  box-shadow: 0 0 0 2px var(--color-turquoise-700);
+}
+
+/* The thumb's bubble. The legacy floats it above the thumb; the library puts
+   it below, where the panel has no room for it. */
+.slider.slider :global(.thumb) span {
+  top: auto;
+  bottom: calc(100% + 6px);
+  font-size: 0.75rem;
+  color: var(--color-turquoise-100);
+  letter-spacing: 0.04em;
+  background: var(--color-grey-800);
+  border-color: var(--color-border-strong);
+}
+
+/* `sliding_hints`: chevrons pulsing either side of the thumb, which is how
+   the legacy says the control is draggable. `--position` is the slider's own
+   -1..1, mapped over the same `width - 20px` travel the thumb uses, so the
+   pair rides along with it. */
+.hints {
+  position: absolute;
+  top: 2px;
+  left: calc(10px + (100% - 20px) * (var(--position, 0) + 1) / 2);
+  width: 0;
+  pointer-events: none;
+}
+
+/* Each chevron is placed by its own wrapper rather than by a transform on
+   the icon: the right-hand one is the left-hand glyph turned 180deg, and a
+   `transform` on the same element composes inside that rotation -- so
+   `translateY(-50%)` moves it down instead of up. */
+.hintLeft,
+.hintRight {
+  position: absolute;
+  top: -10px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  color: var(--color-turquoise-200);
+  filter: drop-shadow(0 0 2px rgb(var(--color-black-rgb) / 100%));
+}
+
+.hintLeft svg,
+.hintRight svg {
+  width: 20px;
+  height: 20px;
+}
+
+.hintLeft {
+  left: -24px;
+  animation: hint-left 1s ease-out infinite;
+}
+
+.hintRight {
+  right: -24px;
+  animation: hint-right 1s ease-out infinite;
+}
+
+@keyframes hint-left {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateX(-8px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+@keyframes hint-right {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateX(8px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hintLeft,
+  .hintRight {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* The toolbar is a bottom bar on narrow viewports, so the panel sits above
+   it rather than over it. */
+@media (width <= 768px) {
+  .timemachine {
+    right: var(--site-margin-small);
+    bottom: calc(var(--toolbar-height) + var(--site-margin-small));
+    left: var(--site-margin-small);
+  }
+
+  /* A panel is full width here, so there is nowhere to move to. */
+  .shifted {
+    left: var(--site-margin-small);
+  }
+}

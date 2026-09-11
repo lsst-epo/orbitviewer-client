@@ -1,0 +1,235 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_navigation.scss` and `_listitem.scss`. The
+   legacy's two-level slide was a transformed track inside an overflow box;
+   only one level exists at a time here, so there is nothing to slide. */
+
+.navigation {
+  position: absolute;
+  top: var(--site-margin-small);
+  right: var(--site-margin-small);
+  z-index: var(--z-logo);
+  display: flex;
+  gap: var(--site-margin-xsmall);
+  align-items: flex-start;
+}
+
+/* Triggers. Two different components in the legacy, not one with variants:
+   `.button_share` is a filled pill, `.button_icon.secondary.medium` is a
+   glass circle. Both are 3rem tall. */
+
+.share,
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  height: 3rem;
+  font-family: var(--font-stack);
+  cursor: pointer;
+}
+
+/* `.button_share`: a solid turquoise-700 pill, radius half its height, with
+   a `caption-semi-caps` label -- uppercased in CSS, as the legacy does; the
+   copy deck carries it in sentence case. */
+.share {
+  gap: 0.25rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-turquoise-200);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--color-turquoise-700);
+  border: 0;
+  border-radius: 1.5rem;
+}
+
+/* `.button_icon.secondary.medium`: a circle in the same frozen glass as the
+   toolbar, not a rounded rectangle. */
+.trigger {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  color: var(--color-button-text);
+  background: var(--surface-glass);
+  border: 0;
+  border-radius: 50%;
+  backdrop-filter: blur(var(--backdrop-blur));
+}
+
+.trigger::before {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  pointer-events: none;
+  content: "";
+  background: var(--surface-glass-edge);
+  border-radius: inherit;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* A ring rather than a fill, which is how the legacy marks both of these. */
+.share:hover,
+.trigger:hover {
+  color: var(--color-turquoise-300);
+  box-shadow: 0 0 0 2px var(--color-turquoise-700);
+}
+
+.share svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.trigger svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Dropdown */
+
+.menu {
+  position: absolute;
+  top: calc(100% + var(--site-margin-xsmall));
+  right: 0;
+  width: min(320px, calc(100vw - 2 * var(--site-margin-small)));
+  overflow: hidden;
+  background-color: var(--color-backdrop);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-large);
+  backdrop-filter: blur(var(--backdrop-blur));
+}
+
+.menuOpen {
+  display: block;
+}
+
+.level {
+  display: grid;
+  gap: var(--site-margin-small);
+  padding: var(--site-margin-small);
+}
+
+.group {
+  display: grid;
+  gap: 4px;
+}
+
+.groupLabel {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-grey-300);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.list {
+  display: grid;
+  gap: 2px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  gap: var(--site-margin-xsmall);
+  align-items: center;
+  width: 100%;
+  padding: 8px 10px;
+  font-family: var(--font-stack);
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: var(--corner-medium);
+}
+
+.link:hover {
+  background-color: var(--color-button-bg-hover);
+}
+
+.link svg {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  color: var(--color-button-text);
+}
+
+.itemLabel {
+  flex: auto;
+}
+
+.itemValue {
+  flex: 0 0 auto;
+  font-size: 0.8125rem;
+  color: var(--color-text-low);
+}
+
+/* Exploration tiers carry a second line, so the label column stacks. */
+
+.tier {
+  display: grid;
+  flex: auto;
+  gap: 2px;
+}
+
+.tierDetail {
+  font-size: 0.75rem;
+  color: var(--color-text-low);
+}
+
+/* Second level */
+
+.submenuHead {
+  display: flex;
+  gap: var(--site-margin-xsmall);
+  align-items: center;
+}
+
+.back {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: var(--color-button-text);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+}
+
+.back:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.back svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (width <= 480px) {
+  .share span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .share {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+  }
+}

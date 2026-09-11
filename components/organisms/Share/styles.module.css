@@ -1,0 +1,219 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_share.scss`. */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-share);
+  display: grid;
+  place-items: center;
+  padding: var(--site-margin-small);
+  background-color: rgb(var(--color-black-rgb) / 70%);
+  backdrop-filter: blur(4px);
+}
+
+.dialog {
+  display: grid;
+  gap: var(--site-margin-small);
+  width: min(34rem, 100%);
+  max-height: calc(100dvh - 2 * var(--site-margin-small));
+  padding: var(--site-margin-large);
+  overflow-y: auto;
+  background-color: var(--color-grey-800);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-large);
+}
+
+.head {
+  display: flex;
+  gap: var(--site-margin-small);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: var(--color-button-text);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+}
+
+.close:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Tabs */
+
+.tabs {
+  display: flex;
+  gap: var(--site-margin-small);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* `caption-semi-caps`, as `_tab.scss` has it. */
+.tab {
+  padding: 8px 2px;
+  font-family: var(--font-stack);
+  font-size: 0.875rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text-low);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+.tabActive {
+  color: var(--color-turquoise-100);
+  border-bottom-color: var(--color-turquoise-300);
+}
+
+.panel {
+  display: grid;
+  gap: var(--site-margin-large);
+}
+
+/* Link */
+
+.inputGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--site-margin-xsmall);
+}
+
+.input {
+  flex: 1 1 14rem;
+  min-width: 0;
+  padding: 10px 12px;
+  font-family: var(--font-stack);
+  font-size: 0.875rem;
+  color: var(--color-text);
+  background-color: var(--color-grey-700);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-medium);
+}
+
+.copy,
+.download {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  justify-self: start;
+  padding: 10px 16px;
+  font-family: var(--font-stack);
+  font-size: 0.875rem;
+  color: var(--color-turquoise-100);
+  cursor: pointer;
+  background-color: var(--color-turquoise-600);
+  border: 1px solid var(--color-turquoise-600);
+  border-radius: var(--corner-medium);
+}
+
+.copy:disabled,
+.download:disabled {
+  color: var(--color-grey-400);
+  cursor: default;
+  background: none;
+  border-color: var(--color-border);
+}
+
+.copy:hover:not(:disabled),
+.download:hover:not(:disabled) {
+  background-color: var(--color-turquoise-100);
+  border-color: var(--color-turquoise-100);
+}
+
+.copy svg,
+.download svg {
+  width: 16px;
+  height: 16px;
+}
+
+.social {
+  display: grid;
+  gap: var(--site-margin-xsmall);
+}
+
+.socialLabel {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-low);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.socialList {
+  display: flex;
+  gap: var(--site-margin-xsmall);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.socialLink {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-button-text);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-medium);
+}
+
+.socialLink:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.socialLink svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Capture */
+
+.preview {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-height: 40vh;
+  overflow: hidden;
+  background-color: var(--color-black);
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+}
+
+.previewCanvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

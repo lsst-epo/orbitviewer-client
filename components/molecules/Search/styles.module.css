@@ -1,0 +1,122 @@
+@import url("../../../styles/variables.css");
+
+.search {
+  display: grid;
+  gap: var(--site-margin-small);
+  align-content: start;
+}
+
+.label {
+  font-size: var(--font-size-lg, 1.25rem);
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.inputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* The legacy's `.input-actions`: one slot at the trailing edge of the field,
+   holding either the magnifier or the cloud-search button. */
+.inputActions {
+  position: absolute;
+  right: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0 0.5rem;
+  color: var(--color-text-low);
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+
+  /* Trailing room for whichever control is in `.inputActions`; the magnifier
+     is the narrower of the two, so the button sets the figure. */
+  padding: var(--site-margin-xsmall) 0.5rem var(--site-margin-xsmall)
+    var(--site-margin-xsmall);
+  font-family: inherit;
+  font-size: var(--font-size-base, 1rem);
+  color: var(--color-text);
+  background-color: rgb(var(--color-white-rgb) / 5%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--color-turquoise-300);
+}
+
+.status {
+  margin: 0;
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--color-text-low);
+}
+
+.results {
+  display: grid;
+  gap: 2px;
+  max-height: 46vh;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.result {
+  display: flex;
+  gap: var(--site-margin-xsmall);
+  align-items: center;
+  width: 100%;
+  padding: var(--site-margin-xsmall);
+  font-family: inherit;
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: var(--corner-medium);
+}
+
+.result:hover {
+  background-color: var(--color-button-bg-hover);
+}
+
+.swatch {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.designation {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.distance {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-low);
+}
+
+.empty,
+.error {
+  margin: 0;
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--color-text-low);
+}
+
+.error {
+  color: var(--color-red-light);
+}

@@ -1,0 +1,343 @@
+{
+  "core": {
+    "languages": {
+      "label": "languages",
+      "english": {
+        "shorthand": "en",
+        "full": "English"
+      },
+      "spanish": {
+        "shorthand": "es",
+        "full": "Español"
+      }
+    },
+    "objects": "objects",
+    "back": "Orbit viewer",
+    "recommended": "recommended",
+    "loading": "Loading... this may take a moment",
+    "testing": "Testing performance to optimize your setup...",
+    "close": "Close"
+  },
+  "logo": {
+    "alt": "NSF DOE Rubin Observatory Orbitviewer logo"
+  },
+  "exploration": {
+    "low": {
+      "name": "Mobile, Tablets & Basic Laptops",
+      "title": "Basic Experience",
+      "objects": "16000",
+      "description": "Perfect for on-the-go exploration with minimal data usage and reduced visuals"
+    },
+    "medium": {
+      "name": "Laptops & Basic Desktops",
+      "title": "Core Experience",
+      "objects": "65000",
+      "description": "Great performance on most devices with rich visuals"
+    },
+    "high": {
+      "name": "High-end laptops",
+      "title": "Detailed discovery",
+      "objects": "262000",
+      "description": "Detailed textures and increased object count for deeper exploration"
+    },
+    "ultra": {
+      "name": "Gaming PCs",
+      "title": "Maximum fidelity",
+      "objects": "500000",
+      "description": "Maximum detail with complete celestial catalog for the ultimate experience"
+    }
+  },
+  "navigation": {
+    "aria": "Main Navigation",
+    "share": "Share",
+    "settings": "Settings",
+    "language": "Language",
+    "exploration": "Exploration mode",
+    "fullscreen": "Fullscreen",
+    "help": "Help",
+    "how_to_use": "How to use",
+    "about": "About",
+    "back": "Back"
+  },
+  "share": {
+    "title": "Share",
+    "tabs": {
+      "aria": "Tab navigation",
+      "link": "Link",
+      "screen_capture": "Screen capture",
+      "copy": "Copy",
+      "copied": "copied",
+      "share_on": "Share on"
+    },
+    "aspect_ratio": {
+      "horizontal": "Horizontal",
+      "vertical": "Vertical",
+      "square": "Square"
+    },
+    "download": "Download image",
+    "generating": "Generating image"
+  },
+  "splash": {
+    "logo": {
+      "alt": "NSF-DOE Vera C. Rubin Observatory logo"
+    },
+    "discoveries": "{{formatted}} discoveries"
+  },
+  "object": {
+    "designation": "Designation",
+    "hero": {
+      "alt": "Astronomical image of"
+    },
+    "diameter": "Diameter",
+    "comparison": "This object compared to other %category%",
+    "orbital_elements": {
+      "title": "Orbital elements",
+      "aria": "Orbital element parameters",
+      "periapsis": {
+        "aria": "Argument of periapsis",
+        "tooltip": "Argument of perihelion: the “roll” of the orbit"
+      },
+      "longitude": {
+        "aria": "Longitude of the ascending node",
+        "tooltip": "Longitude of ascending node: the “yaw” of the orbit"
+      },
+      "anomaly": {
+        "aria": "True anomaly",
+        "tooltip": "True anomaly: the position of the object in its orbit"
+      },
+      "info": "More about"
+    },
+    "closest_sun": {
+      "title": "When will it be closest to the Sun?",
+      "days_left": "days left"
+    },
+    "how_far": {
+      "title": "How far is it today?",
+      "from_sun": "From the Sun",
+      "from_earth": "From the Earth"
+    },
+    "sun_graph": {
+      "title": "Average distance from the Sun",
+      "detail": "Semi-major axis (a)"
+    },
+    "deviation_graph": {
+      "title": "Deviation from a circular orbit",
+      "detail": "Eccentricity (e)"
+    },
+    "angle_graph": {
+      "title": "Angle of orbit",
+      "detail": "Inclination (i)"
+    },
+    "view": {
+      "label": "Camera view",
+      "object": "Object",
+      "orbit": "Orbit"
+    },
+    "perihelion_distance": "Closest approach to the Sun"
+  },
+  "onboarding": {
+    "exploration": {
+      "title": "Choose your Exploration Mode",
+      "action": "Launch",
+      "info": "You can adjust your exploration mode later in the settings menu"
+    },
+    "expedition": {
+      "title": "Choose Your First Tour",
+      "subtitle": "Not sure where to start? Take a guided tour to explore objects in the Solar System and Rubin’s role in studying them.",
+      "see_all": "See all tours",
+      "skip": "Skip to viewer"
+    }
+  },
+  "filters": {
+    "title": "Filters",
+    "reset": "Reset",
+    "apply": "Apply filters",
+    "discoveries": "Discoveries",
+    "toggle": {
+      "all": "All",
+      "rubin": "Rubin",
+      "other": "Other",
+      "aria": "Filter objects by discoverer"
+    },
+    "distance": "Distance from Sun",
+    "au": "In Astronomical Units",
+    "discovery": "Discovery date"
+  },
+  "search": {
+    "title": "Search",
+    "search_cloud": "Search cloud",
+    "not_found_local": "\"{{query}}\" not found in your local catalog. Try searching our cloud database.",
+    "not_found": "\"{{query}}\" not found.",
+    "recommended_searches": "Recommended searches",
+    "placeholder": "Search by planet, object,..",
+    "hint": "Type at least {{count}} characters"
+  },
+  "timemachine": {
+    "aria": "Date selector",
+    "zone": {
+      "utc": "UTC",
+      "local": "Local",
+      "toUtc": "Showing local time. Switch to UTC.",
+      "toLocal": "Showing UTC. Switch to local time."
+    },
+    "toggle": {
+      "aria": "Collapse time machine controls"
+    },
+    "live": "Live",
+    "play": "Play",
+    "pause": "Pause",
+    "speed": "Simulation speed",
+    "realtime": "REAL TIME",
+    "expand": "Show simulation speed",
+    "region": "Time machine"
+  },
+  "toolbar": {
+    "objects": "Objects",
+    "filters": "Filters",
+    "search": "Search",
+    "guides": "Tours",
+    "aria": "Explorer tools"
+  },
+  "wizard": {
+    "title": "Onboarding wizard",
+    "steps": {
+      "aria": "Step X of Y"
+    },
+    "content": {
+      "toolbar": "Choose what to see! Select types of objects, filter by brightness, and search for specific objects.",
+      "time_controls": "Play orbits forward or backward with the slider, or jump to a specific date and time using the calendar.",
+      "map_controls": "Reset your view to center, zoom in or out, or go full screen.",
+      "share_menu": "Share your current view with a link or a screenshot of your current view. Open the hamburger  menu for Orbitviewer info.",
+      "guides": "Explore our collection of guided tours that highlight different objects of interest in the Solar System."
+    },
+    "button_group": {
+      "aria": "Navigation controls",
+      "skip": "Skip",
+      "previous": "Previous",
+      "next": "Next",
+      "finish": "Finish"
+    }
+  },
+  "objects": {
+    "title": "Choose Objects to Explore",
+    "subtitle": "Select which types of orbits you want to see.",
+    "types": {
+      "planets_moons": {
+        "name": "Planets & Dwarf Planets",
+        "description": "The eight planets orbit the Sun in mostly circular paths and are either primarily rocky or primarily gaseous. Inner planets (like Earth and Mars) are solid and small, while outer planets (like Jupiter and Neptune) are large and gaseous or icy.",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "near_earth_objects": {
+        "name": "Near Earth Objects (NEOs)",
+        "description": "NEOs are asteroids or comets with orbits that bring them close to Earth's orbit. Most are harmless, but scientists track them closely to monitor any potential impact risks. Their orbits can shift over time due to gravitational nudges from planets or the Sun.",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "asteroids": {
+        "name": "Main Belt Asteroids",
+        "description": "These rocky bodies orbit the Sun between Mars and Jupiter, forming the asteroid belt. They range from dust-sized fragments to dwarf planet-sized objects like Ceres. The asteroid belt is leftover debris from the early Solar System that never formed into a planet.",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "comets": {
+        "name": "Comets",
+        "description": "Comets are icy bodies from the outer Solar System that develop glowing comas and tails of outgassing material when they approach the Sun. Their orbits can be short and frequent or long and distant, taking thousands of years to return.",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "centaurs": {
+        "name": "Centaurs",
+        "description": "Centaurs orbit between Jupiter and Neptune and sometimes have traits of both asteroids and comets. They're thought to be short-lived, unstable objects because of their close encounters with the much stronger gravity of the gas giant planets. Their chaotic orbits make them fascinating objects to study.",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "trans_neptunian_objects": {
+        "name": "Trans-Neptunian Objects",
+        "description": "TNOs orbit the Sun beyond Neptune. They include dwarf planets like Pluto and Eris, along with millions of smaller objects. These distant, cold worlds are some of the most primitive in the Solar System, with orbits and surfaces that still preserve clues about its earliest days.",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "interstellar_objects": {
+        "name": "Interstellar Objects",
+        "description": "These are rare visitors from outside our Solar System, passing through on open-ended, hyperbolic paths so fast that they’re not bound by the Sun’s gravity. Unlike asteroids and comets that orbit the Sun, interstellar objects only pass through once, never to return. 'Oumuamua (2017) and Borisov (2019) are the only confirmed examples so far.",
+        "objects": "40K",
+        "rubin": "30K"
+      },
+      "trojans": {
+        "name": "Trojans",
+        "description": "Trojans are asteroids that share a planet’s orbit, clustering around gravitationally stable points ahead of or behind the planet (called Lagrange points). Most known Trojans share orbits with Jupiter, but Neptune and even Earth have a few. Their unique orbits make them long-term Solar System residents and tracers of gravitational interactions with the planets."
+      }
+    },
+    "sun_star": {
+      "name": "Sun"
+    },
+    "total": "Near Earth Objects",
+    "detected": "Detected by Rubin",
+    "hidden": "Hidden",
+    "visible": "Visible",
+    "previous": "Previous objects",
+    "next": "More objects"
+  },
+  "guides": {
+    "index": {
+      "title": "Guided Experiences",
+      "subtitle": "Not sure where to start? Take a guided tour to explore objects in the Solar System and Rubin’s role in studying them.",
+      "filter": {
+        "newer": "Newer first",
+        "older": "Older first",
+        "less_duration": "Shorter first",
+        "more_duration": "Longer first",
+        "less_complex": "Less complex first",
+        "more_complex": "More complex first"
+      },
+      "search": "Search",
+      "count_one": "{{count}} tour",
+      "count_other": "{{count}} tours",
+      "minutes": "{{count}} min",
+      "empty": "No tours match that search."
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "entry": {
+      "navigation": {
+        "guides": "Tours",
+        "next": "Next",
+        "previous": "Previous"
+      },
+      "step": "Step {{current}} of {{total}}",
+      "fun_fact": "Did you know?"
+    }
+  },
+  "modal": {
+    "title": "Things looking a bit slow?",
+    "description": "Weve noticed some performance issues. A different visualization mode could provide a smoother experience on your device.",
+    "action": {
+      "primary": "Switch to lite mode",
+      "secondary": "Maybe later"
+    }
+  },
+  "toast": {
+    "max_date": {
+      "message": "Maximum date reached. Future positions cannot be calculated. Try exploring within the supported time range",
+      "aria": "Maximum date notification"
+    }
+  },
+  "about": {
+    "observatory_title": "NSF-DOE Rubin Observatory",
+    "credits": "Credits"
+  },
+  "e404": {
+    "subtitle": "Page Not Found",
+    "action": "Back Home"
+  },
+  "mapcontrols": {
+    "aria": "View controls",
+    "recenter": "Recenter view",
+    "zoom_in": "Zoom in",
+    "zoom_out": "Zoom out"
+  }
+}

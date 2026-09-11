@@ -1,0 +1,276 @@
+@import url("../../../styles/variables.css");
+
+.layer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  /* Offset by the toolbar so it stays visible and usable while a panel is
+     open -- the legacy Toolbar.updateActiveStates() kept its active states in
+     sync with the open layers, which only makes sense if it remains on
+     screen. */
+  left: calc(var(--toolbar-width) + 2 * var(--site-margin-small));
+  z-index: var(--z-menu);
+  display: flex;
+
+  /* Closed state. Kept mounted so the transition can run. */
+  visibility: hidden;
+  flex-direction: column;
+  width: min(var(--panel-width), 100%);
+  background-color: var(--color-backdrop);
+  border-right: 1px solid var(--color-border);
+  opacity: 0;
+  backdrop-filter: blur(var(--backdrop-blur));
+  transform: translateX(-100%);
+  transition:
+    transform 0.5s var(--easing-default),
+    opacity 0.5s var(--easing-default),
+    visibility 0.5s;
+}
+
+/* Docked to the opposite edge, so a toolbar panel and the object detail can
+   be open together without overlapping. */
+.right {
+  right: 0;
+  left: auto;
+  border-right: 0;
+  border-left: 1px solid var(--color-border);
+  transform: translateX(100%);
+}
+
+.right.open {
+  transform: translateX(0);
+}
+
+/* The object detail card: left-anchored, inset below the header, over a scene
+   that stays live and interactive around it. Ported from `.object_card`'s
+   `medium` rules, which set
+   `inset: calc(site-margin-large + 56px) auto site-margin-large site-margin-small`
+   with `max-width: 620px`. Unlike the drawers it is not full-bleed to an
+   edge -- it floats, with every corner rounded. */
+.dock {
+  top: var(--panel-dock-top);
+  bottom: var(--site-margin-large);
+  left: var(--site-margin-small);
+
+  /* Two constraints, and which one binds depends on the viewport. The legacy
+     puts the card in a `grid-template-columns: 40vw 1fr` column and sets
+     `width: calc(100% - site-margin-small); max-width: 620px` against it --
+     so the column binds on a laptop (456px at 1200px wide) and the 620px cap
+     only takes over past ~1700px. Expressed directly here, because the port
+     has no such grid to measure 100% against: without the 40vw term the card
+     is half the viewport wide where production's is a third. */
+  width: min(
+    40vw - var(--site-margin-small),
+    100% - var(--site-margin-small)
+  );
+  max-width: var(--panel-width-detail);
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-large);
+
+  /* Clears its own left margin as well as its width, so nothing of the card
+     is left peeking at the edge while it is closed. */
+  transform: translateX(calc(-100% - var(--site-margin-small)));
+}
+
+.dock.open {
+  transform: translateX(0);
+}
+
+/* Wide enough to show a row of cards rather than one at a time, and only as
+   tall as it needs, so the scene stays visible below as well as beside it --
+   which is the point of the extra width. It also keeps the panel off the
+   time machine, which a full-height drawer this wide would bury. */
+.wide {
+  bottom: auto;
+  width: min(75vw, 100%);
+
+  /* Bounded by the time machine below it, not by a rem figure: epo-react-lib
+     sets a fluid `html { font-size: var(--size-font-16-20) }`, so a rem cap
+     would grow with the viewport and swallow the controls it is meant to
+     clear. */
+  max-height: calc(
+    100dvh - var(--timemachine-height) - 3 * var(--site-margin-large)
+  );
+}
+
+/* The filters card: a small floating panel near the top left, not a drawer.
+   `_filters.scss` places it at a literal `top: 170px; left: 128px` with
+   `width: 384px` and no height at all -- it is as tall as its contents, and
+   the scene stays visible all round it. The numbers are literals there, so
+   they are rem at base 16 here and scale with the root font, which is what
+   production does. */
+.card {
+  top: 10.625rem;
+  bottom: auto;
+  left: 8rem;
+  width: 24rem;
+  background: var(--surface-glass);
+  border: 0;
+  border-radius: var(--corner-large);
+
+  /* It fades and lifts rather than sliding in from the edge: `filtersIn` is
+     0.3s of opacity and `filtersBodyIn` an 8px rise. */
+  transform: translateY(0.5rem);
+}
+
+.card::before {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  pointer-events: none;
+  content: "";
+  background: var(--surface-glass-edge);
+  border-radius: inherit;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* The objects takeover: the whole viewport, dimmed and blurred, with the
+   scene still showing through. Production's `.layer.objects` is
+   `inset: 0` over `--color-backdrop` with the same blur every panel uses --
+   not a slab, which is what the port had. It fades rather than slides, so
+   the transform is cancelled here and the cards do the moving (see
+   `molecules/Objects`). */
+.full {
+  inset: 0;
+
+  /* `--z-objects`, below the menu and the panels that sit beside the
+     toolbar: the takeover covers the scene, not the chrome above it. */
+  z-index: var(--z-objects);
+  width: 100%;
+  border: 0;
+  transform: none;
+}
+
+.open {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.card.open {
+  transform: translateY(0);
+}
+
+
+.head {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--site-margin-small);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-button-text);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+}
+
+.close:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.close svg {
+  width: 24px;
+  height: 24px;
+}
+
+.body {
+  flex: 1;
+  padding: 0 var(--site-margin-large) var(--site-margin-large);
+  overflow-y: auto;
+}
+
+/* No close button on the desktop filters card: `.filters-head` is
+   `display: none` at `medium`, and the panel is dismissed by its toolbar
+   item, a click outside or Escape. */
+.card .head {
+  display: none;
+}
+
+.card .body {
+  padding: 1rem;
+}
+
+/* The card is the scrolling element, so its own padding has to come from the
+   body rather than the panel -- otherwise the top padding scrolls away. */
+.dock .body {
+  padding-top: var(--site-margin-large);
+}
+
+/* The takeover lays itself out against the full viewport -- the rail's own
+   inset clears the toolbar, and the controls are pinned to the edges -- so
+   the panel contributes no padding of its own. */
+.full .body {
+  padding: 0;
+}
+
+/* No header to push the content down, so the panel clears the navigation
+   itself. Only the right side needs it -- that is the corner the share
+   button and the menu occupy. */
+.right.flush .body {
+  padding-top: calc(var(--site-margin-small) + 56px);
+}
+
+/* The toolbar becomes a bottom bar on narrow viewports, so the panel takes
+   the full width and leaves room for it below. */
+@media (width <= 768px) {
+  .layer {
+    bottom: calc(var(--toolbar-height) + var(--site-margin-small));
+    left: 0;
+    width: 100%;
+  }
+
+  /* There is no room to be wide on a phone; the panel is already full width,
+     and it keeps the full height it would have had. */
+  .wide {
+    bottom: calc(var(--toolbar-height) + var(--site-margin-small));
+    width: 100%;
+    max-height: none;
+  }
+
+  /* The takeover keeps the whole screen, toolbar included: it replaces the
+     toolbar with the back pill rather than sitting beside it. */
+  .full {
+    inset: 0;
+    width: 100%;
+  }
+
+  /* A phone has no room for a floating card: `_filters.scss` sends it back
+     to `inset: 0` below `medium`, close button and all. */
+  .card {
+    inset: 0 0 calc(var(--toolbar-height) + var(--site-margin-small));
+    width: 100%;
+    border-radius: 0;
+    transform: translateY(3rem);
+  }
+
+  .card .head {
+    display: flex;
+  }
+
+  .right {
+    right: 0;
+  }
+
+  /* No room to float on a phone: the legacy dropped the same insets at its
+     `medium` breakpoint and let the card fill the width. */
+  .dock {
+    top: auto;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    border: 0;
+    border-radius: var(--corner-large) var(--corner-large) 0 0;
+    transform: translateX(-100%);
+  }
+}

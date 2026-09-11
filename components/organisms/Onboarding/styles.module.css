@@ -1,0 +1,192 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_onboarding.scss` and `_exploration_card.scss`. */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-onboarding);
+  display: grid;
+  place-items: center;
+  padding: var(--site-margin-small);
+  overflow-y: auto;
+  background-color: rgb(var(--color-black-rgb) / 85%);
+}
+
+.panel {
+  display: grid;
+  gap: var(--site-margin-large);
+  width: min(64rem, 100%);
+  padding: var(--site-margin-large);
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+.subtitle {
+  max-width: 44rem;
+  margin: 0 auto;
+  color: var(--color-text-low);
+}
+
+/* Tier picker */
+
+.tiers,
+.tours {
+  display: grid;
+  gap: var(--site-margin-small);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* There are exactly four tiers, so the breakpoints are explicit: `auto-fit`
+   settled on three and left the fourth stranded on its own row. */
+@media (width >= 40rem) {
+  .tiers {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tours {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+}
+
+@media (width >= 64rem) {
+  .tiers {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.tier {
+  display: flex;
+}
+
+.card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto auto;
+  gap: var(--site-margin-xsmall);
+  width: 100%;
+  padding: var(--site-margin-large) var(--site-margin-small)
+    var(--site-margin-small);
+  text-align: left;
+  background-color: var(--color-grey-800);
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-large);
+}
+
+.cardRecommended {
+  border-color: var(--color-turquoise-600);
+}
+
+.ribbon {
+  position: absolute;
+  top: calc(-1 * var(--site-margin-xsmall));
+  left: var(--site-margin-small);
+  padding: 3px 10px;
+  margin: 0;
+  font-size: 0.6875rem;
+  color: var(--color-turquoise-900);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background-color: var(--color-turquoise-200);
+  border-radius: 24px;
+}
+
+.device {
+  margin: 0;
+  font-size: 0.6875rem;
+  color: var(--color-turquoise-300);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tierTitle {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.description {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-low);
+}
+
+.meta {
+  margin: 0;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-grey-300);
+}
+
+/* Actions */
+
+.launch,
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  font-family: var(--font-stack);
+  font-size: 0.9375rem;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--corner-medium);
+}
+
+.launch,
+.secondary {
+  color: var(--color-button-text);
+  background: none;
+  border: 1px solid var(--color-border-strong);
+}
+
+.launch:hover,
+.secondary:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+/* `.button.primary`: turquoise-600 fill, turquoise-100 label. Same
+   inversion the splash and tour-player buttons had. */
+.launchRecommended,
+.primary {
+  color: var(--color-turquoise-100);
+  background-color: var(--color-turquoise-600);
+  border: 1px solid var(--color-turquoise-600);
+}
+
+.launchRecommended:hover,
+.primary:hover {
+  background-color: var(--color-turquoise-100);
+  border-color: var(--color-turquoise-100);
+}
+
+.footnote {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-low);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--site-margin-xsmall);
+  justify-content: center;
+}
+
+@media (width <= 480px) {
+  .panel {
+    padding: var(--site-margin-small);
+  }
+}

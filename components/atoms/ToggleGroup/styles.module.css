@@ -1,0 +1,67 @@
+@import url("../../../styles/variables.css");
+
+/* 24px between the label and the control, matching the range slider's
+   field -- `filters_card_field`'s own gap, and a literal in the legacy. */
+.field {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* `body-large`, as `filters_card_field-label .label` has it -- the field
+   names are not bolded in the legacy. */
+.label {
+  font-size: 1.125rem;
+  color: var(--color-text);
+}
+
+/* `.togglegroup`: a pill, not a rounded rectangle, and the radius is the
+   full height rather than a corner token. */
+.group {
+  /* `.togglegroup.large`, which is the size the filters panel uses. */
+  --height: 2.5rem;
+
+  display: flex;
+  background: var(--color-grey-800);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--height);
+}
+
+/* `overline-medium-semi`, and teal even when it is not the chosen one --
+   the legacy never greys the alternatives here. */
+.option {
+  display: flex;
+  flex: auto;
+  gap: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--height);
+  height: var(--height);
+  padding-inline: calc(var(--height) / 2);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-turquoise-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: var(--height);
+  transition:
+    color 0.2s var(--easing-default),
+    background-color 0.2s var(--easing-default);
+}
+
+.option:hover {
+  color: var(--color-turquoise-300);
+}
+
+/* The legacy slides a `-indicator` pill behind the chosen item; this paints
+   the same pill on the item itself. The colours are the legacy's -- a
+   turquoise-600 fill with a turquoise-200 label, not the pale mint on dark
+   that the port had. The slide is not reproduced. */
+.selected,
+.selected:hover {
+  color: var(--color-turquoise-200);
+  background-color: var(--color-turquoise-600);
+}

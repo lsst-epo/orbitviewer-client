@@ -1,0 +1,72 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_modal.scss`. Not a modal in the blocking sense --
+   it interrupts nothing, so it does not trap focus or cover the scene. */
+
+.modal {
+  position: absolute;
+  right: var(--site-margin-small);
+  bottom: var(--site-margin-small);
+  z-index: var(--z-modal);
+  display: grid;
+  gap: var(--site-margin-xsmall);
+  width: min(22rem, calc(100vw - 2 * var(--site-margin-small)));
+  padding: var(--site-margin-small);
+  background-color: var(--color-grey-800);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-large);
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.body {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-low);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--site-margin-xsmall);
+  justify-content: flex-end;
+  padding-top: var(--site-margin-xsmall);
+}
+
+.primary,
+.secondary {
+  padding: 8px 14px;
+  font-family: var(--font-stack);
+  font-size: 0.875rem;
+  cursor: pointer;
+  border-radius: var(--corner-medium);
+}
+
+.secondary {
+  color: var(--color-button-text);
+  background: none;
+  border: 1px solid var(--color-border-strong);
+}
+
+.secondary:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+/* `.button.primary`: turquoise-600 fill, turquoise-100 label. Same
+   inversion the splash and tour-player buttons had. */
+.primary {
+  color: var(--color-turquoise-100);
+  background-color: var(--color-turquoise-600);
+  border: 1px solid var(--color-turquoise-600);
+}
+
+.primary:hover {
+  background-color: var(--color-turquoise-100);
+  border-color: var(--color-turquoise-100);
+}
