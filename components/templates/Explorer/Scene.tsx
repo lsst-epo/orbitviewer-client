@@ -13,6 +13,8 @@ import Camera from "@/components/celestial-bodies/camera";
 import Sun from "@/components/celestial-bodies/sun";
 import Body from "@/components/celestial-bodies/body";
 import OrbitalPath from "@/components/effects/orbital-path";
+import SolarParticles from "@/components/effects/solar-particles";
+import { useSolarData } from "@/contexts/SolarData";
 import { registerShaderChunks } from "@/lib/glsl";
 
 /**
@@ -57,6 +59,7 @@ const ClockDriver: FunctionComponent = () => {
 
 const Scene: FunctionComponent = () => {
   const { planets, dwarfPlanets, categories, params } = useExplorer();
+  const { elements: mpcElements, quality } = useSolarData();
 
   const planetElements = useMemo<Array<OrbitElements>>(
     () => planets.map((p) => fromPlanetElements(p)),
@@ -113,6 +116,17 @@ const Scene: FunctionComponent = () => {
       <ambientLight intensity={0.03} />
 
       <Sun />
+
+      {/* The minor-body field: hundreds of thousands of objects propagated on
+          the GPU. This is what fills the default system-wide view. */}
+      {mpcElements.length > 0 && (
+        <SolarParticles
+          elements={mpcElements}
+          quality={quality}
+          categoryColors={categoryColor}
+          dimmed={Boolean(params.object)}
+        />
+      )}
 
       {all.map((elements) => {
         const id = elements.id.toLowerCase();

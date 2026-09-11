@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState, type FunctionComponent } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useExplorer } from "@/contexts/Explorer";
 import SolarClockProvider, { useSolarClock } from "@/contexts/SolarClock";
+import SolarDataProvider, { useSolarData } from "@/contexts/SolarData";
 import useClientTranslation from "@/lib/i18n/client";
 import { CAMERA_CLIP } from "@/components/celestial-bodies/camera";
 import Scene from "./Scene";
@@ -44,6 +45,35 @@ const ClockReadout: FunctionComponent<{ locale: string }> = ({ locale }) => {
   );
 };
 
+/** Dataset download state and object count. */
+const DatasetStatus: FunctionComponent<{
+  locale: string;
+  selected?: string;
+}> = ({ locale, selected }) => {
+  const { t } = useClientTranslation(locale);
+  const { elements, loading, progress, error } = useSolarData();
+
+  if (error) {
+    return <p className={styles.meta}>{t("core.loading")}</p>;
+  }
+
+  if (loading) {
+    return (
+      <p className={styles.meta}>
+        {t("core.loading")}
+        {progress > 0 ? ` ${Math.round(progress * 100)}%` : ""}
+      </p>
+    );
+  }
+
+  return (
+    <p className={styles.meta}>
+      {elements.length.toLocaleString(locale)} {t("core.objects")}
+      {selected ? ` · ${selected}` : ""}
+    </p>
+  );
+};
+
 /**
  * Explorer shell: the WebGL canvas plus the UI layers drawn over it.
  *
@@ -51,44 +81,42 @@ const ClockReadout: FunctionComponent<{ locale: string }> = ({ locale }) => {
  * still to come; they mount alongside the canvas rather than inside it.
  */
 const Explorer: FunctionComponent<ExplorerProps> = ({ locale }) => {
-  const { t } = useClientTranslation(locale);
-  const { params, elements } = useExplorer();
+  const { params, dataFileUrls } = useExplorer();
 
   return (
     <main className={styles.explorer}>
-      <SolarClockProvider
-        initialDate={params.date ? new Date(params.date) : undefined}
-        initialHoursPerSecond={params.timeScale ?? 0}
-      >
-        <Canvas
-          className={styles.canvas}
-          camera={{ fov: 35, near: CAMERA_CLIP.near, far: CAMERA_CLIP.far }}
-          gl={{
-            // The scene spans six orders of magnitude, from a 24-unit
-            // near limit to 3,000,000 units. A linear depth buffer
-            // z-fights badly across that range.
-            logarithmicDepthBuffer: true,
-            antialias: true,
-            powerPreference: "high-performance",
-          }}
-          // Rendering is on-demand elsewhere, but the clock advances every
-          // frame, so the loop always runs.
-          frameloop="always"
+      <SolarDataProvider dataFileUrls={dataFileUrls}>
+        <SolarClockProvider
+          initialDate={params.date ? new Date(params.date) : undefined}
+          initialHoursPerSecond={params.timeScale ?? 0}
         >
-          <color attach="background" args={["#000000"]} />
-          <Suspense fallback={null}>
-            <Scene />
-          </Suspense>
-        </Canvas>
+          <Canvas
+            className={styles.canvas}
+            camera={{ fov: 35, near: CAMERA_CLIP.near, far: CAMERA_CLIP.far }}
+            gl={{
+              // The scene spans six orders of magnitude, from a 24-unit
+              // near limit to 3,000,000 units. A linear depth buffer
+              // z-fights badly across that range.
+              logarithmicDepthBuffer: true,
+              antialias: true,
+              powerPreference: "high-performance",
+            }}
+            // Rendering is on-demand elsewhere, but the clock advances every
+            // frame, so the loop always runs.
+            frameloop="always"
+          >
+            <color attach="background" args={["#000000"]} />
+            <Suspense fallback={null}>
+              <Scene />
+            </Suspense>
+          </Canvas>
 
-        <div className={styles.hud}>
-          <ClockReadout locale={locale} />
-          <p className={styles.meta}>
-            {elements.length} {t("core.objects")}
-            {params.object ? ` · ${params.object}` : ""}
-          </p>
-        </div>
-      </SolarClockProvider>
+          <div className={styles.hud}>
+            <ClockReadout locale={locale} />
+            <DatasetStatus locale={locale} selected={params.object} />
+          </div>
+        </SolarClockProvider>
+      </SolarDataProvider>
     </main>
   );
 };

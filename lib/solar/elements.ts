@@ -2,6 +2,7 @@ import { EPOCH } from "./constants";
 import { OrbitElements, OrbitType, SolarCategory } from "./types";
 import type { PlanetOrbitElements } from "@/lib/static/planetOrbits";
 import type { OrbitElements as HasuraOrbitElements } from "@/lib/api/hasura";
+import type { MpcOrbitRow } from "@/lib/api/mpcData";
 
 /**
  * Maps the two source representations of orbital elements onto the single
@@ -36,6 +37,50 @@ const TypeCategoryMap: Record<number, SolarCategory> = Object.fromEntries(
 export const categoryFromTypeCode = (code: number): SolarCategory =>
   TypeCategoryMap[code] ?? "asteroids";
 
+/**
+ * Display priority when an object carries several type codes.
+ *
+ * An object can legitimately be both, say, a comet and a centaur; the legacy
+ * `getCategory` picked whichever appears earliest in this list. Ported
+ * verbatim from `core/data/Categories.ts` -- the order is a product decision,
+ * not an arbitrary one, so it must not be re-sorted.
+ */
+export const CATEGORY_PRIORITY: Array<SolarCategory> = [
+  "asteroids",
+  "comets",
+  "centaurs",
+  "interstellar-objects",
+  "near-earth-objects",
+  "trans-neptunian-objects",
+  "jupiter-trojans",
+];
+
+/**
+ * Resolves a set of MPC type codes to the single category the object is
+ * displayed as. Returns null when no code maps to a known category, matching
+ * the legacy behaviour.
+ *
+ * Note code 7 (planets-moons) is deliberately absent from the priority list,
+ * exactly as in the legacy: planets come from their own dataset, never from
+ * mpc_orbits.
+ */
+export function categoryFromTypeCodes(
+  codes: Array<number> | null | undefined
+): SolarCategory | null {
+  if (!codes?.length) return null;
+
+  let best = Number.POSITIVE_INFINITY;
+
+  for (const code of codes) {
+    const category = TypeCategoryMap[code];
+    if (!category) continue;
+    const rank = CATEGORY_PRIORITY.indexOf(category);
+    if (rank > -1 && rank < best) best = rank;
+  }
+
+  return best === Number.POSITIVE_INFINITY ? null : CATEGORY_PRIORITY[best];
+}
+
 /** Local planet/dwarf-planet JSON (destined for the `planet_orbits` table). */
 export function fromPlanetElements(
   el: PlanetOrbitElements,
@@ -57,6 +102,27 @@ export function fromPlanetElements(
     type: getOrbitType(el.e),
     category,
     rubinDiscovery: false,
+  };
+}
+
+/** Maps one MPC dataset row onto normalised elements. */
+export function fromMpcRow(row: MpcOrbitRow): OrbitElements {
+  return {
+    id: row.fulldesignation,
+    fulldesignation: row.fulldesignation,
+    N: row.node,
+    a: row.a,
+    e: row.e,
+    i: row.i,
+    w: row.argperi,
+    M: row.mean_anomaly < 0 ? row.mean_anomaly + 360 : row.mean_anomaly,
+    n: row.mean_motion,
+    q: row.q,
+    Tp: row.peri_time,
+    epoch: row.epoch_mjd ?? EPOCH,
+    type: getOrbitType(row.e),
+    category: categoryFromTypeCodes(row.object_type) ?? "asteroids",
+    rubinDiscovery: row.rubin_discovery,
   };
 }
 

@@ -1,7 +1,11 @@
 import { FunctionComponent, Suspense } from "react";
 import { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
-import { getSolarElements, getCategories } from "@/lib/api/craft";
+import {
+  getSolarElements,
+  getCategories,
+  getDataFileUrls,
+} from "@/lib/api/craft";
 import { getClassificationRanges } from "@/lib/api/hasura";
 import {
   getPlanetOrbits,
@@ -63,14 +67,23 @@ const ExplorerPage: FunctionComponent<ExplorerPageProps> = async ({
 
   // Fetched on the server so the scene has its orbital data in the first
   // payload, rather than the legacy client-side LoadManager waterfall.
-  const [elements, categories, classificationRanges, planets, dwarfPlanets] =
-    await Promise.all([
-      getSolarElements({ locale }),
-      getCategories({ locale }),
-      getClassificationRanges(),
-      getPlanetOrbits(),
-      getDwarfPlanetOrbits(),
-    ]);
+  const [
+    elements,
+    categories,
+    classificationRanges,
+    planets,
+    dwarfPlanets,
+    dataFileUrls,
+  ] = await Promise.all([
+    getSolarElements({ locale }),
+    getCategories({ locale }),
+    getClassificationRanges(),
+    getPlanetOrbits(),
+    getDwarfPlanetOrbits(),
+    // Only the URLs are resolved here; the browser downloads the dataset
+    // itself, which is far too large to pass through an RSC payload.
+    getDataFileUrls(),
+  ]);
 
   return (
     <ExplorerProvider
@@ -80,6 +93,7 @@ const ExplorerPage: FunctionComponent<ExplorerPageProps> = async ({
       classificationRanges={classificationRanges}
       planets={planets}
       dwarfPlanets={dwarfPlanets}
+      dataFileUrls={dataFileUrls}
     >
       {/* useSearchParams below this point requires a Suspense boundary, or
           the production build fails with "Missing Suspense boundary". */}

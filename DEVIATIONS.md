@@ -30,3 +30,4 @@ confirm the default framing reads correctly with the particle field present.
 **Risk if missed:** every planet and dwarf planet renders twelve times too
 large. Most visible where bodies are compared against orbital distances or
 against each other, and in the object detail framing.
+

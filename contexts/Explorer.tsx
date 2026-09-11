@@ -37,6 +37,8 @@ interface ExplorerData {
   classificationRanges: Array<ClassificationRange>;
   planets: Array<PlanetOrbitElements>;
   dwarfPlanets: Array<PlanetOrbitElements>;
+  /** Quality tier to MPC dataset URL, from Craft's mpcDataFiles entries. */
+  dataFileUrls: Record<string, string>;
 }
 
 interface ExplorerContextValue extends ExplorerData {
