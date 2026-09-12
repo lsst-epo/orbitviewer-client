@@ -11,13 +11,18 @@
   box-sizing: border-box;
 }
 
-html,
-body {
+html {
   height: 100%;
-  margin: 0;
 }
 
+/* `min-height`, not `height`. A sticky element is confined to its parent's
+   box, so a body fixed at one viewport tall let the content pages' sticky
+   header scroll away the moment the page was longer than the screen. Nothing
+   relies on body being exactly 100% -- the explorer and splash set their own
+   height in `dvh`. */
 body {
+  min-height: 100%;
+  margin: 0;
   font-family: var(--font-stack);
   line-height: 1.5;
   color: var(--color-text);

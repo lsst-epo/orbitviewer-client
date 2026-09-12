@@ -2,7 +2,10 @@ import { FunctionComponent } from "react";
 import { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { getPages } from "@/lib/api/craft";
+import { languages } from "@/lib/i18n/settings";
+import { getContentPage, getPages } from "@/lib/api/craft";
+import About from "@/components/templates/About";
+import HowToUse from "@/components/templates/HowToUse";
 
 interface UriSegmentsPageProps {
   params: Promise<{ locale: string; uriSegments: Array<string> }>;
@@ -17,16 +20,45 @@ interface UriSegmentsPageProps {
  */
 const RESERVED_SLUGS = new Set(["landing"]);
 
+/**
+ * Prerenders the content pages, which change only when an editor publishes.
+ * They are revalidated by tag from /api/revalidate, so this costs nothing in
+ * freshness. Anything not listed here still renders on demand.
+ */
+export async function generateStaticParams() {
+  const pages = await Promise.all(
+    languages.map(async (locale) => {
+      const entries = await getPages({ locale });
+
+      return entries.flatMap((entry) =>
+        entry?.slug && !RESERVED_SLUGS.has(entry.slug)
+          ? [{ locale, uriSegments: entry.slug.split("/") }]
+          : []
+      );
+    })
+  );
+
+  return pages.flat();
+}
+
 export async function generateMetadata({
   params,
 }: UriSegmentsPageProps): Promise<Metadata> {
   const { locale, uriSegments } = await params;
   setRequestLocale(locale);
-  const uri = uriSegments.join("/");
-  const pages = await getPages({ locale });
-  const page = pages.find((entry) => entry?.slug === uri);
 
-  return { title: page?.title ?? undefined };
+  const page = await getContentPage({ locale, slug: uriSegments.join("/") });
+
+  if (!page) return {};
+
+  const description =
+    page.__typename === "about_Entry"
+      ? (page.headerBody?.plainText ?? undefined)
+      : page.__typename === "howToUse_Entry"
+        ? (page.headerText ?? undefined)
+        : undefined;
+
+  return { title: page.title ?? undefined, description };
 }
 
 const UriSegmentsPage: FunctionComponent<UriSegmentsPageProps> = async ({
@@ -34,23 +66,23 @@ const UriSegmentsPage: FunctionComponent<UriSegmentsPageProps> = async ({
 }) => {
   const { locale, uriSegments } = await params;
   setRequestLocale(locale);
+
   const uri = uriSegments.join("/");
 
   if (RESERVED_SLUGS.has(uri)) notFound();
 
-  const pages = await getPages({ locale });
-  const page = pages.find((entry) => entry?.slug === uri);
+  const page = await getContentPage({ locale, slug: uri });
 
-  if (!page) notFound();
-
-  // SCAFFOLD: About and How to Use have very different shapes (About is a
-  // fixed set of fields; How to Use is a section matrix). Their templates
-  // land in a later phase, along with the full field queries.
-  return (
-    <main>
-      <h1>{page.title}</h1>
-    </main>
-  );
+  // Narrowed on `__typename`: the page types share no field beyond the
+  // interface, so it is the only thing that identifies which one this is.
+  switch (page?.__typename) {
+    case "about_Entry":
+      return <About locale={locale} page={page} />;
+    case "howToUse_Entry":
+      return <HowToUse locale={locale} page={page} />;
+    default:
+      notFound();
+  }
 };
 
 export default UriSegmentsPage;

@@ -1,0 +1,72 @@
+@import url("../../../styles/variables.css");
+
+/* Typography for CMS-authored copy. The legacy set these in `_typography.scss`
+   against global element selectors; scoping them here keeps the reset in
+   `globals.css` minimal, as the port plan intends. */
+
+.richText {
+  color: var(--color-text-low);
+}
+
+.richText > :first-child {
+  margin-top: 0;
+}
+
+.richText > :last-child {
+  margin-bottom: 0;
+}
+
+.richText p,
+.richText ul,
+.richText ol {
+  margin: 0 0 1em;
+}
+
+.richText h2,
+.richText h3,
+.richText h4 {
+  margin: 1.5em 0 0.5em;
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.richText h2 {
+  font-size: 1.5rem;
+}
+
+.richText h3 {
+  font-size: 1.25rem;
+}
+
+.richText h4 {
+  font-size: 1rem;
+}
+
+.richText a {
+  color: var(--color-link);
+  text-underline-offset: 0.2em;
+}
+
+.richText strong {
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.richText ul,
+.richText ol {
+  padding-left: 1.25em;
+}
+
+.richText li {
+  margin-bottom: 0.25em;
+}
+
+.lead {
+  font-size: 1.125rem;
+}
+
+@media (width >= 768px) {
+  .lead {
+    font-size: 1.25rem;
+  }
+}

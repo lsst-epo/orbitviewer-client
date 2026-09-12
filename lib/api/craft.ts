@@ -114,6 +114,137 @@ export const getPages = async ({ locale }: { locale: string }) => {
   return data?.pagesEntries ?? [];
 };
 
+/**
+ * One Craft content page, with every field its type carries.
+ *
+ * Separate from `getPages`, which stays lean: it is called for slug lookup
+ * and for the landing entry, and neither needs About's two dozen fields or
+ * How to Use's section matrix.
+ *
+ * Assets are queried with `width` and `height` so `next/image` can reserve
+ * the space and avoid a layout shift; the legacy used bare `<img>` tags with
+ * neither, so every image on these pages reflowed the article as it loaded.
+ */
+export const getContentPage = async ({
+  locale,
+  slug,
+}: {
+  locale: string;
+  slug: string;
+}) => {
+  const Query = graphql(`
+    query ContentPage($siteId: [QueryArgument], $slug: [String]) {
+      pagesEntries(siteId: $siteId, slug: $slug) {
+        # Craft's page types have no field in common beyond the interface, so
+        # the typename is what consumers narrow on. Without it the generated
+        # union members are only structurally distinct, and narrowing has to
+        # guess from a field that happens to be unique.
+        __typename
+        ... on EntryInterface {
+          id
+          slug
+          title
+        }
+        ... on about_Entry {
+          eyebrowText
+          headerTitle
+          headerBody {
+            html
+            plainText
+          }
+          introBody {
+            html
+          }
+          introImage {
+            url @transform(width: 1200, format: "webp")
+            width
+            height
+            alt
+          }
+          responsiveBody {
+            html
+          }
+          lowSettingLabel
+          lowSettingCount
+          lowSettingImages {
+            url @transform(width: 1200, format: "webp")
+            width
+            height
+            alt
+          }
+          mediumSettingLabel
+          mediumSettingCount
+          mediumSettingImages {
+            url @transform(width: 1200, format: "webp")
+            width
+            height
+            alt
+          }
+          highSettingLabel
+          highSettingCount
+          highSettingImages {
+            url @transform(width: 1200, format: "webp")
+            width
+            height
+            alt
+          }
+          ultraSettingLabel
+          ultraSettingCount
+          ultraSettingImages {
+            url @transform(width: 1200, format: "webp")
+            width
+            height
+            alt
+          }
+          observatoryBody {
+            html
+          }
+          observatoryImage {
+            url @transform(width: 1600, format: "webp")
+            width
+            height
+            alt
+          }
+          footerBody {
+            html
+          }
+          creditsText {
+            html
+          }
+        }
+        ... on howToUse_Entry {
+          eyebrowText
+          headerText
+          howToUseSection {
+            ... on howToUseSection_section_BlockType {
+              id
+              sectionTitle
+              sectionBody {
+                html
+                plainText
+              }
+              sectionImage {
+                url @transform(width: 1200, format: "webp")
+                width
+                height
+                alt
+              }
+            }
+          }
+        }
+      }
+    }
+  `);
+
+  const { data } = await queryAPI({
+    query: Query,
+    variables: { siteId: [siteIdFromLocale(locale)], slug: [slug] },
+    fetchOptions: { next: { tags: [tagStore.pages] } },
+  });
+
+  return data?.pagesEntries?.[0] ?? undefined;
+};
+
 export const getDataFileUrls = async () => {
   const Query = graphql(`
     query MpcDataFiles {

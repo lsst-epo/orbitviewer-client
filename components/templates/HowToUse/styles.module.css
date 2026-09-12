@@ -1,0 +1,107 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `templates/_how_to_use.scss`. */
+
+.howTo {
+  --measure: 48rem;
+
+  display: grid;
+  gap: calc(var(--site-margin-large) * 3);
+  padding: calc(var(--site-margin-large) * 2) var(--site-margin-large)
+    calc(var(--site-margin-large) * 4);
+}
+
+.masthead,
+.block {
+  display: grid;
+  gap: var(--site-margin-large);
+  width: 100%;
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-turquoise-300);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 2.75rem);
+  font-weight: var(--font-semibold);
+  line-height: 1.15;
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+/* Table of contents */
+
+.contents {
+  padding-top: var(--site-margin-small);
+  border-top: 1px solid var(--color-border);
+}
+
+.contentsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--site-margin-xsmall);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.link {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 0.875rem;
+  color: var(--color-text-low);
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+}
+
+.link:hover {
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+/* Sections */
+
+.block {
+  /* Clears the sticky header when an anchor is followed. The legacy measured
+     the header in JS and scrolled by hand to achieve this. */
+  scroll-margin-top: calc(var(--header-height) + var(--site-margin-large));
+}
+
+.blockTitle {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.figure {
+  display: grid;
+  gap: var(--site-margin-large);
+  margin: 0;
+}
+
+.shot {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-large);
+}
+
+.caption {
+  font-size: 1rem;
+}
+
+@media (width <= 480px) {
+  .howTo {
+    padding-inline: var(--site-margin-small);
+  }
+}
