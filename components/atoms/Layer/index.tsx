@@ -59,6 +59,35 @@ export interface LayerProps {
   className?: string;
 }
 
+/**
+ * Whether a pointer landed on the control that owns this panel.
+ *
+ * Such a control is not "outside" the panel in the sense that matters: it
+ * does its own toggling, and dismissing on its pointerdown makes the click
+ * that follows reopen what it was meant to close. The toolbar buttons closed
+ * and instantly reopened their own panel, replaying the entrance animation,
+ * which read as the button being broken.
+ *
+ * Resolved through `aria-controls` rather than a prop, so any control that
+ * already declares the relationship gets this for free -- and a control that
+ * does not declare it still dismisses, as anything outside should.
+ */
+function controlsThisPanel(
+  target: Element | null,
+  panel: HTMLElement
+): boolean {
+  const trigger = target?.closest?.("[aria-controls]");
+  const id = trigger?.getAttribute("aria-controls");
+  if (!id) return false;
+
+  const controlled = document.getElementById(id);
+
+  // The id may name a wrapper around the panel rather than the panel itself.
+  return Boolean(
+    controlled && (controlled === panel || controlled.contains(panel))
+  );
+}
+
 const Layer: FunctionComponent<PropsWithChildren<LayerProps>> = ({
   open,
   onClose,
@@ -82,8 +111,15 @@ const Layer: FunctionComponent<PropsWithChildren<LayerProps>> = ({
 
     const onPointerDown = (event: MouseEvent) => {
       if (!closeOnOutsideClick) return;
+
       const panel = panelRef.current;
-      if (panel && !panel.contains(event.target as Node)) onClose();
+      if (!panel) return;
+
+      const target = event.target as Element | null;
+      if (panel.contains(target)) return;
+      if (controlsThisPanel(target, panel)) return;
+
+      onClose();
     };
 
     document.addEventListener("keydown", onKeyDown);
