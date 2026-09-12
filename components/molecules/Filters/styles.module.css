@@ -1,0 +1,25 @@
+@import url("../../../styles/variables.css");
+
+.filters {
+  display: grid;
+  gap: var(--site-margin-large);
+}
+
+.head {
+  display: flex;
+  gap: var(--site-margin-small);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-lg, 1.25rem);
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.body {
+  display: grid;
+  gap: var(--site-margin-large);
+}

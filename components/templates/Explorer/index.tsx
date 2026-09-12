@@ -9,6 +9,7 @@ import useClientTranslation from "@/lib/i18n/client";
 import { CAMERA_CLIP } from "@/components/celestial-bodies/camera";
 import Toolbar from "@/components/molecules/Toolbar";
 import Layer from "@/components/atoms/Layer";
+import Filters from "@/components/molecules/Filters";
 import Loader from "@/components/atoms/Loader";
 import Scene from "./Scene";
 import styles from "./styles.module.css";
@@ -75,7 +76,11 @@ const Panels: FunctionComponent<{ locale: string }> = ({ locale }) => {
             onClose={closePanel}
             label={t(labelKey)}
           >
-            <h2>{t(labelKey)}</h2>
+            {id === "filters" ? (
+              <Filters locale={locale} />
+            ) : (
+              <h2>{t(labelKey)}</h2>
+            )}
           </Layer>
         </div>
       ))}

@@ -1,0 +1,42 @@
+@import url("../../../styles/variables.css");
+
+.field {
+  display: grid;
+  gap: var(--site-margin-xsmall);
+}
+
+.label {
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.group {
+  display: flex;
+  padding: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+}
+
+.option {
+  flex: 1;
+  padding: var(--site-margin-xsmall) var(--site-margin-small);
+  font-family: inherit;
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--color-text-low);
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: calc(var(--corner-medium) - 2px);
+  transition:
+    color 0.2s var(--easing-default),
+    background-color 0.2s var(--easing-default);
+}
+
+.option:hover {
+  color: var(--color-button-text-hover);
+}
+
+.selected {
+  color: var(--color-turquoise-900);
+  background-color: var(--color-turquoise-200);
+}

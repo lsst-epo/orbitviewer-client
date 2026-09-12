@@ -107,6 +107,17 @@ const Scene: FunctionComponent = () => {
 
   const planetsColor = categoryColor.get("planets-moons") ?? null;
 
+  /**
+   * The discovery filter is tri-state in the URL but boolean in the scene:
+   * undefined means no filtering at all, which is not the same as false.
+   */
+  const rubinOnly =
+    params.discovery === "rubin"
+      ? true
+      : params.discovery === "other"
+        ? false
+        : undefined;
+
   return (
     <>
       <ClockDriver />
@@ -130,6 +141,12 @@ const Scene: FunctionComponent = () => {
           elements={mpcElements}
           quality={quality}
           categoryColors={categoryColor}
+          distanceRange={
+            params.distance
+              ? { min: params.distance[0], max: params.distance[1] }
+              : undefined
+          }
+          rubinOnly={rubinOnly}
           dimmed={Boolean(params.object)}
         />
       )}
