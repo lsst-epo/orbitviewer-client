@@ -20,11 +20,7 @@ import styles from "./styles.module.css";
  * elements by a `data-wizard-step` attribute, as the legacy did, so the
  * chrome stays unaware of the wizard.
  *
- * The legacy's third step pointed at its map-controls bar -- recentre, zoom,
- * fullscreen. That bar is not carried over: the camera now returns to the Sun
- * by itself when nothing is selected, zoom is the wheel and the pinch, and
- * fullscreen is in the settings menu. A step spotlighting an empty rectangle
- * would be worse than one fewer step, so the remaining four are renumbered.
+ * All five of the legacy's steps are here, in its order.
  */
 
 const STORAGE_KEY = "wizardSkipped";
@@ -41,6 +37,7 @@ interface Step {
 const STEPS: Array<Step> = [
   { target: "toolbar", copyKey: "wizard.content.toolbar" },
   { target: "timemachine", copyKey: "wizard.content.time_controls" },
+  { target: "mapcontrols", copyKey: "wizard.content.map_controls" },
   { target: "navigation", copyKey: "wizard.content.share_menu" },
   { target: "tours", copyKey: "wizard.content.guides" },
 ];

@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useMemo,
   useRef,
   type FunctionComponent,
   type RefObject,
@@ -11,6 +12,7 @@ import { OrbitControls } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Vector3 } from "three";
 import { lerp } from "@/lib/math";
+import { useSceneControls } from "@/contexts/SceneControls";
 
 /**
  * Scene camera and its controls.
@@ -61,6 +63,26 @@ const ARRIVAL_THRESHOLD = 0.5;
 /** The pivot with nothing selected: the Sun, at the origin. */
 const HOME = new Vector3(0, 0, 0);
 
+/**
+ * Scene units moved per frame of held zoom, by how far out the camera is.
+ *
+ * Ported from the legacy's ZOOM_SPEED, interpolated over the same 0-10,000
+ * unit span: a fixed step would crawl out at the edge of the system and
+ * overshoot wildly near a planet.
+ */
+const ZOOM_SPEED = { min: 1, max: 500 };
+const ZOOM_RAMP = 10_000;
+
+/**
+ * Easing for the recentre glide, and the distance at which it is done.
+ *
+ * Eased rather than snapped: the legacy tweened this over two to three
+ * seconds, and jumping the camera across the system in one frame loses the
+ * reader's sense of where they were.
+ */
+const RECENTER_EASING = 0.08;
+const RECENTER_THRESHOLD = 1;
+
 export interface CameraTarget {
   /** Live world position. Written every frame by the focused body. */
   position: Vector3;
@@ -78,6 +100,14 @@ export interface CameraProps {
   enabled?: boolean;
 }
 
+/** Zoom speed at the camera's current distance. */
+const zoomStep = (distance: number): number =>
+  lerp(
+    ZOOM_SPEED.min,
+    ZOOM_SPEED.max,
+    Math.min(Math.max(distance / ZOOM_RAMP, 0), 1)
+  );
+
 const Camera: FunctionComponent<CameraProps> = ({
   targetRef,
   enabled = true,
@@ -85,6 +115,10 @@ const Camera: FunctionComponent<CameraProps> = ({
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const camera = useThree((state) => state.camera);
   const size = useThree((state) => state.size);
+  const { zoomRef, recenterRef } = useSceneControls();
+
+  // Scratch, reused per frame.
+  const offset = useMemo(() => new Vector3(), []);
 
   // Set the initial vantage point once, rather than through <Canvas camera>,
   // so remounting the controls does not snap the user's view back.
@@ -98,6 +132,48 @@ const Camera: FunctionComponent<CameraProps> = ({
     if (!controls) return;
 
     const target = targetRef?.current ?? null;
+
+    /**
+     * Recentre. Ignored while a body is followed: the camera is already
+     * framing what the reader asked for, and the legacy's `centerView`
+     * likewise only reset the zoom level in that case.
+     */
+    if (recenterRef.current && target) recenterRef.current = false;
+
+    if (recenterRef.current) {
+      camera.position.lerp(DEFAULT_CAMERA_POSITION, RECENTER_EASING);
+      controls.target.lerp(HOME, RECENTER_EASING);
+
+      if (
+        camera.position.distanceTo(DEFAULT_CAMERA_POSITION) < RECENTER_THRESHOLD
+      ) {
+        camera.position.copy(DEFAULT_CAMERA_POSITION);
+        controls.target.copy(HOME);
+        recenterRef.current = false;
+      }
+    }
+
+    /**
+     * Held zoom, from the on-screen buttons. Applied by moving the camera
+     * along its line of sight rather than through OrbitControls' own dolly,
+     * which is private in three's build and not reachable from here.
+     */
+    if (zoomRef.current !== 0) {
+      // Taking manual control cancels a glide in progress, rather than the
+      // two fighting each other.
+      recenterRef.current = false;
+
+      offset.copy(camera.position).sub(controls.target);
+      const distance = offset.length();
+      const next = distance + zoomStep(distance) * zoomRef.current;
+
+      camera.position
+        .copy(controls.target)
+        .addScaledVector(
+          offset.normalize(),
+          Math.min(Math.max(next, controls.minDistance), controls.maxDistance)
+        );
+    }
 
     if (target) {
       const framing = size.width <= 768 ? FRAMING.mobile : FRAMING.desktop;

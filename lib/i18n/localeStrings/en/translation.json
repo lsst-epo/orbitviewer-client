@@ -324,5 +324,11 @@
   "e404": {
     "subtitle": "Page Not Found",
     "action": "Back Home"
+  },
+  "mapcontrols": {
+    "aria": "View controls",
+    "recenter": "Recenter view",
+    "zoom_in": "Zoom in",
+    "zoom_out": "Zoom out"
   }
 }

@@ -1,0 +1,53 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_map_controls.scss`. A vertical stack at the
+   bottom right, clear of the time machine. */
+
+.controls {
+  position: absolute;
+  right: var(--site-margin-large);
+  bottom: var(--site-margin-large);
+  z-index: var(--z-scene_controls);
+  display: grid;
+  gap: var(--site-margin-xsmall);
+}
+
+.button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-button-text);
+
+  /* Held zoom: a press that drags off the button must not select text or
+     start a browser gesture on the way. */
+  touch-action: none;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--color-backdrop);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-medium);
+  backdrop-filter: blur(var(--backdrop-blur));
+}
+
+.button:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.button svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (width <= 768px) {
+  .controls {
+    right: var(--site-margin-small);
+
+    /* Above the time machine, which is itself above the toolbar here. */
+    bottom: calc(
+      var(--toolbar-height) + var(--timemachine-height) + 3 *
+        var(--site-margin-small)
+    );
+  }
+}

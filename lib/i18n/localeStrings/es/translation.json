@@ -324,5 +324,11 @@
   "e404": {
     "subtitle": "Página no encontrada",
     "action": "Volver al inicio"
+  },
+  "mapcontrols": {
+    "aria": "Controles de vista",
+    "recenter": "Centrar la vista",
+    "zoom_in": "Acercar",
+    "zoom_out": "Alejar"
   }
 }

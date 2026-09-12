@@ -23,6 +23,8 @@ import Loader from "@/components/atoms/Loader";
 import ObjectDetail from "@/components/molecules/ObjectDetail";
 import ObjectsPanel from "@/components/molecules/Objects";
 import TimeMachine from "@/components/molecules/TimeMachine";
+import MapControls from "@/components/molecules/MapControls";
+import SceneControlsProvider from "@/contexts/SceneControls";
 import Navigation from "@/components/organisms/Navigation";
 import Share from "@/components/organisms/Share";
 import CaptureProvider from "@/contexts/Capture";
@@ -295,59 +297,66 @@ const Explorer: FunctionComponent<ExplorerProps> = ({
             DOM and fulfilled inside the render loop. */}
         <CaptureProvider>
           <BenchmarkProvider>
-            <SolarClockProvider
-              initialDate={params.date ? new Date(params.date) : undefined}
-              initialHoursPerSecond={params.timeScale ?? 0}
-            >
-              <Canvas
-                className={styles.canvas}
-                camera={{
-                  fov: 35,
-                  near: CAMERA_CLIP.near,
-                  far: CAMERA_CLIP.far,
-                }}
-                gl={{
-                  // The scene spans six orders of magnitude, from a 24-unit
-                  // near limit to 3,000,000 units. A linear depth buffer
-                  // z-fights badly across that range.
-                  logarithmicDepthBuffer: true,
-                  antialias: true,
-                  powerPreference: "high-performance",
-                }}
-                // Rendering is on-demand elsewhere, but the clock advances every
-                // frame, so the loop always runs.
-                frameloop="always"
+            <SceneControlsProvider>
+              <SolarClockProvider
+                initialDate={params.date ? new Date(params.date) : undefined}
+                initialHoursPerSecond={params.timeScale ?? 0}
               >
-                <color attach="background" args={["#000000"]} />
-                <Suspense fallback={null}>
-                  <Scene />
-                  <SceneCapture />
-                  <SceneBenchmark />
-                </Suspense>
-              </Canvas>
+                <Canvas
+                  className={styles.canvas}
+                  camera={{
+                    fov: 35,
+                    near: CAMERA_CLIP.near,
+                    far: CAMERA_CLIP.far,
+                  }}
+                  gl={{
+                    // The scene spans six orders of magnitude, from a 24-unit
+                    // near limit to 3,000,000 units. A linear depth buffer
+                    // z-fights badly across that range.
+                    logarithmicDepthBuffer: true,
+                    antialias: true,
+                    powerPreference: "high-performance",
+                  }}
+                  // Rendering is on-demand elsewhere, but the clock advances every
+                  // frame, so the loop always runs.
+                  frameloop="always"
+                >
+                  <color attach="background" args={["#000000"]} />
+                  <Suspense fallback={null}>
+                    <Scene />
+                    <SceneCapture />
+                    <SceneBenchmark />
+                  </Suspense>
+                </Canvas>
 
-              <ExplorerChrome locale={locale} tour={Boolean(overlay)} />
+                <ExplorerChrome locale={locale} tour={Boolean(overlay)} />
 
-              {/* First-run only, and never over a tour: arriving mid-tour is
+                {/* First-run only, and never over a tour: arriving mid-tour is
               arriving with a purpose already chosen. */}
-              {!overlay && <FirstRun locale={locale} tours={featuredTours} />}
+                {!overlay && <FirstRun locale={locale} tours={featuredTours} />}
 
-              {overlay ?? (
-                <>
-                  <Toolbar locale={locale} />
-                  <ExplorerPanels locale={locale} />
-                  <ObjectLayer locale={locale} />
+                {overlay ?? (
+                  <>
+                    <Toolbar locale={locale} />
+                    <ExplorerPanels locale={locale} />
+                    <ObjectLayer locale={locale} />
 
-                  <div className={styles.hud}>
-                    <DatasetStatus locale={locale} selected={params.object} />
-                  </div>
+                    <div className={styles.hud}>
+                      <DatasetStatus locale={locale} selected={params.object} />
+                    </div>
 
-                  <TimeMachine locale={locale} />
-                </>
-              )}
+                    <TimeMachine locale={locale} />
+                  </>
+                )}
 
-              <DatasetLoader locale={locale} />
-            </SolarClockProvider>
+                {/* Outside the overlay switch: recentring and zooming are how
+                    a reader looks around whatever a tour slide has framed,
+                    so they belong in both modes. */}
+                <MapControls locale={locale} />
+
+                <DatasetLoader locale={locale} />
+              </SolarClockProvider>
+            </SceneControlsProvider>
           </BenchmarkProvider>
         </CaptureProvider>
       </SolarDataProvider>

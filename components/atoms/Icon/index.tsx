@@ -42,6 +42,9 @@ export const ICONS = {
   download: "ArrowUpFromBracket",
   help: "QuestionCircle",
   arrowLeft: "Chevron",
+  zoomIn: "Plus",
+  zoomOut: "Minus",
+  recenter: "RotateLeftWithCenter",
   // Custom, from ./icons
   orbit: "Orbit",
   filters: "Filters",
