@@ -113,6 +113,7 @@ const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
     <section
       className={clsx(styles.timemachine, params.panel && styles.shifted)}
       aria-label={t("timemachine.region")}
+      data-wizard-step="timemachine"
       // Ties the rate animation to how fast the simulation is running.
       style={
         { "--speed": `${speedDuration(hoursPerSecond)}s` } as CSSProperties

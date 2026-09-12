@@ -116,6 +116,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
       ref={rootRef}
       className={styles.navigation}
       aria-label={t("navigation.aria")}
+      data-wizard-step="navigation"
     >
       {onShare && (
         <button

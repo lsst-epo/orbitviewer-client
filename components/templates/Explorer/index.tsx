@@ -31,6 +31,7 @@ import SceneBenchmark from "@/components/effects/benchmark";
 import BenchmarkProvider, { useBenchmark } from "@/contexts/Benchmark";
 import Onboarding from "@/components/organisms/Onboarding";
 import PerformanceModal from "@/components/organisms/PerformanceModal";
+import Wizard, { wizardDismissed } from "@/components/organisms/Wizard";
 import { hasStoredQuality } from "@/lib/solar/quality";
 import type { TourSummary } from "@/lib/tours";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
@@ -221,10 +222,14 @@ const FirstRun: FunctionComponent<{
   const { quality, setQuality } = useSolarData();
   const { result } = useBenchmark();
   const [onboarding, setOnboarding] = useState(false);
+  const [wizard, setWizard] = useState(false);
   const [nudged, setNudged] = useState(false);
 
   // Read after mount: localStorage during render would desync the markup.
-  useEffect(() => setOnboarding(!hasStoredQuality()), []);
+  useEffect(() => {
+    setOnboarding(!hasStoredQuality());
+    setWizard(!wizardDismissed());
+  }, []);
 
   const struggling =
     !onboarding &&
@@ -241,6 +246,12 @@ const FirstRun: FunctionComponent<{
         onDismiss={() => setOnboarding(false)}
       />
     );
+  }
+
+  // After onboarding, not alongside it: two overlays explaining the same
+  // screen at once is one too many.
+  if (wizard) {
+    return <Wizard locale={locale} onDismiss={() => setWizard(false)} />;
   }
 
   if (!struggling) return null;

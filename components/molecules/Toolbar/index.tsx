@@ -47,7 +47,8 @@ const Toolbar: FunctionComponent<ToolbarProps> = ({ locale }) => {
       className={styles.toolbar}
       aria-label={t("toolbar.aria", { defaultValue: "Explorer tools" })}
     >
-      <ul className={styles.list}>
+      {/* Spotlight targets for the first-run walkthrough; see Wizard. */}
+      <ul className={styles.list} data-wizard-step="toolbar">
         {PANEL_ITEMS.map(({ panel, icon, labelKey }) => {
           const active = params.panel === panel;
 
@@ -69,7 +70,10 @@ const Toolbar: FunctionComponent<ToolbarProps> = ({ locale }) => {
           );
         })}
 
-        <li className={clsx(styles.item, styles.spaced)}>
+        <li
+          className={clsx(styles.item, styles.spaced)}
+          data-wizard-step="tours"
+        >
           <Link href="/guided-experiences" className={styles.link}>
             <Icon name="guides" />
             <span className={styles.label}>{t("toolbar.guides")}</span>
