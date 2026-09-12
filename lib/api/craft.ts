@@ -212,6 +212,18 @@ export const getContentPage = async ({
             html
           }
         }
+        ... on landing_Entry {
+          eyebrowText
+          headlineText
+          buttonLabel
+          discoveryLabel
+          logoImage {
+            url @transform(width: 800, format: "webp")
+            width
+            height
+            alt
+          }
+        }
         ... on howToUse_Entry {
           eyebrowText
           headerText

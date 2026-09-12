@@ -3,6 +3,7 @@
 import {
   Suspense,
   useMemo,
+  useState,
   type FunctionComponent,
   type ReactNode,
 } from "react";
@@ -21,6 +22,10 @@ import Loader from "@/components/atoms/Loader";
 import ObjectDetail from "@/components/molecules/ObjectDetail";
 import ObjectsPanel from "@/components/molecules/Objects";
 import TimeMachine from "@/components/molecules/TimeMachine";
+import Navigation from "@/components/organisms/Navigation";
+import Share from "@/components/organisms/Share";
+import CaptureProvider from "@/contexts/Capture";
+import SceneCapture from "@/components/effects/capture";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
 import Scene from "./Scene";
 import styles from "./styles.module.css";
@@ -165,6 +170,36 @@ const DatasetLoader: FunctionComponent<{ locale: string }> = ({ locale }) => {
 };
 
 /**
+ * The navigation and the share dialog.
+ *
+ * Together because the menu owns the share trigger, and because both need the
+ * data contexts -- quality from SolarData, params and clock for the link.
+ *
+ * Present during a tour as well: a reader still needs a way out and a
+ * language switch. The exploration-mode item is not offered there, since
+ * swapping datasets mid-tour would reload the scene under the slide.
+ */
+const ExplorerChrome: FunctionComponent<{
+  locale: string;
+  tour: boolean;
+}> = ({ locale, tour }) => {
+  const { quality, setQuality } = useSolarData();
+  const [sharing, setSharing] = useState(false);
+
+  return (
+    <>
+      <Navigation
+        locale={locale}
+        onShare={() => setSharing(true)}
+        quality={tour ? undefined : quality}
+        onQualityChange={tour ? undefined : setQuality}
+      />
+      <Share locale={locale} open={sharing} onClose={() => setSharing(false)} />
+    </>
+  );
+};
+
+/**
  * Explorer shell: the WebGL canvas plus the UI layers drawn over it.
  *
  * The panels mount alongside the canvas rather than inside it. A tour swaps
@@ -176,47 +211,54 @@ const Explorer: FunctionComponent<ExplorerProps> = ({ locale, overlay }) => {
   return (
     <main className={styles.explorer}>
       <SolarDataProvider dataFileUrls={dataFileUrls}>
-        <SolarClockProvider
-          initialDate={params.date ? new Date(params.date) : undefined}
-          initialHoursPerSecond={params.timeScale ?? 0}
-        >
-          <Canvas
-            className={styles.canvas}
-            camera={{ fov: 35, near: CAMERA_CLIP.near, far: CAMERA_CLIP.far }}
-            gl={{
-              // The scene spans six orders of magnitude, from a 24-unit
-              // near limit to 3,000,000 units. A linear depth buffer
-              // z-fights badly across that range.
-              logarithmicDepthBuffer: true,
-              antialias: true,
-              powerPreference: "high-performance",
-            }}
-            // Rendering is on-demand elsewhere, but the clock advances every
-            // frame, so the loop always runs.
-            frameloop="always"
+        {/* Wraps the canvas and the dialog alike: the request is made in the
+            DOM and fulfilled inside the render loop. */}
+        <CaptureProvider>
+          <SolarClockProvider
+            initialDate={params.date ? new Date(params.date) : undefined}
+            initialHoursPerSecond={params.timeScale ?? 0}
           >
-            <color attach="background" args={["#000000"]} />
-            <Suspense fallback={null}>
-              <Scene />
-            </Suspense>
-          </Canvas>
+            <Canvas
+              className={styles.canvas}
+              camera={{ fov: 35, near: CAMERA_CLIP.near, far: CAMERA_CLIP.far }}
+              gl={{
+                // The scene spans six orders of magnitude, from a 24-unit
+                // near limit to 3,000,000 units. A linear depth buffer
+                // z-fights badly across that range.
+                logarithmicDepthBuffer: true,
+                antialias: true,
+                powerPreference: "high-performance",
+              }}
+              // Rendering is on-demand elsewhere, but the clock advances every
+              // frame, so the loop always runs.
+              frameloop="always"
+            >
+              <color attach="background" args={["#000000"]} />
+              <Suspense fallback={null}>
+                <Scene />
+                <SceneCapture />
+              </Suspense>
+            </Canvas>
 
-          {overlay ?? (
-            <>
-              <Toolbar locale={locale} />
-              <ExplorerPanels locale={locale} />
-              <ObjectLayer locale={locale} />
+            <ExplorerChrome locale={locale} tour={Boolean(overlay)} />
 
-              <div className={styles.hud}>
-                <DatasetStatus locale={locale} selected={params.object} />
-              </div>
+            {overlay ?? (
+              <>
+                <Toolbar locale={locale} />
+                <ExplorerPanels locale={locale} />
+                <ObjectLayer locale={locale} />
 
-              <TimeMachine locale={locale} />
-            </>
-          )}
+                <div className={styles.hud}>
+                  <DatasetStatus locale={locale} selected={params.object} />
+                </div>
 
-          <DatasetLoader locale={locale} />
-        </SolarClockProvider>
+                <TimeMachine locale={locale} />
+              </>
+            )}
+
+            <DatasetLoader locale={locale} />
+          </SolarClockProvider>
+        </CaptureProvider>
       </SolarDataProvider>
     </main>
   );

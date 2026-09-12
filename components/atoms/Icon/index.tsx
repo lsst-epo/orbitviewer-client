@@ -36,6 +36,12 @@ export const ICONS = {
   chevronRight: "ChevronRightElongated",
   calendar: "Calendar",
   share: "ShareToggle",
+  facebook: "ShareFacebook",
+  x: "ShareTwitter",
+  copy: "ShareCopyUrl",
+  download: "ArrowUpFromBracket",
+  help: "QuestionCircle",
+  arrowLeft: "Chevron",
   // Custom, from ./icons
   orbit: "Orbit",
   filters: "Filters",
