@@ -44,6 +44,12 @@ export const ExplorerParamsSchema = z.object({
   object: z.string().min(1).optional(),
   /** Whether the objects list panel is open. */
   panel: z.enum(["objects", "filters", "search"]).optional(),
+  /**
+   * How the camera frames the selected object: on the body, or pulled back to
+   * take in its whole orbit. Ported from the legacy's ORBIT/OBJECT toggle,
+   * without which a selected path is drawn but never in shot.
+   */
+  view: z.enum(["object", "orbit"]).optional(),
   /** Simulated date. Absent means "live". */
   date: z.iso.datetime({ offset: true }).optional(),
   /** Simulation rate, in hours per real-time second. */
@@ -116,6 +122,7 @@ export function serializeExplorerParams(
 
   if (params.object) search.set("object", params.object);
   if (params.panel) search.set("panel", params.panel);
+  if (params.view) search.set("view", params.view);
   if (params.date) search.set("date", params.date);
   if (params.timeScale !== undefined)
     search.set("timeScale", String(params.timeScale));

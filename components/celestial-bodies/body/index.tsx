@@ -1,9 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, type FunctionComponent } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  type FunctionComponent,
+  type ReactNode,
+} from "react";
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { Mesh, Vector3, type Texture } from "three";
+import { Group, Mesh, Vector3, type Texture } from "three";
 import type { CameraTarget } from "@/components/celestial-bodies/camera";
 import { AU2KM, DEG_TO_RAD, KM2AU, PLANET_SCALE } from "@/lib/solar/constants";
 import { calculateOrbit, type PerturbationContext } from "@/lib/solar/orbits";
@@ -16,6 +22,7 @@ import {
 import { atmosphereFor } from "@/lib/solar/atmospheres";
 import { useSolarClock } from "@/contexts/SolarClock";
 import Atmosphere from "@/components/effects/atmosphere";
+import Ring from "@/components/celestial-bodies/ring";
 import { BodyMaterial } from "./material";
 import { textureSetFor } from "./textures";
 
@@ -56,6 +63,11 @@ export interface BodyProps {
    */
   focusRef?: React.RefObject<CameraTarget | null> | null;
   onClick?: (id: string) => void;
+  /**
+   * Floating name beside the body. Rendered here rather than in the scene so
+   * it inherits the body's position without a second per-frame write.
+   */
+  label?: ReactNode;
 }
 
 const DAYS_TO_SECONDS = 86400;
@@ -68,7 +80,9 @@ const Body: FunctionComponent<BodyProps> = ({
   cloudsMap = null,
   focusRef = null,
   onClick,
+  label,
 }) => {
+  const groupRef = useRef<Group>(null);
   const meshRef = useRef<Mesh>(null);
   const materialRef = useRef<BodyMaterial>(null);
   const { dateRef, getMJD, getSimulationTime } = useSolarClock();
@@ -116,13 +130,16 @@ const Body: FunctionComponent<BodyProps> = ({
   useEffect(() => () => material.dispose(), [material]);
 
   useFrame(() => {
+    const group = groupRef.current;
     const mesh = meshRef.current;
-    if (!mesh) return;
+    if (!group || !mesh) return;
 
     const d = getMJD();
 
     calculateOrbit(elements, d, position, perturbations);
-    mesh.position.copy(position);
+    // Position on the group, rotation on the mesh: anything that should sit
+    // beside the body -- its label -- must not be swung around by its spin.
+    group.position.copy(position);
 
     if (focusRef?.current) {
       focusRef.current.position.copy(position);
@@ -143,20 +160,25 @@ const Body: FunctionComponent<BodyProps> = ({
   const atmosphere = atmosphereFor(id);
 
   return (
-    <mesh
-      ref={meshRef}
-      scale={radius}
-      onClick={onClick ? () => onClick(elements.id) : undefined}
-      // Bodies are exaggerated but still small on screen; a slightly generous
-      // raycast threshold makes them selectable without pixel-hunting.
-      raycast={undefined}
-    >
-      <sphereGeometry args={[1, 64, 32]} />
-      <primitive object={material} ref={materialRef} attach="material" />
-      {/* Nested so the shell inherits the body's position and radius; its
-          own scale is then a plain multiple of the surface. */}
-      {atmosphere && <Atmosphere settings={atmosphere} />}
-    </mesh>
+    <group ref={groupRef}>
+      <mesh
+        ref={meshRef}
+        scale={radius}
+        onClick={onClick ? () => onClick(elements.id) : undefined}
+        // Bodies are exaggerated but still small on screen; a slightly
+        // generous raycast threshold makes them selectable without
+        // pixel-hunting.
+        raycast={undefined}
+      >
+        <sphereGeometry args={[1, 64, 32]} />
+        <primitive object={material} ref={materialRef} attach="material" />
+        {/* Nested so the shell inherits the body's radius; its own scale is
+            then a plain multiple of the surface. */}
+        {atmosphere && <Atmosphere settings={atmosphere} />}
+        {textures?.ringMap && <Ring map={textures.ringMap} />}
+      </mesh>
+      {label}
+    </group>
   );
 };
 

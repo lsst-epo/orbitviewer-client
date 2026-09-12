@@ -89,11 +89,23 @@ export async function searchSolarElements(
   q: string,
   { types = [], rubinDiscovery, limit = 100 }: SearchFilters = {}
 ): Promise<Array<OrbitElements>> {
+  /**
+   * Clauses are assembled rather than always present. Hasura reads
+   * `_in: []` as "match none", so a types clause with an empty list returned
+   * zero results for every unfiltered search -- which is the panel's default
+   * state, so the whole cloud search came back empty unless a category
+   * filter happened to be on.
+   *
+   * The variable declaration goes with the clause: a declared-but-unused
+   * variable makes the whole document invalid.
+   */
+  const filtered = types.length > 0;
+
   const query = `
     query SearchOrbits(
       $q: String!
-      $types: [Int!]
-      $rubinDiscovery: Boolean
+      ${filtered ? "$types: [Int!]" : ""}
+      ${rubinDiscovery === undefined ? "" : "$rubinDiscovery: Boolean"}
       $limit: Int!
     ) {
       mpc_orbits(
@@ -102,7 +114,7 @@ export async function searchSolarElements(
             { packed_primary_provisional_designation: { _ilike: $q } }
             { unpacked_primary_provisional_designation: { _ilike: $q } }
           ]
-          object_type_int: { _in: $types }
+          ${filtered ? "object_type_int: { _in: $types }" : ""}
           ${rubinDiscovery === undefined ? "" : "rubin_discovery: { _eq: $rubinDiscovery }"}
         }
         limit: $limit
@@ -129,8 +141,8 @@ export async function searchSolarElements(
     query,
     {
       q: `%${q}%`,
-      types: [0, ...types],
-      rubinDiscovery,
+      ...(filtered ? { types: [0, ...types] } : {}),
+      ...(rubinDiscovery === undefined ? {} : { rubinDiscovery }),
       limit,
     },
     { cache: "no-store" }

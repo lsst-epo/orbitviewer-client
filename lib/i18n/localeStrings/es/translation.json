@@ -126,7 +126,13 @@
     "angle_graph": {
       "title": "Ángulo de la órbita",
       "detail": "Inclinación (i)"
-    }
+    },
+    "view": {
+      "label": "Vista de cámara",
+      "object": "Objeto",
+      "orbit": "Órbita"
+    },
+    "perihelion_distance": "Máximo acercamiento al Sol"
   },
   "onboarding": {
     "exploration": {

@@ -48,8 +48,9 @@ const OrbitalPath: FunctionComponent<OrbitalPathProps> = ({
 
   const lineColor = useMemo(() => new Color(color || FALLBACK_COLOR), [color]);
 
-  // Non-elliptical orbits do not close, so buildOrbitPath declines them.
-  // Open arcs for parabolic/hyperbolic bodies are still to do.
+  // Null only when there is genuinely nothing to draw -- an orbit whose
+  // perihelion is already beyond the scene, or elements too degenerate to
+  // trace. Unbound orbits get an open arc; see buildOrbitPath.
   if (!path) return null;
 
   return (

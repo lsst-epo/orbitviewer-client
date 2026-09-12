@@ -1,0 +1,33 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_canvas_pointer.scss`. */
+
+.label {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  padding: 3px 10px;
+  font-family: var(--font-stack);
+  font-size: 0.75rem;
+  color: var(--color-text);
+  white-space: nowrap;
+
+  /* The wrapper disables pointer events so drags pass through the canvas;
+     the control itself takes them back. */
+  pointer-events: auto;
+  cursor: pointer;
+  background-color: var(--color-backdrop);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 24px;
+  backdrop-filter: blur(var(--backdrop-blur));
+  transition: opacity 0.2s var(--easing-default);
+}
+
+.label:hover {
+  background-color: var(--color-turquoise-800);
+}
+
+.icon {
+  width: 14px;
+  height: 14px;
+}

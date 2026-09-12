@@ -28,6 +28,7 @@ import {
 } from "@/lib/solar/stats";
 import type { OrbitElements } from "@/lib/solar/types";
 import Icon from "@/components/atoms/Icon";
+import ToggleGroup from "@/components/atoms/ToggleGroup";
 import Graph from "./Graph";
 import OrbitalElement from "./OrbitalElement";
 import styles from "./styles.module.css";
@@ -84,6 +85,7 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { t } = useClientTranslation(locale);
   const {
     params,
+    setParams,
     planets,
     dwarfPlanets,
     elements: craftElements,
@@ -232,6 +234,21 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
         )}
       </header>
 
+      {/* The legacy showed this only for planets, but every selected body has
+          an orbit worth seeing -- and without it the path is drawn off
+          screen, since the camera frames the body itself. */}
+      {object && (
+        <ToggleGroup<"object" | "orbit">
+          label={t("object.view.label")}
+          options={[
+            { value: "object", label: t("object.view.object") },
+            { value: "orbit", label: t("object.view.orbit") },
+          ]}
+          value={params.view ?? "object"}
+          onChange={(view) => setParams({ view })}
+        />
+      )}
+
       {diameter !== null && (
         <section className={styles.unit}>
           <h3 className={styles.unitTitle}>{t("object.diameter")}</h3>
@@ -249,13 +266,26 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
           <h3 className={styles.unitTitle}>
             {t("object.comparison").replace("%category%", t(label.nameKey))}
           </h3>
-          <Graph
-            label={t("object.sun_graph.title")}
-            detail={t("object.sun_graph.detail")}
-            value={object.a}
-            range={ranges.a}
-            format={AU}
-          />
+          {/* Semi-major axis is negative for an unbound orbit -- a = q/(1-e)
+              flips sign past e = 1 -- so it is not a distance and cannot be
+              compared against one. Those objects show perihelion instead,
+              which is the distance that means something for them. */}
+          {object.e < 1 ? (
+            <Graph
+              label={t("object.sun_graph.title")}
+              detail={t("object.sun_graph.detail")}
+              value={object.a}
+              range={ranges.a}
+              format={AU}
+            />
+          ) : (
+            <p className={styles.value}>
+              <span className={styles.primary}>
+                {t("object.perihelion_distance")}
+              </span>
+              <span className={styles.secondary}>{AU(object.q)}</span>
+            </p>
+          )}
           <Graph
             label={t("object.deviation_graph.title")}
             detail={t("object.deviation_graph.detail")}

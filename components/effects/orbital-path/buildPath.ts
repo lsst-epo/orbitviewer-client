@@ -1,8 +1,10 @@
 import { CatmullRomCurve3, Vector3 } from "three";
 import {
   calculateOrbitByType,
+  getCartesianCoordinates,
   type PerturbationContext,
 } from "@/lib/solar/orbits";
+import { PLANET_SCALE } from "@/lib/solar/constants";
 import { dateToMJD } from "@/lib/solar/time";
 import { OrbitType, type OrbitElements } from "@/lib/solar/types";
 
@@ -38,14 +40,88 @@ export interface OrbitPathResult {
   startDistance: number;
 }
 
+/**
+ * How far out an open arc is drawn, in AU.
+ *
+ * The same ceiling the distance filter uses, so an interstellar object's path
+ * reaches the edge of what the rest of the interface considers the system
+ * and stops. Traced further it would be a line to nowhere: these orbits are
+ * unbounded.
+ */
+const OPEN_ARC_MAX_AU = 500;
+
+/** Samples per branch of an open arc. Both branches share the apex. */
+const OPEN_ARC_SEGMENTS = 160;
+
+/**
+ * Traces the visible part of an unbound orbit.
+ *
+ * The legacy drew nothing here -- `EllipticalPath` logged "Object does not
+ * have an elliptical orbit" and returned -- so every comet on an escape
+ * trajectory and both interstellar objects were rendered as a body with no
+ * path at all.
+ *
+ * Sampled in true anomaly rather than stepped through time. An unbound orbit
+ * has no period to walk around, and time-stepping it is badly conditioned:
+ * the body crawls for centuries at 400 AU and crosses perihelion in days, so
+ * any fixed step is wrong at one end or the other. The conic gives r
+ * directly from the true anomaly,
+ *
+ *   r = q (1 + e) / (1 + e cos v)
+ *
+ * and the same `getCartesianCoordinates` that the propagators use puts it in
+ * the orbital plane -- so the arc is the same curve the body will fly, not an
+ * approximation of it.
+ *
+ * Samples are spaced geometrically in r. Uniform steps in true anomaly bunch
+ * up near perihelion and then leap tens of AU per segment out near the
+ * asymptote, where the curve is straight but the polyline would visibly cut
+ * corners.
+ */
+function buildOpenArc(el: OrbitElements): OrbitPathResult | null {
+  const { q, e } = el;
+
+  // Below perihelion there is nothing to draw, and a bound orbit does not
+  // belong here.
+  if (!(q > 0) || !(e >= 1) || q >= OPEN_ARC_MAX_AU) return null;
+
+  const semiLatus = q * (1 + e);
+
+  /** True anomaly at radius r, on the outbound branch. */
+  const anomalyAt = (r: number): number => {
+    const cos = Math.min(Math.max((semiLatus / r - 1) / e, -1), 1);
+    return Math.acos(cos);
+  };
+
+  const ratio = OPEN_ARC_MAX_AU / q;
+
+  /** Radii from perihelion outwards, spaced geometrically. */
+  const radii = Array.from(
+    { length: OPEN_ARC_SEGMENTS + 1 },
+    (_, step) => q * ratio ** (step / OPEN_ARC_SEGMENTS)
+  );
+
+  // Inbound then outbound, sharing the apex: the two branches are mirror
+  // images about perihelion, so the same radii serve both with the sign of
+  // the true anomaly flipped.
+  const points = [
+    ...radii
+      .slice(1)
+      .reverse()
+      .map((r) => getCartesianCoordinates(-anomalyAt(r), r, el)),
+    ...radii.map((r) => getCartesianCoordinates(anomalyAt(r), r, el)),
+  ];
+
+  return { points, startDistance: points[0].length() };
+}
+
 export function buildOrbitPath(
   el: OrbitElements,
   { from = new Date(), perturbations = {} as PerturbationContext } = {}
 ): OrbitPathResult | null {
-  // Only closed orbits trace a repeating path. Parabolic and hyperbolic
-  // bodies pass through once and need an open arc instead -- see the note in
-  // the component.
-  if (el.type !== OrbitType.Elliptical) return null;
+  // Unbound orbits pass through once; they get an open arc rather than a
+  // traced revolution.
+  if (el.type !== OrbitType.Elliptical) return buildOpenArc(el);
 
   const points: Vector3[] = [];
   let d = dateToMJD(from);
@@ -89,4 +165,49 @@ export function buildOrbitPath(
   const segments = Math.round(lerp(200, 500, spread)) * 2;
 
   return { points: curve.getPoints(segments), startDistance };
+}
+
+/**
+ * Where to put the camera to see the whole orbit, rather than the body.
+ *
+ * Ported from the `t.orbit` branch of `CameraManager.update`, which pivoted
+ * on `orbitPath.ellipse.position` and swapped `lockedObjectDistance` for
+ * `lockedOrbitDistance`.
+ *
+ * Derived from the elements rather than measured off the traced polyline, so
+ * the camera does not have to wait for the path to be built -- and so the two
+ * cannot disagree.
+ */
+
+/** Fraction of the orbit's own size used as the framing radius. */
+const ORBIT_FRAMING = 0.45;
+
+/**
+ * How much of an unbound orbit to frame, in perihelion distances. Its arc
+ * runs to 500 AU, but the part worth looking at is the turn around the Sun.
+ */
+const OPEN_FRAMING_Q = 12;
+
+export interface OrbitFraming {
+  /** Pivot in scene units. */
+  position: Vector3;
+  /** Framing radius in scene units. */
+  radius: number;
+}
+
+export function orbitFraming(el: OrbitElements): OrbitFraming {
+  if (el.type === OrbitType.Elliptical && el.a > 0) {
+    // The geometric centre of the ellipse sits a*e from the focus, along the
+    // apsidal line towards aphelion -- which is true anomaly 180 degrees.
+    return {
+      position: getCartesianCoordinates(Math.PI, el.a * el.e, el),
+      radius: el.a * PLANET_SCALE * ORBIT_FRAMING,
+    };
+  }
+
+  // An unbound orbit has no centre; the Sun is the only fixed point on it.
+  return {
+    position: new Vector3(0, 0, 0),
+    radius: Math.max(el.q, 0.1) * OPEN_FRAMING_Q * PLANET_SCALE * ORBIT_FRAMING,
+  };
 }

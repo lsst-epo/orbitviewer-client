@@ -129,7 +129,10 @@ const ExplorerProvider: FunctionComponent<
   );
 
   const closeObject = useCallback(
-    () => setParams({ object: undefined }),
+    // The camera view belongs to the selection, so it goes with it; a
+    // lingering `view=orbit` would frame the next object's orbit before it
+    // had been asked for.
+    () => setParams({ object: undefined, view: undefined }),
     [setParams]
   );
 

@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useRef, type FunctionComponent } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
-import { PLANET_SCALE } from "@/lib/solar/constants";
+import { KM2AU, PLANET_SCALE } from "@/lib/solar/constants";
 import { resolveObject } from "@/lib/explorer/resolveObject";
+import { orbitFraming } from "@/components/effects/orbital-path/buildPath";
 import type { CameraTarget } from "@/components/celestial-bodies/camera";
 import { fromPlanetElements, categoryFromTypeCode } from "@/lib/solar/elements";
 import { categoryColorMap } from "@/lib/solar/categoryColors";
@@ -13,10 +14,11 @@ import { PlanetRadiusMap, isPlanetId } from "@/lib/solar/planets";
 import type { PerturbationContext } from "@/lib/solar/orbits";
 import type { OrbitElements } from "@/lib/solar/types";
 import { useSolarClock } from "@/contexts/SolarClock";
-import { useExplorer } from "@/contexts/Explorer";
+import { useExplorer, solarElementEntries } from "@/contexts/Explorer";
 import Camera from "@/components/celestial-bodies/camera";
 import Sun, { SUN_SCENE_RADIUS } from "@/components/celestial-bodies/sun";
 import Body from "@/components/celestial-bodies/body";
+import BodyLabel from "@/components/celestial-bodies/label";
 import OrbitalPath from "@/components/effects/orbital-path";
 import SolarParticles from "@/components/effects/solar-particles";
 import CompositorEffect from "@/components/effects/composite";
@@ -77,6 +79,7 @@ const Scene: FunctionComponent = () => {
     params,
     visibleCategories,
     openObject,
+    elements: craftElements,
   } = useExplorer();
   const { elements: mpcElements, quality } = useSolarData();
 
@@ -107,6 +110,23 @@ const Scene: FunctionComponent = () => {
   const categoryColor = useMemo(
     () => categoryColorMap(categories),
     [categories]
+  );
+
+  /**
+   * Craft's display names, keyed by element id. The orbital data's
+   * `fulldesignation` is the catalogue name -- "Earth-Moon Barycenter (3)" --
+   * which is not what belongs on a label.
+   */
+  const craftTitles = useMemo(
+    () =>
+      new Map(
+        solarElementEntries(craftElements).flatMap((entry) =>
+          entry.elementID && entry.title
+            ? [[entry.elementID.toLowerCase(), entry.title]]
+            : []
+        )
+      ),
+    [craftElements]
   );
 
   const all = useMemo(
@@ -149,6 +169,27 @@ const Scene: FunctionComponent = () => {
   }, [focusedSun]);
 
   /**
+   * Orbit view: the camera frames the whole path instead of the body.
+   *
+   * Without this a selected path is drawn at full opacity and then left off
+   * screen, because the camera is parked a few body-radii away -- so in the
+   * port so far no orbit has ever actually been visible while selected. The
+   * legacy solved it with an ORBIT/OBJECT toggle; this is the same idea, with
+   * the choice in the URL so the framing is shareable.
+   *
+   * The pivot is fixed rather than written per frame: an orbit does not move.
+   */
+  const orbitView = params.view === "orbit";
+
+  const orbitTarget = useMemo<CameraTarget | null>(() => {
+    if (!orbitView || !focused) return null;
+    return orbitFraming(focused);
+  }, [orbitView, focused]);
+
+  const orbitTargetRef = useRef<CameraTarget | null>(null);
+  orbitTargetRef.current = orbitTarget;
+
+  /**
    * A focused MPC object is not one of the thirteen bodies in the scene -- it
    * only exists as a texel in the GPU simulation, which the CPU cannot read
    * back cheaply. Propagating a single orbit per frame is negligible, so the
@@ -175,7 +216,15 @@ const Scene: FunctionComponent = () => {
   return (
     <>
       <ClockDriver />
-      <Camera targetRef={focused || focusedSun ? focusTarget : undefined} />
+      <Camera
+        targetRef={
+          orbitTarget
+            ? orbitTargetRef
+            : focused || focusedSun
+              ? focusTarget
+              : undefined
+        }
+      />
 
       {/* Takes over the render loop: scene, glow, blur, composite. */}
       <CompositorEffect quality={quality} />
@@ -266,6 +315,20 @@ const Scene: FunctionComponent = () => {
               perturbations={perturbations}
               cloudsMap={id === "earth" ? cloudsMap : null}
               focusRef={focused?.id === elements.id ? focusTarget : null}
+              label={
+                // Not for the selected body: its name is already in the
+                // panel, and the legacy hid it there too.
+                focused?.id === elements.id ? null : (
+                  <BodyLabel
+                    id={elements.id}
+                    name={craftTitles.get(id) ?? elements.fulldesignation}
+                    category={elements.category}
+                    color={categoryColor.get(elements.category) ?? null}
+                    radius={radiusKm * KM2AU * PLANET_SCALE * BODY_RADIUS_SCALE}
+                    onSelect={openObject}
+                  />
+                )
+              }
               // The legacy put a projected DOM anchor over each body to catch
               // clicks; raycasting the mesh itself is pixel-accurate and needs
               // no per-frame screen-space projection.

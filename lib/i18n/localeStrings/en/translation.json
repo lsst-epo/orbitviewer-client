@@ -126,7 +126,13 @@
     "angle_graph": {
       "title": "Angle of orbit",
       "detail": "Inclination (i)"
-    }
+    },
+    "view": {
+      "label": "Camera view",
+      "object": "Object",
+      "orbit": "Orbit"
+    },
+    "perihelion_distance": "Closest approach to the Sun"
   },
   "onboarding": {
     "exploration": {
