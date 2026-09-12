@@ -59,7 +59,7 @@ const rotations: Record<
   },
   earth: {
     axialTilt: 23.4392811,
-    period: 0.99722222,
+    period: 0.9972685185,
     meridian: 0,
   },
   mars: {
@@ -84,7 +84,7 @@ const rotations: Record<
   },
   neptune: {
     axialTilt: 28.32,
-    period: 0.66526,
+    period: 0.67125,
     meridian: 249.978,
   },
 };
@@ -93,9 +93,10 @@ const rotations: Record<
  * Texture URLs will come from Craft once its element texture field exists.
  */
 export function Body({ record }: { record: OrbitRecord }) {
-  const { mjd, select, entries, selectedId } = useExplorer();
+  const { mjd, select, entries, selectedId, categoryPalette } = useExplorer();
   const group = useRef<Group>(null);
   const mesh = useRef<Mesh>(null);
+  const axis = useRef<Group>(null);
   const id = objectId(record);
   const texture = textures[id];
   const name =
@@ -112,32 +113,36 @@ export function Body({ record }: { record: OrbitRecord }) {
       mesh.current.rotation.y = spin
         ? ((mjd / spin.period) % 1) * Math.PI * 2 + spin.meridian * DEG
         : 0;
-      mesh.current.rotation.z = spin ? spin.axialTilt * DEG : 0;
+      if (axis.current)
+        axis.current.rotation.z = spin ? -(spin.axialTilt + record.i) * DEG : 0;
     }
-  });
+    // Move before camera follow (-2.5), controls (-1), and Html projection (0).
+  }, -3);
   return (
     <group ref={group}>
-      <mesh
-        ref={mesh}
-        scale={bodyRadius(id)}
-        onClick={(event) => {
-          event.stopPropagation();
-          select(id);
-        }}
-      >
-        <sphereGeometry args={[1, 48, 32]} />
-        {texture ? (
-          id === "earth" ? (
-            <EarthMaterial texture={texture} />
+      <group ref={axis}>
+        <mesh
+          ref={mesh}
+          scale={bodyRadius(id)}
+          onClick={(event) => {
+            event.stopPropagation();
+            select(id);
+          }}
+        >
+          <sphereGeometry args={[1, 48, 32]} />
+          {texture ? (
+            id === "earth" ? (
+              <EarthMaterial texture={texture} />
+            ) : (
+              <BodyMaterial texture={texture} />
+            )
           ) : (
-            <BodyMaterial texture={texture} />
-          )
-        ) : (
-          <meshStandardMaterial color="#b3b3b3" />
-        )}
-        {id === "saturn" && <SaturnRings />}
-        {id === "earth" && <Atmosphere />}
-      </mesh>
+            <meshStandardMaterial color="#b3b3b3" />
+          )}
+          {id === "saturn" && <SaturnRings />}
+          {id === "earth" && <Atmosphere />}
+        </mesh>
+      </group>
       <Html position={[0, bodyRadius(id) * 1.5, 0]} center zIndexRange={[2, 0]}>
         <button
           className={styles.label}
@@ -146,7 +151,9 @@ export function Body({ record }: { record: OrbitRecord }) {
         >
           <span
             className={styles.dot}
-            style={{ background: categoryColor(record.object_type) }}
+            style={{
+              background: categoryColor(record.object_type, categoryPalette),
+            }}
           />
           {name}
         </button>

@@ -17,21 +17,30 @@ export function Camera() {
   const controls = useRef<Controls>(null);
   const previous = useRef(new Vector3());
   const initialized = useRef(false);
+  const flight = useRef<{
+    offset: Vector3;
+    destinationOffset: Vector3;
+    elapsed: number;
+  } | null>(null);
   useEffect(() => {
     if (!controls.current || (selectedId && selectedId !== "sun" && !selected))
       return;
     const target = selected ? orbitPosition(selected, mjd) : new Vector3();
     previous.current.copy(target);
-    controls.current.target.copy(target);
     const radius = selectedId ? Math.max(0.15, bodyRadius(selectedId) * 6) : 12;
-    camera.position
-      .copy(target)
-      .add(new Vector3(radius, radius * 0.65, radius));
+    const offset = camera.position.clone().sub(controls.current.target);
+    const distance = new Vector3(radius, radius * 0.65, radius).length();
+    flight.current = {
+      offset,
+      destinationOffset: offset.clone().normalize().multiplyScalar(distance),
+      elapsed: 0,
+    };
     if (!initialized.current) {
       const shared = parseCameraView(
         new URLSearchParams(window.location.search),
       );
       if (shared) {
+        flight.current = null;
         camera.position.fromArray(shared.position);
         controls.current.target.fromArray(shared.target);
       }
@@ -43,6 +52,7 @@ export function Camera() {
   }, [selectedId, selected, camera]);
   useEffect(() => {
     if (!controls.current || !cameraAction.revision) return;
+    flight.current = null;
     const target = controls.current.target;
     const offset = camera.position.clone().sub(target);
     if (cameraAction.action === "reset") {
@@ -52,22 +62,51 @@ export function Camera() {
     camera.position.copy(target).add(offset);
     controls.current.update();
   }, [cameraAction, camera]);
+  useFrame((_, delta) => {
+    if (!controls.current) return;
+    const target = selected ? orbitPosition(selected, mjd) : new Vector3();
+    const transition = flight.current;
+    if (transition) {
+      // Follow orbital displacement exactly, even during a flight. Easing this
+      // motion makes each clock tick kick the object away from the camera target.
+      controls.current.target.add(target.clone().sub(previous.current));
+      // Legacy CameraManager.alpha = .036 per frame. Normalize to 60 Hz so
+      // pan and zoom have the same easing on displays with different refresh rates.
+      const elapsed = Math.min(delta, 0.1);
+      const alpha = 1 - Math.pow(1 - 0.036, elapsed * 60);
+      transition.elapsed += elapsed;
+      controls.current.target.lerp(target, alpha);
+      transition.offset.lerp(transition.destinationOffset, alpha);
+      camera.position.copy(controls.current.target).add(transition.offset);
+      if (transition.elapsed >= 6) {
+        controls.current.target.copy(target);
+        camera.position.copy(target).add(transition.destinationOffset);
+        flight.current = null;
+      }
+      previous.current.copy(target);
+      return;
+    }
+    if (!selected) return;
+    const motion = target.clone().sub(previous.current);
+    camera.position.add(motion);
+    controls.current.target.add(motion);
+    previous.current.copy(target);
+    // Follow before OrbitControls updates orientation and damping (-1).
+  }, -2.5);
   useFrame(() => {
     if (!controls.current) return;
     cameraViewRef.current = {
       position: camera.position.toArray(),
       target: controls.current.target.toArray(),
     };
-    if (!selected) return;
-    const target = orbitPosition(selected, mjd);
-    camera.position.add(target.clone().sub(previous.current));
-    controls.current.target.copy(target);
-    previous.current.copy(target);
-  });
+  }, -0.5);
   return (
     <OrbitControls
       ref={controls}
       makeDefault
+      onStart={() => {
+        flight.current = null;
+      }}
       enableDamping
       minDistance={0.05}
       maxDistance={2000}

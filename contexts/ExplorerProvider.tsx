@@ -11,12 +11,26 @@ import {
 } from "react";
 import { useSearchParams } from "next/navigation";
 import type { OrbitRecord } from "@/lib/api/hasura";
-import type { SolarEntry } from "@/lib/api/craft";
+import type { SolarEntry, Category } from "@/lib/api/craft";
 import type { CameraView } from "@/lib/solar/view";
-import { categories } from "@/lib/solar/categories";
+import { categories, categoryCode } from "@/lib/solar/categories";
 import { dateToMjd, objectId } from "@/lib/solar/orbits";
 
-function useExplorerState(initial: OrbitRecord[], entries: SolarEntry[]) {
+function useExplorerState(
+  initial: OrbitRecord[],
+  entries: SolarEntry[],
+  categoryEntries: Category[],
+) {
+  const categoryPalette = useMemo(
+    () =>
+      Object.fromEntries(
+        categoryEntries.map((entry) => [
+          Number(entry.objectTypeCode),
+          entry.mainColor,
+        ]),
+      ),
+    [categoryEntries],
+  );
   const params = useSearchParams();
   const cameraViewRef = useRef<CameraView | null>(null);
   const [extras, setExtras] = useState<OrbitRecord[]>([]);
@@ -44,7 +58,9 @@ function useExplorerState(initial: OrbitRecord[], entries: SolarEntry[]) {
       ? shared
       : dateToMjd(new Date());
   });
-  const [speed, setSpeed] = useState(0);
+  // Start with gentle orbital motion (one simulated hour per second).
+  const [speed, setSpeed] = useState(1);
+  const [playing, setPlaying] = useState(true);
   const [showOrbits, setShowOrbits] = useState(true);
   const [quality, setQuality] = useState("low");
   const [cameraAction, setCameraAction] = useState({
@@ -70,23 +86,27 @@ function useExplorerState(initial: OrbitRecord[], entries: SolarEntry[]) {
     );
   }, []);
   useEffect(() => {
-    if (!speed) return;
+    if (!playing) return;
     let last = performance.now();
     const timer = setInterval(() => {
       const now = performance.now();
       const elapsed = Math.min((now - last) / 1000, 0.25);
       last = now;
+      // Legacy SolarClock adds real elapsed time plus hours-per-second acceleration.
       setMjd((value) =>
-        Math.min(88069, Math.max(15020, value + speed * elapsed)),
+        Math.min(
+          88069,
+          Math.max(15020, value + (speed / 24 + 1 / 86400) * elapsed),
+        ),
       );
     }, 50);
     return () => clearInterval(timer);
-  }, [speed]);
+  }, [speed, playing]);
   const visible = useMemo(
     () =>
       records.filter(
         (record) =>
-          (record.object_type ?? [0]).some((code) => enabled.includes(code)) &&
+          enabled.includes(categoryCode(record.object_type) ?? 0) &&
           (discoverer === "all" ||
             Boolean(record.rubin_discovery) === (discoverer === "rubin")) &&
           Math.abs(record.a) <= distance,
@@ -131,6 +151,7 @@ function useExplorerState(initial: OrbitRecord[], entries: SolarEntry[]) {
   return {
     records,
     entries,
+    categoryPalette,
     addRecords,
     setCatalog,
     visible,
@@ -144,6 +165,8 @@ function useExplorerState(initial: OrbitRecord[], entries: SolarEntry[]) {
     setMjd,
     speed,
     setSpeed,
+    playing,
+    setPlaying,
     selectedId,
     selected,
     select,
@@ -161,13 +184,15 @@ const ExplorerContext = createContext<ExplorerState | null>(null);
 export function ExplorerProvider({
   initial,
   entries,
+  categoryEntries,
   children,
 }: {
   initial: OrbitRecord[];
   entries: SolarEntry[];
+  categoryEntries: Category[];
   children: ReactNode;
 }) {
-  const state = useExplorerState(initial, entries);
+  const state = useExplorerState(initial, entries, categoryEntries);
   return <ExplorerContext value={state}>{children}</ExplorerContext>;
 }
 export function useExplorer() {

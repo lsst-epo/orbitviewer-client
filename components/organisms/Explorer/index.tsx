@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import { Icon } from "@/components/atoms/Icon";
 import { Button } from "@/components/atoms/Button";
+import { ObjectsOverlay } from "@/components/organisms/ObjectsOverlay";
 import { ShareControls } from "@/components/molecules/ShareControls";
 import { TimeControls } from "@/components/molecules/TimeControls";
 import {
@@ -12,7 +13,7 @@ import {
   useOrbitSearch,
 } from "@/contexts/ExplorerProvider";
 import type { OrbitRecord } from "@/lib/api/hasura";
-import type { SolarEntry } from "@/lib/api/craft";
+import type { SolarEntry, Category } from "@/lib/api/craft";
 import { categories } from "@/lib/solar/categories";
 import { objectId, orbitPosition } from "@/lib/solar/orbits";
 import { Link } from "@/lib/i18n/navigation";
@@ -30,8 +31,7 @@ function ExplorerSurface({
 }) {
   const { t } = useTranslation();
   const explorer = useExplorer();
-  const { enabled, setEnabled, selected, selectedId, entries, select, mjd } =
-    explorer;
+  const { setEnabled, selected, selectedId, entries, select, mjd } = explorer;
   const search = useOrbitSearch();
   const [panel, setPanel] = useState<string | null>(null);
   useEffect(() => {
@@ -128,7 +128,8 @@ function ExplorerSurface({
               : t("ui.unavailable")}
         </p>
       )}
-      {panel && (
+      {panel === "objects" && <ObjectsOverlay onClose={() => setPanel(null)} />}
+      {panel && panel !== "objects" && (
         <aside
           className={styles.panel}
           aria-label={t(panel === "share" ? "ui.share" : `toolbar.${panel}`)}
@@ -139,41 +140,8 @@ function ExplorerSurface({
               ×
             </Button>
           </div>
-          {panel === "objects" && (
+          {panel === "filters" && (
             <>
-              <p>{t("objects.subtitle")}</p>
-              <ul className={styles.results}>
-                {entries.map((entry) => (
-                  <li key={entry.elementID}>
-                    <button
-                      onClick={() => {
-                        select(entry.elementID);
-                        setPanel(null);
-                      }}
-                    >
-                      {entry.title}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              {categories.map(({ code, key, color }) => (
-                <label className={styles.check} key={code}>
-                  <input
-                    type="checkbox"
-                    checked={enabled.includes(code)}
-                    onChange={(event) =>
-                      setEnabled(
-                        event.target.checked
-                          ? [...enabled, code]
-                          : enabled.filter((item) => item !== code),
-                      )
-                    }
-                  />
-                  <span style={{ color }}>
-                    {t(`objects.types.${key}.name`)}
-                  </span>
-                </label>
-              ))}
               <label className={styles.check}>
                 <input
                   type="checkbox"
@@ -197,10 +165,7 @@ function ExplorerSurface({
                   ))}
                 </select>
               </label>
-            </>
-          )}
-          {panel === "filters" && (
-            <>
+
               <label className={styles.field}>
                 {t("filters.discoveries")}
                 <select
@@ -383,16 +348,22 @@ function ExplorerSurface({
 export function Explorer({
   initial,
   entries,
+  categoryEntries,
   children,
   contentError,
 }: {
   initial: OrbitRecord[];
   entries: SolarEntry[];
+  categoryEntries: Category[];
   children?: ReactNode;
   contentError?: boolean;
 }) {
   return (
-    <ExplorerProvider initial={initial} entries={entries}>
+    <ExplorerProvider
+      initial={initial}
+      entries={entries}
+      categoryEntries={categoryEntries}
+    >
       <ExplorerSurface contentError={contentError}>{children}</ExplorerSurface>
     </ExplorerProvider>
   );

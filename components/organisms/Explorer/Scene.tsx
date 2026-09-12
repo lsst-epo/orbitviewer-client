@@ -36,12 +36,14 @@ function SolarScene() {
           />
         ))}
       <SolarParticles records={small} />
-      {selected && !selected.object_type?.includes(7) && (
-        <>
-          <Body record={selected} />
-          <OrbitPath record={selected} selected />
-        </>
-      )}
+      {selected &&
+        visible.includes(selected) &&
+        !selected.object_type?.includes(7) && (
+          <>
+            <Body record={selected} />
+            <OrbitPath record={selected} selected />
+          </>
+        )}
     </>
   );
 }

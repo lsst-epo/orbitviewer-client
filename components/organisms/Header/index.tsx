@@ -20,7 +20,11 @@ export function Header() {
     if (menu.current) menu.current.open = false;
   };
   return (
-    <header className={styles.header} data-viewer={isViewer}>
+    <header
+      className={styles.header}
+      data-viewer={isViewer}
+      data-home={path === "/"}
+    >
       <Link href="/explorer" className={styles.brand} aria-label="Orbitviewer">
         <Image
           src="/images/orbitviewer-logo.svg"

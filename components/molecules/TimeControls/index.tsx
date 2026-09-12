@@ -6,14 +6,14 @@ import { Button } from "@/components/atoms/Button";
 import styles from "./styles.module.css";
 export function TimeControls() {
   const { t } = useTranslation();
-  const { mjd, setMjd, speed, setSpeed } = useExplorer();
+  const { mjd, setMjd, speed, setSpeed, playing, setPlaying } = useExplorer();
   return (
     <section className={styles.controls} aria-label={t("timemachine.aria")}>
       <Button
-        aria-label={speed ? t("ui.pause") : t("ui.play")}
-        onClick={() => setSpeed(speed ? 0 : 1)}
+        aria-label={playing ? t("ui.pause") : t("ui.play")}
+        onClick={() => setPlaying(!playing)}
       >
-        {speed ? "Ⅱ" : "▶"}
+        {playing ? "Ⅱ" : "▶"}
       </Button>
       <label>
         {t("ui.date")}
@@ -32,18 +32,22 @@ export function TimeControls() {
         {t("ui.speed")}
         <input
           type="range"
-          min="-30"
-          max="30"
+          min="-1000"
+          max="1000"
           step="1"
           value={speed}
-          onChange={(event) => setSpeed(Number(event.target.value))}
+          onChange={(event) => {
+            setSpeed(Number(event.target.value));
+            setPlaying(true);
+          }}
         />
         <output>{speed}</output>
       </label>
       <Button
         onClick={() => {
           setMjd(dateToMjd(new Date()));
-          setSpeed(0);
+          setSpeed(1);
+          setPlaying(true);
         }}
       >
         {t("ui.today")}
