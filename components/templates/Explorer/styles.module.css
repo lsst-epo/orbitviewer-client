@@ -25,17 +25,6 @@
   pointer-events: none;
 }
 
-.readout {
-  margin: 0;
-  font-size: var(--font-size-sm, 0.875rem);
-  font-variant-numeric: tabular-nums;
-  color: var(--color-text);
-}
-
-.live {
-  color: var(--color-turquoise-300);
-}
-
 .meta {
   margin: 0;
   font-size: 0.8125rem;

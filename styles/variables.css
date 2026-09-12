@@ -13,9 +13,15 @@
 :root {
   /* Color primitives */
   --color-black: #000;
-  --color-black-rgb: 0, 0, 0;
+
+  /* Space-separated, because they are consumed by `rgb(... / a)`. The
+     legacy wrote `rgba(var(--x-rgb), .1)`, where commas were correct; mixing
+     the two -- `rgb(0, 0, 0 / 60%)` -- is invalid, and the whole declaration
+     is dropped. That is what silently removed every border and backdrop in
+     the app until it was noticed in session 11. */
+  --color-black-rgb: 0 0 0;
   --color-white: #fff;
-  --color-white-rgb: 255, 255, 255;
+  --color-white-rgb: 255 255 255;
   --color-turquoise-100: #d9f7f6;
   --color-turquoise-200: #b1f2ef;
   --color-turquoise-300: #00bec0;
@@ -96,6 +102,7 @@
   --timemachine-height: 113px;
   --toolbar-height: 64px;
   --toolbar-width: 96px;
+  --panel-width: 420px;
   --object-grid-frame-small: 75;
   --object-grid-frame-large: 60;
 

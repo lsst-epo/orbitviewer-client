@@ -37,6 +37,7 @@ interface SolarClockValue {
   displayDate: Date;
   /** Simulated hours elapsed per real second. 0 is real time. */
   hoursPerSecond: number;
+  /** Any non-zero rate leaves live mode; see the note on the setter. */
   setHoursPerSecond: (hours: number) => void;
   /** True while the clock tracks the real current time. */
   isLive: boolean;
@@ -88,48 +89,101 @@ const SolarClockProvider: FunctionComponent<
   const originRef = useRef((initialDate ?? new Date()).getTime() * 0.001);
 
   const [displayDate, setDisplayDate] = useState<Date>(dateRef.current);
-  const [hoursPerSecond, setHoursPerSecond] = useState(initialHoursPerSecond);
-  const [isLive, setIsLive] = useState(!initialDate);
-  const [paused, setPaused] = useState(false);
+  const [hoursPerSecond, setHoursPerSecondState] = useState(
+    initialHoursPerSecond
+  );
+  const [isLive, setIsLiveState] = useState(
+    !initialDate && !initialHoursPerSecond
+  );
+  const [paused, setPausedState] = useState(false);
 
-  const advance = useCallback(
-    (deltaSeconds: number) => {
-      if (paused) return;
+  /**
+   * The frame path reads these rather than the state above.
+   *
+   * `advance` runs from `useFrame`, outside React's render cycle, and a
+   * closure over state is a frame or more stale. That is not cosmetic here:
+   * while live, `advance` overwrites the date with `new Date()` every frame,
+   * so a `setDate` committed between two renders was wiped by the next frame
+   * still believing it was live -- the date jumped straight back to now. The
+   * legacy avoided this by reading a mutable `SolarClock` each frame; refs
+   * are the same idea.
+   */
+  const modeRef = useRef({
+    isLive,
+    hoursPerSecond: initialHoursPerSecond,
+    paused: false,
+  });
 
-      if (isLive && hoursPerSecond === 0) {
-        dateRef.current = new Date();
-      } else {
-        const msPerSecond =
-          hoursPerSecond === 0 ? 1000 : hoursPerSecond * 3600 * 1000;
-        dateRef.current = clampDate(
-          new Date(dateRef.current.getTime() + deltaSeconds * msPerSecond)
-        );
-      }
+  const setPaused = useCallback((next: boolean) => {
+    modeRef.current.paused = next;
+    setPausedState(next);
+  }, []);
 
-      // Throttled mirror into React state for the UI.
-      const now = performance.now();
-      if (now - lastSyncRef.current > UI_SYNC_INTERVAL) {
-        lastSyncRef.current = now;
-        setDisplayDate(new Date(dateRef.current));
-      }
+  const setIsLive = useCallback((next: boolean) => {
+    modeRef.current.isLive = next;
+    setIsLiveState(next);
+  }, []);
+
+  /**
+   * Setting a rate leaves live mode, because the frame path only tracks the
+   * real clock while the rate is zero. Without this the two disagree: the
+   * simulation scrubs away from now while `isLive` still reports true, and
+   * the UI keeps claiming to be live.
+   */
+  const setHoursPerSecond = useCallback(
+    (hours: number) => {
+      modeRef.current.hoursPerSecond = hours;
+      setHoursPerSecondState(hours);
+      if (hours !== 0) setIsLive(false);
     },
-    [paused, isLive, hoursPerSecond]
+    [setIsLive]
   );
 
-  const setDate = useCallback((date: Date) => {
-    const clamped = clampDate(date);
-    dateRef.current = clamped;
-    setDisplayDate(new Date(clamped));
-    setIsLive(false);
+  const advance = useCallback((deltaSeconds: number) => {
+    const {
+      isLive: live,
+      hoursPerSecond: rate,
+      paused: halted,
+    } = modeRef.current;
+
+    if (halted) return;
+
+    if (live && rate === 0) {
+      dateRef.current = new Date();
+    } else {
+      const msPerSecond = rate === 0 ? 1000 : rate * 3600 * 1000;
+      dateRef.current = clampDate(
+        new Date(dateRef.current.getTime() + deltaSeconds * msPerSecond)
+      );
+    }
+
+    // Throttled mirror into React state for the UI.
+    const now = performance.now();
+    if (now - lastSyncRef.current > UI_SYNC_INTERVAL) {
+      lastSyncRef.current = now;
+      setDisplayDate(new Date(dateRef.current));
+    }
   }, []);
+
+  const setDate = useCallback(
+    (date: Date) => {
+      const clamped = clampDate(date);
+      dateRef.current = clamped;
+      setDisplayDate(new Date(clamped));
+      setIsLive(false);
+    },
+    [setIsLive]
+  );
 
   const goLive = useCallback(() => {
     const now = new Date();
     dateRef.current = now;
+    modeRef.current.hoursPerSecond = 0;
+    setHoursPerSecondState(0);
     setDisplayDate(now);
-    setHoursPerSecond(0);
+    setPaused(false);
     setIsLive(true);
-  }, []);
+  }, [setIsLive, setPaused]);
 
   const getMJD = useCallback(() => dateToMJD(dateRef.current), []);
 
@@ -157,8 +211,10 @@ const SolarClockProvider: FunctionComponent<
       getSimulationTime,
       displayDate,
       hoursPerSecond,
+      setHoursPerSecond,
       isLive,
       paused,
+      setPaused,
       setDate,
       goLive,
       advance,

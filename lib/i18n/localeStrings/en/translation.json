@@ -166,7 +166,14 @@
     "aria": "Date selector",
     "toggle": {
       "aria": "Collapse time machine controls"
-    }
+    },
+    "live": "Live",
+    "play": "Play",
+    "pause": "Pause",
+    "speed": "Simulation speed",
+    "realtime": "REAL TIME",
+    "expand": "Show simulation speed",
+    "region": "Time machine"
   },
   "toolbar": {
     "objects": "Objects",

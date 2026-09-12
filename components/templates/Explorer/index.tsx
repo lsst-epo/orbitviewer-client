@@ -3,10 +3,9 @@
 import { Suspense, useMemo, type FunctionComponent } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useExplorer } from "@/contexts/Explorer";
-import SolarClockProvider, { useSolarClock } from "@/contexts/SolarClock";
+import SolarClockProvider from "@/contexts/SolarClock";
 import SolarDataProvider, { useSolarData } from "@/contexts/SolarData";
 import useClientTranslation from "@/lib/i18n/client";
-import useMounted from "@/lib/hooks/useMounted";
 import { CAMERA_CLIP } from "@/components/celestial-bodies/camera";
 import Toolbar from "@/components/molecules/Toolbar";
 import Layer from "@/components/atoms/Layer";
@@ -16,6 +15,7 @@ import SearchProvider from "@/contexts/Search";
 import Loader from "@/components/atoms/Loader";
 import ObjectDetail from "@/components/molecules/ObjectDetail";
 import ObjectsPanel from "@/components/molecules/Objects";
+import TimeMachine from "@/components/molecules/TimeMachine";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
 import Scene from "./Scene";
 import styles from "./styles.module.css";
@@ -23,35 +23,6 @@ import styles from "./styles.module.css";
 interface ExplorerProps {
   locale: string;
 }
-
-/**
- * Simulation date readout. Reads the throttled mirror, not the per-frame ref.
- *
- * Renders nothing until mounted. The clock seeds itself from `new Date()`, so
- * the server and client necessarily disagree about the current instant and
- * React reports a hydration mismatch on the <time> element. Deferring to after
- * hydration is correct rather than cosmetic: there is no "right" server value
- * for a live clock.
- */
-const ClockReadout: FunctionComponent<{ locale: string }> = ({ locale }) => {
-  const { displayDate, isLive } = useSolarClock();
-  const mounted = useMounted();
-
-  if (!mounted) return <p className={styles.readout} />;
-
-  return (
-    <p className={styles.readout}>
-      <time dateTime={displayDate.toISOString()}>
-        {displayDate.toLocaleString(locale, {
-          dateStyle: "medium",
-          timeStyle: "short",
-          timeZone: "UTC",
-        })}
-      </time>
-      {isLive && <span className={styles.live}> UTC · live</span>}
-    </p>
-  );
-};
 
 /**
  * Object detail, docked opposite the toolbar panels.
@@ -222,9 +193,10 @@ const Explorer: FunctionComponent<ExplorerProps> = ({ locale }) => {
           <DatasetLoader locale={locale} />
 
           <div className={styles.hud}>
-            <ClockReadout locale={locale} />
             <DatasetStatus locale={locale} selected={params.object} />
           </div>
+
+          <TimeMachine locale={locale} />
         </SolarClockProvider>
       </SolarDataProvider>
     </main>

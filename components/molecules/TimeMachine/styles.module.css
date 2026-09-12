@@ -1,0 +1,245 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_timemachine.scss`, flattened out of its nesting.
+   The `frozen_glass` and `gradient_border` mixins become a backdrop filter
+   and a plain border; the tokens they used are the same. */
+
+.timemachine {
+  --head-height: 48px;
+
+  position: absolute;
+
+  /* Centred in the space the toolbar leaves, not the whole viewport. */
+  right: var(--site-margin-large);
+  bottom: var(--site-margin-large);
+  left: calc(var(--toolbar-width) + var(--site-margin-large));
+  z-index: var(--z-scene_controls);
+  max-width: 440px;
+  margin: 0 auto;
+  background-color: var(--color-backdrop);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-large);
+  backdrop-filter: blur(var(--backdrop-blur));
+  transition: left 0.5s var(--easing-default);
+}
+
+/* An open panel sits above this one -- the legacy's stacking order, kept --
+   so rather than let it cover the controls, they move out from under it. */
+.shifted {
+  left: calc(
+    var(--toolbar-width) + var(--panel-width) + 2 * var(--site-margin-small)
+  );
+}
+
+.head {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  height: var(--head-height);
+  padding: 0 var(--site-margin-xsmall);
+}
+
+/* Play / pause */
+
+.play {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--color-turquoise-300);
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.play svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Turns at a rate tied to the simulation speed -- the legacy's spinner,
+   which read the same `--speed` custom property. */
+.ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--color-turquoise-700);
+  border-top-color: var(--color-turquoise-300);
+  border-radius: 50%;
+}
+
+.playing .ring {
+  animation: spin var(--speed, 4s) linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playing .ring {
+    animation: none;
+  }
+}
+
+/* Date */
+
+.date {
+  flex: auto;
+  min-width: 0;
+  padding: 4px 6px;
+  font-family: var(--font-stack);
+  font-size: 0.875rem;
+  color: var(--color-text);
+  color-scheme: dark;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--corner-medium);
+}
+
+.date:hover {
+  border-color: var(--color-border);
+}
+
+.date:focus-visible {
+  outline: none;
+  border-color: var(--color-turquoise-400);
+}
+
+.zone {
+  flex: 0 0 auto;
+  font-size: 0.6875rem;
+  color: var(--color-grey-300);
+  letter-spacing: 0.04em;
+}
+
+/* Live */
+
+.live {
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  color: var(--color-text-low);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+}
+
+.liveActive {
+  color: var(--color-turquoise-100);
+  background-color: var(--color-turquoise-800);
+  border-color: var(--color-turquoise-600);
+}
+
+/* Collapse */
+
+.toggle {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 6px;
+  color: var(--color-button-text);
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.toggle:hover {
+  color: var(--color-button-text-hover);
+}
+
+.toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.rate {
+  font-size: 0.75rem;
+  color: var(--color-text-low);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* Speed */
+
+.body {
+  padding: var(--site-margin-xsmall);
+  border-top: 1px solid var(--color-border);
+}
+
+.speed {
+  display: grid;
+  grid-template-areas:
+    "label value"
+    "slider slider";
+  grid-template-columns: 1fr auto;
+  gap: 4px var(--site-margin-xsmall);
+  align-items: center;
+}
+
+.speedLabel {
+  grid-area: label;
+  font-size: 0.75rem;
+  color: var(--color-text-low);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.speedValue {
+  grid-area: value;
+  font-size: 0.75rem;
+  color: var(--color-text);
+  letter-spacing: 0.04em;
+}
+
+.slider {
+  position: relative;
+  grid-area: slider;
+}
+
+/* The library fills its track from the minimum, which on a signed rate reads
+   as "half speed" when the value is actually zero. Both sides get the plain
+   rail instead, and a tick marks the real-time centre.
+
+   `!important` because the component sets this custom property inline, per
+   track, from its own fill logic; there is no prop to turn that off. */
+.slider :global(.track) {
+  --opacity-background-track: 0 !important;
+}
+
+/* The rail sits 6px down from the top of the container, which reserves the
+   space below it for the thumb's label -- so the tick is placed against the
+   rail rather than centred in the container. */
+.slider::after {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 18px;
+  content: "";
+  background-color: var(--color-grey-300);
+  transform: translateX(-50%);
+}
+
+/* The toolbar is a bottom bar on narrow viewports, so the panel sits above
+   it rather than over it. */
+@media (width <= 768px) {
+  .timemachine {
+    right: var(--site-margin-small);
+    bottom: calc(var(--toolbar-height) + var(--site-margin-small));
+    left: var(--site-margin-small);
+  }
+
+  /* A panel is full width here, so there is nowhere to move to. */
+  .shifted {
+    left: var(--site-margin-small);
+  }
+}

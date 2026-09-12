@@ -166,7 +166,14 @@
     "aria": "Seleccionar fechas",
     "toggle": {
       "aria": "Ocultar los controles de máquina de tiempo"
-    }
+    },
+    "live": "En vivo",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "speed": "Velocidad de la simulación",
+    "realtime": "TIEMPO REAL",
+    "expand": "Mostrar la velocidad de la simulación",
+    "region": "Máquina del tiempo"
   },
   "toolbar": {
     "objects": "Objetos",
