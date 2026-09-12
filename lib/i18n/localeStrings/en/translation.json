@@ -132,7 +132,8 @@
       "object": "Object",
       "orbit": "Orbit"
     },
-    "perihelion_distance": "Closest approach to the Sun"
+    "perihelion_distance": "Closest approach to the Sun",
+    "back": "Back to the Solar System"
   },
   "onboarding": {
     "exploration": {

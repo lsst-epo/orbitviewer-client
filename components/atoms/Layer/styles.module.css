@@ -42,6 +42,23 @@
   transform: translateX(0);
 }
 
+/* Wide enough to show a row of cards rather than one at a time, and only as
+   tall as it needs, so the scene stays visible below as well as beside it --
+   which is the point of the extra width. It also keeps the panel off the
+   time machine, which a full-height drawer this wide would bury. */
+.wide {
+  bottom: auto;
+  width: min(75vw, 100%);
+
+  /* Bounded by the time machine below it, not by a rem figure: epo-react-lib
+     sets a fluid `html { font-size: var(--size-font-16-20) }`, so a rem cap
+     would grow with the viewport and swallow the controls it is meant to
+     clear. */
+  max-height: calc(
+    100dvh - var(--timemachine-height) - 3 * var(--site-margin-large)
+  );
+}
+
 .open {
   visibility: visible;
   opacity: 1;
@@ -82,6 +99,13 @@
   overflow-y: auto;
 }
 
+/* No header to push the content down, so the panel clears the navigation
+   itself. Only the right side needs it -- that is the corner the share
+   button and the menu occupy. */
+.right.flush .body {
+  padding-top: calc(var(--site-margin-small) + 56px);
+}
+
 /* The toolbar becomes a bottom bar on narrow viewports, so the panel takes
    the full width and leaves room for it below. */
 @media (width <= 768px) {
@@ -89,6 +113,14 @@
     bottom: calc(var(--toolbar-height) + var(--site-margin-small));
     left: 0;
     width: 100%;
+  }
+
+  /* There is no room to be wide on a phone; the panel is already full width,
+     and it keeps the full height it would have had. */
+  .wide {
+    bottom: calc(var(--toolbar-height) + var(--site-margin-small));
+    width: 100%;
+    max-height: none;
   }
 
   .right {

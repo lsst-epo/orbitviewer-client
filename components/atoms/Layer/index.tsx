@@ -42,8 +42,20 @@ export interface LayerProps {
    * be open at once.
    */
   side?: "left" | "right";
+  /**
+   * How much of the viewport the panel takes. `wide` is for panels whose
+   * content is a row rather than a column -- the objects rail shows one card
+   * at a time in the default width.
+   */
+  size?: "default" | "wide";
   /** Accessible name for the close button. Untranslated in the legacy. */
   closeLabel?: string;
+  /**
+   * Suppresses the header's close button, for content that provides its own.
+   * Two ways out of the same panel is clutter, and on the right-hand side
+   * this one sits underneath the navigation.
+   */
+  showClose?: boolean;
   className?: string;
 }
 
@@ -53,7 +65,9 @@ const Layer: FunctionComponent<PropsWithChildren<LayerProps>> = ({
   label,
   closeOnOutsideClick = true,
   side = "left",
+  size = "default",
   closeLabel = "Close",
+  showClose = true,
   className,
   children,
 }) => {
@@ -92,6 +106,8 @@ const Layer: FunctionComponent<PropsWithChildren<LayerProps>> = ({
       className={clsx(
         styles.layer,
         side === "right" && styles.right,
+        size === "wide" && styles.wide,
+        !showClose && styles.flush,
         open && styles.open,
         className
       )}
@@ -101,16 +117,18 @@ const Layer: FunctionComponent<PropsWithChildren<LayerProps>> = ({
       // leaving it mounted so the transition can play.
       inert={!open}
     >
-      <header className={styles.head}>
-        <button
-          type="button"
-          className={styles.close}
-          onClick={onClose}
-          aria-label={closeLabel}
-        >
-          <Icon name="close" />
-        </button>
-      </header>
+      {showClose && (
+        <header className={styles.head}>
+          <button
+            type="button"
+            className={styles.close}
+            onClick={onClose}
+            aria-label={closeLabel}
+          >
+            <Icon name="close" />
+          </button>
+        </header>
+      )}
       <div className={styles.body}>{children}</div>
     </section>
   );

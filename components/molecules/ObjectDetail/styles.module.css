@@ -15,6 +15,31 @@
   color: var(--color-text-low);
 }
 
+.back {
+  display: inline-flex;
+  gap: var(--site-margin-xsmall);
+  align-items: center;
+  justify-self: start;
+  padding: 6px 12px 6px 8px;
+  font-family: var(--font-stack);
+  font-size: 0.875rem;
+  color: var(--color-button-text);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+}
+
+.back:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.back svg {
+  width: 18px;
+  height: 18px;
+}
+
 /* Heading */
 
 .heading {

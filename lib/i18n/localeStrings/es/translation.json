@@ -132,7 +132,8 @@
       "object": "Objeto",
       "orbit": "Órbita"
     },
-    "perihelion_distance": "Máximo acercamiento al Sol"
+    "perihelion_distance": "Máximo acercamiento al Sol",
+    "back": "Volver al Sistema Solar"
   },
   "onboarding": {
     "exploration": {

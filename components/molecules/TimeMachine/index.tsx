@@ -111,7 +111,12 @@ const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
 
   return (
     <section
-      className={clsx(styles.timemachine, params.panel && styles.shifted)}
+      className={clsx(
+        styles.timemachine,
+        // The wide panel stops short of the bottom, so there is nothing to
+        // move out from under -- and no room to move to if there were.
+        params.panel && params.panel !== "objects" && styles.shifted
+      )}
       aria-label={t("timemachine.region")}
       data-wizard-step="timemachine"
       // Ties the rate animation to how fast the simulation is running.

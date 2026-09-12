@@ -88,8 +88,10 @@
 
 .cardBody {
   /* The descriptions run to several sentences and vary a lot in length;
-     capping the body keeps the rail's cards a consistent height. */
-  max-height: 12rem;
+     capping the body keeps the rail's cards a consistent height, and keeps
+     the whole panel within the height the layer allows so the rail's own
+     controls stay in view. */
+  max-height: 6rem;
   padding: var(--site-margin-small);
   overflow-y: auto;
 }

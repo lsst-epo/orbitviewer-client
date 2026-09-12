@@ -54,7 +54,6 @@ const createEmptyTexture = (): DataTexture => {
 const msaaSamples = (samples: number): number => (samples > 1 ? samples : 0);
 
 interface GlowCapableMaterial extends ShaderMaterial {
-  isCustomMaterial?: boolean;
   shaderRef?: WebGLProgramParametersWithUniforms | null;
 }
 
@@ -65,14 +64,20 @@ interface GlowCapableMaterial extends ShaderMaterial {
  * directly. A patched built-in -- BodyMaterial, which extends
  * MeshStandardMaterial and rewrites the program in onBeforeCompile -- only
  * gains its uniforms once compiled, and they live on the cached shaderRef.
+ *
+ * Discriminated on `shaderRef` itself rather than on a marker property. This
+ * previously tested an `isCustomMaterial` flag that nothing ever set --
+ * BodyMaterial declares `isBodyMaterial` -- so every body fell to the
+ * `material.uniforms` branch, which a MeshStandardMaterial subclass does not
+ * have. `setGlowUniform` therefore reported failure for all of them and the
+ * glow pass hid every planet: Earth's night-side city lights are drawn in
+ * that pass and had never once appeared.
  */
 function setGlowUniform(
   material: GlowCapableMaterial,
   value: boolean
 ): boolean {
-  const uniforms = material.isCustomMaterial
-    ? material.shaderRef?.uniforms
-    : material.uniforms;
+  const uniforms = material.shaderRef?.uniforms ?? material.uniforms;
 
   if (!uniforms?.isGlow) return false;
 

@@ -74,6 +74,10 @@ const ObjectLayer: FunctionComponent<{ locale: string }> = ({ locale }) => {
       closeOnOutsideClick={false}
       label={params.object ?? t("toolbar.objects")}
       closeLabel={t("core.close")}
+      // ObjectDetail carries its own labelled Back control. The header's
+      // close button would sit directly underneath the navigation here, which
+      // is where it has been hiding -- present, but covered and unclickable.
+      showClose={false}
     >
       <ObjectDetail locale={locale} />
     </Layer>
@@ -130,6 +134,9 @@ const ExplorerPanels: FunctionComponent<{ locale: string }> = ({ locale }) => {
             onClose={closePanel}
             label={t(labelKey)}
             closeLabel={t("core.close")}
+            // The objects rail is a row of cards; at the default width only
+            // one is legible at a time.
+            size={id === "objects" ? "wide" : "default"}
           >
             {id === "filters" && <Filters locale={locale} />}
             {id === "search" && <SearchPanel locale={locale} />}

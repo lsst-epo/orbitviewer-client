@@ -81,11 +81,22 @@ const orbitRange = (object: OrbitElements): Range | null => {
   return { min: object.q, max: aphelion };
 };
 
+const BackButton: FunctionComponent<{
+  label: string;
+  onClick: () => void;
+}> = ({ label, onClick }) => (
+  <button type="button" className={styles.back} onClick={onClick}>
+    <Icon name="chevronLeft" aria-hidden />
+    <span>{label}</span>
+  </button>
+);
+
 const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { t } = useClientTranslation(locale);
   const {
     params,
     setParams,
+    closeObject,
     planets,
     dwarfPlanets,
     elements: craftElements,
@@ -143,6 +154,7 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
   if (!object && !craft) {
     return (
       <div className={styles.detail}>
+        <BackButton label={t("object.back")} onClick={closeObject} />
         <p className={styles.empty}>
           {t("search.not_found", { query: params.object })}
         </p>
@@ -177,6 +189,12 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
 
   return (
     <article className={styles.detail}>
+      {/* The only way out of a selection besides Escape. The legacy card had
+          the same control as its first element -- a link, since each object
+          was its own page -- and the panel's own close button would sit
+          underneath the navigation on this side. */}
+      <BackButton label={t("object.back")} onClick={closeObject} />
+
       <header className={styles.heading}>
         <h2 className={styles.title}>
           {craft?.title ?? object?.fulldesignation ?? params.object}
