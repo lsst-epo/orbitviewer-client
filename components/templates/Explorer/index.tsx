@@ -1,6 +1,11 @@
 "use client";
 
-import { Suspense, useMemo, type FunctionComponent } from "react";
+import {
+  Suspense,
+  useMemo,
+  type FunctionComponent,
+  type ReactNode,
+} from "react";
 import { Canvas } from "@react-three/fiber";
 import { useExplorer } from "@/contexts/Explorer";
 import SolarClockProvider from "@/contexts/SolarClock";
@@ -22,6 +27,15 @@ import styles from "./styles.module.css";
 
 interface ExplorerProps {
   locale: string;
+  /**
+   * Replaces the explorer's own chrome with the given overlay.
+   *
+   * A tour drives the scene itself -- which object is framed, where the clock
+   * is -- so the toolbar, panels and time machine would be competing with it
+   * for the same state. The legacy closed them all on entering guided mode
+   * (`goToGuidedExperienceMode`); here they are simply not rendered.
+   */
+  overlay?: ReactNode;
 }
 
 /**
@@ -153,10 +167,10 @@ const DatasetLoader: FunctionComponent<{ locale: string }> = ({ locale }) => {
 /**
  * Explorer shell: the WebGL canvas plus the UI layers drawn over it.
  *
- * The panels (object list, object detail, filters, search, time machine) are
- * still to come; they mount alongside the canvas rather than inside it.
+ * The panels mount alongside the canvas rather than inside it. A tour swaps
+ * the whole set for its own overlay -- see `overlay`.
  */
-const Explorer: FunctionComponent<ExplorerProps> = ({ locale }) => {
+const Explorer: FunctionComponent<ExplorerProps> = ({ locale, overlay }) => {
   const { params, dataFileUrls } = useExplorer();
 
   return (
@@ -187,16 +201,21 @@ const Explorer: FunctionComponent<ExplorerProps> = ({ locale }) => {
             </Suspense>
           </Canvas>
 
-          <Toolbar locale={locale} />
-          <ExplorerPanels locale={locale} />
-          <ObjectLayer locale={locale} />
+          {overlay ?? (
+            <>
+              <Toolbar locale={locale} />
+              <ExplorerPanels locale={locale} />
+              <ObjectLayer locale={locale} />
+
+              <div className={styles.hud}>
+                <DatasetStatus locale={locale} selected={params.object} />
+              </div>
+
+              <TimeMachine locale={locale} />
+            </>
+          )}
+
           <DatasetLoader locale={locale} />
-
-          <div className={styles.hud}>
-            <DatasetStatus locale={locale} selected={params.object} />
-          </div>
-
-          <TimeMachine locale={locale} />
         </SolarClockProvider>
       </SolarDataProvider>
     </main>

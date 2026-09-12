@@ -58,6 +58,9 @@ const FRAMING = {
 /** Below this distance from the target, user control is handed back. */
 const ARRIVAL_THRESHOLD = 0.5;
 
+/** The pivot with nothing selected: the Sun, at the origin. */
+const HOME = new Vector3(0, 0, 0);
+
 export interface CameraTarget {
   /** Live world position. Written every frame by the focused body. */
   position: Vector3;
@@ -123,6 +126,12 @@ const Camera: FunctionComponent<CameraProps> = ({
         enabled &&
         controls.target.distanceTo(target.position) < ARRIVAL_THRESHOLD;
     } else {
+      // Deselecting returns the pivot to the Sun, as the legacy's
+      // `releaseCameraTarget` did by calling `centerView`. Without it the
+      // camera keeps orbiting wherever the last body was -- deselect Eris and
+      // you are left circling an empty point 68 AU out. Panning is disabled,
+      // so nothing competes with this.
+      controls.target.lerp(HOME, FOLLOW_EASING);
       controls.minDistance = lerp(
         controls.minDistance,
         CAMERA_LIMITS.min,

@@ -274,7 +274,11 @@
         "less_complex": "Menos complejos primero",
         "more_complex": "Más complejos primero"
       },
-      "search": "Buscar"
+      "search": "Buscar",
+      "count_one": "{{count}} recorrido",
+      "count_other": "{{count}} recorridos",
+      "minutes": "{{count}} min",
+      "empty": "Ningún recorrido coincide con esa búsqueda."
     },
     "difficulty": {
       "easy": "Fácil",
@@ -286,7 +290,9 @@
         "guides": "Tours",
         "next": "Siguiente",
         "previous": "Anterior"
-      }
+      },
+      "step": "Paso {{current}} de {{total}}",
+      "fun_fact": "¿Sabías que?"
     }
   },
   "modal": {

@@ -285,8 +285,17 @@ export const getGuidedExperiences = async ({ locale }: { locale: string }) => {
           postDate
           duration
           complexity
+          tourPicker {
+            ... on tours_Category {
+              title
+              slug
+            }
+          }
           tourPreview {
             title
+            alt
+            width
+            height
             url @transform(width: 600, format: "webp")
           }
         }
@@ -301,4 +310,94 @@ export const getGuidedExperiences = async ({ locale }: { locale: string }) => {
   });
 
   return data?.guidedExperiencesToursEntries ?? [];
+};
+
+/**
+ * One tour with its whole slide deck.
+ *
+ * The deck is a Craft matrix of four block types, so every member is queried
+ * and consumers narrow on `__typename`. The legacy read only the fields that
+ * `defaultSlide` carries, which meant a fun-fact slide rendered as an empty
+ * card and a share slide lost its title, body and all four links.
+ *
+ * `closeUp` points at an `elements` entry, and its `elementID` is the same id
+ * the explorer's `object` param uses -- so a slide's object is addressable
+ * without a second lookup.
+ */
+export const getGuidedExperience = async ({
+  locale,
+  slug,
+}: {
+  locale: string;
+  slug: string;
+}) => {
+  const Query = graphql(`
+    query GuidedExperience($siteId: [QueryArgument], $slug: [String]) {
+      guidedExperiencesToursEntries(siteId: $siteId, slug: $slug) {
+        ... on tour_Entry {
+          title
+          slug
+          duration
+          complexity
+          seoTitle
+          seoDescription
+          tourPreview {
+            title
+            alt
+            width
+            height
+            url @transform(width: 1200, format: "webp")
+          }
+          flexible {
+            __typename
+            ... on introSlide_Entry {
+              id
+              thumbnail
+              slideTitle
+              subTitle
+              slideContent
+            }
+            ... on defaultSlide_Entry {
+              id
+              slideTitle
+              subTitle
+              slideContent
+              closeUp {
+                ... on elements_default_Entry {
+                  elementID
+                  title
+                }
+              }
+            }
+            ... on funFactSlide_Entry {
+              id
+              slideContent
+            }
+            ... on shareSlide_Entry {
+              id
+              slideTitle
+              slideText
+              linksTitle
+              Link1
+              link1Text
+              link2
+              link2Text
+              link3
+              link3Text
+              link4
+              link4Text
+            }
+          }
+        }
+      }
+    }
+  `);
+
+  const { data } = await queryAPI({
+    query: Query,
+    variables: { siteId: [siteIdFromLocale(locale)], slug: [slug] },
+    fetchOptions: { next: { tags: [tagStore.tours] } },
+  });
+
+  return data?.guidedExperiencesToursEntries?.[0] ?? undefined;
 };

@@ -16,7 +16,7 @@ import type { PlanetOrbitElements } from "@/lib/static/planetOrbits";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
 import type { SolarCategory } from "@/lib/solar/types";
 import {
-  serializeExplorerParams,
+  mergeExplorerParams,
   type ExplorerParams,
   type ExplorerPanel,
 } from "@/lib/explorer/searchParams";
@@ -105,9 +105,14 @@ const ExplorerProvider: FunctionComponent<
    * render ("Cannot update a component while rendering a different
    * component"). An effect also collapses several updates in one commit into
    * a single history write.
+   *
+   * Merged into whatever is already in the URL, not written over it. The
+   * explorer is not the only thing keeping state there -- a tour keeps its
+   * slide in the same query string -- and rebuilding the whole thing from
+   * explorer state alone silently dropped it.
    */
   useEffect(() => {
-    const query = serializeExplorerParams(params);
+    const query = mergeExplorerParams(window.location.search, params);
     const url = query
       ? `${window.location.pathname}?${query}`
       : window.location.pathname;

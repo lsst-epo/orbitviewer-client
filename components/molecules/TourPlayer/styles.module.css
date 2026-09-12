@@ -1,0 +1,232 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_guide_step.scss`. The legacy positioned this as an
+   `.object_detail` sheet that slid up from the bottom; it is a docked card
+   here, matching the object detail panel it sits in place of. */
+
+.player {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-menu);
+  display: flex;
+  align-items: center;
+  width: min(var(--panel-width), 100%);
+  padding: var(--site-margin-large) var(--site-margin-small);
+  pointer-events: none;
+}
+
+.card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  max-height: 100%;
+  overflow: hidden;
+  pointer-events: auto;
+  background-color: var(--color-backdrop);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-large);
+  backdrop-filter: blur(var(--backdrop-blur));
+}
+
+/* Head */
+
+.head {
+  display: grid;
+  gap: var(--site-margin-xsmall);
+  padding: var(--site-margin-small) var(--site-margin-small) 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: var(--font-semibold);
+  line-height: 1.3;
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+.steps {
+  margin: 0;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-low);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.progress {
+  height: 3px;
+  background-color: var(--color-grey-600);
+  border-radius: 3px;
+}
+
+.progressValue {
+  display: block;
+  height: 100%;
+  background-color: var(--color-turquoise-300);
+  border-radius: 3px;
+  transition: width 0.4s var(--easing-default);
+}
+
+/* Body */
+
+.body {
+  display: grid;
+  gap: var(--site-margin-small);
+  align-content: start;
+  padding: var(--site-margin-small);
+  overflow-y: auto;
+}
+
+.hero {
+  width: 100%;
+  height: auto;
+  border-radius: var(--corner-medium);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-turquoise-300);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.slideTitle {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: var(--font-semibold);
+  line-height: 1.2;
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+.text {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-text-low);
+}
+
+.text p {
+  margin: 0 0 0.75em;
+}
+
+.text p:last-child {
+  margin-bottom: 0;
+}
+
+/* Share slide links */
+
+.links {
+  display: grid;
+  gap: var(--site-margin-xsmall);
+  padding-top: var(--site-margin-xsmall);
+  border-top: 1px solid var(--color-border);
+}
+
+.linksTitle {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text-low);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.linkList {
+  display: grid;
+  gap: 4px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.link {
+  font-size: 0.9375rem;
+  color: var(--color-link);
+  text-underline-offset: 0.2em;
+}
+
+/* Foot */
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--site-margin-xsmall);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--site-margin-small);
+  border-top: 1px solid var(--color-border);
+}
+
+.nav {
+  display: flex;
+  gap: var(--site-margin-xsmall);
+  align-items: center;
+}
+
+.exit,
+.secondary,
+.primary {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 6px 12px;
+  font-family: var(--font-stack);
+  font-size: 0.875rem;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--corner-medium);
+}
+
+.exit,
+.secondary {
+  color: var(--color-button-text);
+  background: none;
+  border: 1px solid var(--color-border);
+}
+
+.primary {
+  color: var(--color-turquoise-900);
+  background-color: var(--color-turquoise-200);
+  border: 1px solid var(--color-turquoise-200);
+}
+
+.secondary:disabled,
+.primary:disabled {
+  color: var(--color-grey-400);
+  cursor: default;
+  background: none;
+  border-color: var(--color-border);
+}
+
+.exit:hover,
+.secondary:hover:not(:disabled) {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--color-turquoise-100);
+  border-color: var(--color-turquoise-100);
+}
+
+.exit svg,
+.secondary svg,
+.primary svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* The scene has nowhere to go on a narrow viewport, so the card sits over the
+   lower half rather than beside it. */
+@media (width <= 768px) {
+  .player {
+    top: auto;
+    left: 0;
+    width: 100%;
+    max-height: 70%;
+    padding: var(--site-margin-small);
+  }
+}

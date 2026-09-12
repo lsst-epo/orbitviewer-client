@@ -274,7 +274,11 @@
         "less_complex": "Less complex first",
         "more_complex": "More complex first"
       },
-      "search": "Search"
+      "search": "Search",
+      "count_one": "{{count}} tour",
+      "count_other": "{{count}} tours",
+      "minutes": "{{count}} min",
+      "empty": "No tours match that search."
     },
     "difficulty": {
       "easy": "Easy",
@@ -286,7 +290,9 @@
         "guides": "Tours",
         "next": "Next",
         "previous": "Previous"
-      }
+      },
+      "step": "Step {{current}} of {{total}}",
+      "fun_fact": "Did you know?"
     }
   },
   "modal": {

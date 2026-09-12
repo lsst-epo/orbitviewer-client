@@ -1,0 +1,126 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_guides.scss`. */
+
+.guides {
+  display: grid;
+  gap: var(--site-margin-large);
+  width: 100%;
+  max-width: 72rem;
+  padding: calc(var(--site-margin-large) * 2) var(--site-margin-large)
+    calc(var(--site-margin-large) * 3);
+  margin: 0 auto;
+}
+
+.heading {
+  display: grid;
+  gap: var(--site-margin-xsmall);
+  max-width: 48rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 2.5rem);
+  font-weight: var(--font-semibold);
+  line-height: 1.15;
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 1.0625rem;
+  color: var(--color-text-low);
+}
+
+/* Controls */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--site-margin-small);
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--site-margin-small);
+  border-top: 1px solid var(--color-border);
+}
+
+.field {
+  position: relative;
+  display: flex;
+  flex: 1 1 16rem;
+  align-items: center;
+  max-width: 24rem;
+}
+
+.fieldIcon {
+  position: absolute;
+  right: 12px;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-low);
+  pointer-events: none;
+}
+
+.select,
+.input {
+  width: 100%;
+  padding: 10px 40px 10px 14px;
+  font-family: var(--font-stack);
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  appearance: none;
+  background-color: var(--color-grey-800);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-medium);
+}
+
+.select:focus-visible,
+.input:focus-visible {
+  border-color: var(--color-turquoise-400);
+}
+
+.input::placeholder {
+  color: var(--color-grey-300);
+}
+
+/* Grid */
+
+.status {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-low);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.empty {
+  margin: 0;
+  color: var(--color-text-low);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: var(--site-margin-large);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* Visually hidden, but present for screen readers -- the controls are
+   identified by icon and placeholder alone on screen. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+@media (width <= 480px) {
+  .guides {
+    padding-inline: var(--site-margin-small);
+  }
+}

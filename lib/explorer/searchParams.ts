@@ -95,6 +95,17 @@ export function parseExplorerParams(
 }
 
 /**
+ * The query keys the explorer owns.
+ *
+ * It is not the only thing writing the query string -- a tour keeps its slide
+ * there too -- so the URL sync replaces these and leaves everything else
+ * alone. Derived from the schema, so a new param cannot be forgotten here.
+ */
+export const EXPLORER_PARAM_KEYS = Object.keys(
+  ExplorerParamsSchema.shape
+) as Array<keyof ExplorerParams>;
+
+/**
  * Serialises state back to a query string. Defaults are omitted so a pristine
  * viewer produces a bare /explorer URL.
  */
@@ -117,4 +128,28 @@ export function serializeExplorerParams(
     search.set("distance", params.distance.join(","));
 
   return search.toString();
+}
+
+/**
+ * Merges explorer state into an existing query string.
+ *
+ * Only the keys in `EXPLORER_PARAM_KEYS` are touched; anything else in the
+ * URL is preserved. Without this the explorer's URL sync rebuilt the whole
+ * query string from its own state and silently dropped a tour's `slide`.
+ */
+export function mergeExplorerParams(
+  search: string,
+  params: Partial<ExplorerParams>
+): string {
+  const merged = new URLSearchParams(search);
+
+  for (const key of EXPLORER_PARAM_KEYS) merged.delete(key);
+
+  for (const [key, value] of new URLSearchParams(
+    serializeExplorerParams(params)
+  )) {
+    merged.set(key, value);
+  }
+
+  return merged.toString();
 }
