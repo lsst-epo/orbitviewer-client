@@ -16,6 +16,7 @@ import { customIcons } from "./icons";
  *   search, menu, play, pause, close, info, language, fullscreen, check,
  *   chevron-*  ->  library icons (Search, Hamburger, Play, ...)
  *   orbit, filters, guides, settings, fullscreen-off  ->  ./icons
+ *   the eight object-category glyphs                ->  ./icons
  */
 
 /** Legacy sprite ids mapped onto the library's names. */
@@ -41,6 +42,15 @@ export const ICONS = {
   guides: "Guides",
   settings: "Settings",
   fullscreenOff: "FullscreenOff",
+  // Object categories
+  "planets-moons": "PlanetsMoons",
+  asteroids: "Asteroids",
+  "near-earth-objects": "NearEarthObjects",
+  comets: "Comets",
+  centaurs: "Centaurs",
+  "trans-neptunian-objects": "TransNeptunianObjects",
+  "interstellar-objects": "InterstellarObjects",
+  "jupiter-trojans": "JupiterTrojans",
 } as const;
 
 export type IconName = keyof typeof ICONS;

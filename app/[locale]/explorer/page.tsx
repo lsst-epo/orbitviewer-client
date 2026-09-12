@@ -13,6 +13,7 @@ import {
 } from "@/lib/static/planetOrbits";
 import { ogImageForElement } from "@/lib/static/globals";
 import { parseExplorerParams } from "@/lib/explorer/searchParams";
+import { resolveCraftElement } from "@/lib/explorer/resolveObject";
 import ExplorerProvider from "@/contexts/Explorer";
 import Explorer from "@/components/templates/Explorer";
 
@@ -37,12 +38,23 @@ export async function generateMetadata({
   if (!object) return {};
 
   const elements = await getSolarElements({ locale });
-  const element = elements.find(
-    (entry) =>
-      entry && "elementID" in entry && entry.elementID?.toLowerCase() === object
+
+  // The Craft union includes members without these fields, so narrow with a
+  // predicate -- a plain truthiness filter does not change the type.
+  type SolarElementEntry = Extract<
+    (typeof elements)[number],
+    { elementID?: string | null }
+  >;
+
+  const element = resolveCraftElement(
+    elements.filter(
+      (entry): entry is SolarElementEntry =>
+        entry !== null && "elementID" in entry
+    ),
+    object
   );
 
-  if (!element || !("elementID" in element)) return {};
+  if (!element) return {};
 
   const description = element.textBody?.plainText?.slice(0, 150);
 

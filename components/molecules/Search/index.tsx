@@ -6,6 +6,7 @@ import useClientTranslation from "@/lib/i18n/client";
 import Icon from "@/components/atoms/Icon";
 import { useExplorer } from "@/contexts/Explorer";
 import { useSearch, MIN_QUERY_LENGTH } from "@/contexts/Search";
+import { categoryColorMap } from "@/lib/solar/categoryColors";
 import type { OrbitElements } from "@/lib/solar/types";
 import styles from "./styles.module.css";
 
@@ -65,13 +66,7 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const inputId = useId();
   const resultsId = useId();
 
-  const categoryColors = new Map(
-    categories.flatMap((category) =>
-      category && "slug" in category && category.slug && category.mainColor
-        ? [[category.slug, category.mainColor] as const]
-        : []
-    )
-  );
+  const categoryColors = categoryColorMap(categories);
 
   const tooShort = query.trim().length < MIN_QUERY_LENGTH;
   const results = catalogueResults ?? localResults;

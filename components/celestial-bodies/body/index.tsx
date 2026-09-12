@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, type FunctionComponent } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { Mesh, Vector3, type Texture } from "three";
+import type { CameraTarget } from "@/components/celestial-bodies/camera";
 import { AU2KM, DEG_TO_RAD, KM2AU, PLANET_SCALE } from "@/lib/solar/constants";
 import { calculateOrbit, type PerturbationContext } from "@/lib/solar/orbits";
 import type { OrbitElements } from "@/lib/solar/types";
@@ -48,6 +49,12 @@ export interface BodyProps {
    * far too expensive to evaluate thirteen times.
    */
   cloudsMap?: Texture | null;
+  /**
+   * When set, this body writes its live position here each frame for the
+   * camera to follow. A ref rather than a callback so following costs no
+   * React renders while the body orbits.
+   */
+  focusRef?: React.RefObject<CameraTarget | null> | null;
   onClick?: (id: string) => void;
 }
 
@@ -59,6 +66,7 @@ const Body: FunctionComponent<BodyProps> = ({
   radiusScale = 1,
   perturbations,
   cloudsMap = null,
+  focusRef = null,
   onClick,
 }) => {
   const meshRef = useRef<Mesh>(null);
@@ -115,6 +123,11 @@ const Body: FunctionComponent<BodyProps> = ({
 
     calculateOrbit(elements, d, position, perturbations);
     mesh.position.copy(position);
+
+    if (focusRef?.current) {
+      focusRef.current.position.copy(position);
+      focusRef.current.radius = radius;
+    }
 
     if (rotation) {
       // Axial tilt is fixed; the meridian advances with the sidereal period.

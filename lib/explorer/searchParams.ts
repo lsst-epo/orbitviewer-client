@@ -34,8 +34,14 @@ const numberTuple = (length: number) =>
     .transform((parts) => parts.map(Number));
 
 export const ExplorerParamsSchema = z.object({
-  /** Craft elementID of the object whose detail panel is open. */
-  object: z.string().min(1).toLowerCase().optional(),
+  /**
+   * Identifier of the object whose detail panel is open.
+   *
+   * Case is preserved deliberately. MPC packed designations encode the cycle
+   * count in base 62, where "A" is 10 but "a" is 36, so lowercasing changes
+   * the identifier -- roughly 5% of the catalogue carries a lowercase letter.
+   */
+  object: z.string().min(1).optional(),
   /** Whether the objects list panel is open. */
   panel: z.enum(["objects", "filters", "search"]).optional(),
   /** Simulated date. Absent means "live". */

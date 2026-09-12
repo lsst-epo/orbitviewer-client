@@ -108,8 +108,11 @@ export function fromPlanetElements(
 /** Maps one MPC dataset row onto normalised elements. */
 export function fromMpcRow(row: MpcOrbitRow): OrbitElements {
   return {
-    id: row.fulldesignation,
+    // Packed designation preferred: compact, space-free and what the legacy
+    // put in ?id=. Falls back to the unpacked form when a row lacks one.
+    id: row.mpcdesignation ?? row.fulldesignation,
     fulldesignation: row.fulldesignation,
+    mpcDesignation: row.mpcdesignation,
     N: row.node,
     a: row.a,
     e: row.e,
@@ -132,8 +135,9 @@ export function fromHasuraElements(
   category?: SolarCategory
 ): OrbitElements {
   return {
-    id: el.fulldesignation,
+    id: el.mpcdesignation ?? el.fulldesignation,
     fulldesignation: el.fulldesignation,
+    mpcDesignation: el.mpcdesignation,
     N: el.node,
     a: el.a,
     e: el.e,

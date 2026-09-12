@@ -15,7 +15,8 @@
     "back": "Orbit viewer",
     "recommended": "recommended",
     "loading": "Loading... this may take a moment",
-    "testing": "Testing performance to optimize your setup..."
+    "testing": "Testing performance to optimize your setup...",
+    "close": "Close"
   },
   "logo": {
     "alt": "NSF DOE Rubin Observatory Orbitviewer logo"
@@ -101,7 +102,8 @@
       "anomaly": {
         "aria": "True anomaly",
         "tooltip": "True anomaly: the position of the object in its orbit"
-      }
+      },
+      "info": "More about"
     },
     "closest_sun": {
       "title": "When will it be closest to the Sun?",
@@ -249,7 +251,9 @@
     "total": "Near Earth Objects",
     "detected": "Detected by Rubin",
     "hidden": "Hidden",
-    "visible": "Visible"
+    "visible": "Visible",
+    "previous": "Previous objects",
+    "next": "More objects"
   },
   "guides": {
     "index": {

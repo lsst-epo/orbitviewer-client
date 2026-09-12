@@ -1,17 +1,12 @@
 "use client";
 
-import {
-  Suspense,
-  useEffect,
-  useMemo,
-  useState,
-  type FunctionComponent,
-} from "react";
+import { Suspense, useMemo, type FunctionComponent } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useExplorer } from "@/contexts/Explorer";
 import SolarClockProvider, { useSolarClock } from "@/contexts/SolarClock";
 import SolarDataProvider, { useSolarData } from "@/contexts/SolarData";
 import useClientTranslation from "@/lib/i18n/client";
+import useMounted from "@/lib/hooks/useMounted";
 import { CAMERA_CLIP } from "@/components/celestial-bodies/camera";
 import Toolbar from "@/components/molecules/Toolbar";
 import Layer from "@/components/atoms/Layer";
@@ -19,6 +14,9 @@ import Filters from "@/components/molecules/Filters";
 import SearchPanel from "@/components/molecules/Search";
 import SearchProvider from "@/contexts/Search";
 import Loader from "@/components/atoms/Loader";
+import ObjectDetail from "@/components/molecules/ObjectDetail";
+import ObjectsPanel from "@/components/molecules/Objects";
+import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
 import Scene from "./Scene";
 import styles from "./styles.module.css";
 
@@ -37,9 +35,7 @@ interface ExplorerProps {
  */
 const ClockReadout: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { displayDate, isLive } = useSolarClock();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const mounted = useMounted();
 
   if (!mounted) return <p className={styles.readout} />;
 
@@ -58,6 +54,33 @@ const ClockReadout: FunctionComponent<{ locale: string }> = ({ locale }) => {
 };
 
 /**
+ * Object detail, docked opposite the toolbar panels.
+ *
+ * Driven by the `object` param rather than `panel`, so an object stays
+ * selected -- and framed by the camera -- while the filters or search panel is
+ * open over on the other side. Outside clicks do not dismiss it: a click in
+ * the scene is how you pick a different object, and the legacy's global
+ * document handler would have closed the card on the way.
+ */
+const ObjectLayer: FunctionComponent<{ locale: string }> = ({ locale }) => {
+  const { t } = useClientTranslation(locale);
+  const { params, closeObject } = useExplorer();
+
+  return (
+    <Layer
+      open={Boolean(params.object)}
+      onClose={closeObject}
+      side="right"
+      closeOnOutsideClick={false}
+      label={params.object ?? t("toolbar.objects")}
+      closeLabel={t("core.close")}
+    >
+      <ObjectDetail locale={locale} />
+    </Layer>
+  );
+};
+
+/**
  * The explorer's side panels.
  *
  * Which one is open lives in the `panel` search param, so the state survives
@@ -67,7 +90,7 @@ const ClockReadout: FunctionComponent<{ locale: string }> = ({ locale }) => {
  */
 const ExplorerPanels: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { t } = useClientTranslation(locale);
-  const { params, closePanel } = useExplorer();
+  const { params, closePanel, visibleCategories } = useExplorer();
 
   /**
    * The same filters the scene applies, so search cannot surface an object
@@ -75,6 +98,10 @@ const ExplorerPanels: FunctionComponent<{ locale: string }> = ({ locale }) => {
    */
   const filters = useMemo(
     () => ({
+      categories:
+        visibleCategories.size === ALL_CATEGORIES.length
+          ? undefined
+          : visibleCategories,
       distance: params.distance
         ? { min: params.distance[0], max: params.distance[1] }
         : undefined,
@@ -85,7 +112,7 @@ const ExplorerPanels: FunctionComponent<{ locale: string }> = ({ locale }) => {
             ? false
             : undefined,
     }),
-    [params.distance, params.discovery]
+    [params.distance, params.discovery, visibleCategories]
   );
 
   const panels = [
@@ -102,10 +129,11 @@ const ExplorerPanels: FunctionComponent<{ locale: string }> = ({ locale }) => {
             open={params.panel === id}
             onClose={closePanel}
             label={t(labelKey)}
+            closeLabel={t("core.close")}
           >
             {id === "filters" && <Filters locale={locale} />}
             {id === "search" && <SearchPanel locale={locale} />}
-            {id === "objects" && <h2>{t(labelKey)}</h2>}
+            {id === "objects" && <ObjectsPanel locale={locale} />}
           </Layer>
         </div>
       ))}
@@ -190,6 +218,7 @@ const Explorer: FunctionComponent<ExplorerProps> = ({ locale }) => {
 
           <Toolbar locale={locale} />
           <ExplorerPanels locale={locale} />
+          <ObjectLayer locale={locale} />
           <DatasetLoader locale={locale} />
 
           <div className={styles.hud}>

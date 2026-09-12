@@ -15,7 +15,8 @@
     "back": "Orbit viewer",
     "recommended": "recomendado",
     "loading": "Cargando... esto puede tomar tiempo",
-    "testing": "Probando rendimiento para optimizar tus ajustes..."
+    "testing": "Probando rendimiento para optimizar tus ajustes...",
+    "close": "Cerrar"
   },
   "logo": {
     "alt": "logo de Orbitviewer del Observatorio Rubin de NSF-DOE"
@@ -101,7 +102,8 @@
       "anomaly": {
         "aria": "Anomalía verdadera",
         "tooltip": "Anomalía verdadera: la posición del objeto en su órbita"
-      }
+      },
+      "info": "Más sobre"
     },
     "closest_sun": {
       "title": "¿Cuándo estará más cerca del Sol?",
@@ -249,7 +251,9 @@
     "total": "Objetos cercanos a la Tierra",
     "detected": "Detectado por Rubin",
     "hidden": "Esconder",
-    "visible": "Mostrar"
+    "visible": "Mostrar",
+    "previous": "Objetos anteriores",
+    "next": "Más objetos"
   },
   "guides": {
     "index": {

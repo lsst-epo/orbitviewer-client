@@ -36,6 +36,14 @@ export interface LayerProps {
   label: string;
   /** Dismiss when a click lands outside the panel. */
   closeOnOutsideClick?: boolean;
+  /**
+   * Which edge the panel docks to. The toolbar panels come from the left, as
+   * in the legacy; the object detail card comes from the right so the two can
+   * be open at once.
+   */
+  side?: "left" | "right";
+  /** Accessible name for the close button. Untranslated in the legacy. */
+  closeLabel?: string;
   className?: string;
 }
 
@@ -44,6 +52,8 @@ const Layer: FunctionComponent<PropsWithChildren<LayerProps>> = ({
   onClose,
   label,
   closeOnOutsideClick = true,
+  side = "left",
+  closeLabel = "Close",
   className,
   children,
 }) => {
@@ -79,7 +89,12 @@ const Layer: FunctionComponent<PropsWithChildren<LayerProps>> = ({
   return (
     <section
       ref={panelRef}
-      className={clsx(styles.layer, open && styles.open, className)}
+      className={clsx(
+        styles.layer,
+        side === "right" && styles.right,
+        open && styles.open,
+        className
+      )}
       aria-label={label}
       aria-hidden={!open}
       // Keeps the closed panel out of the tab order and the a11y tree while
@@ -91,7 +106,7 @@ const Layer: FunctionComponent<PropsWithChildren<LayerProps>> = ({
           type="button"
           className={styles.close}
           onClick={onClose}
-          aria-label="Close"
+          aria-label={closeLabel}
         >
           <Icon name="close" />
         </button>

@@ -23,8 +23,21 @@ export enum OrbitType {
  * representation.
  */
 export interface OrbitElements {
+  /**
+   * Stable identifier, and what goes in the URL.
+   *
+   * For MPC objects this is the PACKED provisional designation ("K14UI9F"),
+   * not the unpacked one ("2014 UF189") -- the legacy chose packed because it
+   * is compact and has no spaces. Case is significant: the packed format
+   * encodes the cycle count in base 62, where "A" is 10 but "a" is 36, so
+   * lowercasing changes what the identifier means. For Craft-authored bodies
+   * this is the element id ("earth", "ceres").
+   */
   id: string;
+  /** Human-readable designation, e.g. "2014 UF189". */
   fulldesignation: string;
+  /** Packed MPC designation, when the object has one. */
+  mpcDesignation?: string;
   /** Longitude of the ascending node, degrees. */
   N: number;
   /** Semi-major axis, AU. */

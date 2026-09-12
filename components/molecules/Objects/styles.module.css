@@ -1,0 +1,172 @@
+@import url("../../../styles/variables.css");
+
+/* Ported from `components/_objects.scss`. The legacy rail was a transformed
+   div driven by JS; here it is a native scroll container, so the layout is
+   the same but the mechanics are the browser's. */
+
+.objects {
+  display: grid;
+  gap: var(--site-margin-large);
+}
+
+.heading {
+  display: grid;
+  gap: var(--site-margin-xsmall);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: var(--font-regular);
+  color: var(--color-text-low);
+}
+
+/* Rail */
+
+.rail {
+  padding-bottom: var(--site-margin-xsmall);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.track {
+  display: flex;
+  gap: var(--site-margin-small);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.rail:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 4px;
+}
+
+.item {
+  flex: 0 0 min(260px, 80%);
+  scroll-snap-align: start;
+}
+
+.card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-large);
+}
+
+.cardLabel {
+  display: flex;
+  gap: var(--site-margin-xsmall);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--site-margin-small);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cardLabel svg {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+}
+
+.name {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: var(--font-semibold);
+  color: currentcolor;
+}
+
+.cardBody {
+  /* The descriptions run to several sentences and vary a lot in length;
+     capping the body keeps the rail's cards a consistent height. */
+  max-height: 12rem;
+  padding: var(--site-margin-small);
+  overflow-y: auto;
+}
+
+.description {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-low);
+}
+
+.cardFoot {
+  display: grid;
+  gap: var(--site-margin-xsmall);
+  padding: var(--site-margin-small);
+  border-top: 1px solid var(--color-border);
+}
+
+.count {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-grey-300);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Switch */
+
+.switch {
+  display: flex;
+  gap: var(--site-margin-xsmall);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.switchLabel {
+  font-size: 0.75rem;
+  color: var(--color-grey-300);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.switchActive {
+  color: var(--color-text);
+}
+
+/* Controls */
+
+.controls {
+  display: flex;
+  gap: var(--site-margin-xsmall);
+  justify-content: flex-end;
+}
+
+.control {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-button-text);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+}
+
+.control:disabled {
+  color: var(--color-grey-400);
+  cursor: default;
+}
+
+.control:hover:not(:disabled) {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.control svg {
+  width: 20px;
+  height: 20px;
+}

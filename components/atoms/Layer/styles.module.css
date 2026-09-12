@@ -28,6 +28,20 @@
     visibility 0.5s;
 }
 
+/* Docked to the opposite edge, so a toolbar panel and the object detail can
+   be open together without overlapping. */
+.right {
+  right: 0;
+  left: auto;
+  border-right: 0;
+  border-left: 1px solid var(--color-border);
+  transform: translateX(100%);
+}
+
+.right.open {
+  transform: translateX(0);
+}
+
 .open {
   visibility: visible;
   opacity: 1;
@@ -75,5 +89,9 @@
     bottom: calc(var(--toolbar-height) + var(--site-margin-small));
     left: 0;
     width: 100%;
+  }
+
+  .right {
+    right: 0;
   }
 }
