@@ -1,6 +1,11 @@
-import "@/styles/globals.css";
+// Vendor base styles first, project styles after. The library sets
+// `--font-stack-base` and a `body` font-family in its own `:root`, and both
+// are plain single-element rules -- so whichever sheet comes last wins. With
+// this the wrong way round the whole app rendered in Helvetica: the library
+// points that token at Source Sans Pro, which nothing here loads.
 // Precompiled by the package; no Sass toolchain is needed to consume it.
 import "@rubin-epo/epo-react-lib/styles.css";
+import "@/styles/globals.css";
 import { FunctionComponent, PropsWithChildren } from "react";
 import { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";

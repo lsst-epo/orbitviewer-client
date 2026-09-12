@@ -113,6 +113,11 @@
 
   /* Fonts */
   --font-stack: var(--font-source-sans-3), arial, sans-serif;
+
+  /* epo-react-lib reads this for everything it renders, and defaults it to
+     Source Sans Pro -- a different family from the Source Sans 3 this app
+     loads, and one nothing serves, so it fell through to Helvetica. */
+  --font-stack-base: var(--font-stack);
   --font-regular: 400;
   --font-semibold: 600;
 
