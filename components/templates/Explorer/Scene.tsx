@@ -269,6 +269,13 @@ const Scene: FunctionComponent = () => {
             elements={focused}
             color={categoryColor.get(focused.category) ?? null}
             selected
+            view={orbitView ? "orbit" : "object"}
+            fadeRadius={
+              FOCUSED_OBJECT_RADIUS_KM *
+              KM2AU *
+              PLANET_SCALE *
+              BODY_RADIUS_SCALE
+            }
             perturbations={perturbations}
           />
           <Body
@@ -306,6 +313,8 @@ const Scene: FunctionComponent = () => {
               // Compared against the resolved object rather than the raw
               // param, which may differ in case from the element's id.
               selected={focused?.id === elements.id}
+              view={orbitView ? "orbit" : "object"}
+              fadeRadius={radiusKm * KM2AU * PLANET_SCALE * BODY_RADIUS_SCALE}
               perturbations={perturbations}
             />
             <Body
