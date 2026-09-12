@@ -5,6 +5,7 @@ import {
   getSolarElements,
   getCategories,
   getDataFileUrls,
+  getGuidedExperiences,
 } from "@/lib/api/craft";
 import { getClassificationRanges } from "@/lib/api/hasura";
 import {
@@ -16,6 +17,10 @@ import { parseExplorerParams } from "@/lib/explorer/searchParams";
 import { resolveCraftElement } from "@/lib/explorer/resolveObject";
 import ExplorerProvider from "@/contexts/Explorer";
 import Explorer from "@/components/templates/Explorer";
+import type { TourSummary } from "@/lib/tours";
+
+/** Onboarding offers at most three, as the legacy's second slide did. */
+const ONBOARDING_TOURS = 3;
 
 interface ExplorerPageProps {
   params: Promise<{ locale: string }>;
@@ -86,6 +91,7 @@ const ExplorerPage: FunctionComponent<ExplorerPageProps> = async ({
     planets,
     dwarfPlanets,
     dataFileUrls,
+    tours,
   ] = await Promise.all([
     getSolarElements({ locale }),
     getCategories({ locale }),
@@ -95,7 +101,16 @@ const ExplorerPage: FunctionComponent<ExplorerPageProps> = async ({
     // Only the URLs are resolved here; the browser downloads the dataset
     // itself, which is far too large to pass through an RSC payload.
     getDataFileUrls(),
+    getGuidedExperiences({ locale }),
   ]);
+
+  const featuredTours = tours
+    .filter(
+      (entry): entry is TourSummary =>
+        entry !== null && "slug" in entry && Boolean(entry.slug)
+    )
+    .filter((tour) => tour.featuredTour)
+    .slice(0, ONBOARDING_TOURS);
 
   return (
     <ExplorerProvider
@@ -110,7 +125,7 @@ const ExplorerPage: FunctionComponent<ExplorerPageProps> = async ({
       {/* useSearchParams below this point requires a Suspense boundary, or
           the production build fails with "Missing Suspense boundary". */}
       <Suspense fallback={null}>
-        <Explorer locale={locale} />
+        <Explorer locale={locale} featuredTours={featuredTours} />
       </Suspense>
     </ExplorerProvider>
   );

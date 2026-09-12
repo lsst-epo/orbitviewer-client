@@ -2,6 +2,7 @@
 
 import {
   Suspense,
+  useEffect,
   useMemo,
   useState,
   type FunctionComponent,
@@ -26,12 +27,20 @@ import Navigation from "@/components/organisms/Navigation";
 import Share from "@/components/organisms/Share";
 import CaptureProvider from "@/contexts/Capture";
 import SceneCapture from "@/components/effects/capture";
+import SceneBenchmark from "@/components/effects/benchmark";
+import BenchmarkProvider, { useBenchmark } from "@/contexts/Benchmark";
+import Onboarding from "@/components/organisms/Onboarding";
+import PerformanceModal from "@/components/organisms/PerformanceModal";
+import { hasStoredQuality } from "@/lib/solar/quality";
+import type { TourSummary } from "@/lib/tours";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
 import Scene from "./Scene";
 import styles from "./styles.module.css";
 
 interface ExplorerProps {
   locale: string;
+  /** Featured tours for onboarding's second step. */
+  featuredTours?: Array<TourSummary>;
   /**
    * Replaces the explorer's own chrome with the given overlay.
    *
@@ -200,12 +209,65 @@ const ExplorerChrome: FunctionComponent<{
 };
 
 /**
+ * Onboarding on a first visit, and the performance nudge afterwards.
+ *
+ * The two are exclusive: someone still choosing a tier does not need to be
+ * told the one they have not chosen yet is slow.
+ */
+const FirstRun: FunctionComponent<{
+  locale: string;
+  tours: Array<TourSummary>;
+}> = ({ locale, tours }) => {
+  const { quality, setQuality } = useSolarData();
+  const { result } = useBenchmark();
+  const [onboarding, setOnboarding] = useState(false);
+  const [nudged, setNudged] = useState(false);
+
+  // Read after mount: localStorage during render would desync the markup.
+  useEffect(() => setOnboarding(!hasStoredQuality()), []);
+
+  const struggling =
+    !onboarding &&
+    !nudged &&
+    quality !== "low" &&
+    result !== null &&
+    result.quality === "low";
+
+  if (onboarding) {
+    return (
+      <Onboarding
+        locale={locale}
+        tours={tours}
+        onDismiss={() => setOnboarding(false)}
+      />
+    );
+  }
+
+  if (!struggling) return null;
+
+  return (
+    <PerformanceModal
+      locale={locale}
+      onAccept={() => {
+        setQuality("low");
+        setNudged(true);
+      }}
+      onDismiss={() => setNudged(true)}
+    />
+  );
+};
+
+/**
  * Explorer shell: the WebGL canvas plus the UI layers drawn over it.
  *
  * The panels mount alongside the canvas rather than inside it. A tour swaps
  * the whole set for its own overlay -- see `overlay`.
  */
-const Explorer: FunctionComponent<ExplorerProps> = ({ locale, overlay }) => {
+const Explorer: FunctionComponent<ExplorerProps> = ({
+  locale,
+  featuredTours = [],
+  overlay,
+}) => {
   const { params, dataFileUrls } = useExplorer();
 
   return (
@@ -214,50 +276,61 @@ const Explorer: FunctionComponent<ExplorerProps> = ({ locale, overlay }) => {
         {/* Wraps the canvas and the dialog alike: the request is made in the
             DOM and fulfilled inside the render loop. */}
         <CaptureProvider>
-          <SolarClockProvider
-            initialDate={params.date ? new Date(params.date) : undefined}
-            initialHoursPerSecond={params.timeScale ?? 0}
-          >
-            <Canvas
-              className={styles.canvas}
-              camera={{ fov: 35, near: CAMERA_CLIP.near, far: CAMERA_CLIP.far }}
-              gl={{
-                // The scene spans six orders of magnitude, from a 24-unit
-                // near limit to 3,000,000 units. A linear depth buffer
-                // z-fights badly across that range.
-                logarithmicDepthBuffer: true,
-                antialias: true,
-                powerPreference: "high-performance",
-              }}
-              // Rendering is on-demand elsewhere, but the clock advances every
-              // frame, so the loop always runs.
-              frameloop="always"
+          <BenchmarkProvider>
+            <SolarClockProvider
+              initialDate={params.date ? new Date(params.date) : undefined}
+              initialHoursPerSecond={params.timeScale ?? 0}
             >
-              <color attach="background" args={["#000000"]} />
-              <Suspense fallback={null}>
-                <Scene />
-                <SceneCapture />
-              </Suspense>
-            </Canvas>
+              <Canvas
+                className={styles.canvas}
+                camera={{
+                  fov: 35,
+                  near: CAMERA_CLIP.near,
+                  far: CAMERA_CLIP.far,
+                }}
+                gl={{
+                  // The scene spans six orders of magnitude, from a 24-unit
+                  // near limit to 3,000,000 units. A linear depth buffer
+                  // z-fights badly across that range.
+                  logarithmicDepthBuffer: true,
+                  antialias: true,
+                  powerPreference: "high-performance",
+                }}
+                // Rendering is on-demand elsewhere, but the clock advances every
+                // frame, so the loop always runs.
+                frameloop="always"
+              >
+                <color attach="background" args={["#000000"]} />
+                <Suspense fallback={null}>
+                  <Scene />
+                  <SceneCapture />
+                  <SceneBenchmark />
+                </Suspense>
+              </Canvas>
 
-            <ExplorerChrome locale={locale} tour={Boolean(overlay)} />
+              <ExplorerChrome locale={locale} tour={Boolean(overlay)} />
 
-            {overlay ?? (
-              <>
-                <Toolbar locale={locale} />
-                <ExplorerPanels locale={locale} />
-                <ObjectLayer locale={locale} />
+              {/* First-run only, and never over a tour: arriving mid-tour is
+              arriving with a purpose already chosen. */}
+              {!overlay && <FirstRun locale={locale} tours={featuredTours} />}
 
-                <div className={styles.hud}>
-                  <DatasetStatus locale={locale} selected={params.object} />
-                </div>
+              {overlay ?? (
+                <>
+                  <Toolbar locale={locale} />
+                  <ExplorerPanels locale={locale} />
+                  <ObjectLayer locale={locale} />
 
-                <TimeMachine locale={locale} />
-              </>
-            )}
+                  <div className={styles.hud}>
+                    <DatasetStatus locale={locale} selected={params.object} />
+                  </div>
 
-            <DatasetLoader locale={locale} />
-          </SolarClockProvider>
+                  <TimeMachine locale={locale} />
+                </>
+              )}
+
+              <DatasetLoader locale={locale} />
+            </SolarClockProvider>
+          </BenchmarkProvider>
         </CaptureProvider>
       </SolarDataProvider>
     </main>

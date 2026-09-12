@@ -174,3 +174,48 @@ export async function getClassificationRanges(): Promise<
 
   return json.classification_ranges ?? [];
 }
+
+/**
+ * How many catalogue objects Rubin discovered.
+ *
+ * Shown on the splash, where the legacy hardcoded `745,259` into the markup
+ * and never replaced it -- a placeholder that shipped. An aggregate keeps it
+ * a single number over the wire rather than the 6 MB dataset the count would
+ * otherwise have to be derived from.
+ */
+export async function getRubinDiscoveryCount(): Promise<number | null> {
+  const query = `
+    query RubinDiscoveryCount {
+      mpc_orbits_aggregate(where: { rubin_discovery: { _eq: true } }) {
+        aggregate {
+          count
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await fetch(env.HASURA_GRAPHQL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+      // New discoveries land continuously, but not by the minute.
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      console.error(`Rubin discovery count failed: ${response.status}`);
+      return null;
+    }
+
+    const json = (await response.json()) as {
+      data?: { mpc_orbits_aggregate?: { aggregate?: { count?: number } } };
+    };
+
+    return json.data?.mpc_orbits_aggregate?.aggregate?.count ?? null;
+  } catch (cause) {
+    // The splash must render regardless; the figure is a flourish.
+    console.error("Rubin discovery count failed", cause);
+    return null;
+  }
+}

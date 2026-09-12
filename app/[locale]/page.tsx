@@ -1,8 +1,8 @@
 import { FunctionComponent } from "react";
 import { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
-import { serverTranslation } from "@/lib/i18n/server";
-import { getPages } from "@/lib/api/craft";
+import { getContentPage } from "@/lib/api/craft";
+import { getRubinDiscoveryCount } from "@/lib/api/hasura";
 import Splash from "@/components/templates/Splash";
 
 interface SplashPageProps {
@@ -19,20 +19,31 @@ export async function generateMetadata({
 }: SplashPageProps): Promise<Metadata> {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { t } = await serverTranslation(locale, "translation");
+  const page = await getContentPage({ locale, slug: "landing" });
+
+  if (page?.__typename !== "landing_Entry") return {};
 
   return {
-    title: t("splash.title", { defaultValue: "Orbitviewer" }),
+    title: page.headlineText ?? undefined,
+    description: page.eyebrowText ?? undefined,
   };
 }
 
 const SplashPage: FunctionComponent<SplashPageProps> = async ({ params }) => {
   const { locale } = await params;
   setRequestLocale(locale);
-  const pages = await getPages({ locale });
-  const landing = pages.find((page) => page?.slug === "landing");
+  const [page, discoveries] = await Promise.all([
+    getContentPage({ locale, slug: "landing" }),
+    getRubinDiscoveryCount(),
+  ]);
 
-  return <Splash locale={locale} landing={landing} />;
+  return (
+    <Splash
+      locale={locale}
+      landing={page?.__typename === "landing_Entry" ? page : undefined}
+      discoveries={discoveries}
+    />
+  );
 };
 
 export default SplashPage;

@@ -58,6 +58,23 @@ export const DEFAULT_QUALITY: SimQuality = "low";
 /** localStorage key the legacy used to persist the user's tier choice. */
 export const QUALITY_STORAGE_KEY = "rubin-data-profile";
 
+/**
+ * Whether a tier has been chosen before.
+ *
+ * Onboarding keys off this, exactly as the legacy did: the presence of the
+ * stored profile is what told it a visit was not the first one.
+ */
+export const hasStoredQuality = (): boolean => {
+  try {
+    return window.localStorage.getItem(QUALITY_STORAGE_KEY) !== null;
+  } catch {
+    // Storage refused. Treating that as "chosen" is the kinder default:
+    // the choice cannot be remembered, so asking on every single visit
+    // would be worse than not asking at all.
+    return true;
+  }
+};
+
 export const isSimQuality = (value: string): value is SimQuality =>
   (SIM_QUALITIES as Array<string>).includes(value);
 
