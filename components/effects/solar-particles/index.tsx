@@ -16,6 +16,7 @@ import {
   Vector2,
 } from "three";
 import type { OrbitElements, SolarCategory } from "@/lib/solar/types";
+import { matchesFilters } from "@/lib/solar/filters";
 import { GPU_SIM_SIZES, type SimQuality } from "@/lib/solar/quality";
 import { useSolarClock } from "@/contexts/SolarClock";
 import { CAMERA_CLIP } from "@/components/celestial-bodies/camera";
@@ -207,17 +208,13 @@ const SolarParticles: FunctionComponent<SolarParticlesProps> = ({
     const count = Math.min(capacity, elements.length);
 
     for (let i = 0; i < count; i++) {
-      const el = elements[i];
-
-      const categoryOk =
-        !visibleCategories || visibleCategories.has(el.category);
-      const distanceOk =
-        !distanceRange ||
-        (el.a >= distanceRange.min && el.a <= distanceRange.max);
-      const discoveryOk =
-        rubinOnly === undefined || el.rubinDiscovery === rubinOnly;
-
-      array[i] = categoryOk && distanceOk && discoveryOk ? 1 : 0;
+      array[i] = matchesFilters(elements[i], {
+        categories: visibleCategories,
+        distance: distanceRange,
+        rubinOnly,
+      })
+        ? 1
+        : 0;
     }
 
     filterValues.needsUpdate = true;

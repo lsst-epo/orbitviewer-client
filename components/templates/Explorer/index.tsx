@@ -1,6 +1,12 @@
 "use client";
 
-import { Suspense, useEffect, useState, type FunctionComponent } from "react";
+import {
+  Suspense,
+  useEffect,
+  useMemo,
+  useState,
+  type FunctionComponent,
+} from "react";
 import { Canvas } from "@react-three/fiber";
 import { useExplorer } from "@/contexts/Explorer";
 import SolarClockProvider, { useSolarClock } from "@/contexts/SolarClock";
@@ -10,6 +16,8 @@ import { CAMERA_CLIP } from "@/components/celestial-bodies/camera";
 import Toolbar from "@/components/molecules/Toolbar";
 import Layer from "@/components/atoms/Layer";
 import Filters from "@/components/molecules/Filters";
+import SearchPanel from "@/components/molecules/Search";
+import SearchProvider from "@/contexts/Search";
 import Loader from "@/components/atoms/Loader";
 import Scene from "./Scene";
 import styles from "./styles.module.css";
@@ -57,9 +65,28 @@ const ClockReadout: FunctionComponent<{ locale: string }> = ({ locale }) => {
  * bodies are placeholders; filters, search and the objects list are the next
  * phases.
  */
-const Panels: FunctionComponent<{ locale: string }> = ({ locale }) => {
+const ExplorerPanels: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { t } = useClientTranslation(locale);
   const { params, closePanel } = useExplorer();
+
+  /**
+   * The same filters the scene applies, so search cannot surface an object
+   * that is hidden in the view.
+   */
+  const filters = useMemo(
+    () => ({
+      distance: params.distance
+        ? { min: params.distance[0], max: params.distance[1] }
+        : undefined,
+      rubinOnly:
+        params.discovery === "rubin"
+          ? true
+          : params.discovery === "other"
+            ? false
+            : undefined,
+    }),
+    [params.distance, params.discovery]
+  );
 
   const panels = [
     { id: "objects" as const, labelKey: "toolbar.objects" },
@@ -68,7 +95,7 @@ const Panels: FunctionComponent<{ locale: string }> = ({ locale }) => {
   ];
 
   return (
-    <>
+    <SearchProvider filters={filters}>
       {panels.map(({ id, labelKey }) => (
         <div key={id} id={`explorer-panel-${id}`}>
           <Layer
@@ -76,15 +103,13 @@ const Panels: FunctionComponent<{ locale: string }> = ({ locale }) => {
             onClose={closePanel}
             label={t(labelKey)}
           >
-            {id === "filters" ? (
-              <Filters locale={locale} />
-            ) : (
-              <h2>{t(labelKey)}</h2>
-            )}
+            {id === "filters" && <Filters locale={locale} />}
+            {id === "search" && <SearchPanel locale={locale} />}
+            {id === "objects" && <h2>{t(labelKey)}</h2>}
           </Layer>
         </div>
       ))}
-    </>
+    </SearchProvider>
   );
 };
 
@@ -164,7 +189,7 @@ const Explorer: FunctionComponent<ExplorerProps> = ({ locale }) => {
           </Canvas>
 
           <Toolbar locale={locale} />
-          <Panels locale={locale} />
+          <ExplorerPanels locale={locale} />
           <DatasetLoader locale={locale} />
 
           <div className={styles.hud}>
