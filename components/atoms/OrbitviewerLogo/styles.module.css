@@ -1,0 +1,23 @@
+.logo {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 100px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+}
+
+.logo[data-toolbar="true"] {
+  background: linear-gradient(120deg, #363636e8, #202020e8);
+  border-radius: 10px 10px 0 0;
+}
+
+@media (width <= 600px) {
+  .logo {
+    left: 8px;
+    top: 8px;
+    width: 72px;
+    height: 56px;
+  }
+}

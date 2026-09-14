@@ -19,8 +19,8 @@ import fragment from "./earth_clouds.frag";
  */
 export function useCloudTexture() {
   const { gl } = useThree();
-  const { quality, mjd } = useExplorer();
-  const [initialDate] = useState(mjd);
+  const { quality, rotationMjd } = useExplorer();
+  const [initialDate] = useState(rotationMjd);
   const width = quality === "ultra" ? 2048 : quality === "high" ? 1024 : 512;
   const resources = useMemo(() => {
     const target = new WebGLRenderTarget(width, width / 2);
@@ -39,7 +39,7 @@ export function useCloudTexture() {
     // Three uniforms are intentionally mutable outside React rendering.
     // eslint-disable-next-line react-hooks/immutability
     resources.material.uniforms.time.value =
-      (mjd - initialDate) * 86400;
+      (rotationMjd - initialDate) * 86400;
     const previous = gl.getRenderTarget();
     gl.setRenderTarget(resources.target);
     gl.render(resources.scene, resources.camera);

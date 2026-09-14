@@ -1,8 +1,11 @@
 import type { ContentPage as Page } from "@/lib/api/craft";
 import { RichText } from "@/components/atoms/RichText";
 import { CmsImage } from "@/components/atoms/CmsImage";
+import { HowToUse } from "@/components/templates/HowToUse";
 import styles from "./styles.module.css";
 export function ContentPage({ page }: { page: Page }) {
+  if (["how-to-use", "how_to_use"].includes(page.slug))
+    return <HowToUse page={page} />;
   return (
     <main className={styles.page}>
       <header>

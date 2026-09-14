@@ -47,15 +47,11 @@
     }
   },
   "navigation": {
-    "aria": "Main Navigation",
-    "share": "Share",
     "settings": "Settings",
-    "language": "Language",
     "exploration": "Exploration mode",
     "fullscreen": "Fullscreen",
     "help": "Help",
-    "how_to_use": "How to use",
-    "about": "About"
+    "back": "Back"
   },
   "share": {
     "title": "Share",
@@ -139,6 +135,8 @@
     }
   },
   "filters": {
+    "minimumDistance": "Minimum distance from Sun",
+    "maximumDistance": "Maximum distance from Sun",
     "title": "Filters",
     "reset": "Reset",
     "apply": "Apply filters",
@@ -276,7 +274,8 @@
         "next": "Next",
         "previous": "Previous"
       }
-    }
+    },
+    "recommended": "Recommended"
   },
   "modal": {
     "title": "Things looking a bit slow?",
@@ -301,6 +300,7 @@
     "action": "Back Home"
   },
   "ui": {
+    "displaySettings": "Display settings",
     "explorer": "Explorer",
     "about": "About",
     "howTo": "How to Use",

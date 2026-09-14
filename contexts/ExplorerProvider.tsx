@@ -20,6 +20,7 @@ function useExplorerState(
   initial: OrbitRecord[],
   entries: SolarEntry[],
   categoryEntries: Category[],
+  landing: boolean,
 ) {
   const categoryPalette = useMemo(
     () =>
@@ -51,18 +52,86 @@ function useExplorerState(
     categories.map(({ code }) => code),
   );
   const [discoverer, setDiscoverer] = useState("all");
-  const [distance, setDistance] = useState(500);
+  const [distanceRange, setDistanceRange] = useState<[number, number]>([
+    -Infinity,
+    Infinity,
+  ]);
+  const [classificationRanges, setClassificationRanges] = useState<
+    {
+      object_type: number[];
+      observed_property: string;
+      observed_range_type: string;
+      observed_value: number;
+    }[]
+  >([]);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/classification-ranges", { signal: controller.signal })
+      .then(async (response) => {
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data.classification_ranges))
+            setClassificationRanges(data.classification_ranges);
+        }
+      })
+      .catch(() => {
+        /* Fall back to the loaded catalog, like the legacy viewer. */
+      });
+    return () => controller.abort();
+  }, []);
+  const distanceBounds = useMemo<[number, number]>(() => {
+    const ranges = new Map<number, [number, number]>();
+    for (const record of records) {
+      const code = categoryCode(record.object_type);
+      if (code === undefined || !Number.isFinite(record.a)) continue;
+      const range = ranges.get(code) ?? [Infinity, -Infinity];
+      ranges.set(code, [
+        Math.min(range[0], record.a),
+        Math.max(range[1], record.a),
+      ]);
+    }
+    for (const row of classificationRanges) {
+      const code = row.object_type?.[0];
+      if (
+        row.observed_property !== "a" ||
+        code === 7 ||
+        !ranges.has(code) ||
+        !Number.isFinite(row.observed_value)
+      )
+        continue;
+      const range = ranges.get(code)!;
+      if (row.observed_range_type === "min") range[0] = row.observed_value;
+      if (row.observed_range_type === "max") range[1] = row.observed_value;
+    }
+    let min = Infinity;
+    let max = -Infinity;
+    for (const [code, range] of ranges) {
+      if (!enabled.includes(code)) continue;
+      min = Math.min(min, range[0]);
+      max = Math.max(max, code === 7 ? range[1] : Math.min(range[1], 500));
+    }
+    return Number.isFinite(min) && max > min ? [min, max] : [0, 100];
+  }, [records, enabled, classificationRanges]);
   const [mjd, setMjd] = useState(() => {
     const shared = Number(params.get("mjd"));
     return Number.isFinite(shared) && shared >= 15020 && shared <= 88069
       ? shared
       : dateToMjd(new Date());
   });
-  // Start with gentle orbital motion (one simulated hour per second).
+  const [spinDate, setSpinDate] = useState(mjd);
+  // Homepage orbits move visibly, while axial spin keeps its gentle clock.
   const [speed, setSpeed] = useState(1);
   const [playing, setPlaying] = useState(true);
   const [showOrbits, setShowOrbits] = useState(true);
   const [quality, setQuality] = useState("low");
+  useEffect(() => {
+    const saved = localStorage.getItem("rubin-data-profile");
+    if (saved && ["low", "medium", "high", "ultra"].includes(saved)) {
+      // Hydrate the exploration preference shared with the tour gallery menu.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setQuality(saved);
+    }
+  }, []);
   const [cameraAction, setCameraAction] = useState({
     action: "reset",
     revision: 0,
@@ -87,31 +156,44 @@ function useExplorerState(
   }, []);
   useEffect(() => {
     if (!playing) return;
-    let last = performance.now();
-    const timer = setInterval(() => {
+    const started = performance.now();
+    let last = started;
+    let frame = 0;
+    const tick = () => {
       const now = performance.now();
       const elapsed = Math.min((now - last) / 1000, 0.25);
       last = now;
+      const orbitSpeed = landing ? 100 : speed;
+      if (landing) {
+        setSpinDate((value) => value + (1 / 24 + 1 / 86400) * elapsed);
+      }
       // Legacy SolarClock adds real elapsed time plus hours-per-second acceleration.
       setMjd((value) =>
         Math.min(
           88069,
-          Math.max(15020, value + (speed / 24 + 1 / 86400) * elapsed),
+          Math.max(15020, value + (orbitSpeed / 24 + 1 / 86400) * elapsed),
         ),
       );
-    }, 50);
-    return () => clearInterval(timer);
-  }, [speed, playing]);
+      frame = requestAnimationFrame(tick);
+    };
+    // Legacy updates SolarClock on each rendered frame, including axial spin.
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [speed, playing, landing]);
   const visible = useMemo(
     () =>
       records.filter(
         (record) =>
           enabled.includes(categoryCode(record.object_type) ?? 0) &&
-          (discoverer === "all" ||
+          // Keep the planetary reference scene (bodies, labels and orbit paths)
+          // available while filtering the survey catalog by discoverer.
+          (record.object_type?.includes(7) ||
+            discoverer === "all" ||
             Boolean(record.rubin_discovery) === (discoverer === "rubin")) &&
-          Math.abs(record.a) <= distance,
+          record.a >= distanceRange[0] &&
+          record.a <= distanceRange[1],
       ),
-    [records, enabled, discoverer, distance],
+    [records, enabled, discoverer, distanceRange],
   );
   const addRecords = useCallback(
     (items: OrbitRecord[]) =>
@@ -146,8 +228,11 @@ function useExplorerState(
       });
     return () => controller.abort();
   }, [selectedId, selected, addRecords]);
-  const camera = (action: string) =>
-    setCameraAction((value) => ({ action, revision: value.revision + 1 }));
+  const camera = useCallback(
+    (action: string) =>
+      setCameraAction((value) => ({ action, revision: value.revision + 1 })),
+    [],
+  );
   return {
     records,
     entries,
@@ -159,9 +244,11 @@ function useExplorerState(
     setEnabled,
     discoverer,
     setDiscoverer,
-    distance,
-    setDistance,
+    distanceRange,
+    setDistanceRange,
+    distanceBounds,
     mjd,
+    rotationMjd: landing ? spinDate : mjd,
     setMjd,
     speed,
     setSpeed,
@@ -186,13 +273,15 @@ export function ExplorerProvider({
   entries,
   categoryEntries,
   children,
+  landing = false,
 }: {
   initial: OrbitRecord[];
   entries: SolarEntry[];
   categoryEntries: Category[];
   children: ReactNode;
+  landing?: boolean;
 }) {
-  const state = useExplorerState(initial, entries, categoryEntries);
+  const state = useExplorerState(initial, entries, categoryEntries, landing);
   return <ExplorerContext value={state}>{children}</ExplorerContext>;
 }
 export function useExplorer() {

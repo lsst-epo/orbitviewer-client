@@ -1,9 +1,83 @@
-.controls {
+.controls,
+.capturePanel {
   display: grid;
-  gap: 20px;
+  gap: 16px;
 }
 
 .controls label {
   display: grid;
   gap: 8px;
+}
+
+.tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid #ffffff26;
+}
+
+.tabs button {
+  padding: 0 0 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.tabs button[aria-selected="true"] {
+  color: #8bdedb;
+  border-bottom-color: #8bdedb;
+}
+
+.linkPanel {
+  display: grid;
+  gap: 4px;
+}
+
+.linkPanel input {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 12px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(#ffffff1c, #ffffff14);
+  color: #fff;
+}
+
+.linkPanel > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  height: 48px;
+  border-radius: 8px;
+  background: #147e7c;
+  color: #d7f4f3;
+}
+
+.social {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.social > div {
+  display: flex;
+  gap: 8px;
+}
+
+.social a,
+.social button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  color: #d7f4f3;
+  background: #124d4c;
+  cursor: pointer;
 }

@@ -177,3 +177,14 @@
     gap: 24px;
   }
 }
+
+.content,
+.landing footer {
+  transition: opacity 0.4s ease;
+}
+
+.landing[data-leaving="true"] .content,
+.landing[data-leaving="true"] footer {
+  opacity: 0;
+  pointer-events: none;
+}

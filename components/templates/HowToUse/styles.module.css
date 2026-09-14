@@ -1,0 +1,118 @@
+.page {
+  min-height: 100dvh;
+  background: #000;
+}
+
+.heading {
+  padding: 120px 32px 0;
+  background: url("/images/about/about-header-bg-large.webp") center top /
+    1440px auto no-repeat;
+  text-align: center;
+}
+
+.heading > div {
+  width: 50%;
+  margin: auto;
+}
+
+.heading h1 {
+  font-size: 24px;
+  font-weight: 400;
+  color: #aaa;
+  margin: 0 0 24px;
+}
+
+.subtitle {
+  font-size: clamp(36px, 4.5vw, 64px);
+  line-height: 1.1;
+  font-weight: 400;
+  margin: 0;
+}
+
+.heading nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.heading a {
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: #36b6b0;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.heading a:hover,
+.heading a:focus-visible {
+  background: #0c3433;
+  color: #b1f2ef;
+}
+
+.content {
+  padding: 80px 32px;
+}
+
+.content section {
+  width: 66.6667%;
+  margin: auto;
+  padding: 64px 0;
+  text-align: center;
+  scroll-margin-top: 80px;
+}
+
+.content section + section {
+  border-top: 1px solid #ffffff26;
+}
+
+.content h2 {
+  margin: 0 0 16px;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.content section > div {
+  max-width: 80ch;
+  margin: 0 auto 16px;
+  color: #aaa;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.content img {
+  display: block;
+  max-width: 100%;
+  margin: auto;
+}
+
+@media (width < 1024px) {
+  .heading > div,
+  .content section {
+    width: 83.3333%;
+  }
+}
+
+@media (width < 768px) {
+  .heading {
+    padding: 92px 16px 0;
+    background-image: url("/images/about/about-header-bg-small.webp");
+    background-size: 768px auto;
+  }
+
+  .heading > div,
+  .content section {
+    width: 100%;
+  }
+
+  .content {
+    padding: 48px 16px;
+  }
+
+  .content section {
+    padding: 32px 0;
+  }
+}

@@ -93,7 +93,8 @@ const rotations: Record<
  * Texture URLs will come from Craft once its element texture field exists.
  */
 export function Body({ record }: { record: OrbitRecord }) {
-  const { mjd, select, entries, selectedId, categoryPalette } = useExplorer();
+  const { mjd, rotationMjd, select, entries, selectedId, categoryPalette } =
+    useExplorer();
   const group = useRef<Group>(null);
   const mesh = useRef<Mesh>(null);
   const axis = useRef<Group>(null);
@@ -111,7 +112,7 @@ export function Body({ record }: { record: OrbitRecord }) {
     if (mesh.current) {
       const spin = rotations[id];
       mesh.current.rotation.y = spin
-        ? ((mjd / spin.period) % 1) * Math.PI * 2 + spin.meridian * DEG
+        ? ((rotationMjd / spin.period) % 1) * Math.PI * 2 + spin.meridian * DEG
         : 0;
       if (axis.current)
         axis.current.rotation.z = spin ? -(spin.axialTilt + record.i) * DEG : 0;
