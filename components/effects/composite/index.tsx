@@ -31,6 +31,7 @@ const CompositorEffect: FunctionComponent<CompositorEffectProps> = ({
 }) => {
   const gl = useThree((state) => state.gl);
   const size = useThree((state) => state.size);
+  const dpr = useThree((state) => state.viewport.dpr);
   const [compositor, setCompositor] = useState<Compositor | null>(null);
 
   // Created inside the effect that disposes it. A useMemo would survive a
@@ -61,10 +62,12 @@ const CompositorEffect: FunctionComponent<CompositorEffectProps> = ({
 
   useEffect(() => {
     if (!compositor) return;
-    // Render targets are sized in device pixels, not CSS pixels.
+    // Render targets are sized in device pixels, not CSS pixels -- so this
+    // has to run on a pixel-ratio change as well as a resize. `size` is in
+    // CSS pixels and does not move when the ratio does.
     const { width, height } = gl.domElement;
     compositor.setSize(width, height);
-  }, [compositor, gl, size.width, size.height]);
+  }, [compositor, gl, size.width, size.height, dpr]);
 
   /**
    * Taking a priority above zero switches R3F's automatic rendering off for

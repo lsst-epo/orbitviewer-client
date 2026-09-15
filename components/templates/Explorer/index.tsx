@@ -34,7 +34,7 @@ import BenchmarkProvider, { useBenchmark } from "@/contexts/Benchmark";
 import Onboarding from "@/components/organisms/Onboarding";
 import PerformanceModal from "@/components/organisms/PerformanceModal";
 import Wizard, { wizardDismissed } from "@/components/organisms/Wizard";
-import { hasStoredQuality } from "@/lib/solar/quality";
+import { GFX_TIERS, hasStoredQuality } from "@/lib/solar/quality";
 import type { TourSummary } from "@/lib/tours";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
 import Scene from "./Scene";
@@ -278,6 +278,64 @@ const FirstRun: FunctionComponent<{
 };
 
 /**
+ * The WebGL canvas.
+ *
+ * Its own component purely so it can read the quality tier, which lives in
+ * `SolarDataProvider` -- and `dpr` has to be a prop rather than a `setDpr`
+ * call from inside the canvas, because Canvas reconciles its own `dpr` prop
+ * on every reconfigure and would overwrite anything set from within.
+ */
+const SceneCanvas: FunctionComponent = () => {
+  const { quality } = useSolarData();
+
+  return (
+    <Canvas
+      className={styles.canvas}
+      camera={{
+        fov: 35,
+        near: CAMERA_CLIP.near,
+        far: CAMERA_CLIP.far,
+      }}
+      /**
+       * The tier's pixel-ratio cap, which had never been applied: the tiers
+       * have carried `maxPixelRatio` since they were ported but nothing read
+       * it, so every tier took R3F's default clamp of [1, 2]. The legacy's
+       * `setPixelRatio(Math.min(devicePixelRatio, tier.maxPixelRatio))` holds
+       * low and medium to 1.5 and lets ultra reach 3 -- trading resolution
+       * for frame rate is what the tiers are for.
+       *
+       * It tells most on the particle field, where a particle is a sphere one
+       * CSS pixel in radius: the pixel ratio is how many device pixels it
+       * actually covers, and a sub-pixel dot averaged down from 2 reads
+       * softer and dimmer than the same dot rasterised at 1.5.
+       *
+       * A range rather than a number, so R3F recalculates it if the window
+       * moves to a display with a different ratio. The legacy set it once.
+       */
+      dpr={[1, GFX_TIERS[quality].maxPixelRatio]}
+      gl={{
+        // The scene spans six orders of magnitude, from a 24-unit near limit
+        // to 3,000,000 units. A linear depth buffer z-fights badly across
+        // that range.
+        logarithmicDepthBuffer: true,
+        antialias: true,
+        powerPreference: "high-performance",
+      }}
+      // Rendering is on-demand elsewhere, but the clock advances every frame,
+      // so the loop always runs.
+      frameloop="always"
+    >
+      <color attach="background" args={["#000000"]} />
+      <Suspense fallback={null}>
+        <Scene />
+        <SceneCapture />
+        <SceneBenchmark />
+      </Suspense>
+    </Canvas>
+  );
+};
+
+/**
  * Explorer shell: the WebGL canvas plus the UI layers drawn over it.
  *
  * The panels mount alongside the canvas rather than inside it. A tour swaps
@@ -302,32 +360,7 @@ const Explorer: FunctionComponent<ExplorerProps> = ({
                 initialDate={params.date ? new Date(params.date) : undefined}
                 initialHoursPerSecond={params.timeScale ?? 0}
               >
-                <Canvas
-                  className={styles.canvas}
-                  camera={{
-                    fov: 35,
-                    near: CAMERA_CLIP.near,
-                    far: CAMERA_CLIP.far,
-                  }}
-                  gl={{
-                    // The scene spans six orders of magnitude, from a 24-unit
-                    // near limit to 3,000,000 units. A linear depth buffer
-                    // z-fights badly across that range.
-                    logarithmicDepthBuffer: true,
-                    antialias: true,
-                    powerPreference: "high-performance",
-                  }}
-                  // Rendering is on-demand elsewhere, but the clock advances every
-                  // frame, so the loop always runs.
-                  frameloop="always"
-                >
-                  <color attach="background" args={["#000000"]} />
-                  <Suspense fallback={null}>
-                    <Scene />
-                    <SceneCapture />
-                    <SceneBenchmark />
-                  </Suspense>
-                </Canvas>
+                <SceneCanvas />
 
                 <ExplorerChrome locale={locale} tour={Boolean(overlay)} />
 
