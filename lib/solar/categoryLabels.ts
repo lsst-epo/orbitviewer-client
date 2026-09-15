@@ -65,3 +65,7 @@ export const CATEGORY_LABELS: Record<
 export const ALL_CATEGORIES = Object.keys(
   CATEGORY_LABELS
 ) as Array<SolarCategory>;
+
+/** Narrows an arbitrary slug -- a CMS value, a URL parameter -- to a category. */
+export const isSolarCategory = (slug: string): slug is SolarCategory =>
+  Object.hasOwn(CATEGORY_LABELS, slug);

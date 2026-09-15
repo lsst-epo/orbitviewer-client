@@ -27,6 +27,23 @@ const MIN_POINTS = 10;
 /** Guard against a non-closing walk pinning the main thread. */
 const MAX_POINTS = 5000;
 
+/**
+ * Ceiling on probes per revolution.
+ *
+ * `MAX_POINTS` bounds how many points are *kept*, but nothing bounded how
+ * long the walk spent looking for the next one, and the day-sized steps below
+ * are sized for asteroid periods. Sedna's is 12,900 years -- 4.7 million days
+ * -- so tracing it one day at a time is several million Kepler solves for a
+ * single path, on the main thread, and Craft names four objects out past 490
+ * AU. This raises the step for those instead, so a revolution always costs
+ * about the same.
+ *
+ * Set high enough that nothing in the solar system proper is affected:
+ * Neptune, the longest period among the planets, walks in around 60,000
+ * probes and keeps its original step.
+ */
+const MAX_PROBES = 100_000;
+
 const smoothstep = (min: number, max: number, value: number): number => {
   const t = Math.min(Math.max((value - min) / (max - min), 0), 1);
   return t * t * (3 - 2 * t);
@@ -133,8 +150,14 @@ export function buildOrbitPath(
   // e above ~0.9 needs the tighter sampling and finer time step.
   const eccentric = smoothstep(0.9, 0.95, el.e);
   const spacing = lerp(SAMPLE_SPACING.low, SAMPLE_SPACING.high, 1 - eccentric);
-  const step = lerp(TIME_STEP.low, TIME_STEP.high, 1 - eccentric);
   const minDistance = spacing * el.a;
+
+  // Mean motion is in degrees per day, so a revolution is 360/n of them.
+  const period = el.n > 0 ? 360 / el.n : 0;
+  const step = Math.max(
+    lerp(TIME_STEP.low, TIME_STEP.high, 1 - eccentric),
+    period / MAX_PROBES
+  );
 
   const cursor = new Vector3();
   calculateOrbitByType(el, ++d, OrbitType.Elliptical, cursor, perturbations);

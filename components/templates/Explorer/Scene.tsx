@@ -9,6 +9,8 @@ import { orbitFraming } from "@/components/effects/orbital-path/buildPath";
 import type { CameraTarget } from "@/components/celestial-bodies/camera";
 import { fromPlanetElements, categoryFromTypeCode } from "@/lib/solar/elements";
 import { categoryColorMap } from "@/lib/solar/categoryColors";
+import { resolveNamedObjects } from "@/lib/solar/solarItems";
+import { matchesFilters, type ObjectFilters } from "@/lib/solar/filters";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
 import { PlanetRadiusMap, isPlanetId } from "@/lib/solar/planets";
 import type { PerturbationContext } from "@/lib/solar/orbits";
@@ -53,9 +55,15 @@ const BODY_RADIUS_SCALE = 100;
 const DEFAULT_RADIUS_KM = 1200;
 
 /**
- * Nominal radius for a focused catalogue object. The MPC dataset carries no
- * size, so one is assumed purely to give the camera something to frame
- * against; most of these bodies are a few km across.
+ * Nominal radius for a catalogue object -- one Craft names, or one the URL
+ * selects. The MPC dataset carries no size, so a figure is assumed purely to
+ * give the camera something to frame against and the label something to clear;
+ * most of these bodies are a few km across.
+ *
+ * At this radius the body is far below a pixel at system-wide framing, which
+ * is the legacy's behaviour rather than a shortcoming of it: `SolarElement`
+ * had its mesh commented out entirely, so a named minor body was an orbit
+ * path and a label and nothing else until you flew to it.
  */
 const FOCUSED_OBJECT_RADIUS_KM = 5;
 
@@ -65,6 +73,10 @@ const FOCUSED_OBJECT_RADIUS_KM = 5;
  * Priority -2 puts it first in the frame: the GPU simulation (-1) samples the
  * date it sets, and the compositor (1) renders the result.
  */
+/** `FOCUSED_OBJECT_RADIUS_KM` in scene units. */
+const CATALOGUE_RADIUS =
+  FOCUSED_OBJECT_RADIUS_KM * KM2AU * PLANET_SCALE * BODY_RADIUS_SCALE;
+
 const ClockDriver: FunctionComponent = () => {
   const { advance } = useSolarClock();
   useFrame((_, delta) => advance(delta), -2);
@@ -135,6 +147,20 @@ const Scene: FunctionComponent = () => {
   );
 
   /**
+   * Craft's named objects, found in the loaded dataset.
+   *
+   * These are what the legacy's pointers were mostly made of -- Bennu,
+   * Chiron, Odysseus, the Rubin discoveries of the month -- and the reason
+   * its labels came in eight colours where the port's came in one: the eight
+   * category glyphs belong to these, not to the planets, which are all
+   * "planets-moons".
+   */
+  const namedObjects = useMemo(
+    () => resolveNamedObjects(solarElementEntries(craftElements), mpcElements),
+    [craftElements, mpcElements]
+  );
+
+  /**
    * The object named in the URL, resolved across every source we hold.
    *
    * Case-sensitive first: MPC packed designations encode their cycle count in
@@ -197,7 +223,9 @@ const Scene: FunctionComponent = () => {
    * SolarElement for it.
    */
   const focusedIsBody = Boolean(
-    focused && all.some((element) => element.id === focused.id)
+    focused &&
+    (all.some((element) => element.id === focused.id) ||
+      namedObjects.some((named) => named.id === focused.id))
   );
 
   const planetsColor = categoryColor.get("planets-moons") ?? null;
@@ -212,6 +240,28 @@ const Scene: FunctionComponent = () => {
       : params.discovery === "other"
         ? false
         : undefined;
+
+  /**
+   * One filter set for the whole scene. The particle field applies it in a
+   * shader attribute and the named bodies apply it in React, and the two
+   * must not drift -- a named object left visible after its category is
+   * switched off would be the only one of its kind still on screen.
+   */
+  const filters = useMemo<ObjectFilters>(
+    () => ({
+      // Undefined skips the category test entirely; the set is only worth
+      // passing once something is switched off.
+      categories:
+        visibleCategories.size === ALL_CATEGORIES.length
+          ? undefined
+          : visibleCategories,
+      distance: params.distance
+        ? { min: params.distance[0], max: params.distance[1] }
+        : undefined,
+      rubinOnly,
+    }),
+    [visibleCategories, params.distance, rubinOnly]
+  );
 
   return (
     <>
@@ -244,19 +294,9 @@ const Scene: FunctionComponent = () => {
           elements={mpcElements}
           quality={quality}
           categoryColors={categoryColor}
-          visibleCategories={
-            // Undefined skips the category test entirely; the set is only
-            // worth passing once something is switched off.
-            visibleCategories.size === ALL_CATEGORIES.length
-              ? undefined
-              : visibleCategories
-          }
-          distanceRange={
-            params.distance
-              ? { min: params.distance[0], max: params.distance[1] }
-              : undefined
-          }
-          rubinOnly={rubinOnly}
+          visibleCategories={filters.categories}
+          distanceRange={filters.distance}
+          rubinOnly={filters.rubinOnly}
           dimmed={Boolean(params.object)}
         />
       )}
@@ -270,12 +310,7 @@ const Scene: FunctionComponent = () => {
             color={categoryColor.get(focused.category) ?? null}
             selected
             view={orbitView ? "orbit" : "object"}
-            fadeRadius={
-              FOCUSED_OBJECT_RADIUS_KM *
-              KM2AU *
-              PLANET_SCALE *
-              BODY_RADIUS_SCALE
-            }
+            fadeRadius={CATALOGUE_RADIUS}
             perturbations={perturbations}
           />
           <Body
@@ -341,6 +376,56 @@ const Scene: FunctionComponent = () => {
               // The legacy put a projected DOM anchor over each body to catch
               // clicks; raycasting the mesh itself is pixel-accurate and needs
               // no per-frame screen-space projection.
+              onClick={openObject}
+            />
+          </group>
+        );
+      })}
+
+      {/* Craft's named minor bodies: an orbit path and a labelled marker each.
+          These carry the categories -- Trojan, centaur, TNO, NEO, comet,
+          interstellar -- that the planets, all "planets-moons", never show.
+
+          The legacy gave each one a `SolarElement` with its mesh commented
+          out, so a body here is a point the label and camera hang off rather
+          than something meant to be seen at this distance. */}
+      {namedObjects.map(({ id, title, category, elements }) => {
+        const selected = focused?.id === id;
+
+        // A selected object stays put whatever the filters say, so a shared
+        // link to one still shows it -- as for the planets above.
+        if (!selected && !matchesFilters(elements, filters)) return null;
+
+        const color = categoryColor.get(category) ?? null;
+
+        return (
+          <group key={id}>
+            <OrbitalPath
+              elements={elements}
+              color={color}
+              selected={selected}
+              view={orbitView ? "orbit" : "object"}
+              fadeRadius={CATALOGUE_RADIUS}
+              perturbations={perturbations}
+            />
+            <Body
+              elements={elements}
+              radiusKm={FOCUSED_OBJECT_RADIUS_KM}
+              radiusScale={BODY_RADIUS_SCALE}
+              perturbations={perturbations}
+              focusRef={selected ? focusTarget : null}
+              label={
+                selected ? null : (
+                  <BodyLabel
+                    id={id}
+                    name={title}
+                    category={category}
+                    color={color}
+                    radius={CATALOGUE_RADIUS}
+                    onSelect={openObject}
+                  />
+                )
+              }
               onClick={openObject}
             />
           </group>
