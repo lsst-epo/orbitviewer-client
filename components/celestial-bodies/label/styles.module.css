@@ -1,33 +1,64 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `components/_canvas_pointer.scss`. */
+/* Ported from `.canvas_pointer` in `components/_canvas.scss`. */
 
-.label {
+.pointer {
+  /* Overridden inline with the category's colour from Craft. */
+  --pointer-color: var(--color-turquoise-200);
+  --pointer-size: 20px;
+
   display: inline-flex;
-  gap: 5px;
+  gap: 2px;
   align-items: center;
-  padding: 3px 10px;
+  padding: 0;
   font-family: var(--font-stack);
   font-size: 0.75rem;
-  color: var(--color-text);
-  white-space: nowrap;
 
-  /* The wrapper disables pointer events so drags pass through the canvas;
+  /* The wrapper disables pointer events so drags pass through to the canvas;
      the control itself takes them back. */
   pointer-events: auto;
   cursor: pointer;
-  background-color: var(--color-backdrop);
-  border: 1px solid var(--color-border-strong);
-  border-radius: 24px;
-  backdrop-filter: blur(var(--backdrop-blur));
-  transition: opacity 0.2s var(--easing-default);
+  background: none;
+  border: 0;
 }
 
-.label:hover {
-  background-color: var(--color-turquoise-800);
+/* The category glyph reversed out of a filled disc. Legibility at this size
+   comes from the disc, not the glyph: a 16px outline on open space reads as a
+   smudge, which is how the whole set came to look identical. */
+.chip {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--pointer-size);
+  height: var(--pointer-size);
+  color: var(--color-black);
+  background: var(--pointer-color);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgb(var(--color-black-rgb) / 20%);
 }
 
 .icon {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
+}
+
+.text {
+  padding: 0 4px;
+  color: var(--color-link);
+  white-space: nowrap;
+  text-shadow: 1px 1px 0 rgb(var(--color-black-rgb) / 30%);
+  background: rgb(var(--color-black-rgb) / 50%);
+  border-radius: var(--corner-medium);
+  transition: all 0.3s var(--easing-default);
+}
+
+.text::first-letter {
+  text-transform: capitalize;
+}
+
+.pointer:hover .text {
+  color: var(--color-black);
+  text-shadow: none;
+  background: var(--pointer-color);
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type FunctionComponent } from "react";
+import { useRef, type CSSProperties, type FunctionComponent } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import { Group, Vector3 } from "three";
@@ -19,6 +19,11 @@ import styles from "./styles.module.css";
  * drei's <Html> does the projection, so what is left is the part that was
  * actually bespoke: hiding the label when the body is behind the camera, and
  * standing down for the body that is already selected.
+ *
+ * The category glyph sits in a disc filled with the category's colour, as
+ * `.canvas_pointer-icon` did. That is what makes one category tell apart from
+ * another at a glance; drawn as a bare 14px outline, as this first was, every
+ * glyph in the set collapses into the same grey smudge.
  *
  * The legacy's label was an `<a href>` into a per-object route. Selection is
  * a search param now, so this is a button -- it changes the view rather than
@@ -80,19 +85,18 @@ const BodyLabel: FunctionComponent<BodyLabelProps> = ({
       >
         <button
           type="button"
-          className={styles.label}
-          style={color ? { borderColor: color } : undefined}
+          className={styles.pointer}
+          style={
+            color ? ({ "--pointer-color": color } as CSSProperties) : undefined
+          }
           onClick={() => onSelect(id)}
         >
           {category && (
-            <Icon
-              name={category as IconName}
-              className={styles.icon}
-              style={color ? { color } : undefined}
-              aria-hidden
-            />
+            <span className={styles.chip} aria-hidden>
+              <Icon name={category as IconName} className={styles.icon} />
+            </span>
           )}
-          <span>{name}</span>
+          <span className={styles.text}>{name}</span>
         </button>
       </Html>
     </group>

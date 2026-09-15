@@ -19,7 +19,6 @@ import type { OrbitElements, SolarCategory } from "@/lib/solar/types";
 import { matchesFilters } from "@/lib/solar/filters";
 import { GPU_SIM_SIZES, type SimQuality } from "@/lib/solar/quality";
 import { useSolarClock } from "@/contexts/SolarClock";
-import { CAMERA_CLIP } from "@/components/celestial-bodies/camera";
 import { GPUSim } from "./gpuSim";
 import vertexShader from "./particles_instanced.vert";
 import fragmentShader from "./particles_instanced.frag";
@@ -41,7 +40,7 @@ import fragmentShader from "./particles_instanced.frag";
 export const UNCATEGORISED_COLOR = new Color(0x999999);
 
 /**
- * On-screen particle diameter, in pixels. This is the legacy value.
+ * On-screen particle radius, in CSS pixels. This is the legacy value.
  *
  * The field looked invisible during development, which initially seemed to
  * call for a larger value to compensate for the unported glow/bloom pass
@@ -51,6 +50,41 @@ export const UNCATEGORISED_COLOR = new Color(0x999999);
  * an enlarged value, which renders the belt chunky and oversaturated.
  */
 const PARTICLE_PIXEL_SIZE = 1;
+
+/**
+ * Distance band over which a particle fades out, in scene units.
+ *
+ * These are `NEAR` and `FAR` from `gfx/OrbitViewer.ts`, which despite the
+ * names are nothing to do with the camera's clip planes (those are 0.01 and
+ * ~8,000,000). They are the scene's fog, and the particle shader reads them
+ * through `GLOBALS.fog` to decide how much of the field to show:
+ *
+ *   depth = smoothstep(near, far, distanceToCamera)
+ *   alpha = 1 - depth
+ *
+ * The port had been passing the camera's clip planes instead, which makes the
+ * smoothstep a no-op: every particle came back at full alpha no matter how far
+ * away it was. The visible result was not a brighter field but a flatter one.
+ * Objects out at 50, 200, 500 AU -- the great majority of the dataset, and the
+ * ones the legacy fades to nothing -- were painted at the same strength as the
+ * main belt, spreading a uniform haze of single-pixel dots across the whole
+ * frame. Against that, the belt itself stopped reading as a belt.
+ */
+const FADE_DISTANCE = { near: 5_000, far: 100_000 };
+
+/**
+ * Seconds the field takes to reach its full depth on arrival.
+ *
+ * Ported from `OrbitViewer.fadeIn()`, which eased `fog.far` from `NEAR` up to
+ * `FAR` when the viewer entered landing mode. Starting with the two equal
+ * makes the smoothstep saturate, so only what is nearer than `near` is drawn
+ * and the system fills in from the camera outwards.
+ */
+const FADE_IN_SECONDS = 5;
+
+/** gsap's `cubic.inOut`, which is what the legacy eased the fade with. */
+const cubicInOut = (t: number): number =>
+  t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
 
 const DEFAULT_OPACITY = 1;
 /** Dimmed opacity while a single object is being inspected. */
@@ -81,6 +115,8 @@ const SolarParticles: FunctionComponent<SolarParticlesProps> = ({
   dimmed = false,
 }) => {
   const meshRef = useRef<InstancedMesh>(null);
+  /** Seconds into the arrival fade. */
+  const fadeElapsed = useRef(0);
   const renderer = useThree((state) => state.gl);
   const size = useThree((state) => state.size);
   const { getMJD } = useSolarClock();
@@ -124,8 +160,8 @@ const SolarParticles: FunctionComponent<SolarParticlesProps> = ({
             uniforms: {
               computedPosition: { value: sim.texture },
               opacity: { value: DEFAULT_OPACITY },
-              near: { value: CAMERA_CLIP.near },
-              far: { value: CAMERA_CLIP.far },
+              near: { value: FADE_DISTANCE.near },
+              far: { value: FADE_DISTANCE.far },
               fixedSize: { value: PARTICLE_PIXEL_SIZE },
               resolution: { value: new Vector2() },
               isGlow: { value: false },
@@ -231,6 +267,13 @@ const SolarParticles: FunctionComponent<SolarParticlesProps> = ({
     material?.uniforms.resolution.value.set(size.width, size.height);
   }, [material, size.width, size.height]);
 
+  // A new material starts the arrival over: it begins at near === far.
+  useEffect(() => {
+    if (!material) return;
+    fadeElapsed.current = 0;
+    material.uniforms.far.value = FADE_DISTANCE.near;
+  }, [material]);
+
   useEffect(() => {
     if (!material) return;
     material.uniforms.opacity.value = dimmed
@@ -241,8 +284,24 @@ const SolarParticles: FunctionComponent<SolarParticlesProps> = ({
   /**
    * Priority -1 so the simulation pass writes its render target before R3F
    * renders the main scene, which samples that texture in the same frame.
+   *
+   * The same pass eases the far plane of the depth fade open, so the field
+   * arrives from the camera outwards rather than all at once.
    */
-  useFrame(() => sim?.render(getMJD()), -1);
+  useFrame((_, delta) => {
+    sim?.render(getMJD());
+
+    if (!material || fadeElapsed.current >= FADE_IN_SECONDS) return;
+
+    fadeElapsed.current = Math.min(
+      fadeElapsed.current + delta,
+      FADE_IN_SECONDS
+    );
+
+    const t = cubicInOut(fadeElapsed.current / FADE_IN_SECONDS);
+    material.uniforms.far.value =
+      FADE_DISTANCE.near + (FADE_DISTANCE.far - FADE_DISTANCE.near) * t;
+  }, -1);
 
   // The mesh cannot exist before the simulation it samples from.
   if (!sim || !material) return null;
