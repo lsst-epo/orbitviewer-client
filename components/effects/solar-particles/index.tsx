@@ -12,6 +12,7 @@ import {
   Color,
   InstancedBufferAttribute,
   InstancedMesh,
+  LinearSRGBColorSpace,
   ShaderMaterial,
   Vector2,
 } from "three";
@@ -36,8 +37,50 @@ import fragmentShader from "./particles_instanced.frag";
  * and `simUV` carries the lookup coordinate.
  */
 
-/** Fallback colour for objects whose category has no Craft entry. */
+/**
+ * Fallback colour for objects whose category has no Craft entry.
+ *
+ * Left colour-managed, unlike the category colours below, because the legacy
+ * converts this one explicitly -- `new Color(0x999999).convertSRGBToLinear()`
+ * -- and so arrives at the same value either way.
+ */
 export const UNCATEGORISED_COLOR = new Color(0x999999);
+
+/**
+ * Why the category colours are read as linear rather than converted.
+ *
+ * Production's particles are lighter and pinker than this port's, which were
+ * darker and redder, and the difference is a colour-space one. Measured off
+ * screenshots of both, over a matched window: particle density is near
+ * identical, 11.8% of pixels against 10.6%, so it is not size or count --
+ * but production carries 1.7x the mean luminance, and the core colours part
+ * company on blue.
+ *
+ * Working the asteroid pink `#ff6eb4` through the shader both ways settles
+ * it. Desaturate by 0.5, scale by 0.4, encode:
+ *
+ *   converted to linear first    vColor (1.0, 0.156, 0.456)  ->  (146,  97, 118)
+ *   used as-is                   vColor (1.0, 0.431, 0.706)  ->  (155, 127, 141)
+ *   measured, production                                         (148, 121, 141)
+ *   measured, this port                                          (129, 101, 101)
+ *
+ * Blue decides it: 141 measured against 141 predicted un-managed and 118
+ * predicted managed.
+ *
+ * Production is not colour-managing these. Almost certainly it is built
+ * against a three older than r152, where `ColorManagement.enabled` defaulted
+ * to false and `new Color('#ff6eb4')` kept the sRGB numbers for the shader to
+ * consume as linear. The legacy source now pins ^0.174.0, where the default
+ * is true -- so a rebuild of the legacy today would look like this port did,
+ * not like the site it deploys.
+ *
+ * Which means the port was the colour-correct one and production is the
+ * accident. But production is the thing people know, so it is what gets
+ * matched -- deliberately, and only here. The orbit paths take the same
+ * route through `new Color()` and are still managed; they are desaturated by
+ * 95% so the hue barely shows, but they are the obvious next candidate if
+ * this is wanted scene-wide.
+ */
 
 /**
  * On-screen particle radius, in CSS pixels.
@@ -246,12 +289,10 @@ const SolarParticles: FunctionComponent<SolarParticlesProps> = ({
 
     for (let i = 0; i < count; i++) {
       const hex = categoryColors.get(elements[i].category);
-      // Color.set() applies the sRGB -> linear conversion; toArray copies the
-      // already-converted components straight into the instance buffer.
-      (hex ? color.set(hex) : color.copy(UNCATEGORISED_COLOR)).toArray(
-        instanceColors.array as Float32Array,
-        i * 3
-      );
+      (hex
+        ? color.setStyle(hex, LinearSRGBColorSpace)
+        : color.copy(UNCATEGORISED_COLOR)
+      ).toArray(instanceColors.array as Float32Array, i * 3);
     }
 
     instanceColors.needsUpdate = true;
