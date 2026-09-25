@@ -34,7 +34,7 @@ import BenchmarkProvider, { useBenchmark } from "@/contexts/Benchmark";
 import Onboarding from "@/components/organisms/Onboarding";
 import PerformanceModal from "@/components/organisms/PerformanceModal";
 import Wizard, { wizardDismissed } from "@/components/organisms/Wizard";
-import { GFX_TIERS, hasStoredQuality } from "@/lib/solar/quality";
+import { hasStoredQuality } from "@/lib/solar/quality";
 import type { TourSummary } from "@/lib/tours";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
 import Scene from "./Scene";
@@ -280,14 +280,31 @@ const FirstRun: FunctionComponent<{
 /**
  * The WebGL canvas.
  *
- * Its own component purely so it can read the quality tier, which lives in
- * `SolarDataProvider` -- and `dpr` has to be a prop rather than a `setDpr`
- * call from inside the canvas, because Canvas reconciles its own `dpr` prop
- * on every reconfigure and would overwrite anything set from within.
+ * Note what is *not* here: the tier's `maxPixelRatio`. Applying it was a
+ * mistake, and this is the measurement that settled it -- both apps in the
+ * same pane, same CSS size, same display:
+ *
+ *   production  1024x768 css  ->  2048x1536 buffer   ratio 2.0
+ *   this port   1024x768 css  ->  1536x1152 buffer   ratio 1.5
+ *
+ * The legacy does call `setPixelRatio(Math.min(devicePixelRatio, maxPixel-
+ * Ratio))`, and on desktop `OrbitViewerPage` even forces the medium tier's
+ * 1.5 -- and yet production renders at the full device ratio regardless.
+ * Same shape as `GFXTier.maxSamples`, which `setTier` also appears to apply
+ * and also does not. The tier table describes an intent the legacy never
+ * carries out.
+ *
+ * Reading it honestly cost this port a quarter of its linear resolution, and
+ * a particle is a sphere one CSS pixel in radius -- so at 1.5 each one lands
+ * on 1.5 device pixels against production's 2, then gets resampled up to the
+ * display. Smaller, softer, dimmer, which is exactly how the field read.
+ *
+ * So no `dpr` prop: R3F's default clamp of [1, 2] is what production does on
+ * any ordinary display. The tier still governs what it demonstrably does
+ * govern -- glow, blur scale, quality and iterations, and the size of the
+ * dataset.
  */
 const SceneCanvas: FunctionComponent = () => {
-  const { quality } = useSolarData();
-
   return (
     <Canvas
       className={styles.canvas}
@@ -296,23 +313,6 @@ const SceneCanvas: FunctionComponent = () => {
         near: CAMERA_CLIP.near,
         far: CAMERA_CLIP.far,
       }}
-      /**
-       * The tier's pixel-ratio cap, which had never been applied: the tiers
-       * have carried `maxPixelRatio` since they were ported but nothing read
-       * it, so every tier took R3F's default clamp of [1, 2]. The legacy's
-       * `setPixelRatio(Math.min(devicePixelRatio, tier.maxPixelRatio))` holds
-       * low and medium to 1.5 and lets ultra reach 3 -- trading resolution
-       * for frame rate is what the tiers are for.
-       *
-       * It tells most on the particle field, where a particle is a sphere one
-       * CSS pixel in radius: the pixel ratio is how many device pixels it
-       * actually covers, and a sub-pixel dot averaged down from 2 reads
-       * softer and dimmer than the same dot rasterised at 1.5.
-       *
-       * A range rather than a number, so R3F recalculates it if the window
-       * moves to a display with a different ratio. The legacy set it once.
-       */
-      dpr={[1, GFX_TIERS[quality].maxPixelRatio]}
       gl={{
         // The scene spans six orders of magnitude, from a 24-unit near limit
         // to 3,000,000 units. A linear depth buffer z-fights badly across

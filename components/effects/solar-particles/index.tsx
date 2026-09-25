@@ -83,40 +83,20 @@ export const UNCATEGORISED_COLOR = new Color(0x999999);
  */
 
 /**
- * On-screen particle radius, in CSS pixels.
+ * On-screen particle radius, in CSS pixels. The legacy value, confirmed
+ * against the deployed bundle, which ships `fixedSize: { value: 1 }`.
  *
- * **The legacy value is 1; this is a deliberate, measured deviation.**
+ * This was briefly 1.4. The reasoning then was that production's particles
+ * covered 1.9x the pixel area for the same peak brightness, so the port's
+ * were too small -- and the arithmetic was right but the conclusion was not.
+ * The area gap was the colour bug below: un-managed colours are brighter, so
+ * more of each particle clears any threshold you measure against, which reads
+ * as a bigger dot. Fixing the colours removed the reason for the size.
  *
- * Everything about the field is a faithful port -- the two fragment and vertex
- * shaders are byte-identical, the geometry is the same 4x4 sphere, the
- * uniforms and the colour pipeline agree -- and yet side by side the field
- * reads markedly fainter here. Measured off screenshots of both, sampling a
- * sparse outer region so that neither the camera framing nor the quality tier
- * can influence the result:
- *
- *                  median blob   mean area   p90    median peak
- *     production        3 px      4.32 px    7 px        58
- *     this port         2 px      2.27 px    4 px        62
- *
- * Peak brightness per particle already matches -- 62 against 58, marginally
- * brighter here -- so nothing is dimming them. The entire difference is area:
- * production's particles cover about 1.9x the pixels, which is 1.4x the
- * diameter. Half the light per object, from the same colour.
- *
- * Where production gets the extra 1.4x is not settled. The likeliest
- * explanation is the display: `resolution` is a CSS-pixel size here, so a
- * particle is a fixed CSS pixel whatever the device ratio, while the legacy
- * seeds that uniform from the drawing buffer and only corrects it on a resize
- * -- so on a 2x display its particles are rasterised at twice the size and
- * arrive softened rather than crisp. That is a bug in the legacy that happens
- * to look better, and matching it exactly would mean making apparent size
- * depend on the monitor.
- *
- * So the size is raised here instead, by the measured ratio and no more. The
- * previous attempt at this used 2.5 and did render the belt chunky and
- * oversaturated; 1.4 restores production's weight without that.
+ * Left at the legacy value rather than carrying two deviations that were only
+ * ever compensating for one bug.
  */
-const PARTICLE_PIXEL_SIZE = 1.4;
+const PARTICLE_PIXEL_SIZE = 1;
 
 /**
  * Distance band over which a particle fades out, in scene units.
