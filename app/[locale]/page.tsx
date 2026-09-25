@@ -1,8 +1,8 @@
 import { FunctionComponent } from "react";
 import { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
-import { getContentPage } from "@/lib/api/craft";
-import { getRubinDiscoveryCount } from "@/lib/api/hasura";
+import { getContentPage, getDataFileUrls } from "@/lib/api/craft";
+import { datasetUrlFor, fetchRubinDiscoveryCount } from "@/lib/api/mpcData";
 import Splash from "@/components/templates/Splash";
 
 interface SplashPageProps {
@@ -32,10 +32,18 @@ export async function generateMetadata({
 const SplashPage: FunctionComponent<SplashPageProps> = async ({ params }) => {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [page, discoveries] = await Promise.all([
+  // The count lives in the head of the MPC dataset, which is also where the
+  // legacy read it. Any tier's file carries the same figure; the smallest is
+  // asked for since only its first 256 bytes are actually read.
+  const [page, dataFileUrls] = await Promise.all([
     getContentPage({ locale, slug: "landing" }),
-    getRubinDiscoveryCount(),
+    getDataFileUrls(),
   ]);
+
+  const datasetUrl = datasetUrlFor(dataFileUrls, "low");
+  const discoveries = datasetUrl
+    ? await fetchRubinDiscoveryCount(datasetUrl)
+    : null;
 
   return (
     <Splash

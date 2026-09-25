@@ -44,6 +44,32 @@ export const DEFAULT_CAMERA_POSITION = new Vector3(0, 5000, 10000);
 /** Per-frame easing toward a target. Matches the legacy's cameraTarget.alpha. */
 const FOLLOW_EASING = 0.036;
 
+/**
+ * Frame order: after the bodies have moved, before the compositor draws.
+ *
+ * Following reads a position that a `Body` writes in its own frame callback,
+ * so the two are ordered or the camera eases toward where the body was last
+ * frame. Both sat on R3F's default priority of 0, where subscribers run in
+ * subscription order -- and `<Camera>` is rendered above the bodies in the
+ * scene, so it subscribed first and always ran on stale positions.
+ *
+ * At real time a frame of orbital motion is nothing and the lag is invisible.
+ * Wind the clock up and it is a real distance, so the body drifts off centre
+ * by an amount proportional to how fast the simulation is running; pause, and
+ * the displacement stops arriving and the easing closes it, which is the
+ * "it snaps back when I pause" of the report. Mercury shows it first because
+ * it covers the most ground per frame.
+ *
+ * The legacy had no equivalent problem because `OrbitViewer.update` is a
+ * straight sequence: every `solarElements[i].update(d)` first, then
+ * `controls.update()`.
+ *
+ * Fractional so it slots between the bodies and `COMPOSITOR_PRIORITY`. Any
+ * priority above zero would normally hand rendering over to the subscriber,
+ * but the compositor has already taken that on.
+ */
+export const CAMERA_PRIORITY = 0.5;
+
 /** Midpoint of the object's near/far framing range. */
 const DEFAULT_TARGET_ZOOM = 0.5;
 
@@ -120,6 +146,25 @@ const Camera: FunctionComponent<CameraProps> = ({
   // Scratch, reused per frame.
   const offset = useMemo(() => new Vector3(), []);
 
+  /**
+   * Whether the current target has had its distance limits collapsed yet.
+   *
+   * Following works by easing `controls.maxDistance` down onto the body until
+   * OrbitControls pulls the camera in against it. But the limit starts at
+   * `CAMERA_LIMITS.max` -- three million units, wide enough for the whole
+   * scene -- while the camera sits about eleven thousand out, and a limit
+   * above the camera's own distance clamps nothing. So the first stretch of
+   * the ease is inert: 3,000,000 to 11,180 at 3.6% a frame is 153 frames,
+   * two and a half seconds in which the panel is open, the body is selected,
+   * and the view is perfectly still. Then the real flight begins.
+   *
+   * That dead stretch is the "delay before we are zoomed in". Collapsing the
+   * ceiling onto the camera's actual distance the moment a target is taken
+   * removes it and changes nothing else: every value skipped was one that
+   * could not have moved the camera anyway.
+   */
+  const framedTarget = useRef<CameraTarget | null>(null);
+
   // Set the initial vantage point once, rather than through <Canvas camera>,
   // so remounting the controls does not snap the user's view back.
   useEffect(() => {
@@ -176,6 +221,15 @@ const Camera: FunctionComponent<CameraProps> = ({
     }
 
     if (target) {
+      // Newly acquired: drop the inert part of the ease. See framedTarget.
+      if (framedTarget.current !== target) {
+        framedTarget.current = target;
+        controls.maxDistance = Math.min(
+          controls.maxDistance,
+          camera.position.distanceTo(controls.target)
+        );
+      }
+
       const framing = size.width <= 768 ? FRAMING.mobile : FRAMING.desktop;
       const near = target.radius * framing.min;
       const far = target.radius * framing.max;
@@ -202,6 +256,8 @@ const Camera: FunctionComponent<CameraProps> = ({
         enabled &&
         controls.target.distanceTo(target.position) < ARRIVAL_THRESHOLD;
     } else {
+      framedTarget.current = null;
+
       // Deselecting returns the pivot to the Sun, as the legacy's
       // `releaseCameraTarget` did by calling `centerView`. Without it the
       // camera keeps orbiting wherever the last body was -- deselect Eris and
@@ -220,7 +276,7 @@ const Camera: FunctionComponent<CameraProps> = ({
       );
       controls.enabled = enabled;
     }
-  });
+  }, CAMERA_PRIORITY);
 
   return (
     <OrbitControls

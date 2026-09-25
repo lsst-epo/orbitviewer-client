@@ -123,3 +123,56 @@ export function datasetUrlFor(
 ): string | undefined {
   return urls[quality] ?? urls.low ?? Object.values(urls)[0];
 }
+
+/**
+ * Bytes of the dataset to read when all that is wanted is the discovery count.
+ *
+ * `rubin_discoveries_count` is the first key of the object, ahead of the
+ * `mpc_orbits` array, so the number is always within the first few dozen
+ * bytes. 256 is generous cover for the key moving slightly.
+ */
+const COUNT_PROBE_BYTES = 256;
+
+/** Matches the count wherever it sits in the probed head. */
+const COUNT_PATTERN = /"rubin_discoveries_count"\s*:\s*(\d+)/;
+
+/**
+ * Reads the Rubin discovery total out of the head of a dataset file.
+ *
+ * This is where the legacy gets the figure the splash counts up to:
+ * `LoadManager.loadSample` keeps `json.rubin_discoveries_count` and
+ * `OrbitViewerPage.transitionIn` animates to it. It is an editorial number
+ * published alongside the orbits -- 35,000 today, the same in every tier's
+ * file -- and not the row count of anything.
+ *
+ * Which is why asking Hasura for `count(*) where rubin_discovery` gave a
+ * different answer: that counts the flagged rows in the catalogue, a
+ * different quantity that nothing in the legacy ever showed.
+ *
+ * Fetched as a range request so the splash does not pull a file that runs
+ * from 6 MB to 343 MB. A server that ignores the range would answer 200 with
+ * the whole body, so anything but 206 is abandoned unread.
+ */
+export async function fetchRubinDiscoveryCount(
+  url: string,
+  { revalidate = 3600 }: { revalidate?: number } = {}
+): Promise<number | null> {
+  try {
+    const response = await fetch(url, {
+      headers: { Range: `bytes=0-${COUNT_PROBE_BYTES - 1}` },
+      next: { revalidate },
+    });
+
+    if (response.status !== 206) {
+      console.error(
+        `Discovery count: expected a partial response, got ${response.status}`
+      );
+      return null;
+    }
+
+    return Number(COUNT_PATTERN.exec(await response.text())?.[1]) || null;
+  } catch (cause) {
+    console.error("Failed to read the Rubin discovery count", cause);
+    return null;
+  }
+}
