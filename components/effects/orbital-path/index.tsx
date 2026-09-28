@@ -7,7 +7,6 @@ import {
   type FunctionComponent,
 } from "react";
 import { Line } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
 import { Color } from "three";
 import type { Line2, LineMaterial } from "three-stdlib";
 import type { OrbitElements } from "@/lib/solar/types";
@@ -32,22 +31,22 @@ import { applyPathFade, fadeBandFor, type PathFadeUniforms } from "./fade";
 export const PATH_ALPHA = 0.05;
 
 /**
- * Line width, in CSS pixels.
+ * Line width. LineMaterial measures this in *device* pixels: three sets its
+ * `resolution` uniform itself, in `LineSegments2.onBeforeRender`, from the
+ * device-pixel viewport. So these are the legacy's values as production
+ * renders them -- a one-device-pixel hairline, half a CSS pixel on a 2x
+ * display.
  *
- * `lineWidth` on drei's <Line> is really LineMaterial's `linewidth`, which the
- * shader converts to clip space by dividing by the `resolution` uniform -- and
- * three sets that uniform itself, in `LineSegments2.onBeforeRender`, from the
- * *device*-pixel viewport. So the value is in device pixels, not CSS pixels,
- * which neither codebase ever accounted for: on a 2x display the legacy's 1
- * draws a half-thickness hairline that the display then has to resample, and
- * at 5% opacity there is nothing left of it. It looks correct in production
- * only because that is being viewed at a device pixel ratio of 1.
- *
- * Scaling by the ratio restores the intent -- one CSS pixel, the same apparent
- * weight on any display.
+ * These were briefly scaled by the pixel ratio, to make the line a CSS pixel
+ * on any display. The reasoning was that a half-thickness hairline at 5%
+ * opacity leaves nothing to see -- but that was measured while the whole
+ * scene was reaching the canvas in linear colour at half brightness, which
+ * was the actual reason the paths were hard to make out. With the encode
+ * restored the legacy's width reads as production's does, and doubling it
+ * makes the paths heavier than the thing being matched.
  */
-const PATH_WIDTH_CSS = 1;
-const SELECTED_PATH_WIDTH_CSS = 2;
+const PATH_WIDTH = 1;
+const SELECTED_PATH_WIDTH = 2;
 
 /**
  * Opacity for the selected body's path, by how the camera is framing it.
@@ -91,9 +90,6 @@ const OrbitalPath: FunctionComponent<OrbitalPathProps> = ({
 
   const lineColor = useMemo(() => new Color(color || FALLBACK_COLOR), [color]);
 
-  // The tier's pixel ratio, which is what LineMaterial measures width in.
-  const dpr = useThree((state) => state.viewport.dpr);
-
   const lineRef = useRef<Line2>(null);
   const fadeRef = useRef<PathFadeUniforms | null>(null);
 
@@ -126,9 +122,7 @@ const OrbitalPath: FunctionComponent<OrbitalPathProps> = ({
       ref={lineRef}
       points={path.points}
       color={lineColor}
-      lineWidth={
-        (selected ? SELECTED_PATH_WIDTH_CSS : PATH_WIDTH_CSS) * Math.max(dpr, 1)
-      }
+      lineWidth={selected ? SELECTED_PATH_WIDTH : PATH_WIDTH}
       transparent
       opacity={selected ? SELECTED_PATH_ALPHA[view] : PATH_ALPHA}
       // Paths cross constantly at this density; writing depth would make the
