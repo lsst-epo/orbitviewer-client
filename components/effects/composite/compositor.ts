@@ -1,7 +1,9 @@
 import {
   Camera,
   DataTexture,
+  Material,
   Mesh,
+  MeshBasicMaterial,
   OrthographicCamera,
   PlaneGeometry,
   RGBAFormat,
@@ -101,7 +103,7 @@ export class Compositor {
   // at far = 1 the quad would sit exactly on the far plane.
   private quadCamera = new OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10);
   private quad: Mesh;
-  private screenMaterial: ShaderMaterial;
+  private screenMaterial: MeshBasicMaterial;
 
   private emptyTexture = createEmptyTexture();
 
@@ -166,17 +168,39 @@ export class Compositor {
       },
     });
 
-    // Screen blit. A plain textured quad, kept as a ShaderMaterial so the
-    // composited result is written through without further colour management.
-    this.screenMaterial = new ShaderMaterial({
-      vertexShader,
-      fragmentShader: `
-        in vec2 vUv;
-        uniform sampler2D scene;
-        void main() { gl_FragColor = texture2D(scene, vUv); }
-      `,
-      uniforms: { scene: { value: null } },
-    });
+    /**
+     * Screen blit -- and it has to be a built-in material, as the legacy's
+     * `SCREEN_MAT = new MeshBasicMaterial()` is.
+     *
+     * This was a raw ShaderMaterial doing `texture2D(scene, vUv)`, on the
+     * reasoning that a pass-through shader leaves colour alone. It does not.
+     * Every target here is declared `SRGBColorSpace`, which three backs with
+     * an sRGB8_ALPHA8 internal format -- so the GPU encodes linear to sRGB on
+     * write and decodes sRGB to linear on sample, in hardware, whatever the
+     * shader says. A raw shader therefore *samples* decoded linear values and
+     * writes them straight to the default framebuffer, which is not an sRGB
+     * target and so does not encode. The whole scene reached the canvas in
+     * linear, which is to say at about half brightness.
+     *
+     * Working Craft's asteroid pink through the shader gives the arithmetic:
+     *
+     *   linear out of the particle shader      (0.326, 0.213, 0.268)
+     *   written with the encode                (155, 127, 141)  luminance 134
+     *   written without it                     ( 83,  54,  68)  luminance  61
+     *   measured, production                                    luminance 111
+     *   measured, this port                                     luminance  66
+     *
+     * A built-in material closes it: three appends `<colorspace_fragment>`,
+     * which encodes to the renderer's output colour space. `toneMapped` is
+     * off because R3F defaults the renderer to ACES filmic where the legacy
+     * leaves three's NoToneMapping, and tone mapping here would regrade the
+     * composited image; the colour-space encode is a separate include and is
+     * applied either way.
+     *
+     * This is why the particles and the orbit paths both read faint. It was
+     * never either of them -- it was everything.
+     */
+    this.screenMaterial = new MeshBasicMaterial({ toneMapped: false });
 
     this.quad = new Mesh(new PlaneGeometry(1, 1), this.compMaterial);
     this.quadScene.add(this.quad);
@@ -238,10 +262,7 @@ export class Compositor {
     });
   }
 
-  private drawQuad(
-    target: WebGLRenderTarget | null,
-    material: ShaderMaterial
-  ): void {
+  private drawQuad(target: WebGLRenderTarget | null, material: Material): void {
     this.quad.material = material;
     this.renderer.setRenderTarget(target);
     this.renderer.render(this.quadScene, this.quadCamera);
@@ -294,7 +315,7 @@ export class Compositor {
     this.drawQuad(this.compRT, this.compMaterial);
 
     // 6. Blit to the screen, or to a caller-supplied target.
-    this.screenMaterial.uniforms.scene.value = this.compRT.texture;
+    this.screenMaterial.map = this.compRT.texture;
     this.drawQuad(target, this.screenMaterial);
     this.renderer.setRenderTarget(null);
   }
