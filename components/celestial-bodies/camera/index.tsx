@@ -134,6 +134,40 @@ const zoomStep = (distance: number): number =>
     Math.min(Math.max(distance / ZOOM_RAMP, 0), 1)
   );
 
+/**
+ * Applies the frame's target and limits to the camera.
+ *
+ * drei's <OrbitControls> runs `if (controls.enabled) controls.update()` in its
+ * own frame callback, so while the controls are disabled it never updates them
+ * -- and disabling them is exactly what this component does to keep the
+ * pointer out of a flight in progress. The result was a camera that could not
+ * move at all for the duration:
+ *
+ *   - selecting a body opened the panel, held perfectly still while the
+ *     distance limits eased down unseen, then snapped the whole way in on the
+ *     single frame `enabled` flipped back to true;
+ *
+ *   - and with the clock wound up, the easing pivot never got within
+ *     `ARRIVAL_THRESHOLD` of a fast-moving body at all, so `enabled` stayed
+ *     false indefinitely and the camera simply stopped following. Pausing let
+ *     the pivot close the gap, which flipped `enabled` and snapped the body
+ *     back to centre -- the "it re-centres when I pause" of the report.
+ *
+ * The legacy has no equivalent because `CameraManager.update` sets
+ * `controls.enabled` and then calls `this.controls.update()` regardless;
+ * `enabled` gates input handling in three's OrbitControls, not the update.
+ *
+ * Only called here when drei will not, so the controls still update exactly
+ * once a frame and damping is applied once. That split also lands the right
+ * way round: this runs after the bodies have moved and after the pivot is
+ * written, so the frames where the camera is actually chasing something use
+ * this frame's positions, while drei's earlier pass covers the settled case
+ * where a frame of staleness cannot be seen.
+ */
+const driveControls = (controls: OrbitControlsImpl): void => {
+  if (!controls.enabled) controls.update();
+};
+
 const Camera: FunctionComponent<CameraProps> = ({
   targetRef,
   enabled = true,
@@ -164,6 +198,24 @@ const Camera: FunctionComponent<CameraProps> = ({
    * could not have moved the camera anyway.
    */
   const framedTarget = useRef<CameraTarget | null>(null);
+
+  /**
+   * Where the followed body was last frame, and scratch for how far it moved.
+   *
+   * Easing the pivot onto a *moving* body leaves a standing error. Each frame
+   * closes 3.6% of the gap while the body opens a fresh one, so the gap
+   * settles at roughly 27 frames' worth of the body's motion -- nothing at
+   * real time, but with the clock wound up it is most of an orbit. Traced
+   * against Mercury at 2,000 hours a second, the pivot trailed by 290 to 350
+   * scene units and climbing, on an orbit whose radius is about 580.
+   *
+   * Carrying the body's own displacement into the pivot before easing removes
+   * that: the ease is then only closing the error it has left, rather than
+   * fighting the body's velocity, and the standing lag goes to zero at any
+   * clock rate. The approach still eases, so the fly-to is unchanged.
+   */
+  const bodyWasAt = useRef<Vector3 | null>(null);
+  const bodyMoved = useMemo(() => new Vector3(), []);
 
   // Set the initial vantage point once, rather than through <Canvas camera>,
   // so remounting the controls does not snap the user's view back.
@@ -224,11 +276,22 @@ const Camera: FunctionComponent<CameraProps> = ({
       // Newly acquired: drop the inert part of the ease. See framedTarget.
       if (framedTarget.current !== target) {
         framedTarget.current = target;
+        bodyWasAt.current = null;
         controls.maxDistance = Math.min(
           controls.maxDistance,
           camera.position.distanceTo(controls.target)
         );
       }
+
+      // Travel with the body, then ease away what is left. See bodyWasAt.
+      if (bodyWasAt.current) {
+        controls.target.add(
+          bodyMoved.subVectors(target.position, bodyWasAt.current)
+        );
+      } else {
+        bodyWasAt.current = new Vector3();
+      }
+      bodyWasAt.current.copy(target.position);
 
       const framing = size.width <= 768 ? FRAMING.mobile : FRAMING.desktop;
       const near = target.radius * framing.min;
@@ -255,8 +318,11 @@ const Camera: FunctionComponent<CameraProps> = ({
       controls.enabled =
         enabled &&
         controls.target.distanceTo(target.position) < ARRIVAL_THRESHOLD;
+
+      driveControls(controls);
     } else {
       framedTarget.current = null;
+      bodyWasAt.current = null;
 
       // Deselecting returns the pivot to the Sun, as the legacy's
       // `releaseCameraTarget` did by calling `centerView`. Without it the
@@ -275,6 +341,7 @@ const Camera: FunctionComponent<CameraProps> = ({
         FOLLOW_EASING
       );
       controls.enabled = enabled;
+      driveControls(controls);
     }
   }, CAMERA_PRIORITY);
 
