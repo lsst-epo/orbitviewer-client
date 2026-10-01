@@ -11,10 +11,7 @@ import {
 } from "@/contexts/Explorer";
 import { useSolarData } from "@/contexts/SolarData";
 import { useSolarClock } from "@/contexts/SolarClock";
-import {
-  resolveObject,
-  resolveCraftElement,
-} from "@/lib/explorer/resolveObject";
+import { resolveObject, resolveCraftFor } from "@/lib/explorer/resolveObject";
 import { defaultViewFor } from "@/lib/explorer/searchParams";
 import { fromPlanetElements } from "@/lib/solar/elements";
 import { calculateRanges, type Range } from "@/lib/solar/categories";
@@ -124,8 +121,12 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
 
   const craft = useMemo(
     () =>
-      resolveCraftElement(solarElementEntries(craftElements), params.object),
-    [craftElements, params.object]
+      resolveCraftFor(
+        solarElementEntries(craftElements),
+        object,
+        params.object
+      ),
+    [craftElements, object, params.object]
   );
 
   const earth = useMemo(

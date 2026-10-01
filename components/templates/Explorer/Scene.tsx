@@ -367,9 +367,13 @@ const Scene: FunctionComponent = () => {
               cloudsMap={id === "earth" ? cloudsMap : null}
               focusRef={focused?.id === elements.id ? focusTarget : null}
               label={
-                // Not for the selected body: its name is already in the
-                // panel, and the legacy hid it there too.
-                focused?.id === elements.id ? null : (
+                // Hidden for the selected body only in object view, where the
+                // camera is a few radii away and the panel already names it.
+                // In orbit view it has to stay: the camera is far enough out
+                // to see the whole path, and the body is a dot somewhere on
+                // it. The legacy makes the same distinction in one line --
+                // `sel.domRef.dom.style.opacity = followOrbit ? 1 : 0`.
+                focused?.id === elements.id && !orbitView ? null : (
                   <BodyLabel
                     id={elements.id}
                     name={craftTitles.get(id) ?? elements.fulldesignation}
@@ -422,7 +426,10 @@ const Scene: FunctionComponent = () => {
               perturbations={perturbations}
               focusRef={selected ? focusTarget : null}
               label={
-                selected ? null : (
+                // Kept in orbit view, as for the planets above -- and it
+                // matters more here, since these have no visible body to
+                // mark where on the path they are.
+                selected && !orbitView ? null : (
                   <BodyLabel
                     id={id}
                     name={title}
