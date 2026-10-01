@@ -32,6 +32,20 @@ export interface SolarItemEntry {
 export interface NamedObject {
   /** The element's own id -- the packed designation, where it has one. */
   id: string;
+  /**
+   * The identifier to put in the URL when this object is selected: Craft's
+   * `elementID`, which is the unpacked designation (`1999 RQ36`).
+   *
+   * Not `id`. That is the packed form (`J99R36Q`), because `fromMpcRow`
+   * prefers `mpcdesignation` -- and while the scene resolves either, the
+   * server cannot. `generateMetadata` has the Craft entries but no dataset to
+   * resolve against, so a packed id in the URL finds no entry and the share
+   * card falls back to the bare designation instead of the object's name.
+   *
+   * Putting the editorial identifier in the URL is also what the legacy did,
+   * by routing these to `/solar-items/<slug>/`.
+   */
+  shareId: string;
   /** Craft's display name, which is the point of the entry. */
   title: string;
   category: SolarCategory;
@@ -131,6 +145,7 @@ export function resolveNamedObjects(
 
     named.push({
       id: matched.id,
+      shareId: designation,
       title: entry.title || matched.fulldesignation,
       category: resolved,
       elements:

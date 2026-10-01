@@ -400,7 +400,7 @@ const Scene: FunctionComponent = () => {
           The legacy gave each one a `SolarElement` with its mesh commented
           out, so a body here is a point the label and camera hang off rather
           than something meant to be seen at this distance. */}
-      {namedObjects.map(({ id, title, category, elements }) => {
+      {namedObjects.map(({ id, shareId, title, category, elements }) => {
         const selected = focused?.id === id;
 
         // A selected object stays put whatever the filters say, so a shared
@@ -425,13 +425,16 @@ const Scene: FunctionComponent = () => {
               radiusScale={BODY_RADIUS_SCALE}
               perturbations={perturbations}
               focusRef={selected ? focusTarget : null}
+              // Craft's id, not the element's: it is what reaches the URL,
+              // and the server can resolve it. See NamedObject.shareId.
+              selectId={shareId}
               label={
                 // Kept in orbit view, as for the planets above -- and it
                 // matters more here, since these have no visible body to
                 // mark where on the path they are.
                 selected && !orbitView ? null : (
                   <BodyLabel
-                    id={id}
+                    id={shareId}
                     name={title}
                     category={category}
                     color={color}

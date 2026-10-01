@@ -64,6 +64,12 @@ export interface BodyProps {
   focusRef?: React.RefObject<CameraTarget | null> | null;
   onClick?: (id: string) => void;
   /**
+   * Identifier handed to `onClick`, and so the one that lands in the URL.
+   * Defaults to the elements' own id; the named objects override it with
+   * Craft's `elementID` so that the server can resolve a shared link.
+   */
+  selectId?: string;
+  /**
    * Floating name beside the body. Rendered here rather than in the scene so
    * it inherits the body's position without a second per-frame write.
    */
@@ -80,6 +86,7 @@ const Body: FunctionComponent<BodyProps> = ({
   cloudsMap = null,
   focusRef = null,
   onClick,
+  selectId,
   label,
 }) => {
   const groupRef = useRef<Group>(null);
@@ -185,7 +192,7 @@ const Body: FunctionComponent<BodyProps> = ({
         <mesh
           ref={meshRef}
           scale={radius}
-          onClick={onClick ? () => onClick(elements.id) : undefined}
+          onClick={onClick ? () => onClick(selectId ?? elements.id) : undefined}
           // Bodies are exaggerated but still small on screen; a slightly
           // generous raycast threshold makes them selectable without
           // pixel-hunting.
