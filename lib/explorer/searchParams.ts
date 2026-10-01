@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isPlanetId } from "@/lib/solar/planets";
 
 /**
  * The /explorer search-param vocabulary.
@@ -68,6 +69,32 @@ export type ExplorerParams = z.infer<typeof ExplorerParamsSchema>;
 
 /** Panels that can occupy the explorer's side rail. */
 export type ExplorerPanel = NonNullable<ExplorerParams["panel"]>;
+
+/** How the camera frames a selection. */
+export type ExplorerView = NonNullable<ExplorerParams["view"]>;
+
+/**
+ * The framing a selection falls back to when `view` is absent from the URL.
+ *
+ * The legacy decides this by the body: `followSolarElementById` calls
+ * `followSolarElement(el, !el.isPlanet)`, and `isPlanet` is true only for a
+ * `Planet`, whose `PlanetId` is exactly the eight. Everything else -- dwarf
+ * planets included -- is framed on its orbit.
+ *
+ * Which is also the only sensible default here, because those eight are the
+ * only bodies carrying a texture. Fly up to Chiron or Bennu and all there is
+ * to see is an untextured sphere.
+ *
+ * Lives here, beside the param it defaults, because both the scene and the
+ * detail panel's camera-view toggle have to agree on it -- the toggle read
+ * `params.view ?? "object"` and so sat on "Object" while the scene framed the
+ * orbit.
+ *
+ * With nothing selected the answer is meaningless; "object" is the neutral
+ * one, since it leaves orbit framing switched off.
+ */
+export const defaultViewFor = (id: string | undefined): ExplorerView =>
+  !id || isPlanetId(id.toLowerCase()) ? "object" : "orbit";
 
 /**
  * Parses loosely: an unparseable param falls back to its default rather than

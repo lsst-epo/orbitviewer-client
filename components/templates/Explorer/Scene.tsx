@@ -13,6 +13,7 @@ import { resolveNamedObjects } from "@/lib/solar/solarItems";
 import { matchesFilters, type ObjectFilters } from "@/lib/solar/filters";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
 import { PlanetRadiusMap, isPlanetId } from "@/lib/solar/planets";
+import { defaultViewFor } from "@/lib/explorer/searchParams";
 import type { PerturbationContext } from "@/lib/solar/orbits";
 import type { OrbitElements } from "@/lib/solar/types";
 import { useSolarClock } from "@/contexts/SolarClock";
@@ -204,8 +205,14 @@ const Scene: FunctionComponent = () => {
    * the choice in the URL so the framing is shareable.
    *
    * The pivot is fixed rather than written per frame: an orbit does not move.
+   *
+   * Which framing a selection *defaults* to is decided by the body -- see
+   * `defaultViewFor`. An explicit `?view=` still wins, so the toggle and
+   * shared links override it in either direction.
    */
-  const orbitView = params.view === "orbit";
+  const orbitView =
+    (params.view ?? defaultViewFor(focused?.id)) === "orbit" &&
+    Boolean(focused);
 
   const orbitTarget = useMemo<CameraTarget | null>(() => {
     if (!orbitView || !focused) return null;

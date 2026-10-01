@@ -15,6 +15,7 @@ import {
   resolveObject,
   resolveCraftElement,
 } from "@/lib/explorer/resolveObject";
+import { defaultViewFor } from "@/lib/explorer/searchParams";
 import { fromPlanetElements } from "@/lib/solar/elements";
 import { calculateRanges, type Range } from "@/lib/solar/categories";
 import { CATEGORY_LABELS } from "@/lib/solar/categoryLabels";
@@ -262,7 +263,9 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
             { value: "object", label: t("object.view.object") },
             { value: "orbit", label: t("object.view.orbit") },
           ]}
-          value={params.view ?? "object"}
+          // Falls back to whatever the scene will actually do, or the toggle
+          // reads "Object" while the camera frames the orbit.
+          value={params.view ?? defaultViewFor(object.id)}
           onChange={(view) => setParams({ view })}
         />
       )}

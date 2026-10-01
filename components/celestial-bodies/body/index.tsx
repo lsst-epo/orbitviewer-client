@@ -147,10 +147,9 @@ const Body: FunctionComponent<BodyProps> = ({
     }
 
     if (rotation) {
-      // Axial tilt is fixed; the meridian advances with the sidereal period.
+      // Spin only. The tilt is a fixed prop on the group above; see axisTilt.
       const elapsedSeconds = dateRef.current.getTime() * 0.001;
       const turns = elapsedSeconds / (rotation.period * DAYS_TO_SECONDS);
-      mesh.rotation.z = rotation.axialTilt * DEG_TO_RAD;
       mesh.rotation.y = rotation.meridian * DEG_TO_RAD + turns * Math.PI * 2;
     }
 
@@ -159,24 +158,47 @@ const Body: FunctionComponent<BodyProps> = ({
 
   const atmosphere = atmosphereFor(id);
 
+  /**
+   * Axial tilt, in radians, applied to the group that holds the spinning mesh.
+   *
+   * It has to be a level above the spin, not alongside it. Setting both on one
+   * object leaves three to compose them in Euler order, and the default `XYZ`
+   * gives `RY(spin) · RZ(tilt)` -- the body is tilted and then turned about
+   * the *world* vertical, so instead of rotating on its own axis it wobbles
+   * around the upright like a spinning top. Jupiter showed it most, having a
+   * visible banding pattern and a three-degree tilt to swing it through.
+   *
+   * Nesting puts the spin in the tilted frame, which is what `Planet.ts` does:
+   * `container.rotation.z` carries the tilt and `mesh.rotation.y` the spin.
+   *
+   * Negated and summed with the orbital inclination as the legacy has it --
+   * axial tilt is quoted against the body's own orbital plane, so adding the
+   * inclination expresses it against the ecliptic the scene is built in.
+   */
+  const axisTilt = rotation
+    ? -(rotation.axialTilt + elements.i) * DEG_TO_RAD
+    : 0;
+
   return (
     <group ref={groupRef}>
-      <mesh
-        ref={meshRef}
-        scale={radius}
-        onClick={onClick ? () => onClick(elements.id) : undefined}
-        // Bodies are exaggerated but still small on screen; a slightly
-        // generous raycast threshold makes them selectable without
-        // pixel-hunting.
-        raycast={undefined}
-      >
-        <sphereGeometry args={[1, 64, 32]} />
-        <primitive object={material} ref={materialRef} attach="material" />
-        {/* Nested so the shell inherits the body's radius; its own scale is
-            then a plain multiple of the surface. */}
-        {atmosphere && <Atmosphere settings={atmosphere} />}
-        {textures?.ringMap && <Ring map={textures.ringMap} />}
-      </mesh>
+      <group rotation-z={axisTilt}>
+        <mesh
+          ref={meshRef}
+          scale={radius}
+          onClick={onClick ? () => onClick(elements.id) : undefined}
+          // Bodies are exaggerated but still small on screen; a slightly
+          // generous raycast threshold makes them selectable without
+          // pixel-hunting.
+          raycast={undefined}
+        >
+          <sphereGeometry args={[1, 64, 32]} />
+          <primitive object={material} ref={materialRef} attach="material" />
+          {/* Nested so the shell inherits the body's radius; its own scale is
+              then a plain multiple of the surface. */}
+          {atmosphere && <Atmosphere settings={atmosphere} />}
+          {textures?.ringMap && <Ring map={textures.ringMap} />}
+        </mesh>
+      </group>
       {label}
     </group>
   );
