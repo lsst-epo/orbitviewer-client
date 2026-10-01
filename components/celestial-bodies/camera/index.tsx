@@ -199,24 +199,6 @@ const Camera: FunctionComponent<CameraProps> = ({
    */
   const framedTarget = useRef<CameraTarget | null>(null);
 
-  /**
-   * Where the followed body was last frame, and scratch for how far it moved.
-   *
-   * Easing the pivot onto a *moving* body leaves a standing error. Each frame
-   * closes 3.6% of the gap while the body opens a fresh one, so the gap
-   * settles at roughly 27 frames' worth of the body's motion -- nothing at
-   * real time, but with the clock wound up it is most of an orbit. Traced
-   * against Mercury at 2,000 hours a second, the pivot trailed by 290 to 350
-   * scene units and climbing, on an orbit whose radius is about 580.
-   *
-   * Carrying the body's own displacement into the pivot before easing removes
-   * that: the ease is then only closing the error it has left, rather than
-   * fighting the body's velocity, and the standing lag goes to zero at any
-   * clock rate. The approach still eases, so the fly-to is unchanged.
-   */
-  const bodyWasAt = useRef<Vector3 | null>(null);
-  const bodyMoved = useMemo(() => new Vector3(), []);
-
   // Set the initial vantage point once, rather than through <Canvas camera>,
   // so remounting the controls does not snap the user's view back.
   useEffect(() => {
@@ -276,22 +258,11 @@ const Camera: FunctionComponent<CameraProps> = ({
       // Newly acquired: drop the inert part of the ease. See framedTarget.
       if (framedTarget.current !== target) {
         framedTarget.current = target;
-        bodyWasAt.current = null;
         controls.maxDistance = Math.min(
           controls.maxDistance,
           camera.position.distanceTo(controls.target)
         );
       }
-
-      // Travel with the body, then ease away what is left. See bodyWasAt.
-      if (bodyWasAt.current) {
-        controls.target.add(
-          bodyMoved.subVectors(target.position, bodyWasAt.current)
-        );
-      } else {
-        bodyWasAt.current = new Vector3();
-      }
-      bodyWasAt.current.copy(target.position);
 
       const framing = size.width <= 768 ? FRAMING.mobile : FRAMING.desktop;
       const near = target.radius * framing.min;
@@ -301,6 +272,23 @@ const Camera: FunctionComponent<CameraProps> = ({
       // Following works by easing the orbit pivot onto the body and closing
       // the distance limits around it: OrbitControls then pulls the camera in
       // on its own, which is how the legacy produced its fly-to.
+      //
+      // The lag this leaves is the point, and it is load-bearing. A plain
+      // lerp closes a fixed fraction of the gap each frame while the body
+      // opens a fresh one, so the gap settles at about 27 frames of the
+      // body's motion -- invisible at real time, and widening with the clock.
+      // That is the elastic tether the legacy has: wind the speed up and the
+      // planet pulls away from the camera, slow down or pause and the camera
+      // glides back onto it. `CameraManager.update` gets it from this one
+      // line and nothing else; there is no spring and no velocity term.
+      //
+      // It reads like a bug and it is not. Cancelling the lag by carrying the
+      // body's per-frame displacement into the pivot -- which was tried --
+      // does pin the planet dead centre, and ruins it: the pivot then jumps
+      // by the body's whole displacement every frame, so the planet holds
+      // still while the entire background jerks around it. Smooth camera,
+      // drifting planet is the trade the legacy makes, and it is the right
+      // one. Leave the lerp alone.
       controls.target.lerp(target.position, FOLLOW_EASING);
       controls.minDistance = lerp(
         controls.minDistance,
@@ -322,7 +310,6 @@ const Camera: FunctionComponent<CameraProps> = ({
       driveControls(controls);
     } else {
       framedTarget.current = null;
-      bodyWasAt.current = null;
 
       // Deselecting returns the pivot to the Sun, as the legacy's
       // `releaseCameraTarget` did by calling `centerView`. Without it the
