@@ -14,26 +14,13 @@ import { Vector3 } from "three";
 import { lerp } from "@/lib/math";
 import { useSceneControls } from "@/contexts/SceneControls";
 
-/**
- * Scene camera and its controls.
- *
- * Ported from `gfx/core/CameraManager.ts`, which hand-rolled pointer, wheel
- * and pinch handling on top of three's OrbitControls. drei's <OrbitControls>
- * already covers that, so this keeps only what was genuinely bespoke: the
- * distance limits, the damping feel, and following a target.
- */
-
 /** Distance limits in scene units (1000 units = 1 AU). */
 export const CAMERA_LIMITS = {
   min: 24,
   max: 3_000_000,
 };
 
-/**
- * Near/far planes. The scene spans roughly 24 to 3,000,000 units, far too
- * wide for a 32-bit depth buffer -- hence the logarithmic depth buffer on the
- * Canvas, which is what makes this range usable at all.
- */
+/** Near/far planes. Needs the Canvas's logarithmic depth buffer; see README. */
 export const CAMERA_CLIP = {
   near: 0.01,
   far: CAMERA_LIMITS.max + 5_000_000,
@@ -44,40 +31,13 @@ export const DEFAULT_CAMERA_POSITION = new Vector3(0, 5000, 10000);
 /** Per-frame easing toward a target. Matches the legacy's cameraTarget.alpha. */
 const FOLLOW_EASING = 0.036;
 
-/**
- * Frame order: after the bodies have moved, before the compositor draws.
- *
- * Following reads a position that a `Body` writes in its own frame callback,
- * so the two are ordered or the camera eases toward where the body was last
- * frame. Both sat on R3F's default priority of 0, where subscribers run in
- * subscription order -- and `<Camera>` is rendered above the bodies in the
- * scene, so it subscribed first and always ran on stale positions.
- *
- * At real time a frame of orbital motion is nothing and the lag is invisible.
- * Wind the clock up and it is a real distance, so the body drifts off centre
- * by an amount proportional to how fast the simulation is running; pause, and
- * the displacement stops arriving and the easing closes it, which is the
- * "it snaps back when I pause" of the report. Mercury shows it first because
- * it covers the most ground per frame.
- *
- * The legacy had no equivalent problem because `OrbitViewer.update` is a
- * straight sequence: every `solarElements[i].update(d)` first, then
- * `controls.update()`.
- *
- * Fractional so it slots between the bodies and `COMPOSITOR_PRIORITY`. Any
- * priority above zero would normally hand rendering over to the subscriber,
- * but the compositor has already taken that on.
- */
+/** After the bodies move, before the compositor draws. See README. */
 export const CAMERA_PRIORITY = 0.5;
 
 /** Midpoint of the object's near/far framing range. */
 const DEFAULT_TARGET_ZOOM = 0.5;
 
-/**
- * Viewing distance is framed relative to the body's own radius, so a planet
- * and a kilometre-wide asteroid both fill a comparable part of the screen.
- * Ported from SolarElement's lockedObjectDistance.
- */
+/** Viewing distance as a multiple of the body's own radius. */
 const FRAMING = {
   desktop: { min: 3, max: 8 },
   mobile: { min: 5, max: 15 },
@@ -89,23 +49,11 @@ const ARRIVAL_THRESHOLD = 0.5;
 /** The pivot with nothing selected: the Sun, at the origin. */
 const HOME = new Vector3(0, 0, 0);
 
-/**
- * Scene units moved per frame of held zoom, by how far out the camera is.
- *
- * Ported from the legacy's ZOOM_SPEED, interpolated over the same 0-10,000
- * unit span: a fixed step would crawl out at the edge of the system and
- * overshoot wildly near a planet.
- */
+/** Scene units per frame of held zoom, ramped by distance. */
 const ZOOM_SPEED = { min: 1, max: 500 };
 const ZOOM_RAMP = 10_000;
 
-/**
- * Easing for the recentre glide, and the distance at which it is done.
- *
- * Eased rather than snapped: the legacy tweened this over two to three
- * seconds, and jumping the camera across the system in one frame loses the
- * reader's sense of where they were.
- */
+/** The recentre glide, and the distance at which it is done. */
 const RECENTER_EASING = 0.08;
 const RECENTER_THRESHOLD = 1;
 
@@ -135,34 +83,8 @@ const zoomStep = (distance: number): number =>
   );
 
 /**
- * Applies the frame's target and limits to the camera.
- *
- * drei's <OrbitControls> runs `if (controls.enabled) controls.update()` in its
- * own frame callback, so while the controls are disabled it never updates them
- * -- and disabling them is exactly what this component does to keep the
- * pointer out of a flight in progress. The result was a camera that could not
- * move at all for the duration:
- *
- *   - selecting a body opened the panel, held perfectly still while the
- *     distance limits eased down unseen, then snapped the whole way in on the
- *     single frame `enabled` flipped back to true;
- *
- *   - and with the clock wound up, the easing pivot never got within
- *     `ARRIVAL_THRESHOLD` of a fast-moving body at all, so `enabled` stayed
- *     false indefinitely and the camera simply stopped following. Pausing let
- *     the pivot close the gap, which flipped `enabled` and snapped the body
- *     back to centre -- the "it re-centres when I pause" of the report.
- *
- * The legacy has no equivalent because `CameraManager.update` sets
- * `controls.enabled` and then calls `this.controls.update()` regardless;
- * `enabled` gates input handling in three's OrbitControls, not the update.
- *
- * Only called here when drei will not, so the controls still update exactly
- * once a frame and damping is applied once. That split also lands the right
- * way round: this runs after the bodies have moved and after the pivot is
- * written, so the frames where the camera is actually chasing something use
- * this frame's positions, while drei's earlier pass covers the settled case
- * where a frame of staleness cannot be seen.
+ * drei only updates the controls while they are enabled, and a flight disables
+ * them -- so without this the camera cannot move for its duration. See README.
  */
 const driveControls = (controls: OrbitControlsImpl): void => {
   if (!controls.enabled) controls.update();
@@ -180,23 +102,7 @@ const Camera: FunctionComponent<CameraProps> = ({
   // Scratch, reused per frame.
   const offset = useMemo(() => new Vector3(), []);
 
-  /**
-   * Whether the current target has had its distance limits collapsed yet.
-   *
-   * Following works by easing `controls.maxDistance` down onto the body until
-   * OrbitControls pulls the camera in against it. But the limit starts at
-   * `CAMERA_LIMITS.max` -- three million units, wide enough for the whole
-   * scene -- while the camera sits about eleven thousand out, and a limit
-   * above the camera's own distance clamps nothing. So the first stretch of
-   * the ease is inert: 3,000,000 to 11,180 at 3.6% a frame is 153 frames,
-   * two and a half seconds in which the panel is open, the body is selected,
-   * and the view is perfectly still. Then the real flight begins.
-   *
-   * That dead stretch is the "delay before we are zoomed in". Collapsing the
-   * ceiling onto the camera's actual distance the moment a target is taken
-   * removes it and changes nothing else: every value skipped was one that
-   * could not have moved the camera anyway.
-   */
+  /** Whether this target has had its distance ceiling collapsed. See README. */
   const framedTarget = useRef<CameraTarget | null>(null);
 
   // Set the initial vantage point once, rather than through <Canvas camera>,
@@ -269,26 +175,8 @@ const Camera: FunctionComponent<CameraProps> = ({
       const far = target.radius * framing.max;
       const distance = lerp(near, far, 1 - DEFAULT_TARGET_ZOOM);
 
-      // Following works by easing the orbit pivot onto the body and closing
-      // the distance limits around it: OrbitControls then pulls the camera in
-      // on its own, which is how the legacy produced its fly-to.
-      //
-      // The lag this leaves is the point, and it is load-bearing. A plain
-      // lerp closes a fixed fraction of the gap each frame while the body
-      // opens a fresh one, so the gap settles at about 27 frames of the
-      // body's motion -- invisible at real time, and widening with the clock.
-      // That is the elastic tether the legacy has: wind the speed up and the
-      // planet pulls away from the camera, slow down or pause and the camera
-      // glides back onto it. `CameraManager.update` gets it from this one
-      // line and nothing else; there is no spring and no velocity term.
-      //
-      // It reads like a bug and it is not. Cancelling the lag by carrying the
-      // body's per-frame displacement into the pivot -- which was tried --
-      // does pin the planet dead centre, and ruins it: the pivot then jumps
-      // by the body's whole displacement every frame, so the planet holds
-      // still while the entire background jerks around it. Smooth camera,
-      // drifting planet is the trade the legacy makes, and it is the right
-      // one. Leave the lerp alone.
+      // The lag here is the legacy's elastic tether, not a bug. Do not
+      // cancel it -- see README, "The elastic tether is deliberate".
       controls.target.lerp(target.position, FOLLOW_EASING);
       controls.minDistance = lerp(
         controls.minDistance,

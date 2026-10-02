@@ -14,48 +14,14 @@ import type { PerturbationContext } from "@/lib/solar/orbits";
 import { buildOrbitPath } from "./buildPath";
 import { applyPathFade, fadeBandFor, type PathFadeUniforms } from "./fade";
 
-/**
- * The traced orbit of a single body.
- *
- * Ported from `gfx/solar/EllipticalPath.ts`. drei's <Line> wraps the same
- * Line2/LineMaterial pair the legacy code used directly, which is what allows
- * a real line width -- native WebGL line width is capped at 1px on most
- * drivers.
- *
- * The geometry is expensive to trace and does not change as the clock runs
- * (the body moves along a fixed ellipse), so it is memoised on the elements
- * and rebuilt only when they change.
- */
-
 /** Default opacity, matching the legacy DEFAULT_PATH_ALPHA. */
 export const PATH_ALPHA = 0.05;
 
-/**
- * Line width. LineMaterial measures this in *device* pixels: three sets its
- * `resolution` uniform itself, in `LineSegments2.onBeforeRender`, from the
- * device-pixel viewport. So these are the legacy's values as production
- * renders them -- a one-device-pixel hairline, half a CSS pixel on a 2x
- * display.
- *
- * These were briefly scaled by the pixel ratio, to make the line a CSS pixel
- * on any display. The reasoning was that a half-thickness hairline at 5%
- * opacity leaves nothing to see -- but that was measured while the whole
- * scene was reaching the canvas in linear colour at half brightness, which
- * was the actual reason the paths were hard to make out. With the encode
- * restored the legacy's width reads as production's does, and doubling it
- * makes the paths heavier than the thing being matched.
- */
+/** Device pixels, not CSS pixels -- see README before changing. */
 const PATH_WIDTH = 1;
 const SELECTED_PATH_WIDTH = 2;
 
-/**
- * Opacity for the selected body's path, by how the camera is framing it.
- *
- * The legacy made the same distinction -- `followSolarElement` called
- * `sel.focus()` in orbit mode and `sel.blur(OBJECT_PATH_ALPHA)` otherwise.
- * Close in on a body and its orbit is context, not the subject; at full
- * strength it dominates a view it is not the point of.
- */
+/** Selected path opacity, by framing. The legacy drew the same distinction. */
 export const SELECTED_PATH_ALPHA = { object: 0.25, orbit: 1 };
 
 const FALLBACK_COLOR = "#8d8d8d";
@@ -67,10 +33,7 @@ export interface OrbitalPathProps {
   selected?: boolean;
   /** Which framing the camera is using, when this path is the selected one. */
   view?: "object" | "orbit";
-  /**
-   * Scene radius of the body this path belongs to. Sets how close to the
-   * camera the line fades out; see ./fade.
-   */
+  /** Scene radius of the body. Sets the near-camera fade band; see ./fade. */
   fadeRadius?: number;
   perturbations?: PerturbationContext;
 }
@@ -112,9 +75,6 @@ const OrbitalPath: FunctionComponent<OrbitalPathProps> = ({
     fadeRef.current.fadeFar.value = band.far;
   }, [fadeRadius]);
 
-  // Null only when there is genuinely nothing to draw -- an orbit whose
-  // perihelion is already beyond the scene, or elements too degenerate to
-  // trace. Unbound orbits get an open arc; see buildOrbitPath.
   if (!path) return null;
 
   return (

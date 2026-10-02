@@ -9,14 +9,9 @@ import { dateToMJD } from "@/lib/solar/time";
 import { OrbitType, type OrbitElements } from "@/lib/solar/types";
 
 /**
- * Traces one full revolution of an orbit as a polyline.
- *
- * Ported from `gfx/solar/EllipticalPath.ts`. The algorithm walks the orbit
- * forward in time from today, emitting a point whenever the body has moved
- * more than a threshold distance, and stops once it comes back within that
- * distance of the start. The step adapts to eccentricity: highly eccentric
- * orbits move very fast near perihelion, so they need finer sampling to avoid
- * cutting the corner.
+ * Walks the orbit forward from today, emitting a point whenever the body has
+ * moved past a threshold, until it returns near the start. Ported from
+ * `gfx/solar/EllipticalPath.ts`; the step adapts to eccentricity.
  */
 
 /** Sample spacing as a fraction of semi-major axis, by eccentricity. */
@@ -27,21 +22,7 @@ const MIN_POINTS = 10;
 /** Guard against a non-closing walk pinning the main thread. */
 const MAX_POINTS = 5000;
 
-/**
- * Ceiling on probes per revolution.
- *
- * `MAX_POINTS` bounds how many points are *kept*, but nothing bounded how
- * long the walk spent looking for the next one, and the day-sized steps below
- * are sized for asteroid periods. Sedna's is 12,900 years -- 4.7 million days
- * -- so tracing it one day at a time is several million Kepler solves for a
- * single path, on the main thread, and Craft names four objects out past 490
- * AU. This raises the step for those instead, so a revolution always costs
- * about the same.
- *
- * Set high enough that nothing in the solar system proper is affected:
- * Neptune, the longest period among the planets, walks in around 60,000
- * probes and keeps its original step.
- */
+/** Ceiling on probes per revolution, so long-period orbits stay cheap. */
 const MAX_PROBES = 100_000;
 
 const smoothstep = (min: number, max: number, value: number): number => {
@@ -57,43 +38,16 @@ export interface OrbitPathResult {
   startDistance: number;
 }
 
-/**
- * How far out an open arc is drawn, in AU.
- *
- * The same ceiling the distance filter uses, so an interstellar object's path
- * reaches the edge of what the rest of the interface considers the system
- * and stops. Traced further it would be a line to nowhere: these orbits are
- * unbounded.
- */
+/** How far out an open arc is drawn. Matches the distance filter's ceiling. */
 const OPEN_ARC_MAX_AU = 500;
 
 /** Samples per branch of an open arc. Both branches share the apex. */
 const OPEN_ARC_SEGMENTS = 160;
 
 /**
- * Traces the visible part of an unbound orbit.
- *
- * The legacy drew nothing here -- `EllipticalPath` logged "Object does not
- * have an elliptical orbit" and returned -- so every comet on an escape
- * trajectory and both interstellar objects were rendered as a body with no
- * path at all.
- *
- * Sampled in true anomaly rather than stepped through time. An unbound orbit
- * has no period to walk around, and time-stepping it is badly conditioned:
- * the body crawls for centuries at 400 AU and crosses perihelion in days, so
- * any fixed step is wrong at one end or the other. The conic gives r
- * directly from the true anomaly,
- *
- *   r = q (1 + e) / (1 + e cos v)
- *
- * and the same `getCartesianCoordinates` that the propagators use puts it in
- * the orbital plane -- so the arc is the same curve the body will fly, not an
- * approximation of it.
- *
- * Samples are spaced geometrically in r. Uniform steps in true anomaly bunch
- * up near perihelion and then leap tens of AU per segment out near the
- * asymptote, where the curve is straight but the polyline would visibly cut
- * corners.
+ * Traces the visible part of an unbound orbit, sampled in true anomaly rather
+ * than stepped through time, with samples spaced geometrically in r. The
+ * legacy drew nothing here at all; see README.
  */
 function buildOpenArc(el: OrbitElements): OrbitPathResult | null {
   const { q, e } = el;
@@ -191,15 +145,9 @@ export function buildOrbitPath(
 }
 
 /**
- * Where to put the camera to see the whole orbit, rather than the body.
- *
- * Ported from the `t.orbit` branch of `CameraManager.update`, which pivoted
- * on `orbitPath.ellipse.position` and swapped `lockedObjectDistance` for
- * `lockedOrbitDistance`.
- *
- * Derived from the elements rather than measured off the traced polyline, so
- * the camera does not have to wait for the path to be built -- and so the two
- * cannot disagree.
+ * Where to put the camera to see the whole orbit rather than the body.
+ * Derived from the elements, not the traced polyline, so the camera need not
+ * wait for the path and the two cannot disagree.
  */
 
 /** Fraction of the orbit's own size used as the framing radius. */

@@ -22,22 +22,9 @@ import vertexShader from "./comp.vert";
 import fragmentShader from "./comp.frag";
 
 /**
- * Glow / bloom compositor.
- *
- * Ported from `gfx/core/RubinRenderer.ts`, which replaced the renderer's
- * render call outright. The pipeline per frame:
- *
- *   1. render the scene normally                -> sceneRT
- *   2. render it again in "glow" mode           -> glowRT
- *   3. blur the glow                            -> glowBlur.texture
- *   4. (reserved) sun-specific fire pass        -> fire
- *   5. composite all of the above               -> compRT
- *   6. blit to the screen or a target
- *
- * Step 2 is what `isGlow` / `hasGlow` and `getBloomColor()` throughout the
- * ported shaders exist for. Each material decides for itself which part of its
- * output is bright enough to bleed; meshes with no `isGlow` uniform are hidden
- * for that pass rather than contributing their full colour.
+ * Glow / bloom compositor, ported from `gfx/core/RubinRenderer.ts`. Six passes
+ * a frame; pipeline, the colour-space contract and the GFXTier caveats are in
+ * the README.
  */
 
 /** A 1x1 transparent texture, stood in for passes that are not ported yet. */
@@ -52,7 +39,10 @@ const createEmptyTexture = (): DataTexture => {
   return texture;
 };
 
-/** Tier sample counts are 1-based; three wants 0 to mean "not multisampled". */
+/**
+ * Tier sample counts are 1-based; three wants 0 to mean "not multisampled".
+ * Diverges from production on purpose -- see README.
+ */
 const msaaSamples = (samples: number): number => (samples > 1 ? samples : 0);
 
 interface GlowCapableMaterial extends ShaderMaterial {
@@ -60,20 +50,8 @@ interface GlowCapableMaterial extends ShaderMaterial {
 }
 
 /**
- * Sets a mesh's glow uniform, reporting whether it could.
- *
- * Materials come in two shapes. A plain ShaderMaterial owns its uniforms
- * directly. A patched built-in -- BodyMaterial, which extends
- * MeshStandardMaterial and rewrites the program in onBeforeCompile -- only
- * gains its uniforms once compiled, and they live on the cached shaderRef.
- *
- * Discriminated on `shaderRef` itself rather than on a marker property. This
- * previously tested an `isCustomMaterial` flag that nothing ever set --
- * BodyMaterial declares `isBodyMaterial` -- so every body fell to the
- * `material.uniforms` branch, which a MeshStandardMaterial subclass does not
- * have. `setGlowUniform` therefore reported failure for all of them and the
- * glow pass hid every planet: Earth's night-side city lights are drawn in
- * that pass and had never once appeared.
+ * Sets a mesh's glow uniform, reporting whether it could. Discriminated on
+ * `shaderRef`, not a marker property -- see README.
  */
 function setGlowUniform(
   material: GlowCapableMaterial,
@@ -116,8 +94,6 @@ export class Compositor {
     const { width, height } = renderer.domElement;
 
     this.sceneRT = new WebGLRenderTarget(width, height, {
-      // A tier value of 1 means "no MSAA". Passing samples: 1 would ask for a
-      // single-sample multisample target, which is not a valid configuration.
       samples: msaaSamples(tier.maxSamples),
       colorSpace: SRGBColorSpace,
     });
@@ -169,36 +145,9 @@ export class Compositor {
     });
 
     /**
-     * Screen blit -- and it has to be a built-in material, as the legacy's
-     * `SCREEN_MAT = new MeshBasicMaterial()` is.
-     *
-     * This was a raw ShaderMaterial doing `texture2D(scene, vUv)`, on the
-     * reasoning that a pass-through shader leaves colour alone. It does not.
-     * Every target here is declared `SRGBColorSpace`, which three backs with
-     * an sRGB8_ALPHA8 internal format -- so the GPU encodes linear to sRGB on
-     * write and decodes sRGB to linear on sample, in hardware, whatever the
-     * shader says. A raw shader therefore *samples* decoded linear values and
-     * writes them straight to the default framebuffer, which is not an sRGB
-     * target and so does not encode. The whole scene reached the canvas in
-     * linear, which is to say at about half brightness.
-     *
-     * Working Craft's asteroid pink through the shader gives the arithmetic:
-     *
-     *   linear out of the particle shader      (0.326, 0.213, 0.268)
-     *   written with the encode                (155, 127, 141)  luminance 134
-     *   written without it                     ( 83,  54,  68)  luminance  61
-     *   measured, production                                    luminance 111
-     *   measured, this port                                     luminance  66
-     *
-     * A built-in material closes it: three appends `<colorspace_fragment>`,
-     * which encodes to the renderer's output colour space. `toneMapped` is
-     * off because R3F defaults the renderer to ACES filmic where the legacy
-     * leaves three's NoToneMapping, and tone mapping here would regrade the
-     * composited image; the colour-space encode is a separate include and is
-     * applied either way.
-     *
-     * This is why the particles and the orbit paths both read faint. It was
-     * never either of them -- it was everything.
+     * Screen blit. MUST be a built-in material: a raw ShaderMaterial skips
+     * three's output colour-space encode, and the whole scene then reaches the
+     * canvas in linear colour at half brightness. See README.
      */
     this.screenMaterial = new MeshBasicMaterial({ toneMapped: false });
 
