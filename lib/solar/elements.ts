@@ -38,12 +38,8 @@ export const categoryFromTypeCode = (code: number): SolarCategory =>
   TypeCategoryMap[code] ?? "asteroids";
 
 /**
- * Display priority when an object carries several type codes.
- *
- * An object can legitimately be both, say, a comet and a centaur; the legacy
- * `getCategory` picked whichever appears earliest in this list. Ported
- * verbatim from `core/data/Categories.ts` -- the order is a product decision,
- * not an arbitrary one, so it must not be re-sorted.
+ * Display priority when an object carries several type codes. A product
+ * decision, ported verbatim -- do not re-sort. See README.
  */
 export const CATEGORY_PRIORITY: Array<SolarCategory> = [
   "asteroids",
@@ -56,13 +52,8 @@ export const CATEGORY_PRIORITY: Array<SolarCategory> = [
 ];
 
 /**
- * Resolves a set of MPC type codes to the single category the object is
- * displayed as. Returns null when no code maps to a known category, matching
- * the legacy behaviour.
- *
- * Note code 7 (planets-moons) is deliberately absent from the priority list,
- * exactly as in the legacy: planets come from their own dataset, never from
- * mpc_orbits.
+ * Resolves MPC type codes to the one category an object displays as, or null.
+ * Code 7 is deliberately absent from the priority list -- see README.
  */
 export function categoryFromTypeCodes(
   codes: Array<number> | null | undefined

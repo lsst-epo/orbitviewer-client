@@ -29,43 +29,19 @@ import { useEarthClouds } from "@/components/effects/clouds";
 import { useSolarData } from "@/contexts/SolarData";
 import { registerShaderChunks } from "@/lib/glsl";
 
-/**
- * Scene graph for the explorer.
- *
- * Replaces `gfx/OrbitViewer.ts`, which owned the renderer, scene, camera,
- * lights and every body as one 620-line class. Under R3F the Canvas owns the
- * renderer and each of those concerns is a component.
- */
+/** Scene graph for the explorer, replacing `gfx/OrbitViewer.ts`. */
 
 // Chunks must be registered on three's ShaderChunk before any material that
 // #includes them compiles. Module scope runs once, ahead of first render.
 registerShaderChunks();
 
-/**
- * Bodies are rendered larger than life. At true scale Earth is 4.2e-5 AU
- * across in a scene spanning tens of AU.
- *
- * 100x matches the legacy `gfx/solar/Planet.ts`, which scaled by
- * `PlanetRadiusMap[type] * KM2AU * PLANET_SCALE * 100`. The planets are
- * sub-pixel at the default system-wide framing by design -- that view is
- * carried by the particle field of minor bodies, not by the planets.
- */
+/** Bodies are rendered larger than life, 100x as the legacy did. README. */
 const BODY_RADIUS_SCALE = 100;
 
 /** Default radius for dwarf planets, which are not in PlanetRadiusMap. */
 const DEFAULT_RADIUS_KM = 1200;
 
-/**
- * Nominal radius for a catalogue object -- one Craft names, or one the URL
- * selects. The MPC dataset carries no size, so a figure is assumed purely to
- * give the camera something to frame against and the label something to clear;
- * most of these bodies are a few km across.
- *
- * At this radius the body is far below a pixel at system-wide framing, which
- * is the legacy's behaviour rather than a shortcoming of it: `SolarElement`
- * had its mesh commented out entirely, so a named minor body was an orbit
- * path and a label and nothing else until you flew to it.
- */
+/** Assumed radius for a catalogue object; the dataset carries no size. */
 const FOCUSED_OBJECT_RADIUS_KM = 5;
 
 /**
@@ -125,11 +101,7 @@ const Scene: FunctionComponent = () => {
     [categories]
   );
 
-  /**
-   * Craft's display names, keyed by element id. The orbital data's
-   * `fulldesignation` is the catalogue name -- "Earth-Moon Barycenter (3)" --
-   * which is not what belongs on a label.
-   */
+  /** Craft's display names. `fulldesignation` is the catalogue name, not a label. */
   const craftTitles = useMemo(
     () =>
       new Map(
@@ -147,26 +119,13 @@ const Scene: FunctionComponent = () => {
     [planetElements, dwarfElements]
   );
 
-  /**
-   * Craft's named objects, found in the loaded dataset.
-   *
-   * These are what the legacy's pointers were mostly made of -- Bennu,
-   * Chiron, Odysseus, the Rubin discoveries of the month -- and the reason
-   * its labels came in eight colours where the port's came in one: the eight
-   * category glyphs belong to these, not to the planets, which are all
-   * "planets-moons".
-   */
+  /** Craft's curated objects, found in the loaded dataset. */
   const namedObjects = useMemo(
     () => resolveNamedObjects(solarElementEntries(craftElements), mpcElements),
     [craftElements, mpcElements]
   );
 
-  /**
-   * The object named in the URL, resolved across every source we hold.
-   *
-   * Case-sensitive first: MPC packed designations encode their cycle count in
-   * base 62, so "a" and "A" are different identifiers.
-   */
+  /** The object named in the URL, resolved across every source we hold. */
   const focused = useMemo(
     () => resolveObject(params.object, [all, mpcElements]),
     [params.object, all, mpcElements]
@@ -196,19 +155,8 @@ const Scene: FunctionComponent = () => {
   }, [focusedSun]);
 
   /**
-   * Orbit view: the camera frames the whole path instead of the body.
-   *
-   * Without this a selected path is drawn at full opacity and then left off
-   * screen, because the camera is parked a few body-radii away -- so in the
-   * port so far no orbit has ever actually been visible while selected. The
-   * legacy solved it with an ORBIT/OBJECT toggle; this is the same idea, with
-   * the choice in the URL so the framing is shareable.
-   *
-   * The pivot is fixed rather than written per frame: an orbit does not move.
-   *
-   * Which framing a selection *defaults* to is decided by the body -- see
-   * `defaultViewFor`. An explicit `?view=` still wins, so the toggle and
-   * shared links override it in either direction.
+   * Orbit view frames the whole path instead of the body. The default depends
+   * on the body (`defaultViewFor`); an explicit `?view=` wins. See README.
    */
   const orbitView =
     (params.view ?? defaultViewFor(focused?.id)) === "orbit" &&

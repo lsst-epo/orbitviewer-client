@@ -52,16 +52,8 @@ interface SolarClockValue {
   /** Current simulation date as a Modified Julian Date. */
   getMJD: () => number;
   /**
-   * Simulated seconds elapsed relative to when the clock started, which is
-   * what the shaders animate against.
-   *
-   * Deliberately NOT absolute epoch seconds. Noise functions take this as a
-   * coordinate, and at ~1.79e9 a float32 has worse than 0.1 precision -- the
-   * cloud shader multiplies it up further and degenerates to a flat field.
-   * The legacy `SolarClock.time` had the same relative semantics for exactly
-   * this reason; `sun.frag` additionally guards itself with
-   * `mod(time, 100000.0)`, which is why the sun survives large values and the
-   * clouds do not.
+   * Simulated seconds since the clock started, which is what the shaders
+   * animate against. Relative, never absolute epoch seconds -- see README.
    */
   getSimulationTime: () => number;
 }

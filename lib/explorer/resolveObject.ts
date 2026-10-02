@@ -1,17 +1,8 @@
 import type { OrbitElements } from "@/lib/solar/types";
 
 /**
- * Resolves the URL's `object` id to a body.
- *
- * Ported from `ObjectPage.ts`, which resolved in three steps: Craft slug
- * first, then an exact match on the packed MPC designation in the loaded
- * sample, then an object stashed from cloud search results.
- *
- * Matching is case-sensitive first, because MPC packed designations encode
- * their cycle count in base 62 where "A" is 10 and "a" is 36. A
- * case-insensitive second pass follows only so that links produced while the
- * id was being lowercased still resolve; it can be removed once none are
- * expected to be in circulation.
+ * Resolves the URL's `object` id to a body, case-sensitively first. Ported
+ * from `ObjectPage.ts`; see README for why case matters.
  */
 
 export interface ResolvableObject {
@@ -60,18 +51,8 @@ export const resolveCraftElement = <T extends { elementID?: string | null }>(
 
 /**
  * Craft's entry for an object, tried against every identifier it answers to.
- *
- * `resolveCraftElement` alone is not enough once the object has been resolved,
- * because the two sides are keyed differently. Craft stores the unpacked
- * designation -- `1999 RQ36` -- while an element's `id` is the packed one,
- * `J99R36Q`, since `fromMpcRow` prefers `mpcdesignation`. Selecting a body in
- * the scene puts that packed id in the URL, so a lookup on the raw parameter
- * misses, and the detail panel fell back to showing `1999 RQ36` as the name
- * with no designation beneath it -- losing exactly the names that matter,
- * Bennu and the named Trojans among them.
- *
- * The raw parameter is tried first so a link written by hand against Craft's
- * own id still resolves before the dataset has loaded.
+ * The two sides are keyed differently and a raw-parameter lookup misses --
+ * see README. Raw parameter first, so hand-written links resolve early.
  */
 export function resolveCraftFor<T extends { elementID?: string | null }>(
   elements: Array<T>,

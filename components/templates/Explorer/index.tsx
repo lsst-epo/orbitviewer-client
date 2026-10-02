@@ -278,31 +278,8 @@ const FirstRun: FunctionComponent<{
 };
 
 /**
- * The WebGL canvas.
- *
- * Note what is *not* here: the tier's `maxPixelRatio`. Applying it was a
- * mistake, and this is the measurement that settled it -- both apps in the
- * same pane, same CSS size, same display:
- *
- *   production  1024x768 css  ->  2048x1536 buffer   ratio 2.0
- *   this port   1024x768 css  ->  1536x1152 buffer   ratio 1.5
- *
- * The legacy does call `setPixelRatio(Math.min(devicePixelRatio, maxPixel-
- * Ratio))`, and on desktop `OrbitViewerPage` even forces the medium tier's
- * 1.5 -- and yet production renders at the full device ratio regardless.
- * Same shape as `GFXTier.maxSamples`, which `setTier` also appears to apply
- * and also does not. The tier table describes an intent the legacy never
- * carries out.
- *
- * Reading it honestly cost this port a quarter of its linear resolution, and
- * a particle is a sphere one CSS pixel in radius -- so at 1.5 each one lands
- * on 1.5 device pixels against production's 2, then gets resampled up to the
- * display. Smaller, softer, dimmer, which is exactly how the field read.
- *
- * So no `dpr` prop: R3F's default clamp of [1, 2] is what production does on
- * any ordinary display. The tier still governs what it demonstrably does
- * govern -- glow, blur scale, quality and iterations, and the size of the
- * dataset.
+ * The WebGL canvas. Deliberately sets no `dpr` -- applying the tier's
+ * `maxPixelRatio` diverges from production and dims the field. See README.
  */
 const SceneCanvas: FunctionComponent = () => {
   return (

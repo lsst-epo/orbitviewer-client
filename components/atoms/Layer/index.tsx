@@ -11,22 +11,9 @@ import Icon from "@/components/atoms/Icon";
 import styles from "./styles.module.css";
 
 /**
- * A dismissible panel over the explorer.
- *
- * Replaces the legacy `layers/Layer.ts`, which imperatively toggled
- * `aria-hidden`, added open/close classes, awaited a hardcoded animation
- * duration, and attached a global `document.onclick` handler. In React the
- * open state is a prop and the transition is CSS; only the dismissal
- * behaviour needs real logic.
- *
- * Two things the legacy version got wrong and are fixed here:
- *
- *  - it assigned `document.onclick` directly, so any two open layers
- *    clobbered each other's handler. This uses addEventListener with cleanup.
- *  - it had no keyboard dismissal at all. Escape closes.
- *
- * The panel stays mounted when closed so its transition can run, and is made
- * inert so its contents stay out of the tab order and the accessibility tree.
+ * A dismissible panel over the explorer, replacing `layers/Layer.ts`. Stays
+ * mounted when closed so the CSS transition can run, and is made inert so its
+ * contents leave the tab order. See README for the dismissal rules.
  */
 
 export interface LayerProps {
@@ -60,17 +47,9 @@ export interface LayerProps {
 }
 
 /**
- * Whether a pointer landed on the control that owns this panel.
- *
- * Such a control is not "outside" the panel in the sense that matters: it
- * does its own toggling, and dismissing on its pointerdown makes the click
- * that follows reopen what it was meant to close. The toolbar buttons closed
- * and instantly reopened their own panel, replaying the entrance animation,
- * which read as the button being broken.
- *
- * Resolved through `aria-controls` rather than a prop, so any control that
- * already declares the relationship gets this for free -- and a control that
- * does not declare it still dismisses, as anything outside should.
+ * Whether a pointer landed on the control that owns this panel. Such a control
+ * is not "outside" it in the sense that matters -- see README. The id may name
+ * a wrapper, so containment is tested rather than identity.
  */
 function controlsThisPanel(
   target: Element | null,
@@ -82,7 +61,6 @@ function controlsThisPanel(
 
   const controlled = document.getElementById(id);
 
-  // The id may name a wrapper around the panel rather than the panel itself.
   return Boolean(
     controlled && (controlled === panel || controlled.contains(panel))
   );

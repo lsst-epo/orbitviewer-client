@@ -2,22 +2,9 @@ import { z } from "zod";
 import { isPlanetId } from "@/lib/solar/planets";
 
 /**
- * The /explorer search-param vocabulary.
- *
- * This replaces the legacy `generateShareableURL()` scheme, which used terse
- * keys with ad-hoc encodings: d, ts, cp, cq, db, ntypes, dr and id. Those are
- * intentionally NOT accepted -- old share links still resolve to /explorer,
- * they just open at defaults.
- *
- * Legacy -> current:
- *   d       -> date        (ISO 8601, colons intact)
- *   ts      -> timeScale   (hours per second)
- *   cp      -> camera      (x,y,z,qx,qy,qz,qw -- was two params, underscore-joined)
- *   cq      -> camera
- *   db      -> discovery   ("all" | "rubin" | "other"; was an integer enum)
- *   ntypes  -> types       (comma-joined INCLUDED categories; was '+'-joined EXCLUDED)
- *   dr      -> distance    ("min,max" AU; was "min-max", ambiguous for negatives)
- *   id      -> object
+ * The /explorer search-param vocabulary, and the source of truth for what the
+ * scene is showing. The legacy's share-link keys are deliberately not accepted
+ * -- see README for the mapping.
  */
 
 const csv = (value: string) => value.split(",").map((part) => part.trim());
@@ -74,24 +61,8 @@ export type ExplorerPanel = NonNullable<ExplorerParams["panel"]>;
 export type ExplorerView = NonNullable<ExplorerParams["view"]>;
 
 /**
- * The framing a selection falls back to when `view` is absent from the URL.
- *
- * The legacy decides this by the body: `followSolarElementById` calls
- * `followSolarElement(el, !el.isPlanet)`, and `isPlanet` is true only for a
- * `Planet`, whose `PlanetId` is exactly the eight. Everything else -- dwarf
- * planets included -- is framed on its orbit.
- *
- * Which is also the only sensible default here, because those eight are the
- * only bodies carrying a texture. Fly up to Chiron or Bennu and all there is
- * to see is an untextured sphere.
- *
- * Lives here, beside the param it defaults, because both the scene and the
- * detail panel's camera-view toggle have to agree on it -- the toggle read
- * `params.view ?? "object"` and so sat on "Object" while the scene framed the
- * orbit.
- *
- * With nothing selected the answer is meaningless; "object" is the neutral
- * one, since it leaves orbit framing switched off.
+ * The framing a selection falls back to when `view` is absent. Shared by the
+ * scene and the detail panel's toggle, which must agree -- see README.
  */
 export const defaultViewFor = (id: string | undefined): ExplorerView =>
   !id || isPlanetId(id.toLowerCase()) ? "object" : "orbit";

@@ -9,26 +9,9 @@ import type { SolarCategory } from "@/lib/solar/types";
 import styles from "./styles.module.css";
 
 /**
- * The clickable name that floats beside a named body.
- *
- * Ported from `gfx/solar/SolarDomElement.ts` and `components/pointer.njk`,
- * which projected an absolutely positioned anchor over the canvas and moved
- * it every frame by writing `transform: translate(...)` from screen
- * coordinates it computed itself.
- *
- * drei's <Html> does the projection, so what is left is the part that was
- * actually bespoke: hiding the label when the body is behind the camera, and
- * standing down for the body that is already selected.
- *
- * The category glyph sits in a disc filled with the category's colour, as
- * `.canvas_pointer-icon` did. That is what makes one category tell apart from
- * another at a glance; drawn as a bare 14px outline, as this first was, every
- * glyph in the set collapses into the same grey smudge.
- *
- * The legacy's label was an `<a href>` into a per-object route. Selection is
- * a search param now, so this is a button -- it changes the view rather than
- * navigating, and a link that does not navigate is a lie to anyone using a
- * keyboard or a screen reader.
+ * The clickable name that floats beside a named body, ported from
+ * `gfx/solar/SolarDomElement.ts`. A button, not a link: selection is a search
+ * param and does not navigate. See README for the disc.
  */
 
 export interface BodyLabelProps {

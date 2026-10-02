@@ -94,22 +94,8 @@ const ExplorerProvider: FunctionComponent<
   }, []);
 
   /**
-   * Mirrors view state into the URL with the History API rather than
-   * router.replace(). A router navigation re-renders the server component
-   * tree, which would tear down and remount the WebGL canvas on every panel
-   * toggle or camera move. history.replaceState keeps the scene alive while
-   * still updating useSearchParams() for anything reading it.
-   *
-   * In an effect, not inside the state updater: React may run an updater
-   * during render, and replaceState there makes the router set state mid-
-   * render ("Cannot update a component while rendering a different
-   * component"). An effect also collapses several updates in one commit into
-   * a single history write.
-   *
-   * Merged into whatever is already in the URL, not written over it. The
-   * explorer is not the only thing keeping state there -- a tour keeps its
-   * slide in the same query string -- and rebuilding the whole thing from
-   * explorer state alone silently dropped it.
+   * Mirrors view state into the URL: History API not router.replace(), in an
+   * effect not an updater, merged not overwritten. All three matter -- README.
    */
   useEffect(() => {
     const query = mergeExplorerParams(window.location.search, params);

@@ -27,16 +27,8 @@ import { BodyMaterial } from "./material";
 import { textureSetFor } from "./textures";
 
 /**
- * A generalised celestial body.
- *
- * Ported from `gfx/solar/Planet.ts`, which was a Three.js class bound to the
- * eight planets. This takes orbital elements plus a radius and renders any
- * solid body, so the same component covers planets, dwarf planets and
- * eventually anything Craft describes.
- *
- * Position is recomputed every frame from the simulation clock and written
- * straight to the mesh, never through React state -- re-rendering per frame
- * would be far too expensive.
+ * A generalised celestial body, ported from `gfx/solar/Planet.ts`. Position is
+ * written straight to the object every frame, never through React state.
  */
 
 export interface BodyProps {
@@ -166,21 +158,8 @@ const Body: FunctionComponent<BodyProps> = ({
   const atmosphere = atmosphereFor(id);
 
   /**
-   * Axial tilt, in radians, applied to the group that holds the spinning mesh.
-   *
-   * It has to be a level above the spin, not alongside it. Setting both on one
-   * object leaves three to compose them in Euler order, and the default `XYZ`
-   * gives `RY(spin) · RZ(tilt)` -- the body is tilted and then turned about
-   * the *world* vertical, so instead of rotating on its own axis it wobbles
-   * around the upright like a spinning top. Jupiter showed it most, having a
-   * visible banding pattern and a three-degree tilt to swing it through.
-   *
-   * Nesting puts the spin in the tilted frame, which is what `Planet.ts` does:
-   * `container.rotation.z` carries the tilt and `mesh.rotation.y` the spin.
-   *
-   * Negated and summed with the orbital inclination as the legacy has it --
-   * axial tilt is quoted against the body's own orbital plane, so adding the
-   * inclination expresses it against the ecliptic the scene is built in.
+   * Axial tilt, on the group ABOVE the spinning mesh. It cannot share an
+   * object with the spin -- see README.
    */
   const axisTilt = rotation
     ? -(rotation.axialTilt + elements.i) * DEG_TO_RAD

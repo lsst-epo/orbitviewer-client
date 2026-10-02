@@ -10,16 +10,9 @@ import {
 import { OrbitElements, OrbitType } from "./types";
 
 /**
- * Orbit propagators.
- *
- * Given a set of orbital elements and a Modified Julian Date, each of these
- * returns a heliocentric position in scene units. Ported from the legacy
- * `core/solar/SolarSystem.ts`, converted from module-level functions that
- * leaked `this` into pure functions.
- *
- * All of them write into a caller-supplied Vector3 so the per-frame loop can
- * run without allocating -- with tens of thousands of bodies this is the
- * difference between a steady frame time and constant GC pauses.
+ * Orbit propagators: elements plus a Modified Julian Date to a heliocentric
+ * position in scene units. Each writes into a caller-supplied Vector3 so the
+ * per-frame loop does not allocate -- see README.
  */
 
 /** Mean anomalies of the perturbing giants, cached per propagation pass. */
@@ -30,11 +23,8 @@ export interface PerturbationContext {
 }
 
 /**
- * Converts orbital plane coordinates to scene-space cartesian coordinates.
- *
- * `convert` maps from the ecliptic's z-up frame to three.js's y-up frame. The
- * y axis is negated as well as swapped, otherwise the handedness flips and
- * every orbit runs backwards.
+ * Orbital plane to scene-space cartesian. `convert` maps ecliptic z-up to
+ * three's y-up, negating y as well as swapping it -- see README.
  */
 export function getCartesianCoordinates(
   v: number,
@@ -71,26 +61,9 @@ const planetMeanAnomaly = (el: OrbitElements | undefined, d: number): number =>
   el ? (el.M + el.n * (d - (el.epoch || 0))) * DEG_TO_RAD : 0;
 
 /**
- * Applies Schlyter's long-period perturbation terms for the outer giants.
- *
- * TWO LEGACY BUGS, BOTH FIXED HERE. They cancelled each other out, so the
- * legacy output was accidentally correct-ish and neither was visible:
- *
- * 1. Each block was gated on `this.type` inside a plain exported function.
- *    `this` is never the element there -- under the esbuild IIFE bundle it
- *    resolved to the global object, so every correction evaluated
- *    `undefined === 'jupiter'` and never applied. The subject is the
- *    element's own id.
- *
- * 2. Schlyter publishes these amplitudes in DEGREES, but they were added
- *    directly to `lonecl`/`latecl`, which atan2 returns in RADIANS. Saturn's
- *    0.812 term would have displaced it by 46.5 degrees -- roughly 7.7 AU --
- *    rather than the intended 0.812 degrees (~0.135 AU). Each amplitude is
- *    now scaled by DEG_TO_RAD.
- *
- * Fixing (1) alone would have introduced a large positional error. Verified
- * numerically against the legacy implementation: unperturbed bodies are
- * bit-identical, and the giants now shift by realistic perturbation margins.
+ * Schlyter's long-period perturbation terms for the outer giants. Diverges
+ * from the legacy, which had two faults here that cancelled out -- see README
+ * before touching the gating or the units.
  */
 function applyGiantPerturbations(
   el: OrbitElements,

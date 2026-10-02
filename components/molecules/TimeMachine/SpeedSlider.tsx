@@ -9,30 +9,9 @@ import {
 import styles from "./styles.module.css";
 
 /**
- * Simulation rate control.
- *
- * Replaces the legacy `SimpleSlider`, a hand-rolled thumb with document-level
- * mouse, touch and keydown listeners. Two defects went with it:
- *
- *  - dragging ran the pointer position through `smoothstep`, so the thumb did
- *    not track the cursor -- it lagged, then overshot;
- *  - its arrow-key handler was bound to `document` and gated on
- *    `document.activeElement`, so every slider on the page responded to every
- *    keypress that reached the document.
- *
- * epo-react-lib's HorizontalSlider is a real range input underneath, so
- * keyboard, touch and pointer all come for free and stay scoped to the
- * focused control.
- *
- * The slider's own domain is the normalised position, not the rate: the
- * mapping between them is cubic (see lib/solar/speed).
- *
- * That position is held here rather than derived from the rate on every
- * render, because the mapping is not injective. Every position inside the
- * dead zone means zero hours per second, so a derived thumb would be pushed
- * straight back to the centre -- one arrow key press at a time it could never
- * leave real time at all, and a drag would snap back mid-gesture. The rate
- * still wins when it changes from outside, e.g. when Live resets it.
+ * Simulation rate control. Its domain is the normalised position, not the
+ * rate -- the mapping is cubic (`lib/solar/speed`) and not injective, so the
+ * position is held rather than derived. See README.
  */
 
 /** Slider granularity. 400 steps across the track. */

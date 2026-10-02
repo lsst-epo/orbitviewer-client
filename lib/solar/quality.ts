@@ -1,12 +1,6 @@
 /**
- * Visual quality tiers.
- *
- * Each tier is a GPU simulation texture size: one texel holds one object's
- * computed position, so width x height is the maximum number of bodies the
- * scene can propagate. Ported from `core/Globals.ts`.
- *
- * The tier also selects which MPC dataset is downloaded, and those get large
- * quickly -- see `MPC_DATASET_BYTES` for the measured sizes.
+ * Visual quality tiers: a GPU simulation texture size, which also selects the
+ * MPC dataset downloaded. See README.
  */
 
 export type SimQuality = "low" | "medium" | "high" | "ultra" | "ultra2";
@@ -40,11 +34,7 @@ export const PARTICLE_COUNTS: Record<SimQuality, number> = Object.fromEntries(
   SIM_QUALITIES.map((q) => [q, particleCount(GPU_SIM_SIZES[q])])
 ) as Record<SimQuality, number>;
 
-/**
- * Measured download sizes of the MPC datasets, served uncompressed from GCS
- * (2026-09-11). These are the reason tier selection matters: the jump from
- * low to ultra2 is 6 MB to 343 MB.
- */
+/** Measured 2026-09-11, served uncompressed from GCS. See README. */
 export const MPC_DATASET_BYTES: Record<SimQuality, number> = {
   low: 6_059_379,
   medium: 24_200_000,
@@ -59,10 +49,8 @@ export const DEFAULT_QUALITY: SimQuality = "low";
 export const QUALITY_STORAGE_KEY = "rubin-data-profile";
 
 /**
- * Whether a tier has been chosen before.
- *
- * Onboarding keys off this, exactly as the legacy did: the presence of the
- * stored profile is what told it a visit was not the first one.
+ * Whether a tier has been chosen before. Onboarding keys off this, as the
+ * legacy did -- the stored profile is what marks a return visit.
  */
 export const hasStoredQuality = (): boolean => {
   try {

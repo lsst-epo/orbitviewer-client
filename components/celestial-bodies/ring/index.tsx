@@ -10,19 +10,8 @@ import {
 } from "three";
 
 /**
- * A planetary ring system.
- *
- * Ported from the Saturn branch of `gfx/solar/Planet.ts`, which loaded
- * `ring.glb` and swapped its material for one carrying the ring texture.
- *
- * The glb is used rather than three's `ringGeometry` because of the UVs: the
- * ring texture is a radial strip, and `ringGeometry` maps its UVs across the
- * bounding box, so the bands would smear across the annulus instead of
- * forming circles.
- *
- * Rendered as a child of the body's mesh, so it inherits the axial tilt --
- * which is the whole reason Saturn's rings sit where they do -- and the
- * radius, so its own scale is a plain multiple of the surface.
+ * A planetary ring system, from the Saturn branch of `gfx/solar/Planet.ts`.
+ * A glb rather than `ringGeometry`, and a child of the body's mesh -- README.
  */
 
 const MODEL_URL = "/models/ring.glb";
