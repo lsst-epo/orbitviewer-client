@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useRef, useState, type FunctionComponent } from "react";
+import {
+  useCallback,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FunctionComponent,
+} from "react";
 import useClientTranslation from "@/lib/i18n/client";
 import { useExplorer } from "@/contexts/Explorer";
 import { useSolarData } from "@/contexts/SolarData";
@@ -35,7 +41,14 @@ const PAGE_FRACTION = 0.8;
 
 const ObjectsPanel: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { t } = useClientTranslation(locale);
-  const { categories, visibleCategories, toggleCategory } = useExplorer();
+  const {
+    categories,
+    visibleCategories,
+    toggleCategory,
+    closePanel,
+    planets,
+    dwarfPlanets,
+  } = useExplorer();
   const { elements } = useSolarData();
   const railRef = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
@@ -50,6 +63,13 @@ const ObjectsPanel: FunctionComponent<{ locale: string }> = ({ locale }) => {
     },
     {}
   );
+
+  /**
+   * Planets are not in the MPC catalogue -- they arrive from their own
+   * dataset -- so counting `elements` leaves that one card with no figure at
+   * all, which reads as a bug rather than as "none".
+   */
+  counts["planets-moons"] = planets.length + dwarfPlanets.length;
 
   /**
    * Chevrons are disabled at each end. The legacy tracked this with a
@@ -76,6 +96,18 @@ const ObjectsPanel: FunctionComponent<{ locale: string }> = ({ locale }) => {
 
   return (
     <div className={styles.objects}>
+      {/* Inside the takeover, where `.layer-heading .actions` puts it, not
+          floating over it: the panel covers the whole viewport at
+          `--z-objects`, so anything outside it is behind the scrim. This is
+          also the way out of the panel -- the toolbar stands down while it
+          is open. */}
+      <div className={styles.actions}>
+        <button type="button" className={styles.back} onClick={closePanel}>
+          <Icon name="chevronLeft" aria-hidden />
+          <span>{t("core.back")}</span>
+        </button>
+      </div>
+
       <div className={styles.heading}>
         <h2 className={styles.title}>{t("objects.title")}</h2>
         <p className={styles.subtitle}>{t("objects.subtitle")}</p>
@@ -87,13 +119,18 @@ const ObjectsPanel: FunctionComponent<{ locale: string }> = ({ locale }) => {
           reimplementing by hand. */}
       <div ref={railRef} className={styles.rail} onScroll={onScroll}>
         <ul className={styles.track}>
-          {ALL_CATEGORIES.map((category) => {
+          {ALL_CATEGORIES.map((category, index) => {
             const label = CATEGORY_LABELS[category];
             const visible = visibleCategories.has(category);
             const count = counts[category];
 
             return (
-              <li key={category} className={styles.item}>
+              <li
+                key={category}
+                className={styles.item}
+                // Drives the entrance stagger; see the stylesheet.
+                style={{ "--index": index } as CSSProperties}
+              >
                 <div className={styles.card}>
                   <div
                     className={styles.cardLabel}

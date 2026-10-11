@@ -4,41 +4,124 @@
    div driven by JS; here it is a native scroll container, so the layout is
    the same but the mechanics are the browser's. */
 
+/* The takeover fills the viewport: heading above, rail below, and the whole
+   thing centred vertically the way `.objects-body`'s grid centres it. */
 .objects {
+  position: relative;
   display: grid;
-  gap: var(--site-margin-large);
+
+  /* Way out at the top, the heading above the rail, the rail at the bottom:
+     `.objects-body`'s three bands. The middle row takes the slack so the
+     heading sits with the cards rather than drifting up with the pill. */
+  grid-template-rows: auto 1fr auto;
+  gap: 3rem;
+  height: 100%;
+  padding-block: var(--site-margin-large);
+  overflow: hidden;
 }
 
+/* Same column the cards and the heading start in. */
+.actions {
+  padding: 0 calc(var(--toolbar-width) + var(--site-margin-small));
+  animation: heading-in 1.2s cubic-bezier(0.65, 0, 0.35, 1) backwards;
+}
+
+/* `.button.secondary.medium`, which is what the legacy's `button_back` is
+   here -- bordered and 3rem, not the ghost pill the other back links use. */
+.back {
+  display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
+  height: 3rem;
+  padding: 0 0.75rem;
+  font-family: var(--font-stack);
+  font-size: 1.25rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-button-text);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--corner-medium);
+}
+
+.back:hover {
+  color: var(--color-button-text-hover);
+  background-color: var(--color-button-bg-hover);
+}
+
+.back svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Inset to the same column the cards start in, so the heading lines up with
+   the first card rather than with the viewport edge, and parked at the
+   bottom of its row so it reads with them. */
 .heading {
   display: grid;
   gap: var(--site-margin-xsmall);
+  align-content: end;
+  padding: 0 calc(var(--toolbar-width) + var(--site-margin-small));
+
+  /* The title and subtitle rise together as the cards come up --
+     `autoAlpha` and `translateY: 100` on `cubic.inOut` over 1.2s. */
+  animation: heading-in 1.2s cubic-bezier(0.65, 0, 0.35, 1) backwards;
 }
 
+@keyframes heading-in {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+}
+
+/* `subtitle-large-regular` -- the same size the cards' own titles use. */
 .title {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: var(--font-semibold);
+  font-size: 1.5rem;
+  font-weight: var(--font-regular);
+  line-height: 1.333;
   color: var(--color-text);
 }
 
 .subtitle {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: var(--font-regular);
-  color: var(--color-text-low);
+  line-height: 1.5;
+  color: var(--color-text);
 }
 
 /* Rail */
 
 .rail {
-  padding-bottom: var(--site-margin-xsmall);
+  /* The toolbar's width plus a margin, which is where `_objects.scss` starts
+     the cards -- the rail runs the full width of the takeover and insets
+     itself rather than being placed beside the toolbar. */
+  padding: 0 calc(var(--toolbar-width) + var(--site-margin-small));
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
+  scroll-padding-left: calc(var(--toolbar-width) + var(--site-margin-small));
+
+  /* The legacy hides the bar: the chevrons and the drag are the affordance,
+     and a scrollbar under a row of cards reads as a second control. */
+  scrollbar-width: none;
 }
 
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+/* Grid rather than flex, so the cards' three bands line up across the whole
+   row: `subgrid` hands each card the same three rows, and a title that wraps
+   to two lines makes every header taller rather than only its own. The
+   legacy avoids the question by truncating titles to one line; wrapping and
+   growing together is this port's call. */
 .track {
-  display: flex;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-auto-columns: minmax(20rem, 23vw);
+  grid-auto-flow: column;
   gap: var(--site-margin-small);
   padding: 0;
   margin: 0;
@@ -50,18 +133,38 @@
   outline-offset: 4px;
 }
 
+.item,
+.card {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: 1 / -1;
+}
+
 .item {
-  flex: 0 0 min(260px, 80%);
   scroll-snap-align: start;
+
+  /* `translateY: 105%` to 0 on `expo.inOut` over 1.5s, 0.1s apart, which is
+     the loop in `ObjectsFiltersPage`. The cards slide up one after another;
+     they are not staggered in place. */
+  animation: card-in 1.5s cubic-bezier(0.87, 0, 0.13, 1) calc(var(--index) * 0.1s)
+    backwards;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(105%);
+  }
 }
 
 .card {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  height: 100%;
   overflow: hidden;
+
+  /* `frozen_glass` + `gradient_border`, as every floating surface here. */
+  background: var(--surface-glass);
   border: 1px solid var(--color-border);
-  border-radius: var(--corner-large);
+  border-radius: var(--corner-medium);
+  backdrop-filter: blur(var(--backdrop-blur));
 }
 
 .cardLabel {
@@ -69,36 +172,38 @@
   gap: var(--site-margin-xsmall);
   align-items: center;
   justify-content: space-between;
-  padding: var(--site-margin-small);
+  padding: 0.5rem 1rem;
   border-bottom: 1px solid var(--color-border);
 }
 
 .cardLabel svg {
   flex: 0 0 auto;
-  width: 32px;
-  height: 32px;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
+/* `subtitle-large-regular`. Wraps rather than truncating -- see `.track`. */
 .name {
   margin: 0;
-  font-size: 0.9375rem;
-  font-weight: var(--font-semibold);
+  font-size: 1.5rem;
+  font-weight: var(--font-regular);
+  line-height: 1.333;
   color: currentcolor;
 }
 
+/* The descriptions vary by several lines. The row is one grid, so every body
+   is as tall as the longest; this one scrolls only if the panel itself is
+   short, and fades at the bottom when it does -- `scroll-mask` in the
+   legacy. */
 .cardBody {
-  /* The descriptions run to several sentences and vary a lot in length;
-     capping the body keeps the rail's cards a consistent height, and keeps
-     the whole panel within the height the layer allows so the rail's own
-     controls stay in view. */
-  max-height: 6rem;
-  padding: var(--site-margin-small);
+  padding: 1.25rem 1rem;
   overflow-y: auto;
+  mask-image: linear-gradient(#000 85%, transparent 100%);
 }
 
 .description {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: 1rem;
   line-height: 1.5;
   color: var(--color-text-low);
 }
@@ -106,7 +211,7 @@
 .cardFoot {
   display: grid;
   gap: var(--site-margin-xsmall);
-  padding: var(--site-margin-small);
+  padding: 1rem;
   border-top: 1px solid var(--color-border);
 }
 
@@ -120,55 +225,124 @@
 
 /* Switch */
 
+/* Centred with the labels close to the control, as `objects_card-foot` has
+   it -- not pushed out to the card's edges. */
 .switch {
   display: flex;
-  gap: var(--site-margin-xsmall);
+  gap: 1rem;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
+/* `body-medium-semi` and sentence case -- the legacy's caps styles are the
+   `overline`/`caption-caps` pair, and the switch uses neither. */
 .switchLabel {
-  font-size: 0.75rem;
-  color: var(--color-grey-300);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-size: 1rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text-low);
 }
 
 .switchActive {
   color: var(--color-text);
 }
 
-/* Controls */
+/* The library's switch, themed through its own custom properties rather
+   than overridden selector by selector -- the boundary this port settled on
+   for epo-react-lib (see the Filters reset button).
+
+   Its defaults are a 90x49 pill in `#dce0e3` with a grey knob, which is the
+   light theme again. `_togglegroup.scss` is 4rem x 2rem, grey-800 behind a
+   1px rule, and the knob is turquoise-600 and the full height of the track
+   -- hence no toggle margin. Doubled selector for the usual
+   styled-components reason. */
+.switchControl.switchControl {
+  --switch-width: 4rem;
+  --switch-height: 2rem;
+  --toggle-margin: 0px;
+
+  /* Case-sensitive, and the library's own capitalisation. */
+  --Switch-background-color: var(--color-grey-800);
+  --Switch-Toggle-color: var(--color-turquoise-600);
+
+  flex: 0 0 auto;
+  border: 1px solid var(--color-border);
+}
+
+/* Controls
+
+   Pinned to the viewport's edges and centred on the card row, not tucked
+   into a corner: `inset: 50% var(--site-margin-small) auto` in
+   `_objects.scss`. The strip itself takes no pointer events so the cards
+   behind it stay draggable between the two buttons. */
 
 .controls {
+  position: absolute;
+  inset: 50% var(--site-margin-small) auto;
   display: flex;
-  gap: var(--site-margin-xsmall);
-  justify-content: flex-end;
+  justify-content: space-between;
+  pointer-events: none;
+  transform: translateY(-50%);
+
+  /* Arrives with the cards. */
+  animation: heading-in 1.2s cubic-bezier(0.65, 0, 0.35, 1) backwards;
 }
 
+/* `button_icon.secondary.large`: a 4.5rem glass circle, the biggest of the
+   set. */
 .control {
+  position: relative;
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 4.5rem;
+  height: 4.5rem;
   color: var(--color-button-text);
+  pointer-events: auto;
   cursor: pointer;
-  background: none;
-  border: 1px solid var(--color-border);
-  border-radius: var(--corner-medium);
+  background: var(--surface-glass);
+  border: 0;
+  border-radius: 50%;
+  backdrop-filter: blur(var(--backdrop-blur));
+  transition: opacity 0.2s ease-in-out;
 }
 
+.control::before {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  pointer-events: none;
+  content: "";
+  background: var(--surface-glass-edge);
+  border-radius: inherit;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* Out of the way entirely at each end rather than greyed -- the legacy fades
+   them to nothing. `disabled` keeps the invisible one out of the tab order. */
 .control:disabled {
-  color: var(--color-grey-400);
+  pointer-events: none;
   cursor: default;
+  opacity: 0;
 }
 
 .control:hover:not(:disabled) {
-  color: var(--color-button-text-hover);
-  background-color: var(--color-button-bg-hover);
+  color: var(--color-turquoise-300);
+  box-shadow: 0 0 0 2px var(--color-turquoise-700);
 }
 
 .control svg {
-  width: 20px;
-  height: 20px;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Everything arrives at once for anyone who has asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .item,
+  .actions,
+  .heading,
+  .controls {
+    animation: none;
+  }
 }

@@ -40,7 +40,12 @@ const Switch: FunctionComponent<SwitchProps> = ({
     >
       {offLabel}
     </span>
-    <LibrarySwitch checked={checked} onClick={onChange} aria-label={label} />
+    <LibrarySwitch
+      className={styles.switchControl}
+      checked={checked}
+      onClick={onChange}
+      aria-label={label}
+    />
     <span
       className={clsx(styles.switchLabel, checked && styles.switchActive)}
       aria-hidden
