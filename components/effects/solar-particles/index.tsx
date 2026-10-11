@@ -12,7 +12,6 @@ import {
   Color,
   InstancedBufferAttribute,
   InstancedMesh,
-  LinearSRGBColorSpace,
   ShaderMaterial,
   Vector2,
 } from "three";
@@ -24,7 +23,7 @@ import { GPUSim } from "./gpuSim";
 import vertexShader from "./particles_instanced.vert";
 import fragmentShader from "./particles_instanced.frag";
 
-/** Fallback colour. Managed, unlike the category colours -- see README. */
+/** Fallback colour for an object whose category Craft does not colour. */
 export const UNCATEGORISED_COLOR = new Color(0x999999);
 
 /**
@@ -161,10 +160,12 @@ const SolarParticles: FunctionComponent<SolarParticlesProps> = ({
 
     for (let i = 0; i < count; i++) {
       const hex = categoryColors.get(elements[i].category);
-      (hex
-        ? color.setStyle(hex, LinearSRGBColorSpace)
-        : color.copy(UNCATEGORISED_COLOR)
-      ).toArray(instanceColors.array as Float32Array, i * 3);
+      // Colour-managed, like every other colour in the scene -- see README,
+      // which this reverses.
+      (hex ? color.setStyle(hex) : color.copy(UNCATEGORISED_COLOR)).toArray(
+        instanceColors.array as Float32Array,
+        i * 3
+      );
     }
 
     instanceColors.needsUpdate = true;

@@ -32,7 +32,10 @@ The legacy never had the problem: `SCREEN_MAT = new MeshBasicMaterial()`, and
 three appends `<colorspace_fragment>` to built-in materials.
 
 Working Craft's asteroid pink through the particle shader predicts it, and the
-measurements land on the prediction:
+measurements land on the prediction. (The figures below are the un-managed
+colour the particles carried at the time; see
+`components/effects/solar-particles/README.md`, which has since reversed that.
+The ratio is what the argument rests on, and it is unaffected.)
 
 ```
 linear out of the particle shader   (0.326, 0.213, 0.268)

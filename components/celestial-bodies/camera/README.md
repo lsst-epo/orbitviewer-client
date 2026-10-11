@@ -103,3 +103,35 @@ could not have moved it and leaves the flight itself untouched.
   comparable part of the screen.
 - `ZOOM_SPEED` ramps over the same 0–10,000 unit span the legacy used. A fixed
   step crawls at the edge of the system and overshoots near a planet.
+
+## The default position is rotated 90° from the legacy's own constant
+
+`DEFAULT_CAMERA_POSITION` is `(10000, 5000, 0)`, which is **not** what
+`CameraManager`'s `defaultPos` says. That constant is `(0, 5000, 10000)`, but
+nothing ever reaches the camera through it directly -- `centerView` tweens the
+components across:
+
+```ts
+gsap.to(this.lockedCam.position, {
+  z: defaultPos.x,   // 0
+  y: defaultPos.y,   // 5000
+  x: defaultPos.z,   // 10000
+})
+```
+
+So production settles at `(10000, 5000, 0)`: the same 11,180-unit distance,
+the same polar angle, and an azimuth a quarter turn away. It reads as a
+different shot entirely, because it decides which arc of the belt is in frame
+and which outer bodies get labels near the edges.
+
+This is almost certainly a slip rather than a decision, but it is what ships
+and what every share link and screenshot of production is framed on, so the
+port matches the rendered result rather than the constant. **If upstream ever
+straightens the swizzle, this value follows it back to `(0, 5000, 10000)`.**
+
+Worth knowing when comparing the two apps: a 90° azimuth change leaves radial
+distances from the Sun almost unchanged for some bodies and halves them for
+others, depending on each body's heliocentric longitude. Comparing one pair of
+planets is not enough to tell a rotation from a zoom -- compare several bodies
+spread around the ecliptic, or the projected width of a near-circular orbit,
+which is azimuth-invariant.

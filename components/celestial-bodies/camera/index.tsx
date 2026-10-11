@@ -26,7 +26,14 @@ export const CAMERA_CLIP = {
   far: CAMERA_LIMITS.max + 5_000_000,
 };
 
-export const DEFAULT_CAMERA_POSITION = new Vector3(0, 5000, 10000);
+export const DEFAULT_CAMERA_POSITION = new Vector3(10_000, 5_000, 0);
+
+/**
+ * Where the splash frames the system from: `CameraManager.landingMode`, about
+ * 2.6x closer in than the explorer's own framing. Leaving the splash flies
+ * from here out to `DEFAULT_CAMERA_POSITION`.
+ */
+export const LANDING_CAMERA_POSITION = new Vector3(0, 1_500, 4_000);
 
 /** Per-frame easing toward a target. Matches the legacy's cameraTarget.alpha. */
 const FOLLOW_EASING = 0.036;
@@ -97,7 +104,17 @@ const Camera: FunctionComponent<CameraProps> = ({
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const camera = useThree((state) => state.camera);
   const size = useThree((state) => state.size);
-  const { zoomRef, recenterRef } = useSceneControls();
+  const { zoomRef, recenterRef, landing } = useSceneControls();
+
+  /**
+   * The flight out of the splash happens once per visit.
+   *
+   * The canvas now outlives the route, so this cannot key off `landing`
+   * alone: the reader can go back to the splash and forward again, and
+   * re-running the flight each time would throw away whatever they had
+   * framed. The legacy never had to decide this -- its splash was one-way.
+   */
+  const hasLeftLanding = useRef(!landing);
 
   // Scratch, reused per frame.
   const offset = useMemo(() => new Vector3(), []);
@@ -108,9 +125,25 @@ const Camera: FunctionComponent<CameraProps> = ({
   // Set the initial vantage point once, rather than through <Canvas camera>,
   // so remounting the controls does not snap the user's view back.
   useEffect(() => {
-    camera.position.copy(DEFAULT_CAMERA_POSITION);
+    camera.position.copy(
+      landing ? LANDING_CAMERA_POSITION : DEFAULT_CAMERA_POSITION
+    );
     camera.updateProjectionMatrix();
+    // Mount only: `landing` changing later is the flight below, not a jump.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [camera]);
+
+  /**
+   * Leaving the splash. Reuses the recentre glide rather than adding a
+   * second camera animation: it eases to exactly the position wanted, and
+   * `centerView(2, "cubic.inOut")` -- what the legacy calls here -- is the
+   * same gesture the recentre button makes.
+   */
+  useEffect(() => {
+    if (landing || hasLeftLanding.current) return;
+    hasLeftLanding.current = true;
+    recenterRef.current = true;
+  }, [landing, recenterRef]);
 
   useFrame(() => {
     const controls = controlsRef.current;

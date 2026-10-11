@@ -33,13 +33,19 @@ interface SceneControlsValue {
   recenterRef: React.RefObject<boolean>;
   setZoom: (direction: ZoomDirection) => void;
   recenter: () => void;
+  /**
+   * Whether the splash is the current route. The camera frames the system
+   * differently there, and needs to know when that stops being true so it
+   * can fly out -- see `celestial-bodies/camera`.
+   */
+  landing: boolean;
 }
 
 const SceneControlsContext = createContext<SceneControlsValue | null>(null);
 
-const SceneControlsProvider: FunctionComponent<PropsWithChildren> = ({
-  children,
-}) => {
+const SceneControlsProvider: FunctionComponent<
+  PropsWithChildren<{ landing?: boolean }>
+> = ({ children, landing = false }) => {
   const zoomRef = useRef<ZoomDirection>(0);
   const recenterRef = useRef(false);
 
@@ -52,8 +58,8 @@ const SceneControlsProvider: FunctionComponent<PropsWithChildren> = ({
   }, []);
 
   const value = useMemo<SceneControlsValue>(
-    () => ({ zoomRef, recenterRef, setZoom, recenter }),
-    [setZoom, recenter]
+    () => ({ zoomRef, recenterRef, setZoom, recenter, landing }),
+    [setZoom, recenter, landing]
   );
 
   return (

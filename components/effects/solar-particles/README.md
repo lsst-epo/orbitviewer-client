@@ -12,41 +12,51 @@ and `simUV` carries the lookup coordinate. `particles_instanced.vert` and
 deployed bundle — not just against the legacy source tree, which has drifted
 from what is deployed.
 
-## Category colours are deliberately NOT colour-managed
+## Category colours are colour-managed, like everything else
 
-`setStyle(hex, LinearSRGBColorSpace)` feeds Craft's sRGB hex to the shader as
-if it were linear. That is intentional, and it is the one place in the scene
-where it is done.
+`setStyle(hex)` with no colour space, so Craft's sRGB hex is converted to
+linear before the shader sees it. There is nothing special about the particles
+here; this note exists because the port did the opposite for several sessions
+and the reasoning is worth keeping.
 
-Production's particles are lighter and pinker than a colour-managed port's,
-which come out darker and redder. Measured off screenshots of both over a
-matched window, particle density is near identical — 11.8% of pixels against
-10.6%, so it is not size or count — but production carries 1.7x the mean
-luminance, and the core colours part company on blue. Working Craft's asteroid
-pink `#ff6eb4` through the shader both ways settles which is which:
+An earlier pass measured production's particles as *un-managed* — the sRGB
+numbers handed to the shader as if they were already linear — and matched that
+deliberately, with `setStyle(hex, LinearSRGBColorSpace)`. Re-measured on
+2026-10-09 against the same tier (`high`, both clients confirmed on
+`mpc_orbits-high-v14.json`), the same 1440x900 viewport and the same framing
+(both recentred; labels agree to 23px horizontally, 1px vertically), the
+measurement comes out the other way.
+
+Working Craft's asteroid pink `#ff6eb4` through the shader predicts the two
+candidates, and the belt's brightest 0.5% of pixels — where coverage is
+effectively 1, so the pixel *is* the particle colour — picks between them:
 
 ```
-converted to linear first   vColor (1.0, 0.156, 0.456)  ->  (146,  97, 118)
-used as-is                  vColor (1.0, 0.431, 0.706)  ->  (155, 127, 141)
-measured, production                                        (148, 121, 141)
+                              R     G     B
+predicted, managed           146    97   118
+predicted, un-managed        155   127   141
+measured, production         144   105   119
 ```
 
-Blue decides it: 141 measured against 141 predicted un-managed and 118
-predicted managed.
+Blue decides it, as it did before, and it now reads 119 against 118 managed
+and 141 un-managed. Over the whole belt the un-managed port was 26% brighter
+than production and carried 57% of its chroma; managed, the two agree to 1.7%
+on luminance and 1.6% on chroma.
 
-Production is almost certainly built against a three older than r152, where
-`ColorManagement.enabled` defaulted to `false` and `new Color('#ff6eb4')` kept
-the sRGB numbers for the shader to consume as linear. **The legacy source now
-pins `^0.174.0`, where the default is `true` — so a rebuild of the legacy today
-would not look like the site it deploys.**
+The likely explanation is that production has been rebuilt since. The legacy
+source pins three `^0.174.0`, where `ColorManagement.enabled` defaults to
+`true`; the un-managed look belonged to a build older than r152. Whatever the
+cause, **measure production rather than trusting this note** — it has flipped
+once.
 
-So the colour-managed version was the *correct* one and production is the
-accident. Production is what people know, so it is what gets matched. The
-uncategorised grey stays managed, because the legacy converts that one
-explicitly (`new Color(0x999999).convertSRGBToLinear()`) and lands in the same
-place either way. The orbit paths are still managed; at 95% desaturation the
-hue barely shows, but they are the next candidate if this is ever wanted
-scene-wide.
+Take the measurement off the framebuffer, not off a screenshot. `toDataURL()`
+called inside a `requestAnimationFrame` callback returns the real pixels even
+without `preserveDrawingBuffer`, because the drawing buffer survives until the
+frame composites. JPEG chroma subsampling is exactly the wrong thing to apply
+to a question about chroma.
+
+The uncategorised grey is managed too, and always was. The orbit paths are
+managed; at 95% desaturation the hue barely shows either way.
 
 ## Do not compensate for apparent dimness here
 

@@ -60,9 +60,12 @@ const BodyLabel: FunctionComponent<BodyLabelProps> = ({
   return (
     <group ref={groupRef} position={[0, radius * OFFSET, 0]}>
       <Html
-        center
+        // Not `center`: the disc is what sits on the object, and the label
+        // offsets itself in CSS the way the legacy does.
         // Labels sit over the scene but under the interface panels.
-        zIndexRange={[10, 0]}
+        // Matches `--z-pointer`, the band the legacy gives these. drei's
+        // default of 16 put them over the splash scrim and the panels.
+        zIndexRange={[2, 0]}
         // Without this the label swallows orbit drags that pass across it.
         pointerEvents="none"
       >

@@ -26,3 +26,15 @@ export const map = (
   outMin: number,
   outMax: number
 ): number => outMin + ((value - inMin) / (inMax - inMin)) * (outMax - outMin);
+
+/**
+ * gsap's `expo.inOut`, which the legacy uses for both the discovery count-up
+ * and the splash's clock ramp. Inlined because gsap is not a dependency here.
+ */
+export const expoInOut = (t: number): number => {
+  if (t === 0 || t === 1) return t;
+
+  return t < 0.5
+    ? Math.pow(2, 20 * t - 10) / 2
+    : (2 - Math.pow(2, -20 * t + 10)) / 2;
+};
