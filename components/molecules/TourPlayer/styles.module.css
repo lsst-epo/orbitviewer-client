@@ -1,19 +1,35 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `components/_guide_step.scss`. The legacy positioned this as an
-   `.object_detail` sheet that slid up from the bottom; it is a docked card
-   here, matching the object detail panel it sits in place of. */
+/* Ported from `templates/_guide.scss`. `.guide_step` is a left-anchored
+   column inset clear of the header, with the card pinned to its BOTTOM
+   (`justify-content: flex-end`) and sized by its own content -- which is why
+   production's panel shrinks on a slide with no image instead of holding a
+   full-height rail. It shares its geometry with `.object_card`. */
 
 .player {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
+
+  /* Clears the share button and the menu. Without the top inset the card runs
+     underneath them and the tour title is unreadable. */
+  top: var(--panel-dock-top);
+  bottom: var(--site-margin-small);
+  left: var(--site-margin-small);
   z-index: var(--z-menu);
   display: flex;
-  align-items: center;
-  width: min(var(--panel-width), 100%);
-  padding: var(--site-margin-large) var(--site-margin-small);
+
+  /* Bottom-aligned, so a short slide sits low rather than floating. */
+  flex-direction: column;
+  justify-content: flex-end;
+
+  /* The same two constraints as the object card -- see Layer's `.dock`. */
+  width: min(
+    40vw - var(--site-margin-small),
+    100% - var(--site-margin-small)
+  );
+  max-width: var(--panel-width-detail);
+
+  /* The column is only a positioning frame; the scene stays interactive
+     everywhere the card itself is not. */
   pointer-events: none;
 }
 
@@ -187,10 +203,13 @@
   border: 1px solid var(--color-border);
 }
 
+/* `.button.primary`: a turquoise-600 fill with a turquoise-100 label. The
+   pale-mint-on-dark this replaces was the pairing inverted -- the same
+   inversion the splash button and the cloud-search button had. */
 .primary {
-  color: var(--color-turquoise-900);
-  background-color: var(--color-turquoise-200);
-  border: 1px solid var(--color-turquoise-200);
+  color: var(--color-turquoise-100);
+  background-color: var(--color-turquoise-600);
+  border: 1px solid var(--color-turquoise-600);
 }
 
 .secondary:disabled,
@@ -226,6 +245,10 @@
     top: auto;
     left: 0;
     width: 100%;
+
+    /* The 620px desktop cap would otherwise still apply and leave the card
+       narrower than the viewport it is meant to span. */
+    max-width: none;
     max-height: 70%;
     padding: var(--site-margin-small);
   }

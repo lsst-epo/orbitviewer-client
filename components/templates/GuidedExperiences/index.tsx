@@ -23,7 +23,7 @@ const GuidedExperiences: FunctionComponent<{
   const { t } = await serverTranslation(locale, "translation");
 
   return (
-    <>
+    <div className={styles.page}>
       <ContentHeader locale={locale} />
 
       <main className={styles.guides}>
@@ -34,7 +34,7 @@ const GuidedExperiences: FunctionComponent<{
 
         <ToursList locale={locale} tours={tours} />
       </main>
-    </>
+    </div>
   );
 };
 

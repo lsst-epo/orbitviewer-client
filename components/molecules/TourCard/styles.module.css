@@ -78,9 +78,18 @@
 
 .title {
   margin: 0;
-  font-size: 1.0625rem;
-  font-weight: var(--font-semibold);
-  line-height: 1.3;
+  font-size: 1.25rem;
+  font-weight: var(--font-regular);
+  line-height: 1.5rem;
   color: var(--color-text);
   text-wrap: balance;
+}
+
+/* `subtitle-small-regular` stepping to `subtitle-large-regular` at the
+   legacy's `large` breakpoint -- not `medium`, as the other pages use. */
+@media (width >= 1024px) {
+  .title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
 }

@@ -14,21 +14,25 @@
   backdrop-filter: blur(var(--backdrop-blur));
 }
 
+/* `.button.ghost.small`, the same pill the object card uses -- no border at
+   rest, one on hover. */
 .back {
   display: flex;
-  gap: var(--site-margin-xsmall);
+  gap: 0.5rem;
   align-items: center;
-  padding: 6px 12px 6px 8px;
-  font-size: 0.9375rem;
+  height: 2.5rem;
+  padding-inline: 0.75rem;
+  font-size: 1rem;
+  font-weight: var(--font-semibold);
   color: var(--color-button-text);
   text-decoration: none;
-  border: 1px solid var(--color-border);
+  border: 1px solid transparent;
   border-radius: var(--corner-medium);
 }
 
 .back:hover {
   color: var(--color-button-text-hover);
-  background-color: var(--color-button-bg-hover);
+  border-color: var(--color-border-strong);
 }
 
 .back svg {

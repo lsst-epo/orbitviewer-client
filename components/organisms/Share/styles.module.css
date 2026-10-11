@@ -69,11 +69,15 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+/* `caption-semi-caps`, as `_tab.scss` has it. */
 .tab {
   padding: 8px 2px;
   font-family: var(--font-stack);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
+  font-weight: var(--font-semibold);
   color: var(--color-text-low);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   cursor: pointer;
   background: none;
   border: 0;
@@ -125,10 +129,10 @@
   padding: 10px 16px;
   font-family: var(--font-stack);
   font-size: 0.875rem;
-  color: var(--color-turquoise-900);
+  color: var(--color-turquoise-100);
   cursor: pointer;
-  background-color: var(--color-turquoise-200);
-  border: 1px solid var(--color-turquoise-200);
+  background-color: var(--color-turquoise-600);
+  border: 1px solid var(--color-turquoise-600);
   border-radius: var(--corner-medium);
 }
 
