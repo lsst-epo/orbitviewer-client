@@ -91,25 +91,55 @@
   --z-pointer: 2;
   --z-canvas: 1;
 
-  /* Margins */
-  --site-margin-xsmall: 8px;
-  --site-margin-small: 12px;
-  --site-margin-large: 16px;
+  /* Every length below is rem, not px, and the figure is the legacy's px
+     divided by 16. The legacy authors in px and its build converts the lot
+     to rem against a 16px base (postcss-pxtorem), so production's whole UI
+     scales with the fluid root font -- `--corner-large: 10px` ships as
+     `0.625rem` and renders 11.45px at a 2320px viewport. Authoring px here
+     would pin the port's chrome at a fixed size while production's grew.
+     See `styles/globals.css` for the root-font curve these resolve against.
+
+     Margins */
+  --site-margin-xsmall: 0.5rem;
+  --site-margin-small: 0.75rem;
+  --site-margin-large: 1rem;
 
   /* Sizing */
-  --header-height: 68px;
-  --timemachine-width: 384px;
-  --timemachine-height: 113px;
-  --toolbar-height: 64px;
-  --toolbar-width: 96px;
-  --panel-width: 420px;
+  --header-height: 4.25rem;
+  --timemachine-width: 24rem;
+  --timemachine-height: 7.0625rem;
+  --toolbar-height: 4rem;
+  --toolbar-width: 6rem;
+  --panel-width: 26.25rem;
+
+  /* The object detail and tour player cards. 620px in the legacy. */
+  --panel-width-detail: 38.75rem;
+
+  /* Clears the share button and the menu, which the detail card sits under. */
+  --panel-dock-top: calc(var(--site-margin-large) + 3.5rem);
   --object-grid-frame-small: 75;
   --object-grid-frame-large: 60;
 
+  /* The legacy's `frozen_glass` and `gradient_border` mixins, which together
+     make every floating panel in the viewer -- the toolbar, the time machine,
+     the object card, a tour card. Two stacked gradients rather than a flat
+     tint: a white wash over near-opaque black, so the panel lifts off the
+     scene without the scene showing through as colour. The edge is a
+     masked gradient border, brighter at the top than the bottom, which is
+     what gives the panels their lit-from-above look. */
+  --surface-glass:
+    linear-gradient(180deg, rgb(255 255 255 / 12%) 0%, rgb(255 255 255 / 9%) 100%),
+    linear-gradient(180deg, rgb(0 0 0 / 80%) 0%, rgb(0 0 0 / 80%) 100%);
+  --surface-glass-edge: linear-gradient(
+    180deg,
+    rgb(255 255 255 / 18%) 0%,
+    rgb(255 255 255 / 8%) 53%
+  );
+
   /* Styles */
-  --corner-medium: 5px;
-  --corner-large: 10px;
-  --backdrop-blur: 8px;
+  --corner-medium: 0.3125rem;
+  --corner-large: 0.625rem;
+  --backdrop-blur: 0.5rem;
 
   /* Fonts */
   --font-stack: var(--font-source-sans-3), arial, sans-serif;
@@ -138,10 +168,10 @@
 @media (width >= 768px) {
   :root {
     --viewport: "medium";
-    --site-margin-xsmall: 16px;
-    --site-margin-small: 24px;
-    --site-margin-large: 32px;
-    --header-height: 80px;
+    --site-margin-xsmall: 1rem;
+    --site-margin-small: 1.5rem;
+    --site-margin-large: 2rem;
+    --header-height: 5rem;
   }
 }
 
