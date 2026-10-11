@@ -45,8 +45,13 @@ const Toolbar: FunctionComponent<ToolbarProps> = ({ locale }) => {
   return (
     <nav
       className={styles.toolbar}
-      aria-label={t("toolbar.aria", { defaultValue: "Explorer tools" })}
+      aria-label={t("toolbar.aria")}
     >
+      {/* The wordmark's slot. It is drawn by the chrome, not here -- this is
+          only the space it sits in, and the rule under it that makes the mark
+          and the rail read as one panel. */}
+      <div className={styles.head} aria-hidden="true" />
+
       {/* Spotlight targets for the first-run walkthrough; see Wizard. */}
       <ul className={styles.list} data-wizard-step="toolbar">
         {PANEL_ITEMS.map(({ panel, icon, labelKey }) => {
@@ -75,7 +80,13 @@ const Toolbar: FunctionComponent<ToolbarProps> = ({ locale }) => {
           data-wizard-step="tours"
         >
           <Link href="/guided-experiences" className={styles.link}>
-            <Icon name="guides" />
+            {/* The legacy marks Tours with a static dot -- it is a "there is
+                something here" flag on the feature, not an unread count, so
+                there is no state behind it. */}
+            <span className={styles.iconWrap}>
+              <Icon name="guides" />
+              <span className={styles.badge} aria-hidden="true" />
+            </span>
             <span className={styles.label}>{t("toolbar.guides")}</span>
           </Link>
         </li>

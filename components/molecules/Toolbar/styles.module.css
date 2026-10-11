@@ -1,19 +1,48 @@
 @import url("../../../styles/variables.css");
 
+/* A panel tucked under the wordmark, not a row of floating icons. Without
+   it the labels sit straight on the particle field and stop being readable;
+   production has had the panel since the legacy's `.toolbar`. Top-left from
+   `medium` up, as the legacy places it -- the port had it centred against
+   the viewport height. */
 .toolbar {
   position: absolute;
-  top: 50%;
-  left: 0;
+  top: var(--site-margin-xsmall);
+  left: var(--site-margin-xsmall);
   z-index: var(--z-toolbar);
-  padding: var(--site-margin-small);
-  transform: translateY(-50%);
+  width: var(--toolbar-width);
+  background: var(--surface-glass);
+  border-radius: var(--corner-large);
+  backdrop-filter: blur(var(--backdrop-blur));
+}
+
+/* `gradient_border`: a masked 1px edge, brighter at the top. */
+.toolbar::before {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  pointer-events: none;
+  content: "";
+  background: var(--surface-glass-edge);
+  border-radius: inherit;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* The slot the wordmark sits over. Empty: the mark itself is positioned by
+   the chrome, and this is the rule that makes the two read as one panel. */
+.head {
+  height: 4rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .list {
   display: flex;
   flex-direction: column;
   gap: var(--site-margin-xsmall);
-  padding: 0;
+  padding: 4px 0;
   margin: 0;
   list-style: none;
 }
@@ -57,10 +86,27 @@
   height: 24px;
 }
 
+.iconWrap {
+  position: relative;
+  display: flex;
+}
+
+/* 8px dot in the icon's top-right corner, `--color-red-medium`. */
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--color-red-medium);
+  border-radius: 50%;
+}
+
+/* A filled box and nothing else: production leaves the border transparent on
+   the active item, and this was the only teal-bordered control in the rail. */
 .active {
-  color: var(--color-button-text);
-  background-color: var(--color-button-bg-hover);
-  border-color: var(--color-border-strong);
+  color: var(--color-turquoise-200);
+  background-color: var(--color-turquoise-800);
 }
 
 .label {
@@ -70,11 +116,14 @@
 
 /* On narrow viewports the toolbar becomes a bottom bar. */
 @media (width <= 768px) {
+  /* A bottom bar on a phone, spanning the width, keeping the glass. */
   .toolbar {
-    top: auto;
-    right: 0;
-    bottom: 0;
-    transform: none;
+    inset: auto var(--site-margin-large) var(--site-margin-large) var(--site-margin-large);
+    width: auto;
+  }
+
+  .head {
+    display: none;
   }
 
   .list {

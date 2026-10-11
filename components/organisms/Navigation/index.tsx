@@ -129,7 +129,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
             onShare();
           }}
         >
-          <Icon name="share" aria-hidden />
+          <Icon name="upload" aria-hidden />
           <span>{t("navigation.share")}</span>
         </button>
       )}
@@ -143,7 +143,9 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         aria-controls={menuId}
         aria-label={t("navigation.aria")}
       >
-        <Icon name={open ? "close" : "menu"} aria-hidden />
+        {/* The glyph does not change when the menu opens: the legacy
+            leaves the hamburger and marks the state with the focus ring. */}
+        <Icon name="menu" aria-hidden />
       </button>
 
       <div

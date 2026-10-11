@@ -14,45 +14,78 @@
   align-items: flex-start;
 }
 
-/* Triggers */
+/* Triggers. Two different components in the legacy, not one with variants:
+   `.button_share` is a filled pill, `.button_icon.secondary.medium` is a
+   glass circle. Both are 3rem tall. */
 
 .share,
 .trigger {
   display: inline-flex;
-  gap: 6px;
   align-items: center;
+  height: 3rem;
   font-family: var(--font-stack);
-  font-size: 0.875rem;
   cursor: pointer;
-  background-color: var(--color-backdrop);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--corner-medium);
+}
+
+/* `.button_share`: a solid turquoise-700 pill, radius half its height, with
+   a `caption-semi-caps` label -- uppercased in CSS, as the legacy does; the
+   copy deck carries it in sentence case. */
+.share {
+  gap: 0.25rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-turquoise-200);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--color-turquoise-700);
+  border: 0;
+  border-radius: 1.5rem;
+}
+
+/* `.button_icon.secondary.medium`: a circle in the same frozen glass as the
+   toolbar, not a rounded rectangle. */
+.trigger {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  color: var(--color-button-text);
+  background: var(--surface-glass);
+  border: 0;
+  border-radius: 50%;
   backdrop-filter: blur(var(--backdrop-blur));
 }
 
-.share {
-  padding: 8px 14px;
-  color: var(--color-turquoise-100);
+.trigger::before {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  pointer-events: none;
+  content: "";
+  background: var(--surface-glass-edge);
+  border-radius: inherit;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
 }
 
-.trigger {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  color: var(--color-button-text);
-}
-
+/* A ring rather than a fill, which is how the legacy marks both of these. */
 .share:hover,
 .trigger:hover {
-  color: var(--color-button-text-hover);
-  background-color: var(--color-button-bg-hover);
+  color: var(--color-turquoise-300);
+  box-shadow: 0 0 0 2px var(--color-turquoise-700);
 }
 
-.share svg,
+.share svg {
+  width: 1rem;
+  height: 1rem;
+}
+
 .trigger svg {
-  width: 20px;
-  height: 20px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 /* Dropdown */
