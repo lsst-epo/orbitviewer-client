@@ -57,8 +57,13 @@ const Filters: FunctionComponent<{ locale: string }> = ({ locale }) => {
     <div className={styles.filters}>
       <div className={styles.head}>
         <h2 className={styles.title}>{t("filters.title")}</h2>
+        {/* `tertiary` is the only epo variant shaped like the legacy's
+            Reset -- a bordered ghost rather than a fill -- but it draws in
+            black, which is invisible here. `styles.reset` re-points the
+            three theme variables; see the stylesheet. */}
         <Button
-          styleAs="secondary"
+          className={styles.reset}
+          styleAs="tertiary"
           onClick={reset}
           isInactive={isDefault}
           type="button"

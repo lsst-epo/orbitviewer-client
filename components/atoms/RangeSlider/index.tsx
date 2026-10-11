@@ -67,23 +67,34 @@ const RangeSlider: FunctionComponent<RangeSliderProps> = ({
         {helper && <span className={styles.helper}>{helper}</span>}
       </div>
 
-      <output className={styles.readout} htmlFor={id}>
-        {format(value[0])} – {format(value[1])}
-      </output>
+      <div className={styles.sliderGroup}>
+        <HorizontalSlider
+          {...SLIDER_DEFAULTS}
+          className={styles.slider}
+          // A chip over each handle, which is where `_rangeslider.scss`
+          // floats it, rather than one combined readout above the control.
+          // The library shows it on hover, focus and drag only -- the
+          // legacy's own `.value[hidden]` does the same.
+          renderLabel={({ valueNow }) => format(valueNow)}
+          value={value}
+          min={min}
+          max={max}
+          step={step}
+          onChangeCallback={(next: SliderValue) => {
+            if (Array.isArray(next) && next.length === 2) {
+              onChange([next[0], next[1]]);
+            }
+          }}
+        />
 
-      <HorizontalSlider
-        {...SLIDER_DEFAULTS}
-        className={styles.slider}
-        value={value}
-        min={min}
-        max={max}
-        step={step}
-        onChangeCallback={(next: SliderValue) => {
-          if (Array.isArray(next) && next.length === 2) {
-            onChange([next[0], next[1]]);
-          }
-        }}
-      />
+        {/* `rangeslider-labels`: the range the control spans, not its
+            current value, which the handles carry. Decorative -- each handle
+            already reports `aria-valuemin` and `aria-valuemax`. */}
+        <div className={styles.bounds} aria-hidden>
+          <span>{format(min)}</span>
+          <span>{format(max)}</span>
+        </div>
+      </div>
     </div>
   );
 };
