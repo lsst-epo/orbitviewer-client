@@ -18,19 +18,30 @@
   align-items: center;
 }
 
-.inputIcon {
+/* The legacy's `.input-actions`: one slot at the trailing edge of the field,
+   holding either the magnifier or the cloud-search button. */
+.inputActions {
   position: absolute;
-  left: var(--site-margin-xsmall);
-  width: 20px;
-  height: 20px;
+  right: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0 0.5rem;
   color: var(--color-text-low);
   pointer-events: none;
 }
 
 .input {
   width: 100%;
-  padding: var(--site-margin-xsmall) var(--site-margin-xsmall)
-    var(--site-margin-xsmall) calc(20px + 2 * var(--site-margin-xsmall));
+
+  /* Trailing room for whichever control is in `.inputActions`; the magnifier
+     is the narrower of the two, so the button sets the figure. */
+  padding: var(--site-margin-xsmall) 0.5rem var(--site-margin-xsmall)
+    var(--site-margin-xsmall);
   font-family: inherit;
   font-size: var(--font-size-base, 1rem);
   color: var(--color-text);

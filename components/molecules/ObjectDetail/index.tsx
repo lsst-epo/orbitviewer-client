@@ -156,7 +156,7 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
   if (!object && !craft) {
     return (
       <div className={styles.detail}>
-        <BackButton label={t("object.back")} onClick={closeObject} />
+        <BackButton label={t("core.back")} onClick={closeObject} />
         <p className={styles.empty}>
           {t("search.not_found", { query: params.object })}
         </p>
@@ -195,7 +195,7 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
           the same control as its first element -- a link, since each object
           was its own page -- and the panel's own close button would sit
           underneath the navigation on this side. */}
-      <BackButton label={t("object.back")} onClick={closeObject} />
+      <BackButton label={t("core.back")} onClick={closeObject} />
 
       <header className={styles.heading}>
         <h2 className={styles.title}>

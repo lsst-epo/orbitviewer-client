@@ -72,6 +72,16 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const results = catalogueResults ?? localResults;
   const showEmpty = !tooShort && results.length === 0 && !searching;
 
+  /**
+   * The catalogue is offered only once the local tier has come up empty,
+   * which is how the legacy gates it -- `.cloud_search` is `aria-hidden`
+   * until the local search returns nothing, and the `not_found_local`
+   * banner appears with it. Offering it alongside a full list of local
+   * matches would invite a round trip against millions of rows that the
+   * reader almost never needs.
+   */
+  const offerCatalogue = showEmpty && !catalogueResults;
+
   return (
     <div className={styles.search}>
       <label className={styles.label} htmlFor={inputId}>
@@ -79,7 +89,6 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
       </label>
 
       <div className={styles.inputWrap}>
-        <Icon name="search" className={styles.inputIcon} />
         <input
           id={inputId}
           className={styles.input}
@@ -92,6 +101,27 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
           // than hijacking focus.
           aria-describedby={resultsId}
         />
+
+        {/* The legacy's `.input-actions`: the magnifier and the cloud-search
+            button share one slot at the end of the field and swap, rather
+            than both being on screen at once. */}
+        <div className={styles.inputActions}>
+          {offerCatalogue ? (
+            /* `primary`, not `secondary`: epo-react-lib's secondary is red,
+               and its primary is `#12726d` -- the same fill the legacy's own
+               `.button.primary` uses here. */
+            <Button
+              styleAs="primary"
+              type="button"
+              onClick={runCatalogueSearch}
+              disabled={searching}
+            >
+              {t("search.search_cloud")}
+            </Button>
+          ) : (
+            <Icon name="search" className={styles.inputIcon} />
+          )}
+        </div>
       </div>
 
       <p
@@ -101,9 +131,7 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
         aria-live="polite"
       >
         {tooShort
-          ? t("search.hint", {
-              defaultValue: `Type at least ${MIN_QUERY_LENGTH} characters`,
-            })
+          ? t("search.hint", { count: MIN_QUERY_LENGTH })
           : searching
             ? t("core.loading")
             : `${results.length}${catalogueResults ? "" : "+"} ${t("core.objects")}`}
@@ -118,22 +146,11 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
         />
       )}
 
-      {showEmpty && <p className={styles.empty}>{t("search.notFound")}</p>}
+      {showEmpty && (
+        <p className={styles.empty}>{t("search.not_found", { query })}</p>
+      )}
 
       {error && <p className={styles.error}>{error}</p>}
-
-      {/* The local tier only covers what has been downloaded for the scene,
-          so the full catalogue stays one deliberate click away. */}
-      {!tooShort && !catalogueResults && (
-        <Button
-          styleAs="secondary"
-          type="button"
-          onClick={runCatalogueSearch}
-          isInactive={searching}
-        >
-          {t("search.cloud", { defaultValue: "Search the full catalogue" })}
-        </Button>
-      )}
     </div>
   );
 };
