@@ -1,21 +1,10 @@
-import { FunctionComponent, Suspense } from "react";
+import { FunctionComponent } from "react";
 import { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
-import {
-  getSolarElements,
-  getCategories,
-  getDataFileUrls,
-  getGuidedExperiences,
-} from "@/lib/api/craft";
-import { getClassificationRanges } from "@/lib/api/hasura";
-import {
-  getPlanetOrbits,
-  getDwarfPlanetOrbits,
-} from "@/lib/static/planetOrbits";
+import { getSolarElements, getGuidedExperiences } from "@/lib/api/craft";
 import { ogImageForElement } from "@/lib/static/globals";
 import { parseExplorerParams } from "@/lib/explorer/searchParams";
 import { resolveCraftElement } from "@/lib/explorer/resolveObject";
-import ExplorerProvider from "@/contexts/Explorer";
 import Explorer from "@/components/templates/Explorer";
 import type { TourSummary } from "@/lib/tours";
 
@@ -76,33 +65,14 @@ export async function generateMetadata({
 
 const ExplorerPage: FunctionComponent<ExplorerPageProps> = async ({
   params,
-  searchParams,
 }) => {
   const { locale } = await params;
   setRequestLocale(locale);
-  const initialParams = parseExplorerParams(await searchParams);
 
-  // Fetched on the server so the scene has its orbital data in the first
-  // payload, rather than the legacy client-side LoadManager waterfall.
-  const [
-    elements,
-    categories,
-    classificationRanges,
-    planets,
-    dwarfPlanets,
-    dataFileUrls,
-    tours,
-  ] = await Promise.all([
-    getSolarElements({ locale }),
-    getCategories({ locale }),
-    getClassificationRanges(),
-    getPlanetOrbits(),
-    getDwarfPlanetOrbits(),
-    // Only the URLs are resolved here; the browser downloads the dataset
-    // itself, which is far too large to pass through an RSC payload.
-    getDataFileUrls(),
-    getGuidedExperiences({ locale }),
-  ]);
+  // The orbital data and the canvas belong to the `(viewer)` layout, which
+  // holds them across every route in the group; only what onboarding needs
+  // is fetched here.
+  const tours = await getGuidedExperiences({ locale });
 
   const featuredTours = tours
     .filter(
@@ -112,23 +82,7 @@ const ExplorerPage: FunctionComponent<ExplorerPageProps> = async ({
     .filter((tour) => tour.featuredTour)
     .slice(0, ONBOARDING_TOURS);
 
-  return (
-    <ExplorerProvider
-      initialParams={initialParams}
-      elements={elements}
-      categories={categories}
-      classificationRanges={classificationRanges}
-      planets={planets}
-      dwarfPlanets={dwarfPlanets}
-      dataFileUrls={dataFileUrls}
-    >
-      {/* useSearchParams below this point requires a Suspense boundary, or
-          the production build fails with "Missing Suspense boundary". */}
-      <Suspense fallback={null}>
-        <Explorer locale={locale} featuredTours={featuredTours} />
-      </Suspense>
-    </ExplorerProvider>
-  );
+  return <Explorer locale={locale} featuredTours={featuredTours} />;
 };
 
 export default ExplorerPage;

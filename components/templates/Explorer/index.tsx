@@ -1,19 +1,16 @@
 "use client";
 
 import {
-  Suspense,
   useEffect,
   useMemo,
   useState,
   type FunctionComponent,
   type ReactNode,
 } from "react";
-import { Canvas } from "@react-three/fiber";
 import { useExplorer } from "@/contexts/Explorer";
-import SolarClockProvider from "@/contexts/SolarClock";
-import SolarDataProvider, { useSolarData } from "@/contexts/SolarData";
+import { useSolarData } from "@/contexts/SolarData";
+import { useBenchmark } from "@/contexts/Benchmark";
 import useClientTranslation from "@/lib/i18n/client";
-import { CAMERA_CLIP } from "@/components/celestial-bodies/camera";
 import Toolbar from "@/components/molecules/Toolbar";
 import Layer from "@/components/atoms/Layer";
 import Filters from "@/components/molecules/Filters";
@@ -24,20 +21,13 @@ import ObjectDetail from "@/components/molecules/ObjectDetail";
 import ObjectsPanel from "@/components/molecules/Objects";
 import TimeMachine from "@/components/molecules/TimeMachine";
 import MapControls from "@/components/molecules/MapControls";
-import SceneControlsProvider from "@/contexts/SceneControls";
-import Navigation from "@/components/organisms/Navigation";
-import Share from "@/components/organisms/Share";
-import CaptureProvider from "@/contexts/Capture";
-import SceneCapture from "@/components/effects/capture";
-import SceneBenchmark from "@/components/effects/benchmark";
-import BenchmarkProvider, { useBenchmark } from "@/contexts/Benchmark";
 import Onboarding from "@/components/organisms/Onboarding";
 import PerformanceModal from "@/components/organisms/PerformanceModal";
 import Wizard, { wizardDismissed } from "@/components/organisms/Wizard";
 import { hasStoredQuality } from "@/lib/solar/quality";
 import type { TourSummary } from "@/lib/tours";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
-import Scene from "./Scene";
+import Chrome from "./Chrome";
 import styles from "./styles.module.css";
 
 interface ExplorerProps {
@@ -56,11 +46,11 @@ interface ExplorerProps {
 }
 
 /**
- * Object detail, docked opposite the toolbar panels.
+ * Object detail, the floating card on the left.
  *
  * Driven by the `object` param rather than `panel`, so an object stays
  * selected -- and framed by the camera -- while the filters or search panel is
- * open over on the other side. Outside clicks do not dismiss it: a click in
+ * open. Outside clicks do not dismiss it: a click in
  * the scene is how you pick a different object, and the legacy's global
  * document handler would have closed the card on the way.
  */
@@ -72,13 +62,13 @@ const ObjectLayer: FunctionComponent<{ locale: string }> = ({ locale }) => {
     <Layer
       open={Boolean(params.object)}
       onClose={closeObject}
-      side="right"
+      side="dock"
       closeOnOutsideClick={false}
       label={params.object ?? t("toolbar.objects")}
       closeLabel={t("core.close")}
-      // ObjectDetail carries its own labelled Back control. The header's
-      // close button would sit directly underneath the navigation here, which
-      // is where it has been hiding -- present, but covered and unclickable.
+      // ObjectDetail carries its own labelled Back control, and the card is
+      // already inset clear of the navigation, so a second dismissal in the
+      // header would be redundant clutter.
       showClose={false}
     >
       <ObjectDetail locale={locale} />
@@ -136,9 +126,16 @@ const ExplorerPanels: FunctionComponent<{ locale: string }> = ({ locale }) => {
             onClose={closePanel}
             label={t(labelKey)}
             closeLabel={t("core.close")}
-            // The objects rail is a row of cards; at the default width only
-            // one is legible at a time.
-            size={id === "objects" ? "wide" : "default"}
+            // Objects is a full-viewport takeover, not a drawer: the scene
+            // dims behind it and the cards run the width of the screen.
+            size={id === "objects" ? "full" : "default"}
+            // Filters is a small floating card near the top left, not a
+            // full-height drawer -- see the Layer stylesheet.
+            side={id === "filters" ? "card" : "left"}
+            // Objects is a takeover in the legacy, with its own way out --
+            // the back pill that stands in for the toolbar. Filters and
+            // search sit beside the toolbar and keep the header's close.
+            showClose={id !== "objects"}
           >
             {id === "filters" && <Filters locale={locale} />}
             {id === "search" && <SearchPanel locale={locale} />}
@@ -156,20 +153,16 @@ const DatasetStatus: FunctionComponent<{
   selected?: string;
 }> = ({ locale, selected }) => {
   const { t } = useClientTranslation(locale);
-  const { elements, loading, progress, error } = useSolarData();
+  const { elements, loading, error } = useSolarData();
 
   if (error) {
     return <p className={styles.meta}>{t("core.loading")}</p>;
   }
 
-  if (loading) {
-    return (
-      <p className={styles.meta}>
-        {t("core.loading")}
-        {progress > 0 ? ` ${Math.round(progress * 100)}%` : ""}
-      </p>
-    );
-  }
+  // Nothing while the dataset is still coming down: `DatasetLoader` is over
+  // the whole scene saying exactly this, and the two lines were the same
+  // sentence twice.
+  if (loading) return null;
 
   return (
     <p className={styles.meta}>
@@ -188,35 +181,6 @@ const DatasetLoader: FunctionComponent<{ locale: string }> = ({ locale }) => {
   return <Loader locale={locale} progress={progress} />;
 };
 
-/**
- * The navigation and the share dialog.
- *
- * Together because the menu owns the share trigger, and because both need the
- * data contexts -- quality from SolarData, params and clock for the link.
- *
- * Present during a tour as well: a reader still needs a way out and a
- * language switch. The exploration-mode item is not offered there, since
- * swapping datasets mid-tour would reload the scene under the slide.
- */
-const ExplorerChrome: FunctionComponent<{
-  locale: string;
-  tour: boolean;
-}> = ({ locale, tour }) => {
-  const { quality, setQuality } = useSolarData();
-  const [sharing, setSharing] = useState(false);
-
-  return (
-    <>
-      <Navigation
-        locale={locale}
-        onShare={() => setSharing(true)}
-        quality={tour ? undefined : quality}
-        onQualityChange={tour ? undefined : setQuality}
-      />
-      <Share locale={locale} open={sharing} onClose={() => setSharing(false)} />
-    </>
-  );
-};
 
 /**
  * Onboarding on a first visit, and the performance nudge afterwards.
@@ -278,41 +242,6 @@ const FirstRun: FunctionComponent<{
 };
 
 /**
- * The WebGL canvas. Deliberately sets no `dpr` -- applying the tier's
- * `maxPixelRatio` diverges from production and dims the field. See README.
- */
-const SceneCanvas: FunctionComponent = () => {
-  return (
-    <Canvas
-      className={styles.canvas}
-      camera={{
-        fov: 35,
-        near: CAMERA_CLIP.near,
-        far: CAMERA_CLIP.far,
-      }}
-      gl={{
-        // The scene spans six orders of magnitude, from a 24-unit near limit
-        // to 3,000,000 units. A linear depth buffer z-fights badly across
-        // that range.
-        logarithmicDepthBuffer: true,
-        antialias: true,
-        powerPreference: "high-performance",
-      }}
-      // Rendering is on-demand elsewhere, but the clock advances every frame,
-      // so the loop always runs.
-      frameloop="always"
-    >
-      <color attach="background" args={["#000000"]} />
-      <Suspense fallback={null}>
-        <Scene />
-        <SceneCapture />
-        <SceneBenchmark />
-      </Suspense>
-    </Canvas>
-  );
-};
-
-/**
  * Explorer shell: the WebGL canvas plus the UI layers drawn over it.
  *
  * The panels mount alongside the canvas rather than inside it. A tour swaps
@@ -323,54 +252,41 @@ const Explorer: FunctionComponent<ExplorerProps> = ({
   featuredTours = [],
   overlay,
 }) => {
-  const { params, dataFileUrls } = useExplorer();
+  const { params } = useExplorer();
 
   return (
-    <main className={styles.explorer}>
-      <SolarDataProvider dataFileUrls={dataFileUrls}>
-        {/* Wraps the canvas and the dialog alike: the request is made in the
-            DOM and fulfilled inside the render loop. */}
-        <CaptureProvider>
-          <BenchmarkProvider>
-            <SceneControlsProvider>
-              <SolarClockProvider
-                initialDate={params.date ? new Date(params.date) : undefined}
-                initialHoursPerSecond={params.timeScale ?? 0}
-              >
-                <SceneCanvas />
+    <>
+      <Chrome locale={locale} tour={Boolean(overlay)} />
 
-                <ExplorerChrome locale={locale} tour={Boolean(overlay)} />
+      {/* First-run only, and never over a tour: arriving mid-tour is
+          arriving with a purpose already chosen. */}
+      {!overlay && <FirstRun locale={locale} tours={featuredTours} />}
 
-                {/* First-run only, and never over a tour: arriving mid-tour is
-              arriving with a purpose already chosen. */}
-                {!overlay && <FirstRun locale={locale} tours={featuredTours} />}
+      {overlay ?? (
+        <>
+          {/* The objects panel is a takeover: the legacy stands the toolbar
+              down rather than layering a close button over a rail the panel
+              is already covering. The way back lives inside the panel, as it
+              does there -- see `molecules/Objects`. */}
+          {params.panel !== "objects" && <Toolbar locale={locale} />}
+          <ExplorerPanels locale={locale} />
+          <ObjectLayer locale={locale} />
 
-                {overlay ?? (
-                  <>
-                    <Toolbar locale={locale} />
-                    <ExplorerPanels locale={locale} />
-                    <ObjectLayer locale={locale} />
+          <div className={styles.hud}>
+            <DatasetStatus locale={locale} selected={params.object} />
+          </div>
 
-                    <div className={styles.hud}>
-                      <DatasetStatus locale={locale} selected={params.object} />
-                    </div>
+          <TimeMachine locale={locale} />
+        </>
+      )}
 
-                    <TimeMachine locale={locale} />
-                  </>
-                )}
+      {/* Outside the overlay switch: recentring and zooming are how a reader
+          looks around whatever a tour slide has framed, so they belong in
+          both modes. */}
+      <MapControls locale={locale} />
 
-                {/* Outside the overlay switch: recentring and zooming are how
-                    a reader looks around whatever a tour slide has framed,
-                    so they belong in both modes. */}
-                <MapControls locale={locale} />
-
-                <DatasetLoader locale={locale} />
-              </SolarClockProvider>
-            </SceneControlsProvider>
-          </BenchmarkProvider>
-        </CaptureProvider>
-      </SolarDataProvider>
-    </main>
+      <DatasetLoader locale={locale} />
+    </>
   );
 };
 

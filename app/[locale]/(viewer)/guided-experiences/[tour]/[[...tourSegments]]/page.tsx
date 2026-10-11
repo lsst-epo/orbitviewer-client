@@ -1,4 +1,4 @@
-import { FunctionComponent, Suspense } from "react";
+import { FunctionComponent } from "react";
 import { Metadata } from "next";
 import { z } from "zod";
 import { setRequestLocale } from "next-intl/server";
@@ -7,18 +7,8 @@ import { languages } from "@/lib/i18n/settings";
 import {
   getGuidedExperience,
   getGuidedExperiences,
-  getSolarElements,
-  getCategories,
-  getDataFileUrls,
 } from "@/lib/api/craft";
-import { getClassificationRanges } from "@/lib/api/hasura";
-import {
-  getPlanetOrbits,
-  getDwarfPlanetOrbits,
-} from "@/lib/static/planetOrbits";
-import { parseExplorerParams } from "@/lib/explorer/searchParams";
 import { slidesOf } from "@/lib/tours";
-import ExplorerProvider from "@/contexts/Explorer";
 import Explorer from "@/components/templates/Explorer";
 import TourPlayer from "@/components/molecules/TourPlayer";
 
@@ -106,23 +96,8 @@ const TourPage: FunctionComponent<TourPageProps> = async ({
 
   const query = await searchParams;
 
-  const [
-    tour,
-    elements,
-    categories,
-    classificationRanges,
-    planets,
-    dwarfPlanets,
-    dataFileUrls,
-  ] = await Promise.all([
-    getGuidedExperience({ locale, slug }),
-    getSolarElements({ locale }),
-    getCategories({ locale }),
-    getClassificationRanges(),
-    getPlanetOrbits(),
-    getDwarfPlanetOrbits(),
-    getDataFileUrls(),
-  ]);
+  // Only the tour: the scene's own data belongs to the `(viewer)` layout.
+  const tour = await getGuidedExperience({ locale, slug });
 
   if (!tour) notFound();
 
@@ -141,30 +116,11 @@ const TourPage: FunctionComponent<TourPageProps> = async ({
     .catch(1)
     .parse(Array.isArray(query.slide) ? query.slide[0] : query.slide);
 
-  /**
-   * A tour drives the scene, so it starts from a clean view: no filters, no
-   * lingering selection, and the clock live. This is the legacy's
-   * `goToGuidedExperienceMode`, which reset the filters and called `goLive`.
-   */
-  const initialParams = parseExplorerParams({});
-
   return (
-    <ExplorerProvider
-      initialParams={initialParams}
-      elements={elements}
-      categories={categories}
-      classificationRanges={classificationRanges}
-      planets={planets}
-      dwarfPlanets={dwarfPlanets}
-      dataFileUrls={dataFileUrls}
-    >
-      <Suspense fallback={null}>
-        <Explorer
-          locale={locale}
-          overlay={<TourPlayer locale={locale} tour={tour} slide={slide} />}
-        />
-      </Suspense>
-    </ExplorerProvider>
+    <Explorer
+      locale={locale}
+      overlay={<TourPlayer locale={locale} tour={tour} slide={slide} />}
+    />
   );
 };
 

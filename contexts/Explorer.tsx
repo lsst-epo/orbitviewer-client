@@ -80,7 +80,7 @@ interface ExplorerContextValue extends ExplorerData {
 
 const ExplorerContext = createContext<ExplorerContextValue | null>(null);
 
-interface ExplorerProviderProps extends ExplorerData {
+export interface ExplorerProviderProps extends ExplorerData {
   initialParams: ExplorerParams;
 }
 
