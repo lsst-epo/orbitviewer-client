@@ -80,7 +80,8 @@
   "splash": {
     "logo": {
       "alt": "logo del Observatorio Vera C. Rubin de NSF-DOE"
-    }
+    },
+    "discoveries": "{{formatted}} discoveries"
   },
   "object": {
     "designation": "Designación",
@@ -132,8 +133,7 @@
       "object": "Objeto",
       "orbit": "Órbita"
     },
-    "perihelion_distance": "Máximo acercamiento al Sol",
-    "back": "Volver al Sistema Solar"
+    "perihelion_distance": "Máximo acercamiento al Sol"
   },
   "onboarding": {
     "exploration": {
@@ -168,10 +168,18 @@
     "search_cloud": "Búsqueda en la nube",
     "not_found_local": "\"{{query}}\" no encontrada en tu catálogo local. Intenta buscando en nuestra base de datos de la nube",
     "not_found": "\"{{query}}\" no encontrada",
-    "recommended_searches": "Búsquedas recomendadas"
+    "recommended_searches": "Búsquedas recomendadas",
+    "placeholder": "Search by planet, object,..",
+    "hint": "Type at least {{count}} characters"
   },
   "timemachine": {
     "aria": "Seleccionar fechas",
+    "zone": {
+      "utc": "UTC",
+      "local": "Local",
+      "toUtc": "Showing local time. Switch to UTC.",
+      "toLocal": "Showing UTC. Switch to local time."
+    },
     "toggle": {
       "aria": "Ocultar los controles de máquina de tiempo"
     },
@@ -187,7 +195,8 @@
     "objects": "Objetos",
     "filters": "Filtros",
     "search": "Buscar",
-    "guides": "Tours"
+    "guides": "Tours",
+    "aria": "Explorer tools"
   },
   "wizard": {
     "title": "Asistente de inicio",

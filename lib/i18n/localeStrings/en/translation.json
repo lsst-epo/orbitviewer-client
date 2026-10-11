@@ -80,7 +80,8 @@
   "splash": {
     "logo": {
       "alt": "NSF-DOE Vera C. Rubin Observatory logo"
-    }
+    },
+    "discoveries": "{{formatted}} discoveries"
   },
   "object": {
     "designation": "Designation",
@@ -132,8 +133,7 @@
       "object": "Object",
       "orbit": "Orbit"
     },
-    "perihelion_distance": "Closest approach to the Sun",
-    "back": "Back to the Solar System"
+    "perihelion_distance": "Closest approach to the Sun"
   },
   "onboarding": {
     "exploration": {
@@ -168,10 +168,18 @@
     "search_cloud": "Search cloud",
     "not_found_local": "\"{{query}}\" not found in your local catalog. Try searching our cloud database.",
     "not_found": "\"{{query}}\" not found.",
-    "recommended_searches": "Recommended searches"
+    "recommended_searches": "Recommended searches",
+    "placeholder": "Search by planet, object,..",
+    "hint": "Type at least {{count}} characters"
   },
   "timemachine": {
     "aria": "Date selector",
+    "zone": {
+      "utc": "UTC",
+      "local": "Local",
+      "toUtc": "Showing local time. Switch to UTC.",
+      "toLocal": "Showing UTC. Switch to local time."
+    },
     "toggle": {
       "aria": "Collapse time machine controls"
     },
@@ -187,7 +195,8 @@
     "objects": "Objects",
     "filters": "Filters",
     "search": "Search",
-    "guides": "Tours"
+    "guides": "Tours",
+    "aria": "Explorer tools"
   },
   "wizard": {
     "title": "Onboarding wizard",
