@@ -1,11 +1,18 @@
 "use client";
 
-import { useEffect, useId, useState, type FunctionComponent } from "react";
+import {
+  useEffect,
+  useId,
+  useState,
+  type CSSProperties,
+  type FunctionComponent,
+} from "react";
 import HorizontalSlider from "@rubin-epo/epo-react-lib/HorizontalSlider";
 import {
   hoursPerSecondFromSlider,
   sliderFromHoursPerSecond,
 } from "@/lib/solar/speed";
+import Icon from "@/components/atoms/Icon";
 import styles from "./styles.module.css";
 
 /**
@@ -58,31 +65,56 @@ const SpeedSlider: FunctionComponent<SpeedSliderProps> = ({
 
   return (
     <div className={styles.speed}>
-      <span className={styles.speedLabel} id={id}>
-        {label}
-      </span>
+      {/* Label and reading sit together. Apart -- one flush left, the other
+          flush right -- they read as two unrelated things rather than as a
+          name and its value. */}
+      <div className={styles.speedMeta}>
+        <span className={styles.speedLabel} id={id}>
+          {label}
+        </span>
 
-      <HorizontalSlider
-        {...SLIDER_DEFAULTS}
-        // The raw position is meaningless, whether read aloud or shown in
-        // the thumb's own bubble; the rate is the value in both places.
-        ariaValuetext={valueText}
-        renderLabel={() => valueText}
-        className={styles.slider}
-        value={position}
-        min={-1}
-        max={1}
-        step={STEP}
-        onChangeCallback={(next: SliderValue) => {
-          if (typeof next !== "number") return;
-          setPosition(next);
-          onChange(hoursPerSecondFromSlider(next));
-        }}
-      />
+        <output className={styles.speedValue} htmlFor={id}>
+          {valueText}
+        </output>
+      </div>
 
-      <output className={styles.speedValue} htmlFor={id}>
-        {valueText}
-      </output>
+      {/* The hints are placed against the rail, so they need a box that is
+          the rail's row and nothing else. */}
+      <div className={styles.sliderRow}>
+        <HorizontalSlider
+          {...SLIDER_DEFAULTS}
+          // The raw position is meaningless, whether read aloud or shown in
+          // the thumb's own bubble; the rate is the value in both places.
+          ariaValuetext={valueText}
+          renderLabel={() => valueText}
+          className={styles.slider}
+          value={position}
+          min={-1}
+          max={1}
+          step={STEP}
+          onChangeCallback={(next: SliderValue) => {
+            if (typeof next !== "number") return;
+            setPosition(next);
+            onChange(hoursPerSecondFromSlider(next));
+          }}
+        />
+
+        {/* The legacy's `sliding_hints`: chevrons that pulse either side of
+            the thumb. They track `position` rather than sitting inside the
+            thumb, which is the library's element and takes no children. */}
+        <span
+          className={styles.hints}
+          style={{ "--position": position } as CSSProperties}
+          aria-hidden
+        >
+          <span className={styles.hintLeft}>
+            <Icon name="chevronLeft" />
+          </span>
+          <span className={styles.hintRight}>
+            <Icon name="chevronRight" />
+          </span>
+        </span>
+      </div>
     </div>
   );
 };

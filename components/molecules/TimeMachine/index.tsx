@@ -2,6 +2,8 @@
 
 import {
   useId,
+  useMemo,
+  useRef,
   useState,
   type CSSProperties,
   type FunctionComponent,
@@ -22,34 +24,81 @@ import styles from "./styles.module.css";
  * Ported from `layers/TimeMachine.ts` and `partials/timemachine.njk`: play /
  * pause, the simulated date, a Live toggle, and a collapsible rate slider.
  *
- * Everything is expressed in UTC. The simulation's date-to-MJD conversion is
- * UTC-based, so a local-time control would put the planets somewhere other
- * than where the typed date says -- by up to fourteen hours. The legacy left
- * flatpickr in local time and never said which it meant.
+ * The clock reads in the viewer's own timezone by default, which is what
+ * production shows -- the legacy left flatpickr in local time and never said
+ * which it meant. Saying which it means is the one thing worth adding, so the
+ * zone is a button: it prints the zone in force and switches to the other.
+ * Only the display changes. The simulation's date-to-MJD conversion is
+ * UTC-based throughout and never sees this.
  *
  * `flatpickr` is not carried over. A native `datetime-local` gives the same
  * calendar and time entry with no dependency, works on touch, and is already
  * keyboard accessible; the legacy's Apply / Cancel / Live footer was three
  * buttons appended to flatpickr's DOM by hand on every open.
+ *
+ * It is not, however, formattable: a `datetime-local` renders in whatever
+ * format the browser chooses. So the field carries both -- the input, which
+ * is the real control and the only thing focus and assistive technology
+ * reach, and a formatted string painted over it that steps aside the moment
+ * the input is focused.
  */
 
-/** UTC "YYYY-MM-DDTHH:mm", which is what datetime-local wants. */
-const toInputValue = (date: Date): string => date.toISOString().slice(0, 16);
+const pad = (value: number): string => String(value).padStart(2, "0");
+
+/** "YYYY-MM-DDTHH:mm" in the zone on display, which is what the input wants. */
+const toInputValue = (date: Date, utc: boolean): string => {
+  if (utc) return date.toISOString().slice(0, 16);
+
+  const day = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+
+  return `${day}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
 
 /**
- * Back to a Date, read as UTC.
+ * Back to a Date, reading the typed wall-clock time in the zone on display.
  *
- * Browsers may hand back seconds as well as minutes, so the time is
- * normalised before the zone is appended rather than assuming a length.
+ * Browsers may hand back seconds as well as minutes, so the parts are matched
+ * rather than the string sliced at an assumed length.
  */
-const fromInputValue = (value: string): Date | null => {
-  const match = value.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})/);
+const fromInputValue = (value: string, utc: boolean): Date | null => {
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
   if (!match) return null;
 
-  const [, day, hour, minute] = match;
-  const date = new Date(`${day}T${hour}:${minute}:00Z`);
+  const [year, month, day, hour, minute] = match.slice(1).map(Number);
+  const date = utc
+    ? new Date(Date.UTC(year, month - 1, day, hour, minute))
+    : new Date(year, month - 1, day, hour, minute);
 
   return Number.isNaN(date.getTime()) ? null : date;
+};
+
+/**
+ * flatpickr's `M j, Y H:i:S` from `layers/TimeMachine.ts`, which is what
+ * production prints: `Nov 11, 2026 12:25:07`, uppercased in CSS as
+ * `_timemachine.scss` does it.
+ *
+ * Two formatters rather than one, because a single `Intl` call joins the
+ * date and the time with a locale separator -- a comma in `en` -- that the
+ * legacy's format string does not have.
+ */
+const dateFormatters = (locale: string, utc: boolean) => {
+  const timeZone = utc ? "UTC" : undefined;
+
+  return {
+    day: new Intl.DateTimeFormat(locale, {
+      timeZone,
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }),
+    time: new Intl.DateTimeFormat(locale, {
+      timeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+    }),
+  };
 };
 
 const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
@@ -68,6 +117,10 @@ const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
 
   const bodyId = useId();
   const [expanded, setExpanded] = useState(true);
+  /** Display only; the clock and the URL stay in UTC either way. */
+  const [utc, setUtc] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const dateRef = useRef<HTMLInputElement>(null);
   /**
    * What the user is typing, while they are typing it. A running simulation
    * would otherwise overwrite each segment as it was entered -- the legacy
@@ -78,12 +131,15 @@ const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
 
   const speedLabel = formatSpeed(hoursPerSecond, t("timemachine.realtime"));
 
+  const formatters = useMemo(() => dateFormatters(locale, utc), [locale, utc]);
+  const zoneLabel = utc ? t("timemachine.zone.utc") : t("timemachine.zone.local");
+
   const onDateChange = (value: string) => {
     setDraft(value);
 
     // Empty until every segment is filled in, so a half-typed date commits
     // nothing.
-    const next = fromInputValue(value);
+    const next = fromInputValue(value, utc);
     if (!next) return;
 
     setDate(next);
@@ -113,9 +169,10 @@ const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
     <section
       className={clsx(
         styles.timemachine,
-        // The wide panel stops short of the bottom, so there is nothing to
-        // move out from under -- and no room to move to if there were.
-        params.panel && params.panel !== "objects" && styles.shifted
+        // The object detail dock, not a panel: production shifts the control
+        // strip under `.object_template` and leaves it centred while filters
+        // or search are open. See the stylesheet.
+        params.object && styles.shifted
       )}
       aria-label={t("timemachine.region")}
       data-wizard-step="timemachine"
@@ -135,26 +192,73 @@ const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
           <Icon name={paused ? "play" : "pause"} aria-hidden />
         </button>
 
-        <input
-          type="datetime-local"
-          className={styles.date}
-          aria-label={`${t("timemachine.aria")} (UTC)`}
-          min={toInputValue(CLOCK_RANGE.min)}
-          max={toInputValue(CLOCK_RANGE.max)}
-          // The clock is seeded from `new Date()`, so it has no correct
-          // server value; see useMounted.
-          value={draft ?? (mounted ? toInputValue(displayDate) : "")}
-          onFocus={() => setDraft(mounted ? toInputValue(displayDate) : "")}
-          onBlur={() => setDraft(null)}
-          onChange={(event) => onDateChange(event.target.value)}
-          readOnly={!mounted}
-        />
+        <div className={styles.dateField}>
+          <input
+            ref={dateRef}
+            type="datetime-local"
+            className={styles.dateInput}
+            aria-label={`${t("timemachine.aria")} (${zoneLabel})`}
+            min={toInputValue(CLOCK_RANGE.min, utc)}
+            max={toInputValue(CLOCK_RANGE.max, utc)}
+            // The clock is seeded from `new Date()`, so it has no correct
+            // server value; see useMounted.
+            value={draft ?? (mounted ? toInputValue(displayDate, utc) : "")}
+            onFocus={() => {
+              setEditing(true);
+              setDraft(mounted ? toInputValue(displayDate, utc) : "");
+            }}
+            onBlur={() => {
+              setEditing(false);
+              setDraft(null);
+            }}
+            onChange={(event) => onDateChange(event.target.value)}
+            readOnly={!mounted}
+          />
 
-        {/* The field is UTC, and a bare date that is silently not local is
-            worse than one that says so. */}
-        <span className={styles.zone} aria-hidden>
-          UTC
-        </span>
+          {/* Decoration over the input, so the field reads as production's
+              while the input underneath stays the control. Hidden while the
+              input has focus, where the browser's own segments have to show
+              for the typing to be visible. */}
+          {!editing && (
+            <span className={styles.dateDisplay} aria-hidden>
+              {mounted
+                ? `${formatters.day.format(displayDate)} ${formatters.time.format(displayDate)}`
+                : ""}
+            </span>
+          )}
+        </div>
+
+        {/* The native indicator is hidden in CSS and replaced by this, so the
+            affordance survives the formatted overlay. `showPicker` is the
+            only way to open that calendar from script, and it throws rather
+            than no-ops where it is unavailable. */}
+        <button
+          type="button"
+          className={styles.calendar}
+          onClick={() => {
+            try {
+              dateRef.current?.showPicker();
+            } catch {
+              dateRef.current?.focus();
+            }
+          }}
+          aria-label={t("timemachine.aria")}
+        >
+          <Icon name="calendar" aria-hidden />
+        </button>
+
+        {/* Which zone is on display, and the way to the other one. The
+            legacy showed neither and meant local. */}
+        <button
+          type="button"
+          className={styles.zone}
+          onClick={() => setUtc((current) => !current)}
+          aria-label={
+            utc ? t("timemachine.zone.toLocal") : t("timemachine.zone.toUtc")
+          }
+        >
+          {zoneLabel}
+        </button>
 
         <button
           type="button"

@@ -9,14 +9,22 @@
   bottom: var(--site-margin-large);
   z-index: var(--z-scene_controls);
   display: grid;
-  gap: var(--site-margin-xsmall);
+
+  /* 8px, literal in `_map_controls.scss`. The margin tokens double at
+     `medium`, so one here would space the stack twice as far apart as
+     production's at every desktop width. */
+  gap: 0.5rem;
 }
 
+/* `.button_icon.secondary.small`: the same frozen-glass circle as the
+   navigation trigger, one size down. Not a bordered rounded square -- the
+   legacy has no rectangular buttons over the scene at all. */
 .button {
+  position: relative;
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   color: var(--color-button-text);
 
   /* Held zoom: a press that drags off the button must not select text or
@@ -24,20 +32,37 @@
   touch-action: none;
   cursor: pointer;
   user-select: none;
-  background-color: var(--color-backdrop);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--corner-medium);
+  background: var(--surface-glass);
+  border: 0;
+  border-radius: 50%;
   backdrop-filter: blur(var(--backdrop-blur));
 }
 
+/* The `gradient_border` mixin's masked 1px edge. Same recipe as the
+   navigation trigger and the toolbar; the tokens carry the gradients. */
+.button::before {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  pointer-events: none;
+  content: "";
+  background: var(--surface-glass-edge);
+  border-radius: inherit;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* A ring, which is how the legacy marks every one of these. */
 .button:hover {
-  color: var(--color-button-text-hover);
-  background-color: var(--color-button-bg-hover);
+  color: var(--color-turquoise-300);
+  box-shadow: 0 0 0 2px var(--color-turquoise-700);
 }
 
 .button svg {
-  width: 20px;
-  height: 20px;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 @media (width <= 768px) {

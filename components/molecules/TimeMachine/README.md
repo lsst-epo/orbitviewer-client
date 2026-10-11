@@ -25,9 +25,38 @@ keydown listeners. Two defects went with it:
   `document.activeElement`, so **every slider on the page responded to every
   keypress that reached the document**.
 
-epo-react-lib's `HorizontalSlider` is a real range input underneath, so
-keyboard, touch and pointer come for free and stay scoped to the focused
-control.
+epo-react-lib's `HorizontalSlider` replaces it. It is **not** a native range
+input underneath — the thumb is a `div` with `role="slider"`, `tabindex` and
+`aria-valuenow` — but it implements the pattern properly: arrow keys move it
+(verified: three presses take `aria-valuenow` from 0 to 0.015), and the
+handling is scoped to the focused thumb rather than bound to the document.
+
+## It ships in a light theme, and its rail is mostly border
+
+The component renders with `data-theme="light"` and no prop to change it, and
+its rail is an 18px bar made of a 2px core inside an **8px white border**.
+That white bar was the "white track" in the parity audit. The stylesheet
+replaces it with `_rangeslider.scss`'s teal rail.
+
+**These overrides are the long way round.** The component exposes a full set
+of theme custom properties — `--size-height-slider`, `--size-height-track`,
+`--size-height-thumb`, `--color-background-thumb`, `--color-border-thumb`,
+`--color-background-track-override`, `--size-border-slider` and more, plus a
+`styleAs="dark"` prop. `atoms/RangeSlider` uses them and needs only two
+declarations. This file was written before they were found; it works and is
+verified, so it has been left alone, but anyone touching it should reach for
+the properties first.
+
+Two things to know before touching these overrides:
+
+- **Every selector is doubled** (`.slider.slider`). The component is
+  styled-components, which injects at runtime and therefore after this
+  stylesheet; at equal specificity the library wins, so a single class never
+  takes.
+- **The rail cannot carry the `clip-path`.** The thumb is the rail's child,
+  and `clip-path` clips descendants — put the legacy's pinch on the rail
+  element and the knob is clipped to a 4px sliver of itself. It goes on a
+  pseudo-element, which is not an ancestor of anything.
 
 ## Hydration
 
