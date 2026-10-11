@@ -2,11 +2,18 @@
 
 /* Ported from `components/_splash.scss`. */
 
+/* An overlay over the live scene, as `splash.njk` was -- not a page of its
+   own. The scrim is the legacy's: thin enough that the orbits read through
+   it, dark enough to hold the type. */
 .splash {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-static);
   display: grid;
   grid-template-rows: 1fr auto;
-  min-height: 100dvh;
-  padding: var(--site-margin-large);
+  padding: calc(var(--header-height) + 1rem) var(--site-margin-large)
+    var(--site-margin-large);
+  background: rgb(0 0 0 / 40%);
 }
 
 .body {
@@ -29,34 +36,47 @@
 }
 
 .title {
-  max-width: 18ch;
   margin: 0;
-  font-size: clamp(2rem, 1.2rem + 3.6vw, 3.5rem);
-  font-weight: var(--font-semibold);
-  line-height: 1.1;
+  font-size: 1.125rem;
+  font-weight: var(--font-regular);
+  line-height: 1.5rem;
   color: var(--color-text);
   text-wrap: balance;
 }
 
 .subtitle {
-  max-width: 40ch;
+  max-width: 30ch;
   margin: 0 auto;
-  font-size: 1rem;
-  color: var(--color-text-low);
+  font-size: 2rem;
+  font-weight: var(--font-regular);
+  line-height: 2.5rem;
+  color: var(--color-text);
   text-wrap: balance;
 }
 
+/* `.button.primary.medium` with `.splash-action`'s 192px floor. The pale
+   mint fill this replaces was inverted -- the legacy's primary is a teal
+   fill with a pale label, not the other way round. */
 .cta {
-  padding: 12px 28px;
-  font-size: 1rem;
-  color: var(--color-turquoise-900);
+  display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  min-width: 12rem;
+  height: 3rem;
+  padding-inline: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: var(--font-semibold);
+  line-height: 1.5rem;
+  color: var(--color-turquoise-100);
   text-decoration: none;
-  background-color: var(--color-turquoise-200);
+  background-color: var(--color-turquoise-600);
+  border: 1px solid var(--color-turquoise-600);
   border-radius: var(--corner-medium);
 }
 
 .cta:hover {
-  background-color: var(--color-turquoise-100);
+  color: var(--color-turquoise-200);
 }
 
 .count {
@@ -66,18 +86,18 @@
 
 .countLabel {
   margin: 0;
-  font-size: 0.75rem;
-  color: var(--color-text-low);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--color-text);
 }
 
 .countValue {
   margin: 0;
   font-size: 1.5rem;
-  font-weight: var(--font-semibold);
+  font-weight: var(--font-regular);
   font-variant-numeric: tabular-nums;
-  color: var(--color-turquoise-300);
+  line-height: 2rem;
+  color: var(--color-text);
 }
 
 /* Language */
@@ -90,15 +110,32 @@
 
 .languages {
   display: flex;
-  gap: var(--site-margin-small);
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
+.languages li {
+  padding: 0 0.75rem;
+}
+
+/* A hairline between the pair, not a gap -- `.splash_foot-item + &:before`
+   in the legacy. Inset top and bottom so it reads as a divider rather than
+   a full-height rule. */
+.languages li + li {
+  position: relative;
+}
+
+.languages li + li::before {
+  position: absolute;
+  inset: 2px auto 2px 0;
+  width: 1px;
+  content: "";
+  background: var(--color-turquoise-500);
+}
+
 .language {
-  font-size: 0.875rem;
-  color: var(--color-text-low);
+  color: var(--color-turquoise-200);
   text-decoration: none;
 }
 
@@ -113,5 +150,31 @@
 @media (width <= 480px) {
   .splash {
     padding: var(--site-margin-small);
+  }
+}
+
+/* The legacy's type scale steps at breakpoints rather than interpolating, so
+   these are `@media` steps and not the `clamp()` the port had. Sizes are its
+   `$font-styles` px over 16: body-large 18/24, subtitle-large 24/32,
+   headline 32/40, hero 48/60 -- every one of them `regular`. */
+
+@media (width >= 768px) {
+  .foot {
+    justify-content: flex-end;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .subtitle {
+    font-size: 3rem;
+    line-height: 3.75rem;
+  }
+
+  .countValue {
+    font-size: 2rem;
+    line-height: 2.5rem;
   }
 }

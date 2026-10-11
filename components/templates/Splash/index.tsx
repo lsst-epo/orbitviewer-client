@@ -4,6 +4,9 @@ import { Link } from "@/lib/i18n/navigation";
 import { serverTranslation } from "@/lib/i18n/server";
 import { languages } from "@/lib/i18n/settings";
 import type { getContentPage } from "@/lib/api/craft";
+import Chrome from "@/components/templates/Explorer/Chrome";
+import DiscoveryCount from "./DiscoveryCount";
+import LandingClock from "./LandingClock";
 import styles from "./styles.module.css";
 
 /**
@@ -43,6 +46,12 @@ const Splash: FunctionComponent<SplashProps> = async ({
 
   return (
     <main className={styles.splash}>
+      {/* The legacy puts the whole navigation on the splash too, which is
+          what makes the wordmark and the share pill continuous from here
+          into the explorer. */}
+      <Chrome locale={locale} tour={false} />
+      <LandingClock />
+
       <div className={styles.body}>
         {logo?.url ? (
           <Image
@@ -74,12 +83,14 @@ const Splash: FunctionComponent<SplashProps> = async ({
         </Link>
 
         {discoveries !== null && (
-          <div className={styles.count}>
-            <p className={styles.countLabel}>{landing?.discoveryLabel}</p>
-            <p className={styles.countValue}>
-              {discoveries.toLocaleString(locale)}
-            </p>
-          </div>
+          <DiscoveryCount
+            total={discoveries}
+            label={landing?.discoveryLabel}
+            locale={locale}
+            announcement={t("splash.discoveries", {
+              formatted: discoveries.toLocaleString(locale),
+            })}
+          />
         )}
       </div>
 
