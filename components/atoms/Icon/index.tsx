@@ -2,7 +2,9 @@
 
 import type { FunctionComponent, SVGProps } from "react";
 import IconComposer from "@rubin-epo/epo-react-lib/IconComposer";
+import clsx from "clsx/lite";
 import { customIcons } from "./icons";
+import styles from "./styles.module.css";
 
 /**
  * Icon lookup.
@@ -32,19 +34,27 @@ export const ICONS = {
   check: "Checkmark",
   chevronDown: "CaretDown",
   chevronUp: "CaretUp",
-  chevronLeft: "ChevronLeftElongated",
-  chevronRight: "ChevronRightElongated",
+  // `ChevronThin`, not the `*Elongated` pair the port had. Those are drawn
+  // in a 6.9x21.9 viewBox -- a mark three times taller than it is wide,
+  // where the legacy's `chevron-left` is the compact Material glyph in a
+  // 24x24 box. `Chevron` is the right box but far too heavy (a 3.6-unit
+  // stroke against the legacy's 1.4). There is no right-facing Thin, so the
+  // right chevron is the same glyph turned around -- see `flipped`.
+  chevronLeft: "ChevronThin",
+  chevronRight: "ChevronThin",
   calendar: "Calendar",
   share: "ShareToggle",
   facebook: "ShareFacebook",
   x: "ShareTwitter",
   copy: "ShareCopyUrl",
   download: "ArrowUpFromBracket",
+  // The tray-and-arrow the legacy uses on SHARE; `share` is the nodes glyph.
+  upload: "ArrowUpFromBracket",
   help: "QuestionCircle",
   arrowLeft: "Chevron",
   zoomIn: "Plus",
   zoomOut: "Minus",
-  recenter: "RotateLeftWithCenter",
+  recenter: "Recenter",
   // Custom, from ./icons
   orbit: "Orbit",
   filters: "Filters",
@@ -64,16 +74,25 @@ export const ICONS = {
 
 export type IconName = keyof typeof ICONS;
 
+/** Icons drawn facing one way and reused for the other. */
+const FLIPPED = new Set<IconName>(["chevronRight"]);
+
 export interface IconProps extends SVGProps<SVGSVGElement> {
   name: IconName;
   size?: number | string;
 }
 
-const Icon: FunctionComponent<IconProps> = ({ name, size, ...props }) => (
+const Icon: FunctionComponent<IconProps> = ({
+  name,
+  size,
+  className,
+  ...props
+}) => (
   <IconComposer
     icon={ICONS[name]}
     customIcons={customIcons}
     size={size}
+    className={clsx(className, FLIPPED.has(name) && styles.flipped)}
     {...props}
   />
 );

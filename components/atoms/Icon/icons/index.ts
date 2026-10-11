@@ -3,6 +3,7 @@ import Guides from "./Guides";
 import Orbit from "./Orbit";
 import Settings from "./Settings";
 import FullscreenOff from "./FullscreenOff";
+import Recenter from "./Recenter";
 import PlanetsMoons from "./PlanetsMoons";
 import Asteroids from "./Asteroids";
 import NearEarthObjects from "./NearEarthObjects";
@@ -29,6 +30,7 @@ export const customIcons = {
   Orbit,
   Settings,
   FullscreenOff,
+  Recenter,
   PlanetsMoons,
   Asteroids,
   NearEarthObjects,

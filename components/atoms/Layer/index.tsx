@@ -24,17 +24,20 @@ export interface LayerProps {
   /** Dismiss when a click lands outside the panel. */
   closeOnOutsideClick?: boolean;
   /**
-   * Which edge the panel docks to. The toolbar panels come from the left, as
-   * in the legacy; the object detail card comes from the right so the two can
-   * be open at once.
+   * How the panel is placed. `left` and `right` are full-height drawers
+   * bled to that edge. `dock` is the object detail's floating card:
+   * left-anchored, inset clear of the header, every corner rounded, with the
+   * scene still visible and interactive around it. `card` is the filters
+   * panel's: smaller, near the top left, as tall as its contents.
    */
-  side?: "left" | "right";
+  side?: "left" | "right" | "dock" | "card";
   /**
    * How much of the viewport the panel takes. `wide` is for panels whose
    * content is a row rather than a column -- the objects rail shows one card
-   * at a time in the default width.
+   * at a time in the default width. `full` is the objects takeover: the
+   * whole viewport, dimmed, with the scene showing through.
    */
-  size?: "default" | "wide";
+  size?: "default" | "wide" | "full";
   /** Accessible name for the close button. Untranslated in the legacy. */
   closeLabel?: string;
   /**
@@ -120,7 +123,10 @@ const Layer: FunctionComponent<PropsWithChildren<LayerProps>> = ({
       className={clsx(
         styles.layer,
         side === "right" && styles.right,
+        side === "dock" && styles.dock,
+        side === "card" && styles.card,
         size === "wide" && styles.wide,
+        size === "full" && styles.full,
         !showClose && styles.flush,
         open && styles.open,
         className
