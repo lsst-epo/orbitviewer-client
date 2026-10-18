@@ -1,30 +1,20 @@
-import type { ReactNode } from "react";
 import { CmsImage } from "@/components/atoms/CmsImage";
 import type { ContentPage } from "@/lib/api/craft";
 import type { Locale } from "@/lib/i18n/settings";
 import { Link } from "@/lib/i18n/navigation";
 import { RichText } from "@/components/atoms/RichText";
-import {
-  DiscoveryCount,
-  DiscoveryProvider,
-  LandingSurface,
-} from "./DiscoveryCount";
+import { DiscoveryCount, LandingSurface } from "./DiscoveryCount";
 import styles from "./styles.module.css";
 export function Landing({
   content,
   locale,
-  background,
 }: {
   content?: ContentPage;
   locale: Locale;
-  background: ReactNode;
 }) {
   return (
-    <DiscoveryProvider>
+    <>
       <LandingSurface className={styles.landing}>
-        <div className={styles.background} aria-hidden="true" inert>
-          {background}
-        </div>
         <div className={styles.content}>
           <div className={styles.triad}>
             <CmsImage
@@ -86,6 +76,6 @@ export function Landing({
           </Link>
         </footer>
       </LandingSurface>
-    </DiscoveryProvider>
+    </>
   );
 }

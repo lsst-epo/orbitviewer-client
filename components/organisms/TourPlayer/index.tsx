@@ -22,7 +22,7 @@ export function TourPlayer({
   const { t } = useTranslation();
   const { select } = useExplorer();
   useEffect(() => {
-    select(target);
+    select(target, "orbit");
   }, [target, select]);
   return (
     <section className={styles.player} aria-label={title}>

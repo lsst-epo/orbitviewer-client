@@ -1,9 +1,7 @@
 "use client";
-import { Suspense, useMemo, useRef, useState, useEffect } from "react";
+import { Suspense, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Composite } from "@/components/effects/composite";
-import { getExplorerEntry, clearExplorerEntry } from "@/lib/solar/entry";
-import type { CameraView } from "@/lib/solar/view";
 import { Camera } from "@/components/camera";
 import { Sun } from "@/components/celestial-bodies/sun";
 import { Body } from "@/components/celestial-bodies/body";
@@ -14,13 +12,11 @@ import { objectId } from "@/lib/solar/orbits";
 
 function SolarScene({
   landing,
-  entry,
   ready,
   departing,
   onDepartureComplete,
 }: {
   landing: boolean;
-  entry?: CameraView;
   ready: boolean;
   departing?: boolean;
   onDepartureComplete?: () => void;
@@ -35,7 +31,6 @@ function SolarScene({
     <>
       <Camera
         landing={landing}
-        entry={entry}
         ready={ready}
         departing={departing}
         onDepartureComplete={onDepartureComplete}
@@ -92,21 +87,19 @@ export default function Scene({
   onDepartureComplete?: () => void;
 }) {
   const [eventSource, setEventSource] = useState<HTMLDivElement | null>(null);
-  const [entry] = useState(() => (landing ? undefined : getExplorerEntry()));
-  useEffect(() => {
-    if (entry) clearExplorerEntry(entry);
-  }, [entry]);
+  // Keep the camera configuration stable when the route changes presentation.
+  const [cameraOptions] = useState(() => ({
+    position: (landing ? [0, 1.5, 4] : [12, 8, 12]) as [number, number, number],
+    fov: landing ? 35 : 45,
+    near: 0.001,
+    far: 10000,
+  }));
   return (
     <div ref={setEventSource} style={{ width: "100%", height: "100%" }}>
       {eventSource && (
         <Canvas
           eventSource={eventSource}
-          camera={{
-            position: entry?.position ?? (landing ? [0, 1.5, 4] : [12, 8, 12]),
-            fov: landing || entry ? 35 : 45,
-            near: 0.001,
-            far: 10000,
-          }}
+          camera={cameraOptions}
           dpr={[1, 1.5]}
           gl={{ antialias: true, preserveDrawingBuffer: true }}
         >
@@ -114,7 +107,6 @@ export default function Scene({
           <Suspense fallback={null}>
             <SolarScene
               landing={landing}
-              entry={entry}
               ready={ready}
               departing={departing}
               onDepartureComplete={onDepartureComplete}

@@ -9,26 +9,6 @@
   text-align: center;
 }
 
-.background {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  overflow: hidden;
-  pointer-events: none;
-  background: #000;
-}
-
-.background::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #0006;
-}
-
-.background button {
-  display: none;
-}
-
 .content {
   display: flex;
   flex-direction: column;

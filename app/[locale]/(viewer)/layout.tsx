@@ -1,31 +1,37 @@
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import { notFound } from "next/navigation";
-import { isLocale } from "@/lib/i18n/settings";
 import { getPlanetOrbits } from "@/lib/api/hasura";
 import { getSolarEntries, getCategories } from "@/lib/api/craft";
-import { Explorer } from "@/components/organisms/Explorer";
-export default async function ExplorerPage({
+import { isLocale } from "@/lib/i18n/settings";
+import { SharedExplorer } from "@/components/organisms/Explorer/SharedExplorer";
+
+/** Home and Explorer share one live renderer, catalog and simulation. */
+export default async function ViewerLayout({
+  children,
   params,
 }: {
+  children: ReactNode;
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  const [orbits, content, categories] = await Promise.allSettled([
+  const [orbits, entries, categories] = await Promise.allSettled([
     getPlanetOrbits(),
     getSolarEntries(locale),
     getCategories(locale),
   ]);
   return (
     <Suspense>
-      <Explorer
+      <SharedExplorer
         initial={orbits.status === "fulfilled" ? orbits.value : []}
-        entries={content.status === "fulfilled" ? content.value : []}
+        entries={entries.status === "fulfilled" ? entries.value : []}
         categoryEntries={
           categories.status === "fulfilled" ? categories.value : []
         }
-        contentError={content.status === "rejected"}
-      />
+        contentError={entries.status === "rejected"}
+      >
+        {children}
+      </SharedExplorer>
     </Suspense>
   );
 }

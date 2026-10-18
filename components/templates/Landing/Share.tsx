@@ -36,7 +36,7 @@ export function LandingShare() {
           ×
         </Button>
       </div>
-      <ShareControls getCanvas={() => document.querySelector("main canvas")} />
+      <ShareControls getCanvas={() => document.querySelector("canvas")} />
     </dialog>,
     document.body,
   );

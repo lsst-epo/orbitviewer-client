@@ -5,6 +5,10 @@ import { useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Link, usePathname, useRouter } from "@/lib/i18n/navigation";
 import { Icon } from "@/components/atoms/Icon";
+import {
+  ExplorationModeMenu,
+  explorationModes,
+} from "@/components/molecules/ExplorationModeMenu";
 import styles from "./styles.module.css";
 
 export function NavigationMenu() {
@@ -19,17 +23,33 @@ export function NavigationMenu() {
     const update = (event: Event) =>
       setQuality((event as CustomEvent<string>).detail);
     window.addEventListener("orbitviewer-quality", update);
-    const close = () => {
-      setMenuOpen(false);
-      setLevel("main");
-    };
     return () => window.removeEventListener("orbitviewer-quality", update);
   }, []);
   const [menuOpen, setMenuOpen] = useState(false);
+  const close = () => {
+    setMenuOpen(false);
+    setLevel("main");
+  };
+  useEffect(() => {
+    const loaded = () => {
+      setMenuOpen(false);
+      setLevel("main");
+    };
+    window.addEventListener("orbitviewer-catalog-loaded", loaded);
+    return () =>
+      window.removeEventListener("orbitviewer-catalog-loaded", loaded);
+  }, []);
   return (
     <details
       open={menuOpen}
-      onToggle={(event) => setMenuOpen(event.currentTarget.open)}
+      onToggle={(event) => {
+        setMenuOpen(event.currentTarget.open);
+        if (event.currentTarget.open) {
+          const saved = localStorage.getItem("rubin-data-profile");
+          if (explorationModes.some((mode) => mode === saved))
+            setQuality(saved!);
+        } else setLevel("main");
+      }}
       className={styles.menu}
       onKeyDown={(event) => {
         if (event.key === "Escape") close();
@@ -51,7 +71,7 @@ export function NavigationMenu() {
               <button onClick={() => setLevel("exploration")}>
                 <Icon name="settings" />
                 <span>{t("navigation.exploration")}</span>
-                <small>{t(`ui.${quality}`)}</small>
+                <small>{t(`exploration.${quality}.title`)}</small>
               </button>
               <button
                 onClick={() => {
@@ -77,6 +97,24 @@ export function NavigationMenu() {
               </Link>
             </div>
           </>
+        ) : level === "exploration" ? (
+          <ExplorationModeMenu
+            value={quality}
+            onBack={() => setLevel("main")}
+            onChange={(value) => {
+              if (value === quality) return;
+              setQuality(value);
+              localStorage.setItem("rubin-data-profile", value);
+              window.dispatchEvent(
+                new CustomEvent("orbitviewer-set-quality", { detail: value }),
+              );
+              if (
+                path !== "/explorer" &&
+                !path.startsWith("/guided-experiences/")
+              )
+                close();
+            }}
+          />
         ) : (
           <>
             <div className={styles.subhead}>
@@ -95,41 +133,22 @@ export function NavigationMenu() {
               </h3>
             </div>
             <div className={styles.group}>
-              {level === "language"
-                ? ["en", "es"].map((value) => (
-                    <button
-                      key={value}
-                      aria-pressed={locale === value}
-                      onClick={() => {
-                        router.replace(
-                          `${path}${params.size ? `?${params}` : ""}`,
-                          { locale: value },
-                        );
-                        close();
-                      }}
-                    >
-                      <span>{value === "en" ? "English" : "Español"}</span>
-                      {locale === value && <Icon name="check" />}
-                    </button>
-                  ))
-                : ["low", "medium", "high", "ultra"].map((value) => (
-                    <button
-                      key={value}
-                      aria-pressed={quality === value}
-                      onClick={() => {
-                        setQuality(value);
-                        localStorage.setItem("rubin-data-profile", value);
-                        window.dispatchEvent(
-                          new CustomEvent("orbitviewer-set-quality", {
-                            detail: value,
-                          }),
-                        );
-                      }}
-                    >
-                      <span>{t(`ui.${value}`)}</span>
-                      {quality === value && <Icon name="check" />}
-                    </button>
-                  ))}
+              {["en", "es"].map((value) => (
+                <button
+                  key={value}
+                  aria-pressed={locale === value}
+                  onClick={() => {
+                    router.replace(
+                      `${path}${params.size ? `?${params}` : ""}`,
+                      { locale: value },
+                    );
+                    close();
+                  }}
+                >
+                  <span>{value === "en" ? "English" : "Español"}</span>
+                  {locale === value && <Icon name="check" />}
+                </button>
+              ))}
             </div>
           </>
         )}

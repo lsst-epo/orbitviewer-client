@@ -5,26 +5,30 @@ import { useFrame, useThree } from "@react-three/fiber";
 import type { OrbitControls as Controls } from "three-stdlib";
 import { Vector3 } from "three";
 import { useExplorer } from "@/contexts/ExplorerProvider";
-import { parseCameraView, type CameraView } from "@/lib/solar/view";
+import { parseCameraView } from "@/lib/solar/view";
 import { orbitPosition } from "@/lib/solar/orbits";
 import { bodyRadius } from "@/components/celestial-bodies/body";
 
 /** Own camera target and follow motion without rebuilding controls each frame. */
 export function Camera({
   landing = false,
-  entry,
   ready = true,
   departing = false,
   onDepartureComplete,
 }: {
   landing?: boolean;
-  entry?: CameraView;
   ready?: boolean;
   departing?: boolean;
   onDepartureComplete?: () => void;
 }) {
-  const { selected, selectedId, mjd, cameraAction, cameraViewRef } =
-    useExplorer();
+  const {
+    selected,
+    selectedId,
+    selectionMode,
+    mjd,
+    cameraAction,
+    cameraViewRef,
+  } = useExplorer();
   const { camera } = useThree();
   const controls = useRef<Controls>(null);
   const zoom = useRef<{ distance: number; direction: number } | null>(null);
@@ -37,6 +41,7 @@ export function Camera({
   }, []);
   const previous = useRef(new Vector3());
   const initialized = useRef(false);
+  const previousLanding = useRef(landing);
   const entrance = useRef<{
     from: Vector3;
     target: Vector3;
@@ -48,6 +53,13 @@ export function Camera({
     elapsed: number;
   } | null>(null);
   useEffect(() => {
+    if (selectionMode === "orbit") {
+      // Tour stops highlight the orbit without moving or following the camera.
+      flight.current = null;
+      entrance.current = null;
+      zoom.current = null;
+      return;
+    }
     if (!controls.current || (selectedId && selectedId !== "sun" && !selected))
       return;
     if (entrance.current && !selectedId) return;
@@ -71,16 +83,6 @@ export function Camera({
       const shared = parseCameraView(
         new URLSearchParams(window.location.search),
       );
-      if (entry && !shared && !selectedId) {
-        flight.current = null;
-        camera.position.fromArray(entry.position);
-        controls.current.target.fromArray(entry.target);
-        entrance.current = {
-          from: camera.position.clone(),
-          target: controls.current.target.clone(),
-          elapsed: 0,
-        };
-      }
       if (shared) {
         flight.current = null;
         camera.position.fromArray(shared.position);
@@ -91,10 +93,25 @@ export function Camera({
     controls.current.update();
     // Focus on selection changes, then follow its moving position in useFrame.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedId, selected, camera, landing, entry]);
+  }, [selectedId, selected, selectionMode, camera]);
   useEffect(() => {
     if (!controls.current) return;
+    const enteringExplorer = previousLanding.current && !landing;
+    previousLanding.current = landing;
     if (!departing) {
+      // History navigation can enter Explorer without the homepage click handler.
+      if (
+        enteringExplorer &&
+        !selectedId &&
+        camera.position.distanceTo(new Vector3(10, 5, 0)) > 0.001
+      ) {
+        flight.current = null;
+        entrance.current = {
+          from: camera.position.clone(),
+          target: controls.current.target.clone(),
+          elapsed: 0,
+        };
+      }
       if (
         landing &&
         !selectedId &&
@@ -204,7 +221,7 @@ export function Camera({
       if (!zooming.direction && Math.abs(eased - zooming.distance) < 0.00001)
         zoom.current = null;
     }
-    if (!selected) return;
+    if (!selected || selectionMode === "orbit") return;
     const motion = target.clone().sub(previous.current);
     camera.position.add(motion);
     controls.current.target.add(motion);

@@ -112,13 +112,17 @@ function useExplorerState(
     }
     return Number.isFinite(min) && max > min ? [min, max] : [0, 100];
   }, [records, enabled, classificationRanges]);
-  const [mjd, setMjd] = useState(() => {
+  const [mjd, updateMjd] = useState(() => {
     const shared = Number(params.get("mjd"));
     return Number.isFinite(shared) && shared >= 15020 && shared <= 88069
       ? shared
       : dateToMjd(new Date());
   });
   const [spinDate, setSpinDate] = useState(mjd);
+  const setMjd = (value: number) => {
+    setSpinDate((current) => current + value - mjd);
+    updateMjd(value);
+  };
   // Homepage orbits move visibly, while axial spin keeps its gentle clock.
   const [speed, setSpeed] = useState(1);
   const [playing, setPlaying] = useState(true);
@@ -141,19 +145,26 @@ function useExplorerState(
     (record) =>
       objectId(record) === selectedId || record.fulldesignation === selectedId,
   );
-  const select = useCallback((id?: string) => {
-    const query = new URLSearchParams(window.location.search);
-    if (query.get("target") !== (id ?? null)) {
-      ["x", "y", "z", "tx", "ty", "tz"].forEach((key) => query.delete(key));
-    }
-    if (id) query.set("target", id);
-    else query.delete("target");
-    window.history.pushState(
-      null,
-      "",
-      `${window.location.pathname}${query.size ? `?${query}` : ""}`,
-    );
-  }, []);
+  const [selectionMode, setSelectionMode] = useState<"object" | "orbit">(
+    "object",
+  );
+  const select = useCallback(
+    (id?: string, mode: "object" | "orbit" = "object") => {
+      setSelectionMode(mode);
+      const query = new URLSearchParams(window.location.search);
+      if (query.get("target") !== (id ?? null)) {
+        ["x", "y", "z", "tx", "ty", "tz"].forEach((key) => query.delete(key));
+      }
+      if (id) query.set("target", id);
+      else query.delete("target");
+      window.history.pushState(
+        null,
+        "",
+        `${window.location.pathname}${query.size ? `?${query}` : ""}`,
+      );
+    },
+    [],
+  );
   useEffect(() => {
     if (!playing) return;
     const started = performance.now();
@@ -164,11 +175,11 @@ function useExplorerState(
       const elapsed = Math.min((now - last) / 1000, 0.25);
       last = now;
       const orbitSpeed = landing ? 100 : speed;
-      if (landing) {
-        setSpinDate((value) => value + (1 / 24 + 1 / 86400) * elapsed);
-      }
+      setSpinDate(
+        (value) => value + ((landing ? 1 : speed) / 24 + 1 / 86400) * elapsed,
+      );
       // Legacy SolarClock adds real elapsed time plus hours-per-second acceleration.
-      setMjd((value) =>
+      updateMjd((value) =>
         Math.min(
           88069,
           Math.max(15020, value + (orbitSpeed / 24 + 1 / 86400) * elapsed),
@@ -248,13 +259,14 @@ function useExplorerState(
     setDistanceRange,
     distanceBounds,
     mjd,
-    rotationMjd: landing ? spinDate : mjd,
+    rotationMjd: spinDate,
     setMjd,
     speed,
     setSpeed,
     playing,
     setPlaying,
     selectedId,
+    selectionMode,
     selected,
     select,
     showOrbits,

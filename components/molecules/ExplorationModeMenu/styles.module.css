@@ -1,0 +1,87 @@
+.heading {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ffffff26;
+}
+
+.heading button {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: #8bdedb;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.heading h3 {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.options {
+  padding: 12px;
+}
+
+.option {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #8bdedb;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.details {
+  color: #aaa;
+}
+
+.check {
+  visibility: hidden;
+  color: #58c9c4;
+}
+
+.option:hover .row {
+  background: #ffffff1a;
+}
+
+.option input:focus-visible + .row {
+  outline: 2px solid #8bdedb;
+  outline-offset: -2px;
+}
+
+.option input:checked + .row {
+  background: #124d4c;
+}
+
+.option input:checked + .row .title {
+  font-weight: 600;
+}
+
+.option input:checked + .row .check {
+  visibility: visible;
+}

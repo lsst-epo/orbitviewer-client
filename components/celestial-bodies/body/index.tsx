@@ -5,7 +5,7 @@ import { Html } from "@react-three/drei";
 import { type Group, type Mesh } from "three";
 import type { OrbitRecord } from "@/lib/api/hasura";
 import { DEG, objectId, orbitPosition } from "@/lib/solar/orbits";
-import { categoryColor } from "@/lib/solar/categories";
+import { ObjectLabel } from "@/components/molecules/ObjectLabel";
 import { useExplorer } from "@/contexts/ExplorerProvider";
 import { BodyMaterial, EarthMaterial } from "./material";
 import { SaturnRings } from "@/components/models/saturn-rings";
@@ -18,7 +18,6 @@ import jupiter from "./textures/jupiter.webp";
 import saturn from "./textures/saturn.webp";
 import uranus from "./textures/uranus.webp";
 import neptune from "./textures/neptune.webp";
-import styles from "./styles.module.css";
 
 const textures: Record<string, string> = {
   mercury: mercury.src,
@@ -144,20 +143,14 @@ export function Body({ record }: { record: OrbitRecord }) {
           {id === "earth" && <Atmosphere />}
         </mesh>
       </group>
-      <Html position={[0, bodyRadius(id) * 1.5, 0]} center zIndexRange={[2, 0]}>
-        <button
-          className={styles.label}
-          data-selected={selectedId === id}
-          onClick={() => select(id)}
-        >
-          <span
-            className={styles.dot}
-            style={{
-              background: categoryColor(record.object_type, categoryPalette),
-            }}
-          />
-          {name}
-        </button>
+      <Html position={[0, 0, 0]} zIndexRange={[2, 0]}>
+        <ObjectLabel
+          name={name}
+          types={record.object_type}
+          palette={categoryPalette}
+          selected={selectedId === id}
+          onSelect={() => select(id)}
+        />
       </Html>
     </group>
   );

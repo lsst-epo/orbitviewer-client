@@ -255,3 +255,18 @@
     max-width: calc(100% - 90px);
   }
 }
+
+.explorer[data-landing="true"] .canvas {
+  pointer-events: none;
+}
+
+.explorer[data-landing="true"] .canvas::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #0006;
+}
+
+.explorer[data-landing="true"] .canvas button {
+  display: none;
+}
