@@ -62,7 +62,13 @@ export function createPipeline() {
   });
   const composite = new ShaderMaterial({
     vertexShader: composeShader(vertex),
-    fragmentShader: composeShader(fragment),
+    // Legacy composition ends with a MeshBasicMaterial screen pass, which
+    // encodes linear color for the display. Our direct screen pass needs the
+    // same conversion; otherwise all custom-shader objects appear too dark.
+    fragmentShader: composeShader(fragment).replace(
+      "gl_FragColor = color;",
+      "gl_FragColor = linearToOutputTexel(color);",
+    ),
     uniforms: {
       scene: { value: sceneTarget.texture },
       glow: { value: black },

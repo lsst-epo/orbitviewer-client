@@ -47,15 +47,11 @@
     }
   },
   "navigation": {
-    "aria": "Navegación Principal",
-    "share": "Compartir",
     "settings": "Ajustes",
-    "language": "Idioma",
     "exploration": "Modo de exploración",
     "fullscreen": "Pantalla completa",
     "help": "Ayuda",
-    "how_to_use": "Cómo utilizarlo",
-    "about": "Acerca de"
+    "back": "Volver"
   },
   "share": {
     "title": "Compartir",
@@ -139,6 +135,8 @@
     }
   },
   "filters": {
+    "minimumDistance": "Distancia mínima al Sol",
+    "maximumDistance": "Distancia máxima al Sol",
     "title": "Filtros",
     "reset": "Restaurar",
     "apply": "Aplicar filtros",
@@ -276,7 +274,8 @@
         "next": "Siguiente",
         "previous": "Anterior"
       }
-    }
+    },
+    "recommended": "Recomendado"
   },
   "modal": {
     "title": "¿Las cosas andan un poco lentas?",
@@ -301,6 +300,7 @@
     "action": "Volver al inicio"
   },
   "ui": {
+    "displaySettings": "Ajustes de visualización",
     "explorer": "Explorador",
     "about": "Acerca de",
     "howTo": "Cómo usar",
@@ -312,7 +312,7 @@
     "pause": "Pausar",
     "play": "Reproducir",
     "today": "Hoy",
-    "speed": "Días por segundo",
+    "speed": "Horas por segundo",
     "date": "Fecha",
     "reset": "Restaurar vista",
     "zoomIn": "Acercar",

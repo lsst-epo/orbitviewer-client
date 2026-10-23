@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import {
   Scene,
@@ -19,7 +19,8 @@ import fragment from "./earth_clouds.frag";
  */
 export function useCloudTexture() {
   const { gl } = useThree();
-  const { quality } = useExplorer();
+  const { quality, rotationMjd } = useExplorer();
+  const [initialDate] = useState(rotationMjd);
   const width = quality === "ultra" ? 2048 : quality === "high" ? 1024 : 512;
   const resources = useMemo(() => {
     const target = new WebGLRenderTarget(width, width / 2);
@@ -34,10 +35,11 @@ export function useCloudTexture() {
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
     return { target, material, geometry, scene, camera };
   }, [width]);
-  useFrame(({ clock }) => {
+  useFrame(() => {
     // Three uniforms are intentionally mutable outside React rendering.
     // eslint-disable-next-line react-hooks/immutability
-    resources.material.uniforms.time.value = clock.elapsedTime * 1000;
+    resources.material.uniforms.time.value =
+      (rotationMjd - initialDate) * 86400;
     const previous = gl.getRenderTarget();
     gl.setRenderTarget(resources.target);
     gl.render(resources.scene, resources.camera);

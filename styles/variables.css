@@ -84,3 +84,38 @@
   --viewport: "xsmall";
   --touch: "false";
 }
+
+@media (width >= 480px) {
+  :root {
+    --viewport: "small";
+  }
+}
+
+@media (width >= 768px) {
+  :root {
+    --site-margin-xsmall: 16px;
+    --site-margin-small: 24px;
+    --site-margin-large: 32px;
+    --header-height: 80px;
+    --viewport: "medium";
+  }
+}
+
+@media (width >= 1024px) {
+  :root {
+    --viewport: "large";
+  }
+}
+
+@media (width >= 1200px) {
+  :root {
+    --viewport: "xlarge";
+  }
+}
+
+@media (pointer: coarse) {
+  :root {
+    --touch: "true";
+  }
+}
+

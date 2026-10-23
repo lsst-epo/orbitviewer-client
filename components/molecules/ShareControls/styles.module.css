@@ -1,9 +1,169 @@
-.controls {
+.controls,
+.capturePanel {
   display: grid;
-  gap: 20px;
+  gap: 16px;
 }
 
-.controls label {
+.tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tabs button {
+  padding: 0 0 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--color-text-low);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.tabs button[aria-selected="true"] {
+  color: var(--color-turquoise-300);
+  border-bottom-color: var(--color-turquoise-300);
+}
+
+.linkPanel {
   display: grid;
   gap: 8px;
+}
+
+.linkPanel input {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+  background: rgb(255 255 255 / 8%);
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.linkPanel > button,
+.downloadBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  height: 48px;
+  border: 0;
+  border-radius: var(--corner-medium);
+  background: var(--color-turquoise-700);
+  color: var(--color-turquoise-200);
+  font-size: 16px;
+  line-height: 24px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.informative {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-low);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.informative svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.ratioGroup {
+  display: flex;
+  padding: 2px;
+  border-radius: var(--corner-medium);
+  border: 1px solid var(--color-border);
+  background: rgb(255 255 255 / 6%);
+}
+
+.ratioGroup button {
+  flex: 1;
+  min-height: 36px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: calc(var(--corner-medium) - 2px);
+  background: transparent;
+  color: var(--color-button-text);
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.ratioGroup button[aria-pressed="true"] {
+  background: var(--color-turquoise-800);
+  color: var(--color-turquoise-200);
+}
+
+.captureHero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  border-radius: var(--corner-medium);
+  background: rgb(0 0 0 / 50%);
+  overflow: hidden;
+}
+
+.captureHero img {
+  display: block;
+  max-width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+}
+
+.captureBtn {
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--corner-medium);
+  background: rgb(255 255 255 / 8%);
+  color: var(--color-turquoise-300);
+  cursor: pointer;
+}
+
+.social {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.social > div {
+  display: flex;
+  gap: 8px;
+}
+
+.social a,
+.social button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 50%;
+  color: var(--color-button-text);
+  background: rgb(255 255 255 / 10%);
+  cursor: pointer;
+}
+
+.social a:hover,
+.social button:hover {
+  box-shadow: 0 0 0 2px var(--color-turquoise-700);
+  color: var(--color-turquoise-300);
+}
+
+.linkPanel > button:hover,
+.downloadBtn:hover {
+  background: var(--color-turquoise-600);
 }

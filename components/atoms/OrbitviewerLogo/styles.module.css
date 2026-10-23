@@ -1,0 +1,31 @@
+.logo {
+  position: fixed;
+  top: var(--site-margin-small);
+  left: var(--site-margin-small);
+  z-index: var(--z-logo);
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  pointer-events: auto;
+}
+
+.logo img {
+  display: block;
+  width: 62px;
+  height: 38px;
+}
+
+@media (width >= 768px) {
+  .logo {
+    top: var(--site-margin-xsmall);
+    left: var(--site-margin-xsmall);
+    padding: 12px;
+  }
+
+  .logo img {
+    width: 72px;
+    height: 44px;
+  }
+}

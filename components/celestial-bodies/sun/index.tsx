@@ -1,16 +1,20 @@
 "use client";
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import { Html } from "@react-three/drei";
 import { Color, type ShaderMaterial } from "three";
 import vertex from "./sun.vert";
 import fragment from "./sun.frag";
 import { composeShader } from "@/lib/shaders";
 import { SunMagneticField } from "@/components/effects/sun-magnetic-field";
+import { ObjectLabel } from "@/components/molecules/ObjectLabel";
 import { useExplorer } from "@/contexts/ExplorerProvider";
 
 /** Legacy Sun surface with unchanged GLSL and shared include composition. */
 export function Sun() {
-  const { select } = useExplorer();
+  const { entries, categoryPalette, selectedId, select } = useExplorer();
+  const sunName =
+    entries.find((entry) => entry.elementID === "sun")?.title ?? "Sun";
   const material = useRef<ShaderMaterial>(null);
   const halo = useRef<ShaderMaterial>(null);
   const uniforms = useMemo(
@@ -63,6 +67,15 @@ export function Sun() {
         />
       </mesh>
       <SunMagneticField />
+      <Html position={[0, 0, 0]} zIndexRange={[2, 0]}>
+        <ObjectLabel
+          name={sunName}
+          types={[9]}
+          palette={categoryPalette}
+          selected={selectedId === "sun"}
+          onSelect={() => select("sun")}
+        />
+      </Html>
     </group>
   );
 }

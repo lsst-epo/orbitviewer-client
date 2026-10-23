@@ -1,41 +1,157 @@
 "use client";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import { Icon } from "@/components/atoms/Icon";
-import { Button } from "@/components/atoms/Button";
-import { ShareControls } from "@/components/molecules/ShareControls";
+import { FiltersOverlay } from "@/components/organisms/FiltersOverlay";
+import { ObjectsOverlay } from "@/components/organisms/ObjectsOverlay";
+import { ShareOverlay } from "@/components/organisms/ShareOverlay";
 import { TimeControls } from "@/components/molecules/TimeControls";
-import {
-  ExplorerProvider,
-  useExplorer,
-  useOrbitSearch,
-} from "@/contexts/ExplorerProvider";
+import { useExplorer, useOrbitSearch } from "@/contexts/ExplorerProvider";
 import type { OrbitRecord } from "@/lib/api/hasura";
-import type { SolarEntry } from "@/lib/api/craft";
-import { categories } from "@/lib/solar/categories";
-import { objectId, orbitPosition } from "@/lib/solar/orbits";
+import {
+  categories,
+  categoryCode,
+  categoryColor,
+} from "@/lib/solar/categories";
+import { objectId } from "@/lib/solar/orbits";
 import { Link } from "@/lib/i18n/navigation";
-import { CmsImage } from "@/components/atoms/CmsImage";
+import { LoadingScreen } from "@/components/organisms/LoadingScreen";
+import { ObjectDetailCard } from "./ObjectDetailCard";
 import styles from "./styles.module.css";
 
 const Scene = dynamic(() => import("./Scene"), { ssr: false });
 
-function ExplorerSurface({
+function ZoomButton({
+  direction,
+  label,
+}: {
+  direction: "in" | "out";
+  label: string;
+}) {
+  const { camera } = useExplorer();
+  const held = useRef(false);
+  const stop = () => {
+    if (!held.current) return;
+    held.current = false;
+    camera("stop");
+  };
+  useEffect(() => {
+    const release = () => {
+      if (!held.current) return;
+      held.current = false;
+      camera("stop");
+    };
+    window.addEventListener("pointerup", release);
+    window.addEventListener("pointercancel", release);
+    window.addEventListener("blur", release);
+    return () => {
+      window.removeEventListener("pointerup", release);
+      window.removeEventListener("pointercancel", release);
+      window.removeEventListener("blur", release);
+    };
+  }, [camera]);
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      style={{ touchAction: "none" }}
+      onPointerDown={(event) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        event.stopPropagation();
+        event.currentTarget.setPointerCapture(event.pointerId);
+        held.current = true;
+        camera(`${direction}-hold`);
+      }}
+      onPointerUp={stop}
+      onPointerCancel={stop}
+      onLostPointerCapture={stop}
+      onBlur={stop}
+      onKeyDown={(event) => {
+        if (event.key !== " " && event.key !== "Enter") return;
+        event.preventDefault();
+        if (held.current) return;
+        held.current = true;
+        camera(`${direction}-hold`);
+      }}
+      onKeyUp={(event) => {
+        if (event.key === " " || event.key === "Enter") {
+          event.preventDefault();
+          stop();
+        }
+      }}
+      onClick={(event) => {
+        if (event.detail === 0 && !held.current) camera(direction);
+      }}
+    >
+      <Icon name={direction === "in" ? "add" : "substract"} />
+    </button>
+  );
+}
+
+export function ExplorerSurface({
   children,
   contentError,
+  landing = false,
+  departing = false,
+  onDepartureComplete,
+  onDiscoveryCount,
+  tour = false,
+  tourGallery = false,
 }: {
   children?: ReactNode;
   contentError?: boolean;
+  tour?: boolean;
+  tourGallery?: boolean;
+  landing?: boolean;
+  departing?: boolean;
+  onDepartureComplete?: () => void;
+  onDiscoveryCount?: (count: number | null) => void;
 }) {
   const { t } = useTranslation();
   const explorer = useExplorer();
-  const { enabled, setEnabled, selected, selectedId, entries, select, mjd } =
-    explorer;
+  const {
+    selected,
+    selectedId,
+    selectionMode,
+    entries,
+    categoryPalette,
+    select,
+    quality,
+    setQuality,
+  } = explorer;
   const search = useOrbitSearch();
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("orbitviewer-quality", { detail: quality }),
+    );
+  }, [quality]);
+  useEffect(() => {
+    const change = (event: Event) => {
+      const value = (event as CustomEvent<string>).detail;
+      if (["low", "medium", "high", "ultra"].includes(value)) setQuality(value);
+    };
+    window.addEventListener("orbitviewer-set-quality", change);
+    return () => window.removeEventListener("orbitviewer-set-quality", change);
+  }, [setQuality]);
   const [panel, setPanel] = useState<string | null>(null);
   useEffect(() => {
+    // Close open tool panels when switching into landing or gallery overlays.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (landing || tourGallery) setPanel(null);
+  }, [landing, tourGallery]);
+  useEffect(() => {
     const share = () =>
+      !landing &&
+      !tourGallery &&
       setPanel((current) => (current === "share" ? null : "share"));
     const escape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setPanel(null);
@@ -46,20 +162,16 @@ function ExplorerSurface({
       window.removeEventListener("orbitviewer-share", share);
       window.removeEventListener("keydown", escape);
     };
-  }, []);
+  }, [landing, tourGallery]);
+  const [sceneReady, setSceneReady] = useState(false);
+  const onSceneReady = useCallback(() => setSceneReady(true), []);
   const [catalogError, setCatalogError] = useState(false);
   const [catalogLoading, setCatalogLoading] = useState(true);
-  const [onboard, setOnboard] = useState(false);
   const surface = useRef<HTMLDivElement>(null);
   const add = useRef(explorer.setCatalog);
   useEffect(() => {
     add.current = explorer.setCatalog;
   }, [explorer.setCatalog]);
-  useEffect(() => {
-    // Hydrate the persisted onboarding preference after SSR.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setOnboard(!localStorage.getItem("orbitviewer-onboarded"));
-  }, []);
   useEffect(() => {
     const controller = new AbortController();
     // A mode change starts a new external catalog request.
@@ -71,9 +183,19 @@ function ExplorerSurface({
     })
       .then(async (response) => {
         if (!response.ok) throw new Error("Catalog unavailable");
-        const data = (await response.json()) as { mpc_orbits?: OrbitRecord[] };
+        const data = (await response.json()) as {
+          mpc_orbits?: OrbitRecord[];
+          rubin_discoveries_count?: unknown;
+        };
         if (!Array.isArray(data.mpc_orbits)) throw new Error("Invalid catalog");
         add.current(data.mpc_orbits);
+        const count = data.rubin_discoveries_count;
+        onDiscoveryCount?.(
+          typeof count === "number" && Number.isSafeInteger(count) && count >= 0
+            ? count
+            : null,
+        );
+        window.dispatchEvent(new Event("orbitviewer-catalog-loaded"));
       })
       .catch(() => {
         if (!controller.signal.aborted) setCatalogError(true);
@@ -82,318 +204,237 @@ function ExplorerSurface({
         if (!controller.signal.aborted) setCatalogLoading(false);
       });
     return () => controller.abort();
-  }, [explorer.quality]);
-  const info = entries.find(
-    (entry) =>
-      entry.elementID === selectedId ||
-      entry.elementID === selected?.fulldesignation,
+  }, [explorer.quality, onDiscoveryCount]);
+
+  const backgroundOnly = landing || tourGallery;
+  const hasLeftCard = Boolean((selectedId && !panel) || tour);
+  const isPlanetSelected = Boolean(
+    selectedId && selected?.object_type?.includes(7) && !tour,
   );
-  const closeOnboarding = () => {
-    localStorage.setItem("orbitviewer-onboarded", "true");
-    setOnboard(false);
-  };
+
   return (
-    <main ref={surface} className={styles.explorer}>
-      <div className={styles.canvas}>
-        <Scene />
+    <div
+      ref={surface}
+      className={styles.explorer}
+      data-landing={landing}
+      data-gallery={tourGallery}
+    >
+      {(!sceneReady || catalogLoading) && <LoadingScreen />}
+      <div
+        className={styles.canvas}
+        aria-hidden={backgroundOnly || undefined}
+        inert={backgroundOnly}
+      >
+        <Scene
+          landing={landing}
+          departing={departing}
+          onDepartureComplete={onDepartureComplete}
+          sceneReady={sceneReady}
+          onReady={onSceneReady}
+          ready={!catalogLoading && sceneReady}
+        />
       </div>
-      <div className={styles.toolbar}>
-        {(
-          [
-            ["objects", "Objects"],
-            ["filters", "Filter"],
-            ["search", "Search"],
-          ] as const
-        ).map(([name]) => (
-          <Button
-            key={name}
-            aria-pressed={panel === name}
-            onClick={() => setPanel(panel === name ? null : name)}
-          >
-            <Icon name={name === "objects" ? "orbit" : name} />
-            {t(`toolbar.${name}`)}
-          </Button>
-        ))}
-        <Link href="/guided-experiences">
-          <Icon name="guides" />
-          {t("toolbar.guides")}
-        </Link>
-      </div>
-      {(catalogLoading || catalogError || contentError) && (
-        <p className={styles.status} role="status">
-          {catalogLoading
-            ? t("ui.loading")
-            : catalogError
-              ? t("ui.catalogError")
-              : t("ui.unavailable")}
-        </p>
-      )}
-      {panel && (
-        <aside
-          className={styles.panel}
-          aria-label={t(panel === "share" ? "ui.share" : `toolbar.${panel}`)}
+      <main hidden={backgroundOnly}>
+        <div
+          className={styles.toolbar}
+          data-hidden={Boolean((selectedId && !panel) || tour)}
         >
-          <div className={styles.panelHead}>
-            <h2>{t(panel === "share" ? "ui.share" : `toolbar.${panel}`)}</h2>
-            <Button onClick={() => setPanel(null)} aria-label={t("ui.close")}>
-              ×
-            </Button>
-          </div>
-          {panel === "objects" && (
-            <>
-              <p>{t("objects.subtitle")}</p>
-              <ul className={styles.results}>
-                {entries.map((entry) => (
-                  <li key={entry.elementID}>
-                    <button
-                      onClick={() => {
-                        select(entry.elementID);
-                        setPanel(null);
-                      }}
-                    >
-                      {entry.title}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              {categories.map(({ code, key, color }) => (
-                <label className={styles.check} key={code}>
-                  <input
-                    type="checkbox"
-                    checked={enabled.includes(code)}
-                    onChange={(event) =>
-                      setEnabled(
-                        event.target.checked
-                          ? [...enabled, code]
-                          : enabled.filter((item) => item !== code),
-                      )
-                    }
-                  />
-                  <span style={{ color }}>
-                    {t(`objects.types.${key}.name`)}
+          <div className={styles.toolbarHead} />
+          <div className={styles.toolbarBody}>
+            {(["objects", "filters", "search"] as const).map((name) => (
+              <div key={name} className={styles.toolbarItem}>
+                <button
+                  type="button"
+                  aria-pressed={panel === name}
+                  onClick={() => setPanel(panel === name ? null : name)}
+                >
+                  <span className={styles.iconWrap}>
+                    <Icon name={name === "objects" ? "orbit" : name} />
                   </span>
-                </label>
-              ))}
-              <label className={styles.check}>
-                <input
-                  type="checkbox"
-                  checked={explorer.showOrbits}
-                  onChange={(event) =>
-                    explorer.setShowOrbits(event.target.checked)
-                  }
-                />
-                {t("ui.orbits")}
-              </label>
-              <label className={styles.field}>
-                {t("ui.quality")}
-                <select
-                  value={explorer.quality}
-                  onChange={(event) => explorer.setQuality(event.target.value)}
-                >
-                  {["low", "medium", "high", "ultra"].map((quality) => (
-                    <option key={quality} value={quality}>
-                      {t(`ui.${quality}`)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </>
-          )}
-          {panel === "filters" && (
-            <>
-              <label className={styles.field}>
-                {t("filters.discoveries")}
-                <select
-                  value={explorer.discoverer}
-                  onChange={(event) =>
-                    explorer.setDiscoverer(event.target.value)
-                  }
-                >
-                  {["all", "rubin", "other"].map((value) => (
-                    <option key={value} value={value}>
-                      {t(`filters.toggle.${value}`)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className={styles.field}>
-                {t("ui.distance")}
-                <input
-                  type="range"
-                  min="1"
-                  max="500"
-                  value={explorer.distance}
-                  onChange={(event) =>
-                    explorer.setDistance(Number(event.target.value))
-                  }
-                />
-                <output>{explorer.distance}</output>
-              </label>
-              <Button
-                onClick={() => {
-                  explorer.setDistance(500);
-                  explorer.setDiscoverer("all");
-                  setEnabled(categories.map(({ code }) => code));
-                }}
+                  <span>{t(`toolbar.${name}`)}</span>
+                </button>
+              </div>
+            ))}
+            <div className={styles.toolbarItem}>
+              <Link href="/guided-experiences">
+                <span className={styles.iconWrap}>
+                  <Icon name="guides" />
+                  <span className={styles.badge} />
+                </span>
+                <span>{t("toolbar.guides")}</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+        {(catalogLoading || catalogError || contentError) && (
+          <p className={styles.status} role="status">
+            {catalogLoading
+              ? t("ui.loading")
+              : catalogError
+                ? t("ui.catalogError")
+                : t("ui.unavailable")}
+          </p>
+        )}
+        {panel === "objects" && (
+          <ObjectsOverlay onClose={() => setPanel(null)} />
+        )}
+        {panel === "filters" && (
+          <FiltersOverlay onClose={() => setPanel(null)} />
+        )}
+        {panel === "share" && (
+          <ShareOverlay
+            onClose={() => setPanel(null)}
+            getCanvas={() => surface.current?.querySelector("canvas")}
+          />
+        )}
+        {panel === "search" && (
+          <aside className={styles.searchPanel} aria-label={t("search.title")}>
+            <div className={styles.searchHead}>
+              <h2>{t("search.title")}</h2>
+              <button
+                type="button"
+                className={styles.searchClose}
+                onClick={() => setPanel(null)}
+                aria-label={t("ui.close")}
               >
-                {t("filters.reset")}
-              </Button>
-            </>
-          )}
-          {panel === "search" && (
-            <>
+                <Icon name="close" />
+              </button>
+            </div>
+            <div className={styles.searchBody}>
               <form
+                className={styles.searchForm}
                 onSubmit={(event) => {
                   event.preventDefault();
                   void search.searchCloud();
                 }}
               >
                 <input
+                  type="search"
+                  placeholder={t("search.placeholder")}
                   aria-label={t("search.title")}
                   value={search.query}
                   onChange={(event) => search.setQuery(event.target.value)}
                   maxLength={100}
+                  autoFocus
                 />
-                <Button
-                  type="submit"
-                  disabled={search.query.trim().length < 2 || search.busy}
-                >
-                  {search.busy ? t("ui.loading") : t("search.search_cloud")}
-                </Button>
+                {search.query.trim().length >= 2 && !search.results.length ? (
+                  <button
+                    type="submit"
+                    className={styles.searchCloudBtn}
+                    disabled={search.busy}
+                  >
+                    {search.busy ? t("ui.loading") : t("search.search_cloud")}
+                  </button>
+                ) : (
+                  <span className={styles.searchIcon} aria-hidden="true">
+                    <Icon name="search" />
+                  </span>
+                )}
               </form>
-              {search.error && <p role="alert">{t("ui.searchError")}</p>}
-              {!search.results.length && <p>{t("ui.empty")}</p>}
-              <ul className={styles.results}>
-                {search.results.map((record) => (
-                  <li key={objectId(record)}>
-                    <button
-                      onClick={() => {
-                        select(objectId(record));
-                        setPanel(null);
-                      }}
-                    >
-                      {entries.find(
-                        (entry) => entry.elementID === objectId(record),
-                      )?.title ?? record.fulldesignation}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-          {panel === "share" && (
-            <ShareControls
-              getCanvas={() => surface.current?.querySelector("canvas")}
-            />
-          )}
-        </aside>
-      )}
-      {selectedId && !children && !panel && (
-        <aside className={`${styles.panel} ${styles.details}`}>
-          <div className={styles.panelHead}>
-            <h2>
-              {info?.title ??
-                (selectedId === "sun"
-                  ? t("ui.sun")
-                  : (selected?.fulldesignation ?? selectedId))}
-            </h2>
-            <Button onClick={() => select()} aria-label={t("ui.close")}>
-              ×
-            </Button>
-          </div>
-          {info?.elementPreview?.[0]?.url && (
-            <CmsImage src={info.elementPreview[0].url} alt={info.title} />
-          )}
-          {info?.textBody?.plainText && <p>{info.textBody.plainText}</p>}
-          {selected && (
-            <dl>
-              {[
-                [
-                  t("ui.distance"),
-                  orbitPosition(selected, mjd).length().toFixed(3),
-                ],
-                [t("ui.semimajor"), selected.a.toFixed(3)],
-                [t("ui.eccentricity"), selected.e.toFixed(4)],
-                [t("ui.inclination"), `${selected.i.toFixed(2)}°`],
-              ].map(([label, value]) => (
-                <div key={label}>
-                  <dt>{label}</dt>
-                  <dd>{value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
-          {info?.viewInSkyviewerLink && (
-            <a href={info.viewInSkyviewerLink}>Skyviewer ↗</a>
-          )}
-        </aside>
-      )}
-      <div className={styles.mapControls}>
-        <Button
-          onClick={() => {
-            select();
-            explorer.camera("reset");
-          }}
-          aria-label={t("ui.reset")}
-        >
-          <Icon name="center" />
-        </Button>
-        <Button
-          onClick={() => explorer.camera("in")}
-          aria-label={t("ui.zoomIn")}
-        >
-          +
-        </Button>
-        <Button
-          onClick={() => explorer.camera("out")}
-          aria-label={t("ui.zoomOut")}
-        >
-          −
-        </Button>
-        <Button
-          onClick={() => {
-            if (document.fullscreenElement) void document.exitFullscreen();
-            else void document.documentElement.requestFullscreen();
-          }}
-          aria-label={t("ui.fullscreen")}
-        >
-          ⛶
-        </Button>
-      </div>
-      <div className={styles.time}>
-        <TimeControls />
-      </div>
-      {children}
-      {onboard && !children && (
-        <div
-          className={styles.onboarding}
-          role="dialog"
-          aria-modal="false"
-          aria-labelledby="onboarding-title"
-        >
-          <h1 id="onboarding-title">{t("ui.onboarding")}</h1>
-          <p>{t("ui.help")}</p>
-          <Button onClick={closeOnboarding}>{t("ui.start")}</Button>{" "}
-          <Link href="/guided-experiences">{t("toolbar.guides")}</Link>
+              <div className={styles.searchResults}>
+                {!search.query.trim() && (
+                  <h3 className={styles.searchSubhead}>
+                    {t("search.recommended")}
+                  </h3>
+                )}
+                {search.error && (
+                  <p className={styles.searchEmpty} role="alert">
+                    {t("ui.searchError")}
+                  </p>
+                )}
+                {!search.error && !search.results.length && (
+                  <p className={styles.searchEmpty}>{t("search.no_results")}</p>
+                )}
+                <ul className={styles.results}>
+                  {search.results.map((record) => {
+                    const id = objectId(record);
+                    const cat = categories.find(
+                      ({ code }) => code === categoryCode(record.object_type),
+                    );
+                    const color = categoryColor(
+                      record.object_type,
+                      categoryPalette,
+                    );
+                    return (
+                      <li key={id}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            select(id);
+                            setPanel(null);
+                          }}
+                        >
+                          <span>
+                            {entries.find(
+                              (entry) =>
+                                entry.elementID === id ||
+                                entry.elementID === record.fulldesignation,
+                            )?.title ?? record.fulldesignation}
+                          </span>
+                          {cat && (
+                            <span
+                              className={styles.typeChip}
+                              style={
+                                { "--object-color": color } as CSSProperties
+                              }
+                            >
+                              {t(`categories.${cat.key}.singular`)}
+                            </span>
+                          )}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          </aside>
+        )}
+        {selectedId && !tour && !panel && <ObjectDetailCard />}
+        <div className={styles.mapControls}>
+          <button
+            type="button"
+            onClick={() => {
+              select();
+              explorer.camera("reset");
+            }}
+            aria-label={t("ui.reset")}
+          >
+            <Icon name="center" />
+          </button>
+          <ZoomButton direction="in" label={t("ui.zoomIn")} />
+          <ZoomButton direction="out" label={t("ui.zoomOut")} />
+          <button
+            type="button"
+            className={styles.fullscreenBtn}
+            onClick={() => {
+              if (document.fullscreenElement) void document.exitFullscreen();
+              else void document.documentElement.requestFullscreen();
+            }}
+            aria-label={t("ui.fullscreen")}
+          >
+            <Icon name="fullscreen" />
+          </button>
         </div>
-      )}
-    </main>
-  );
-}
-export function Explorer({
-  initial,
-  entries,
-  children,
-  contentError,
-}: {
-  initial: OrbitRecord[];
-  entries: SolarEntry[];
-  children?: ReactNode;
-  contentError?: boolean;
-}) {
-  return (
-    <ExplorerProvider initial={initial} entries={entries}>
-      <ExplorerSurface contentError={contentError}>{children}</ExplorerSurface>
-    </ExplorerProvider>
+        <div className={styles.time} data-shifted={hasLeftCard}>
+          {isPlanetSelected && selectedId && (
+            <div className={styles.viewToggle} role="group">
+              {(["orbit", "object"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  aria-pressed={selectionMode === mode}
+                  onClick={() => select(selectedId, mode)}
+                >
+                  {t(`object.toggle.${mode}`)}
+                </button>
+              ))}
+            </div>
+          )}
+          <TimeControls />
+        </div>
+      </main>
+      {children}
+    </div>
   );
 }

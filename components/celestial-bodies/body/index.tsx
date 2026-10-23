@@ -5,7 +5,7 @@ import { Html } from "@react-three/drei";
 import { type Group, type Mesh } from "three";
 import type { OrbitRecord } from "@/lib/api/hasura";
 import { DEG, objectId, orbitPosition } from "@/lib/solar/orbits";
-import { categoryColor } from "@/lib/solar/categories";
+import { ObjectLabel } from "@/components/molecules/ObjectLabel";
 import { useExplorer } from "@/contexts/ExplorerProvider";
 import { BodyMaterial, EarthMaterial } from "./material";
 import { SaturnRings } from "@/components/models/saturn-rings";
@@ -18,7 +18,6 @@ import jupiter from "./textures/jupiter.webp";
 import saturn from "./textures/saturn.webp";
 import uranus from "./textures/uranus.webp";
 import neptune from "./textures/neptune.webp";
-import styles from "./styles.module.css";
 
 const textures: Record<string, string> = {
   mercury: mercury.src,
@@ -59,7 +58,7 @@ const rotations: Record<
   },
   earth: {
     axialTilt: 23.4392811,
-    period: 0.99722222,
+    period: 0.9972685185,
     meridian: 0,
   },
   mars: {
@@ -84,7 +83,7 @@ const rotations: Record<
   },
   neptune: {
     axialTilt: 28.32,
-    period: 0.66526,
+    period: 0.67125,
     meridian: 249.978,
   },
 };
@@ -93,9 +92,11 @@ const rotations: Record<
  * Texture URLs will come from Craft once its element texture field exists.
  */
 export function Body({ record }: { record: OrbitRecord }) {
-  const { mjd, select, entries, selectedId } = useExplorer();
+  const { mjd, rotationMjd, select, entries, selectedId, categoryPalette } =
+    useExplorer();
   const group = useRef<Group>(null);
   const mesh = useRef<Mesh>(null);
+  const axis = useRef<Group>(null);
   const id = objectId(record);
   const texture = textures[id];
   const name =
@@ -110,46 +111,46 @@ export function Body({ record }: { record: OrbitRecord }) {
     if (mesh.current) {
       const spin = rotations[id];
       mesh.current.rotation.y = spin
-        ? ((mjd / spin.period) % 1) * Math.PI * 2 + spin.meridian * DEG
+        ? ((rotationMjd / spin.period) % 1) * Math.PI * 2 + spin.meridian * DEG
         : 0;
-      mesh.current.rotation.z = spin ? spin.axialTilt * DEG : 0;
+      if (axis.current)
+        axis.current.rotation.z = spin ? -(spin.axialTilt + record.i) * DEG : 0;
     }
-  });
+    // Move before camera follow (-2.5), controls (-1), and Html projection (0).
+  }, -3);
   return (
     <group ref={group}>
-      <mesh
-        ref={mesh}
-        scale={bodyRadius(id)}
-        onClick={(event) => {
-          event.stopPropagation();
-          select(id);
-        }}
-      >
-        <sphereGeometry args={[1, 48, 32]} />
-        {texture ? (
-          id === "earth" ? (
-            <EarthMaterial texture={texture} />
-          ) : (
-            <BodyMaterial texture={texture} />
-          )
-        ) : (
-          <meshStandardMaterial color="#b3b3b3" />
-        )}
-        {id === "saturn" && <SaturnRings />}
-        {id === "earth" && <Atmosphere />}
-      </mesh>
-      <Html position={[0, bodyRadius(id) * 1.5, 0]} center zIndexRange={[2, 0]}>
-        <button
-          className={styles.label}
-          data-selected={selectedId === id}
-          onClick={() => select(id)}
+      <group ref={axis}>
+        <mesh
+          ref={mesh}
+          scale={bodyRadius(id)}
+          onClick={(event) => {
+            event.stopPropagation();
+            select(id);
+          }}
         >
-          <span
-            className={styles.dot}
-            style={{ background: categoryColor(record.object_type) }}
-          />
-          {name}
-        </button>
+          <sphereGeometry args={[1, 48, 32]} />
+          {texture ? (
+            id === "earth" ? (
+              <EarthMaterial texture={texture} />
+            ) : (
+              <BodyMaterial texture={texture} />
+            )
+          ) : (
+            <meshStandardMaterial color="#b3b3b3" />
+          )}
+          {id === "saturn" && <SaturnRings />}
+          {id === "earth" && <Atmosphere />}
+        </mesh>
+      </group>
+      <Html position={[0, 0, 0]} zIndexRange={[2, 0]}>
+        <ObjectLabel
+          name={name}
+          types={record.object_type}
+          palette={categoryPalette}
+          selected={selectedId === id}
+          onSelect={() => select(id)}
+        />
       </Html>
     </group>
   );

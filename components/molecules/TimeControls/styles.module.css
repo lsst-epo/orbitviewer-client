@@ -1,65 +1,246 @@
 .controls {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 20px;
-  width: 460px;
-  max-width: 100%;
-  border: 1px solid #ffffff0d;
-  border-radius: 10px;
-  background: linear-gradient(120deg, #373737ed, #222e);
-  backdrop-filter: blur(12px);
+  width: 100%;
+  max-width: 440px;
+  border-radius: var(--corner-large);
+  background:
+    linear-gradient(
+      180deg,
+      rgb(255 255 255 / 12%) 0%,
+      rgb(255 255 255 / 9%) 100%
+    ),
+    linear-gradient(180deg, rgb(0 0 0 / 80%) 0%, rgb(0 0 0 / 80%) 100%);
+  backdrop-filter: blur(var(--backdrop-blur));
+  border: 1px solid var(--color-border);
+  pointer-events: auto;
 }
 
-.controls button {
-  border: 0;
-  background: transparent;
-  padding: 4px;
-  min-height: 32px;
-}
-
-.controls label {
+.head {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
+  height: 48px;
 }
 
-.controls label:nth-of-type(2) {
-  grid-column: 1 / -1;
-  grid-row: 2;
-}
-
-.controls input[type="range"] {
+.heading {
   flex: 1;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 4px;
 }
 
-.controls input[type="date"] {
+.play {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-turquoise-400);
+  cursor: pointer;
+}
+
+.play svg {
+  width: 24px;
+  height: 24px;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgb(54 182 176 / 25%);
+  pointer-events: none;
+}
+
+.play[data-playing="true"] .ring {
+  border-top-color: var(--color-turquoise-400);
+  animation: spin 1.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.date {
+  display: flex;
+  align-items: center;
+}
+
+.date input[type="date"] {
   background: transparent;
   border: 0;
-  padding: 4px;
+  padding: 6px;
+  border-radius: var(--corner-medium);
+  color: var(--color-button-text);
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 24px;
+  text-transform: uppercase;
   color-scheme: dark;
+  cursor: pointer;
 }
 
-.controls output {
-  min-width: 22px;
+.date input[type="date"]:hover {
+  background-color: var(--color-turquoise-800);
 }
 
-@media (width <= 600px) {
-  .controls {
-    gap: 6px;
-    padding: 10px;
-    width: 100%;
-  }
+.live {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 26px;
+  border: 1px solid var(--color-border);
+  background:
+    linear-gradient(
+      180deg,
+      rgb(255 255 255 / 12%) 0%,
+      rgb(255 255 255 / 9%) 100%
+    ),
+    linear-gradient(180deg, rgb(0 0 0 / 80%) 0%, rgb(0 0 0 / 80%) 100%);
+  color: var(--color-text);
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
 
-  .controls label {
-    font-size: 12px;
-    gap: 4px;
-  }
+.live[data-active="true"] {
+  background: var(--color-turquoise-800);
+  border-color: transparent;
+  color: var(--color-turquoise-300);
+}
 
-  .controls input {
-    max-width: 135px;
-  }
+.toggle {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 8px;
+  border-left: 1px solid var(--color-border);
+}
+
+.collapse {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--corner-medium);
+  background: transparent;
+  color: var(--color-turquoise-300);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.collapse svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.controls[data-collapsed="true"] .collapse svg {
+  transform: rotate(180deg);
+}
+
+.collapse:hover,
+.collapse:focus-visible {
+  background-color: var(--color-turquoise-800);
+  color: var(--color-turquoise-200);
+}
+
+.body {
+  padding: 8px 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trackWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
+
+.track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    -90deg,
+    var(--color-turquoise-300) 0%,
+    var(--color-turquoise-700) 50%,
+    var(--color-turquoise-300) 100%
+  );
+  clip-path: polygon(0% 0%, 50% 30%, 100% 0%, 100% 100%, 50% 70%, 0% 100%);
+  pointer-events: none;
+}
+
+.trackWrap input[type="range"] {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.trackWrap input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-turquoise-600);
+  border: 3px solid var(--color-turquoise-200);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 50%);
+}
+
+.trackWrap input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-turquoise-600);
+  border: 3px solid var(--color-turquoise-200);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 50%);
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border-radius: 26px;
+  background: var(--color-turquoise-800);
+  color: var(--color-turquoise-300);
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }

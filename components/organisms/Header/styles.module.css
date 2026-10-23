@@ -1,101 +1,48 @@
 .header {
-  position: relative;
-  height: 96px;
-  z-index: 10;
-}
-
-.header[data-viewer="true"] {
-  height: 0;
-}
-
-.brand {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  width: 100px;
-  height: 64px;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(120deg, #363636e8, #202020e8);
-  border-radius: 10px 10px 0 0;
+  position: fixed;
+  inset: 0 0 auto;
+  height: var(--header-height);
+  padding: var(--site-margin-small) var(--site-margin-small) 8px;
+  z-index: var(--z-menu);
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
 }
 
 .actions {
-  position: absolute;
-  right: 24px;
-  top: 24px;
   display: flex;
-  gap: 16px;
-  align-items: center;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: auto;
 }
 
 .share {
   display: flex;
   align-items: center;
-  gap: 8px;
-  border-radius: 24px;
-  padding: 10px 18px;
-  border: 0;
-  color: white;
-  background: #0c4a47;
-}
-
-.menu summary {
-  display: grid;
-  place-items: center;
-  width: 48px;
+  justify-content: center;
   height: 48px;
-  border-radius: 50%;
-  background: #272727e8;
+  gap: 4px;
+  padding: 0 16px;
+  background-color: var(--color-turquoise-700);
+  border-radius: 24px;
+  border: 0;
+  color: var(--color-turquoise-200);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   cursor: pointer;
-  list-style: none;
 }
 
-.menu summary::-webkit-details-marker {
-  display: none;
+.share svg {
+  width: 16px;
+  height: 16px;
 }
 
-.menu nav {
-  position: absolute;
-  right: 0;
-  top: 64px;
-  width: 300px;
-  padding: 24px;
-  background: linear-gradient(120deg, #373737f5, #222f);
-  border-radius: 10px;
-  box-shadow: 0 12px 40px #0006;
-  backdrop-filter: blur(12px);
-  display: grid;
-  gap: 20px;
-}
-
-.menu a {
-  color: white;
-  text-decoration: none;
-}
-
-.menu a:hover {
+.share:hover,
+.share:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-turquoise-700);
+  background-color: var(--color-turquoise-800);
   color: var(--color-turquoise-300);
-}
-
-.menu label {
-  display: grid;
-  gap: 8px;
-  border-top: 1px solid #ffffff26;
-  padding-top: 20px;
-}
-
-@media (width <= 600px) {
-  .brand {
-    left: 8px;
-    top: 8px;
-    width: 72px;
-    height: 56px;
-  }
-
-  .actions {
-    right: 12px;
-    top: 12px;
-    gap: 8px;
-  }
 }

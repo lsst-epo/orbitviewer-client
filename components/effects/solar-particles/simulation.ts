@@ -1,5 +1,8 @@
 import {
   BufferAttribute,
+  DataTexture,
+  RGBAFormat,
+  type WebGLRenderer,
   BufferGeometry,
   FloatType,
   NearestFilter,
@@ -13,10 +16,10 @@ import type { OrbitRecord } from "@/lib/api/hasura";
 import { composeShader } from "@/lib/shaders";
 import vertex from "./shaders/gpu_sim.vert";
 import fragment from "./shaders/gpu_sim.frag";
-import { GAUSSIAN_K, DEG } from "@/lib/solar/orbits";
+import { GAUSSIAN_K, DEG, orbitPosition } from "@/lib/solar/orbits";
 
 /** One orbital record per floating-point texel. The original GPU shaders
- * retain their 1,000-units-per-AU convention; the draw mesh scales to AU.
+ * retain their 1,000-units-per-AU convention; the draw shader converts sampled centers to AU.
  * Sampling texel centers avoids the legacy edge/interpolation ambiguity.
  */
 export function createSimulation(records: OrbitRecord[]) {
@@ -73,14 +76,66 @@ export function createSimulation(records: OrbitRecord[]) {
   });
   return {
     uv,
-    scene,
-    camera,
-    target,
-    material,
+    texture: target.texture,
+    update(gl: WebGLRenderer, mjd: number) {
+      material.uniforms.d.value = mjd;
+      const previous = gl.getRenderTarget();
+      try {
+        gl.setRenderTarget(target);
+        gl.render(scene, camera);
+      } finally {
+        gl.setRenderTarget(previous);
+      }
+    },
     dispose() {
       geometry.dispose();
       material.dispose();
       target.dispose();
+    },
+  };
+}
+
+/** WebGL2 can sample float textures even without float render-target support.
+ * Keep the exact same drawing shader and geometry on the CPU fallback path.
+ */
+export function createCPUSimulation(records: OrbitRecord[]) {
+  const width = Math.max(1, Math.ceil(Math.sqrt(records.length)));
+  const height = Math.max(1, Math.ceil(records.length / width));
+  const positions = new Float32Array(width * height * 4);
+  const uv = new Float32Array(records.length * 2);
+  records.forEach((_, index) => {
+    uv.set(
+      [
+        ((index % width) + 0.5) / width,
+        (Math.floor(index / width) + 0.5) / height,
+      ],
+      index * 2,
+    );
+  });
+  const texture = new DataTexture(
+    positions,
+    width,
+    height,
+    RGBAFormat,
+    FloatType,
+  );
+  let lastDate: number | undefined;
+  return {
+    uv,
+    texture,
+    update(_gl: WebGLRenderer, mjd: number) {
+      if (lastDate === mjd) return;
+      records.forEach((record, index) => {
+        orbitPosition(record, mjd)
+          .multiplyScalar(1000)
+          .toArray(positions, index * 4);
+        positions[index * 4 + 3] = 1;
+      });
+      texture.needsUpdate = true;
+      lastDate = mjd;
+    },
+    dispose() {
+      texture.dispose();
     },
   };
 }
