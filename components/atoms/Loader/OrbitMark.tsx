@@ -1,19 +1,6 @@
 import type { CSSProperties, FunctionComponent } from "react";
 import styles from "./styles.module.css";
 
-/**
- * The orbit mark the legacy's loader turns while the dataset downloads.
- *
- * Ported from the inline SVG in `components/loader.njk`. It is inline here
- * rather than an `<img>` because the animation addresses the individual
- * glyphs: `layers/Loader.ts` ran two gsap timelines over it, one rotating the
- * whole mark and one staggering the glyphs' opacity, and neither reaches
- * inside an external image.
- *
- * The fifteen glyphs are drawn flat in `--color-turquoise-400`; the legacy
- * hard-coded `#009fa1` on every path, which is that token's value.
- */
-
 const GLYPHS = [
   "M39.8477 8.35129C40.7095 8.54279 41.5713 8.7343 42.433 9.02156V17.0648C42.433 17.1606 42.433 17.3521 42.5288 17.4478C42.6245 17.8309 42.816 18.2139 43.1991 18.4054C44.6354 19.1714 45.9759 20.1289 47.1249 21.278C47.1249 21.4695 47.0292 21.661 47.0292 21.9482C47.0292 23.4803 48.274 24.7251 49.806 24.7251C51.3381 24.7251 52.5829 23.4803 52.5829 21.9482C52.5829 20.4162 51.3381 19.1714 49.806 19.1714C49.5188 19.1714 49.3273 19.1714 49.1358 19.2671C47.9867 18.1181 46.7419 17.1606 45.3056 16.3946V10.0748C49.5188 11.9899 53.2531 14.9583 56.03 18.6926C55.8385 19.0756 55.7427 19.4587 55.7427 19.8417C55.7427 21.3737 56.9875 22.6185 58.5196 22.6185C60.0516 22.6185 61.2964 21.3737 61.2964 19.8417C61.2964 18.3096 60.0516 17.0648 58.5196 17.0648C58.4238 17.0648 58.4238 17.0648 58.3281 17.0648C54.1149 11.1281 47.6037 6.91499 40.4222 5.47869C39.6562 5.38294 38.8902 5.86171 38.6987 6.62773C38.6029 7.39376 39.0817 8.15978 39.8477 8.35129Z",
   "M59.9548 24.821C59.3803 25.7785 59.7633 26.9276 60.6251 27.4063C61.5826 27.9809 62.7317 27.5978 63.2104 26.7361C63.7849 25.7785 63.4019 24.6295 62.5402 24.1507C61.5826 23.5762 60.4336 23.8635 59.9548 24.821Z",
@@ -32,9 +19,14 @@ const GLYPHS = [
   "M30.0813 17.7355C31.1389 17.7355 31.9963 16.8781 31.9963 15.8204C31.9963 14.7627 31.1389 13.9053 30.0813 13.9053C29.0236 13.9053 28.1662 14.7627 28.1662 15.8204C28.1662 16.8781 29.0236 17.7355 30.0813 17.7355Z",
 ];
 
-const OrbitMark: FunctionComponent = () => (
+interface OrbitMarkProps {
+  /** Corner-sized, for inline use beside other copy. */
+  compact?: boolean;
+}
+
+const OrbitMark: FunctionComponent<OrbitMarkProps> = ({ compact = false }) => (
   <svg
-    className={styles.mark}
+    className={compact ? `${styles.mark} ${styles.compact}` : styles.mark}
     viewBox="0 0 68 68"
     fill="currentColor"
     aria-hidden="true"

@@ -59,8 +59,8 @@ export const CATEGORY_LABELS: Record<
 };
 
 /**
- * Display order for the category list, matching the legacy `objects.njk`,
- * which iterated the copy file's `objects.types` in declaration order.
+ * Display order for the category list, matching the legacy, which iterated
+ * the copy file's `objects.types` in declaration order.
  */
 export const ALL_CATEGORIES = Object.keys(
   CATEGORY_LABELS

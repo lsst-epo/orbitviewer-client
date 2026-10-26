@@ -1,11 +1,5 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `templates/_about.scss`. The legacy's entrance animations were
-   driven by an IntersectionObserver toggling `intersect_active` on every
-   section; `animation-timeline: view()` does the same in CSS, with no
-   observer and no per-scroll class churn. Where the timeline is unsupported
-   the sections are simply visible, which is the right fallback. */
-
 .about {
   --measure: 44rem;
 
@@ -47,8 +41,6 @@
     transform: none;
   }
 }
-
-/* Masthead */
 
 .crest {
   width: min(100%, 320px);
@@ -96,8 +88,6 @@
   border-radius: var(--corner-large);
 }
 
-/* Device showcase */
-
 .device {
   display: grid;
   gap: var(--site-margin-large);
@@ -113,9 +103,6 @@
   background-color: var(--color-grey-800);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--corner-large);
-
-  /* The ratio is what changes between tiers, so it is the thing worth
-     animating -- the legacy swapped a class and let the same transition run. */
   transition: aspect-ratio 0.5s var(--easing-default);
 }
 
@@ -170,8 +157,6 @@
   border-color: var(--color-turquoise-600);
 }
 
-/* Observatory */
-
 .observatory {
   gap: 0;
   max-width: none;
@@ -205,11 +190,8 @@
   }
 }
 
-/* The legacy's type scale steps at breakpoints rather than interpolating, so
-   these are `@media` steps and not the `clamp()` the port had. Sizes are its
-   `$font-styles` px over 16: body-large 18/24, subtitle-large 24/32,
-   headline 32/40, hero 48/60 -- every one of them `regular`. */
-
+/* The legacy's type scale steps at breakpoints rather than interpolating:
+   these are `@media` steps on purpose, not a `clamp()`. */
 @media (width >= 768px) {
   .title,
   .sectionTitle {

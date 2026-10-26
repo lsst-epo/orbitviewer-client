@@ -10,9 +10,9 @@ interface SplashPageProps {
 }
 
 /**
- * The locale root renders the splash -- the landing state that the legacy
- * `index.njk` drew over the viewer via `splash.njk`. Its call to action
- * navigates to /explorer, which now owns the 3D scene.
+ * The locale root renders the splash -- the landing state the legacy drew
+ * over the viewer. Its call to action navigates to /explorer, which now owns
+ * the 3D scene.
  */
 export async function generateMetadata({
   params,
@@ -32,9 +32,6 @@ export async function generateMetadata({
 const SplashPage: FunctionComponent<SplashPageProps> = async ({ params }) => {
   const { locale } = await params;
   setRequestLocale(locale);
-  // The count lives in the head of the MPC dataset, which is also where the
-  // legacy read it. Any tier's file carries the same figure; the smallest is
-  // asked for since only its first 256 bytes are actually read.
   const [page, dataFileUrls] = await Promise.all([
     getContentPage({ locale, slug: "landing" }),
     getDataFileUrls(),

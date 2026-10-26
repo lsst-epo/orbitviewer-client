@@ -20,9 +20,6 @@ next-env.d.ts
 # production
 /build
 
-# generated
-/gql/
-
 # misc
 .DS_Store
 *.pem
@@ -44,3 +41,7 @@ yarn-error.log*
 .idea
 .vscode/*
 !.vscode/extensions.json
+
+# AI tooling
+/DEVIATIONS.md
+/.claude/

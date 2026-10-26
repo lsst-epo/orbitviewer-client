@@ -10,19 +10,6 @@ import {
   type PropsWithChildren,
 } from "react";
 
-/**
- * Bridges the on-screen map controls to the camera.
- *
- * Same shape as the capture and benchmark bridges: the buttons are DOM, the
- * camera only exists inside the render loop, and a ref carries the intent
- * across without a React render per frame.
- *
- * Zoom is held rather than stepped, which is what the legacy's
- * `attachUpDownActions` gave its buttons -- press and the view keeps moving,
- * release and it stops. A click still nudges, because the press and release
- * bracket at least one frame.
- */
-
 /** -1 zooms in, +1 out, 0 idle. Matches the legacy's `controls.zoom`. */
 export type ZoomDirection = -1 | 0 | 1;
 

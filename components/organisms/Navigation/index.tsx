@@ -15,19 +15,6 @@ import Icon, { type IconName } from "@/components/atoms/Icon";
 import { SIM_QUALITIES, type SimQuality } from "@/lib/solar/quality";
 import styles from "./styles.module.css";
 
-/**
- * Site navigation: the share trigger and the settings menu.
- *
- * Ported from `layers/Navigation.ts`, `partials/navigation.njk` and
- * `components/SlidingMenu.ts`.
- *
- * The legacy rendered this on every page but wired it only where the viewer
- * existed, so on About and How to Use the exploration-mode and fullscreen
- * controls were present, focusable, and did nothing. Here the scene-dependent
- * items are only rendered where there is a scene -- `quality` and `onShare`
- * are optional, and their sections disappear with them.
- */
-
 /** Tier order, coarsest first, as the legacy's menu listed them. */
 const OFFERED_QUALITIES: Array<SimQuality> = SIM_QUALITIES.filter(
   (quality): quality is SimQuality => quality !== "ultra2"
@@ -61,9 +48,9 @@ const Navigation: FunctionComponent<NavigationProps> = ({
   const rootRef = useRef<HTMLElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
-  // Fullscreen can be left by pressing Escape, which fires no click of ours,
-  // so the label is driven by the document rather than by our own state.
   useEffect(() => {
+    // Fullscreen can be left by pressing Escape, which fires no click of ours,
+    // so the state is driven by the document rather than by our own.
     const sync = () => setFullscreen(Boolean(document.fullscreenElement));
     document.addEventListener("fullscreenchange", sync);
     sync();
@@ -77,8 +64,6 @@ const Navigation: FunctionComponent<NavigationProps> = ({
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       setOpen(false);
-      // Focus goes back to what opened the menu, or it would be lost to the
-      // document body. The legacy left it wherever it was.
       triggerRef.current?.focus();
     };
 
@@ -98,7 +83,6 @@ const Navigation: FunctionComponent<NavigationProps> = ({
     };
   }, [open]);
 
-  // The second level is an implementation detail of being open.
   useEffect(() => {
     if (!open) setSubmenu(null);
   }, [open]);
@@ -123,8 +107,6 @@ const Navigation: FunctionComponent<NavigationProps> = ({
           type="button"
           className={styles.share}
           onClick={() => {
-            // The dialog is modal, so leaving the menu open behind it would
-            // strand focusable controls under an overlay.
             setOpen(false);
             onShare();
           }}
@@ -143,8 +125,6 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         aria-controls={menuId}
         aria-label={t("navigation.aria")}
       >
-        {/* The glyph does not change when the menu opens: the legacy
-            leaves the hamburger and marks the state with the focus ring. */}
         <Icon name="menu" aria-hidden />
       </button>
 
@@ -155,7 +135,6 @@ const Navigation: FunctionComponent<NavigationProps> = ({
       >
         {submenu === null && (
           <div className={styles.level}>
-            {/* Language is always here, so the group always has content. */}
             <section className={styles.group}>
               <h3 className={styles.groupLabel}>{t("navigation.settings")}</h3>
               <ul className={styles.list}>
@@ -232,9 +211,6 @@ const Navigation: FunctionComponent<NavigationProps> = ({
                   aria-current={code === locale ? "true" : undefined}
                   onClick={() => {
                     setOpen(false);
-                    // Same route, other locale -- next-intl rewrites the
-                    // path. The legacy called a global `changeLang()` that
-                    // reloaded the whole document.
                     router.replace(pathname, { locale: code });
                   }}
                 >

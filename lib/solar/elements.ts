@@ -2,7 +2,7 @@ import { EPOCH } from "./constants";
 import { OrbitElements, OrbitType, SolarCategory } from "./types";
 import type { PlanetOrbitElements } from "@/lib/static/planetOrbits";
 import type { OrbitElements as HasuraOrbitElements } from "@/lib/api/hasura";
-import type { MpcOrbitRow } from "@/lib/api/mpcData";
+import type { OrbitalMpcRow } from "@/lib/api/mpcData";
 
 /**
  * Maps the two source representations of orbital elements onto the single
@@ -96,11 +96,13 @@ export function fromPlanetElements(
   };
 }
 
+/** Shifts Hasura's and the MPC's `(-180, 180]` onto the propagators' `[0, 360)`. */
+const normaliseMeanAnomaly = (value: number | null): number =>
+  value === null ? 0 : value < 0 ? value + 360 : value;
+
 /** Maps one MPC dataset row onto normalised elements. */
-export function fromMpcRow(row: MpcOrbitRow): OrbitElements {
+export function fromMpcRow(row: OrbitalMpcRow): OrbitElements {
   return {
-    // Packed designation preferred: compact, space-free and what the legacy
-    // put in ?id=. Falls back to the unpacked form when a row lacks one.
     id: row.mpcdesignation ?? row.fulldesignation,
     fulldesignation: row.fulldesignation,
     mpcDesignation: row.mpcdesignation,
@@ -109,8 +111,10 @@ export function fromMpcRow(row: MpcOrbitRow): OrbitElements {
     e: row.e,
     i: row.i,
     w: row.argperi,
-    M: row.mean_anomaly < 0 ? row.mean_anomaly + 360 : row.mean_anomaly,
-    n: row.mean_motion,
+    // Undefined on an unbound orbit, which `hyperbolicCalc` propagates from
+    // `Tp` instead and never reads these.
+    M: normaliseMeanAnomaly(row.mean_anomaly),
+    n: row.mean_motion ?? 0,
     q: row.q,
     Tp: row.peri_time,
     epoch: row.epoch_mjd ?? EPOCH,
@@ -134,8 +138,6 @@ export function fromHasuraElements(
     e: el.e,
     i: el.i,
     w: el.argperi,
-    // Hasura returns mean anomaly in (-180, 180]; the propagators assume a
-    // positive-degree convention.
     M: el.mean_anomaly < 0 ? el.mean_anomaly + 360 : el.mean_anomaly,
     n: el.mean_motion,
     q: el.q,

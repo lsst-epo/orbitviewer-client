@@ -5,8 +5,9 @@ import {
   useMemo,
   useState,
   type FunctionComponent,
-  type ReactNode,
+  type PropsWithChildren,
 } from "react";
+import { usePathname } from "@/lib/i18n/navigation";
 import { useExplorer } from "@/contexts/Explorer";
 import { useSolarData } from "@/contexts/SolarData";
 import { useBenchmark } from "@/contexts/Benchmark";
@@ -17,6 +18,7 @@ import Filters from "@/components/molecules/Filters";
 import SearchPanel from "@/components/molecules/Search";
 import SearchProvider from "@/contexts/Search";
 import Loader from "@/components/atoms/Loader";
+import OrbitMark from "@/components/atoms/Loader/OrbitMark";
 import ObjectDetail from "@/components/molecules/ObjectDetail";
 import ObjectsPanel from "@/components/molecules/Objects";
 import TimeMachine from "@/components/molecules/TimeMachine";
@@ -24,36 +26,19 @@ import MapControls from "@/components/molecules/MapControls";
 import Onboarding from "@/components/organisms/Onboarding";
 import PerformanceModal from "@/components/organisms/PerformanceModal";
 import Wizard, { wizardDismissed } from "@/components/organisms/Wizard";
+import { FADE_IN_SECONDS } from "@/components/scene/effects/solar-particles";
 import { hasStoredQuality } from "@/lib/solar/quality";
 import type { TourSummary } from "@/lib/tours";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
-import Chrome from "./Chrome";
+import Chrome from "@/components/organisms/Chrome";
 import styles from "./styles.module.css";
 
 interface ExplorerProps {
   locale: string;
   /** Featured tours for onboarding's second step. */
   featuredTours?: Array<TourSummary>;
-  /**
-   * Replaces the explorer's own chrome with the given overlay.
-   *
-   * A tour drives the scene itself -- which object is framed, where the clock
-   * is -- so the toolbar, panels and time machine would be competing with it
-   * for the same state. The legacy closed them all on entering guided mode
-   * (`goToGuidedExperienceMode`); here they are simply not rendered.
-   */
-  overlay?: ReactNode;
 }
 
-/**
- * Object detail, the floating card on the left.
- *
- * Driven by the `object` param rather than `panel`, so an object stays
- * selected -- and framed by the camera -- while the filters or search panel is
- * open. Outside clicks do not dismiss it: a click in
- * the scene is how you pick a different object, and the legacy's global
- * document handler would have closed the card on the way.
- */
 const ObjectLayer: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { t } = useClientTranslation(locale);
   const { params, closeObject } = useExplorer();
@@ -66,9 +51,6 @@ const ObjectLayer: FunctionComponent<{ locale: string }> = ({ locale }) => {
       closeOnOutsideClick={false}
       label={params.object ?? t("toolbar.objects")}
       closeLabel={t("core.close")}
-      // ObjectDetail carries its own labelled Back control, and the card is
-      // already inset clear of the navigation, so a second dismissal in the
-      // header would be redundant clutter.
       showClose={false}
     >
       <ObjectDetail locale={locale} />
@@ -76,22 +58,10 @@ const ObjectLayer: FunctionComponent<{ locale: string }> = ({ locale }) => {
   );
 };
 
-/**
- * The explorer's side panels.
- *
- * Which one is open lives in the `panel` search param, so the state survives
- * a reload and is shareable -- the same contract the object detail uses. The
- * bodies are placeholders; filters, search and the objects list are the next
- * phases.
- */
 const ExplorerPanels: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { t } = useClientTranslation(locale);
   const { params, closePanel, visibleCategories } = useExplorer();
 
-  /**
-   * The same filters the scene applies, so search cannot surface an object
-   * that is hidden in the view.
-   */
   const filters = useMemo(
     () => ({
       categories:
@@ -126,15 +96,8 @@ const ExplorerPanels: FunctionComponent<{ locale: string }> = ({ locale }) => {
             onClose={closePanel}
             label={t(labelKey)}
             closeLabel={t("core.close")}
-            // Objects is a full-viewport takeover, not a drawer: the scene
-            // dims behind it and the cards run the width of the screen.
             size={id === "objects" ? "full" : "default"}
-            // Filters is a small floating card near the top left, not a
-            // full-height drawer -- see the Layer stylesheet.
             side={id === "filters" ? "card" : "left"}
-            // Objects is a takeover in the legacy, with its own way out --
-            // the back pill that stands in for the toolbar. Filters and
-            // search sit beside the toolbar and keep the header's close.
             showClose={id !== "objects"}
           >
             {id === "filters" && <Filters locale={locale} />}
@@ -147,6 +110,26 @@ const ExplorerPanels: FunctionComponent<{ locale: string }> = ({ locale }) => {
   );
 };
 
+/**
+ * True while the dataset downloads and for the particles' arrival fade after
+ * it, when the field is still filling in. See solar-particles' README.
+ */
+const useFieldFilling = (loading: boolean): boolean => {
+  const [filling, setFilling] = useState(loading);
+
+  useEffect(() => {
+    if (loading) {
+      setFilling(true);
+      return;
+    }
+
+    const timer = setTimeout(() => setFilling(false), FADE_IN_SECONDS * 1000);
+    return () => clearTimeout(timer);
+  }, [loading]);
+
+  return loading || filling;
+};
+
 /** Dataset download state and object count. */
 const DatasetStatus: FunctionComponent<{
   locale: string;
@@ -154,21 +137,22 @@ const DatasetStatus: FunctionComponent<{
 }> = ({ locale, selected }) => {
   const { t } = useClientTranslation(locale);
   const { elements, loading, error } = useSolarData();
+  const filling = useFieldFilling(loading);
 
   if (error) {
     return <p className={styles.meta}>{t("core.loading")}</p>;
   }
 
-  // Nothing while the dataset is still coming down: `DatasetLoader` is over
-  // the whole scene saying exactly this, and the two lines were the same
-  // sentence twice.
-  if (loading) return null;
-
   return (
-    <p className={styles.meta}>
-      {elements.length.toLocaleString(locale)} {t("core.objects")}
-      {selected ? ` · ${selected}` : ""}
-    </p>
+    <>
+      {filling && <OrbitMark compact />}
+      {!loading && (
+        <p className={styles.meta}>
+          {elements.length.toLocaleString(locale)} {t("core.objects")}
+          {selected ? ` · ${selected}` : ""}
+        </p>
+      )}
+    </>
   );
 };
 
@@ -181,13 +165,6 @@ const DatasetLoader: FunctionComponent<{ locale: string }> = ({ locale }) => {
   return <Loader locale={locale} progress={progress} />;
 };
 
-
-/**
- * Onboarding on a first visit, and the performance nudge afterwards.
- *
- * The two are exclusive: someone still choosing a tier does not need to be
- * told the one they have not chosen yet is slow.
- */
 const FirstRun: FunctionComponent<{
   locale: string;
   tours: Array<TourSummary>;
@@ -221,8 +198,6 @@ const FirstRun: FunctionComponent<{
     );
   }
 
-  // After onboarding, not alongside it: two overlays explaining the same
-  // screen at once is one too many.
   if (wizard) {
     return <Wizard locale={locale} onDismiss={() => setWizard(false)} />;
   }
@@ -241,33 +216,25 @@ const FirstRun: FunctionComponent<{
   );
 };
 
-/**
- * Explorer shell: the WebGL canvas plus the UI layers drawn over it.
- *
- * The panels mount alongside the canvas rather than inside it. A tour swaps
- * the whole set for its own overlay -- see `overlay`.
- */
-const Explorer: FunctionComponent<ExplorerProps> = ({
+const Explorer: FunctionComponent<PropsWithChildren<ExplorerProps>> = ({
   locale,
   featuredTours = [],
-  overlay,
+  children,
 }) => {
   const { params } = useExplorer();
+  // Read from the path, not from `children`: a layout always receives the
+  // page element, so children is truthy on /explorer too. Same check Viewer
+  // makes for the splash.
+  const tour = usePathname().startsWith("/guided-experiences/");
 
   return (
     <>
-      <Chrome locale={locale} tour={Boolean(overlay)} />
+      <Chrome locale={locale} tour={tour} />
 
-      {/* First-run only, and never over a tour: arriving mid-tour is
-          arriving with a purpose already chosen. */}
-      {!overlay && <FirstRun locale={locale} tours={featuredTours} />}
-
-      {overlay ?? (
+      {!tour && (
         <>
-          {/* The objects panel is a takeover: the legacy stands the toolbar
-              down rather than layering a close button over a rail the panel
-              is already covering. The way back lives inside the panel, as it
-              does there -- see `molecules/Objects`. */}
+          <FirstRun locale={locale} tours={featuredTours} />
+
           {params.panel !== "objects" && <Toolbar locale={locale} />}
           <ExplorerPanels locale={locale} />
           <ObjectLayer locale={locale} />
@@ -280,9 +247,8 @@ const Explorer: FunctionComponent<ExplorerProps> = ({
         </>
       )}
 
-      {/* Outside the overlay switch: recentring and zooming are how a reader
-          looks around whatever a tour slide has framed, so they belong in
-          both modes. */}
+      {children}
+
       <MapControls locale={locale} />
 
       <DatasetLoader locale={locale} />

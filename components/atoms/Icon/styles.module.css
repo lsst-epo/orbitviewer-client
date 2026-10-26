@@ -1,8 +1,6 @@
 @import url("../../../styles/variables.css");
 
-/* Some glyphs the library ships face one way only -- `ChevronThin` has no
-   right-facing twin -- so the opposite direction is the same mark turned
-   around. A class, not a `style` prop: the library's icon components accept
+/* A class, not a `style` prop: the library's icon components accept
    `className`, `size` and `fill` and drop anything else. */
 .flipped {
   rotate: 180deg;

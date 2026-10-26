@@ -24,17 +24,6 @@ import Icon from "@/components/atoms/Icon";
 import ToggleGroup from "@/components/atoms/ToggleGroup";
 import styles from "./styles.module.css";
 
-/**
- * Share dialog: a link to the current view, or an image of it.
- *
- * Ported from `layers/Share.ts` and `partials/share.njk`.
- *
- * The link is built from the explorer's own params plus the simulated date at
- * the moment of sharing, which is the piece the URL does not otherwise carry
- * -- the clock only writes `date` when the reader sets one explicitly, so a
- * running simulation would otherwise share a link back to "now".
- */
-
 const COPIED_RESET_MS = 3000;
 const LAYOUTS: Array<ShareLayout> = ["horizontal", "vertical", "square"];
 
@@ -62,14 +51,10 @@ const Share: FunctionComponent<ShareProps> = ({ locale, open, onClose }) => {
   const [busy, setBusy] = useState(false);
   const [image, setImage] = useState<HTMLCanvasElement | null>(null);
 
-  /**
-   * The shareable URL, resolved when asked rather than held in state: the
-   * clock moves every frame and the params change under the reader's hands.
-   */
+  /** The shareable URL, resolved when asked rather than held in state. */
   const shareUrl = useCallback(() => {
     const query = serializeExplorerParams({
       ...params,
-      // The live date, so a shared link reopens the moment that was shared.
       date: dateRef.current.toISOString(),
     });
 
@@ -80,7 +65,6 @@ const Share: FunctionComponent<ShareProps> = ({ locale, open, onClose }) => {
 
   const [url, setUrl] = useState("");
 
-  // Refreshed on open, so the field shows what the buttons will send.
   useEffect(() => {
     if (open) setUrl(shareUrl());
   }, [open, shareUrl]);
@@ -97,8 +81,6 @@ const Share: FunctionComponent<ShareProps> = ({ locale, open, onClose }) => {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, onClose]);
 
-  // Focus moves into the dialog on open; without it the reader is still on
-  // the trigger, behind a modal.
   useEffect(() => {
     if (open) dialogRef.current?.focus();
   }, [open]);
@@ -117,20 +99,18 @@ const Share: FunctionComponent<ShareProps> = ({ locale, open, onClose }) => {
     setBusy(false);
   }, [capture, layout]);
 
-  // The preview is taken when the image tab is shown and whenever the shape
-  // changes -- capturing on every frame would be pointless work.
   useEffect(() => {
     if (open && tab === "image") void refreshPreview();
   }, [open, tab, refreshPreview]);
 
-  // Drawn rather than exported to a data URL: a 1920x1080 PNG string is a
-  // few megabytes of JavaScript, and this only has to be looked at.
   useEffect(() => {
     const canvas = previewRef.current;
     if (!canvas || !image) return;
 
     canvas.width = image.width;
     canvas.height = image.height;
+    // Drawn rather than exported to a data URL: a 1920x1080 PNG string is a
+    // few megabytes of JavaScript, and this only has to be looked at.
     canvas.getContext("2d")?.drawImage(image, 0, 0);
   }, [image]);
 
@@ -265,9 +245,6 @@ const Share: FunctionComponent<ShareProps> = ({ locale, open, onClose }) => {
                   </a>
                 </li>
                 <li>
-                  {/* The legacy rendered this unconditionally and it silently
-                      rejected wherever navigator.share is absent -- desktop
-                      Firefox, most of desktop Chrome. */}
                   <NativeShare url={url} label={t("share.title")} />
                 </li>
               </ul>
@@ -321,12 +298,7 @@ const Share: FunctionComponent<ShareProps> = ({ locale, open, onClose }) => {
   );
 };
 
-/**
- * The Web Share button, rendered only where the API exists.
- *
- * Checked after mount: `navigator.share` is not knowable on the server, and
- * branching on it during render would produce different markup on each side.
- */
+/** The Web Share button, rendered only where the API exists. */
 const NativeShare: FunctionComponent<{ url: string; label: string }> = ({
   url,
   label,

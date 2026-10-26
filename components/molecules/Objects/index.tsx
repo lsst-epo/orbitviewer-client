@@ -17,25 +17,6 @@ import Icon from "@/components/atoms/Icon";
 import Switch from "./Switch";
 import styles from "./styles.module.css";
 
-/**
- * Objects panel -- which categories the scene draws.
- *
- * Ported from `pages/ObjectsFiltersPage.ts`, `components/ObjectsScroller.ts`
- * and `locale-templates/objects.njk`. One card per category: name, icon,
- * description, and a visibility switch.
- *
- * The legacy's 250-line `ObjectsScroller` -- momentum easing on rAF, a global
- * non-passive wheel listener, a bespoke touch-pan class, manual snap points
- * recomputed from getBoundingClientRect, and focus handling to scroll
- * keyboard users into view -- is replaced by native CSS scroll-snap plus
- * `scrollBy({ behavior: "smooth" })`. The browser then handles wheel, touch,
- * keyboard and focus scrolling itself, and the page wheel is no longer
- * hijacked while the panel is open.
- *
- * Which categories are on lives in the `types` search param, so the selection
- * is shareable; see `visibleCategories` in the explorer context.
- */
-
 /** How much of the rail one press of a chevron moves, as a fraction. */
 const PAGE_FRACTION = 0.8;
 
@@ -64,18 +45,8 @@ const ObjectsPanel: FunctionComponent<{ locale: string }> = ({ locale }) => {
     {}
   );
 
-  /**
-   * Planets are not in the MPC catalogue -- they arrive from their own
-   * dataset -- so counting `elements` leaves that one card with no figure at
-   * all, which reads as a bug rather than as "none".
-   */
   counts["planets-moons"] = planets.length + dwarfPlanets.length;
 
-  /**
-   * Chevrons are disabled at each end. The legacy tracked this with a
-   * 'start' | 'middle' | 'end' state machine driven from its animation loop;
-   * the scroll event is enough, and fires when the user scrolls by any means.
-   */
   const onScroll = useCallback(() => {
     const rail = railRef.current;
     if (!rail) return;
@@ -96,11 +67,6 @@ const ObjectsPanel: FunctionComponent<{ locale: string }> = ({ locale }) => {
 
   return (
     <div className={styles.objects}>
-      {/* Inside the takeover, where `.layer-heading .actions` puts it, not
-          floating over it: the panel covers the whole viewport at
-          `--z-objects`, so anything outside it is behind the scrim. This is
-          also the way out of the panel -- the toolbar stands down while it
-          is open. */}
       <div className={styles.actions}>
         <button type="button" className={styles.back} onClick={closePanel}>
           <Icon name="chevronLeft" aria-hidden />
@@ -113,10 +79,6 @@ const ObjectsPanel: FunctionComponent<{ locale: string }> = ({ locale }) => {
         <p className={styles.subtitle}>{t("objects.subtitle")}</p>
       </div>
 
-      {/* The rail needs no tab stop of its own: every card holds a switch,
-          so tabbing through them walks the whole list and the browser scrolls
-          each into view. That is what the legacy's `onFocus` handler was
-          reimplementing by hand. */}
       <div ref={railRef} className={styles.rail} onScroll={onScroll}>
         <ul className={styles.track}>
           {ALL_CATEGORIES.map((category, index) => {
@@ -128,7 +90,6 @@ const ObjectsPanel: FunctionComponent<{ locale: string }> = ({ locale }) => {
               <li
                 key={category}
                 className={styles.item}
-                // Drives the entrance stagger; see the stylesheet.
                 style={{ "--index": index } as CSSProperties}
               >
                 <div className={styles.card}>
@@ -169,8 +130,6 @@ const ObjectsPanel: FunctionComponent<{ locale: string }> = ({ locale }) => {
         </ul>
       </div>
 
-      {/* Icon buttons rather than epo-react-lib's Button, which is sized and
-          coloured for a text label. These match the panel's close control. */}
       <div className={styles.controls}>
         <button
           type="button"

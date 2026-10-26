@@ -3,8 +3,6 @@
    by GLSL convention. Renaming them here would break the shader includes. */
 import { ShaderChunk } from "three";
 
-// Shared GLSL chunks. These are the reusable functions that the body, sun,
-// effect and simulation shaders #include -- noise, curl, fbm, fresnel, glow.
 import curl3D from "./includes/curl3D.glsl";
 import curl4D from "./includes/curl4D.glsl";
 import desaturate from "./includes/desaturate.glsl";
@@ -21,15 +19,8 @@ import fresnel_pars_vert from "./includes/fresnel/pars_vert.glsl";
 import fresnel_vert from "./includes/fresnel/vert.glsl";
 
 /**
- * Registers the shared chunks on three's global ShaderChunk registry so any
- * material can `#include <noise3D>` rather than duplicating the source.
- *
- * This replaces the legacy `scripts/build/glsl.js`, which walked the includes
- * directory at build time and generated a `src/js/gfx/Shaders.ts` barrel of
- * string imports. Turbopack's raw-loader rule (see next.config.js) makes that
- * codegen step unnecessary -- the .glsl files import directly as strings.
- *
- * Safe to call repeatedly; registration is idempotent.
+ * Registers the shared chunks on three's global ShaderChunk registry.
+ * Idempotent, but must run before any material that includes one compiles.
  */
 export function registerShaderChunks(): void {
   Object.assign(ShaderChunk, {

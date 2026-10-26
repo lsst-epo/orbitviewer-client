@@ -1,6 +1,5 @@
 import type { FunctionComponent, SVGProps } from "react";
 
-/** Ported from the legacy `icons.njk` sprite (symbol id="orbit"). */
 const Orbit: FunctionComponent<SVGProps<SVGSVGElement>> = (props) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
     <path d="M15.5 12C15.5 13.933 13.933 15.5 12 15.5C10.067 15.5 8.5 13.933 8.5 12C8.5 10.067 10.067 8.5 12 8.5C13.933 8.5 15.5 10.067 15.5 12Z" />

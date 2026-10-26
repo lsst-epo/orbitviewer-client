@@ -12,21 +12,6 @@ import { difficultyKey, type TourSummary } from "@/lib/tours";
 import TourCard from "@/components/molecules/TourCard";
 import styles from "./styles.module.css";
 
-/**
- * First-run onboarding: pick a quality tier, then optionally pick a tour.
- *
- * Ported from `layers/Onboarding.ts` and `partials/onboarding.njk`.
- *
- * Shown when no tier has been chosen before. The legacy hung this off the
- * splash's start button, which meant the splash had to know about the
- * viewer's state; here the splash simply links to /explorer and the explorer
- * decides for itself whether this is a first visit.
- *
- * The download size is stated on each card. The legacy showed only an object
- * count, so the difference between the tiers -- 6 MB against 106 MB -- was
- * invisible at the moment of choosing, which is the one moment it matters.
- */
-
 const MEGABYTE = 1024 * 1024;
 
 export interface OnboardingProps {
@@ -48,9 +33,6 @@ const Onboarding: FunctionComponent<OnboardingProps> = ({
 
   const [step, setStep] = useState<"quality" | "tours">("quality");
 
-  // Measured while the reader is reading, so the recommendation is ready by
-  // the time they look for it -- the legacy showed a loader and made them
-  // wait two seconds before the dialog appeared at all.
   useEffect(() => start(), [start]);
 
   const choose = (next: SimQuality) => {

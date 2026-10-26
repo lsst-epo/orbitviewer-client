@@ -1,10 +1,5 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `components/_splash.scss`. */
-
-/* An overlay over the live scene, as `splash.njk` was -- not a page of its
-   own. The scrim is the legacy's: thin enough that the orbits read through
-   it, dark enough to hold the type. */
 .splash {
   position: absolute;
   inset: 0;
@@ -54,9 +49,6 @@
   text-wrap: balance;
 }
 
-/* `.button.primary.medium` with `.splash-action`'s 192px floor. The pale
-   mint fill this replaces was inverted -- the legacy's primary is a teal
-   fill with a pale label, not the other way round. */
 .cta {
   display: inline-flex;
   gap: 0.75rem;
@@ -100,8 +92,6 @@
   color: var(--color-text);
 }
 
-/* Language */
-
 .foot {
   display: flex;
   justify-content: center;
@@ -119,9 +109,6 @@
   padding: 0 0.75rem;
 }
 
-/* A hairline between the pair, not a gap -- `.splash_foot-item + &:before`
-   in the legacy. Inset top and bottom so it reads as a divider rather than
-   a full-height rule. */
 .languages li + li {
   position: relative;
 }
@@ -153,11 +140,8 @@
   }
 }
 
-/* The legacy's type scale steps at breakpoints rather than interpolating, so
-   these are `@media` steps and not the `clamp()` the port had. Sizes are its
-   `$font-styles` px over 16: body-large 18/24, subtitle-large 24/32,
-   headline 32/40, hero 48/60 -- every one of them `regular`. */
-
+/* The legacy's type scale steps at breakpoints rather than interpolating:
+   these are `@media` steps on purpose, not a `clamp()`. */
 @media (width >= 768px) {
   .foot {
     justify-content: flex-end;

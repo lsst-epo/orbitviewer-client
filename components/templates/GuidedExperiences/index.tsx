@@ -5,17 +5,6 @@ import ContentHeader from "@/components/molecules/ContentHeader";
 import ToursList from "./ToursList";
 import styles from "./styles.module.css";
 
-/**
- * The tour index.
- *
- * Ported from `locale-templates/guided-experiences.njk`, which rendered this
- * as a `.layer` -- a panel over the 3D viewer. It is a page of its own here:
- * browsing a catalogue of tours has nothing to do with the scene, and
- * keeping the canvas alive behind it cost a WebGL context and a running
- * render loop for a list of cards.
- *
- * The scene comes back for the tour itself, which needs it.
- */
 const GuidedExperiences: FunctionComponent<{
   locale: string;
   tours: Array<TourSummary>;

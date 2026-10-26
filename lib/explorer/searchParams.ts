@@ -85,7 +85,6 @@ export function parseExplorerParams(
 
   if (result.success) return result.data;
 
-  // Retry field by field, dropping only what failed.
   const salvaged: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(flat)) {
     if (value === undefined) continue;

@@ -1,8 +1,7 @@
 import type { PlanetId } from "./planets";
 
 /**
- * Per-planet atmospheric shell settings. Ported verbatim from
- * `PlanetAtmosphereSettings` in `gfx/solar/Planet.ts`.
+ * Per-planet atmospheric shell settings, ported verbatim from the legacy.
  *
  * These are art direction, not physics: the colours and widths were chosen to
  * read well at the viewer's exaggerated body scale, so they should not be

@@ -31,19 +31,6 @@ import Graph from "./Graph";
 import OrbitalElement from "./OrbitalElement";
 import styles from "./styles.module.css";
 
-/**
- * Object detail.
- *
- * Ported from `pages/ObjectPage.ts` and `partials/object.njk`. The legacy had
- * this as two routes -- `/object/?id=` for catalogue objects and
- * `/solar-items/<slug>/` for the 45 Craft-authored ones -- both of which are
- * now this one panel, driven by the `object` search param.
- *
- * The two sources are complementary rather than exclusive: a Craft entry
- * supplies the copy (title, description, hero image, diameter) and the orbital
- * data supplies the figures. An object can have either or both.
- */
-
 const AU = (value: number) => `${value.toFixed(2)}au`;
 
 /** Craft returns `elementDiameter` as an untyped scalar. */
@@ -55,21 +42,7 @@ const diameterOf = (element: SolarElementEntry | undefined): number | null => {
     : null;
 };
 
-/**
- * The object's own perihelion-to-aphelion span.
- *
- * The legacy drew "how far from the Sun today" against the semi-major axis
- * range for the whole category, which answers a different question -- it says
- * whether the object is near or far compared with its peers, not where it is
- * in its own orbit. Its companion bar, distance from Earth, was worse: the
- * range it scaled against (`DistanceFromEarth`) was only ever populated for
- * planets, so for any asteroid or comet it was drawn against
- * Infinity/-Infinity.
- *
- * Perihelion to aphelion is the range the figure actually moves through, so
- * the bar reads as progress around the orbit. Unbound orbits have no
- * aphelion, so they get the figure without a bar.
- */
+/** The object's own perihelion-to-aphelion span; `null` if unbound. */
 const orbitRange = (object: OrbitElements): Range | null => {
   if (object.e >= 1 || !Number.isFinite(object.a)) return null;
 
@@ -104,8 +77,6 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { elements: mpcElements } = useSolarData();
   const { displayDate } = useSolarClock();
 
-  // The figures below are "as of the shown date", which the server cannot
-  // know; see useMounted.
   const mounted = useMounted();
 
   const bodies = useMemo<Array<OrbitElements>>(
@@ -139,7 +110,6 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
     [categories]
   );
 
-  // Bounds for the three comparison bars, for this object's category.
   const ranges = useMemo(() => {
     if (!object) return null;
 
@@ -151,8 +121,6 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
 
   if (!params.object) return null;
 
-  // A shared link can name an object that is not in the loaded tier, or that
-  // never existed. Saying so beats the legacy's silent redirect home.
   if (!object && !craft) {
     return (
       <div className={styles.detail}>
@@ -178,11 +146,6 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const perihelion = live ? nextPerihelion(live, displayDate) : null;
   const sunRange = live ? orbitRange(live) : null;
 
-  /**
-   * Days until perihelion, from the simulated date. The legacy measured this
-   * from `new Date()` while showing a date computed from the simulated one, so
-   * the two disagreed as soon as the time machine moved.
-   */
   const daysToPerihelion = perihelion
     ? Math.floor(
         (perihelion.getTime() - displayDate.getTime()) / (1000 * 60 * 60 * 24)
@@ -191,10 +154,6 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
 
   return (
     <article className={styles.detail}>
-      {/* The only way out of a selection besides Escape. The legacy card had
-          the same control as its first element -- a link, since each object
-          was its own page -- and the panel's own close button would sit
-          underneath the navigation on this side. */}
       <BackButton label={t("core.back")} onClick={closeObject} />
 
       <header className={styles.heading}>
@@ -231,8 +190,6 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
               className={styles.chip}
               style={
                 {
-                  // Craft is the source of truth; the token is the
-                  // fallback so a category it has not coloured still reads.
                   "--chip-color":
                     categoryColors.get(label.icon) ??
                     `var(--color-${label.icon})`,
@@ -248,15 +205,11 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
         {description && (
           <div
             className={styles.description}
-            // Craft-authored rich text, from our own CMS.
             dangerouslySetInnerHTML={{ __html: description }}
           />
         )}
       </header>
 
-      {/* The legacy showed this only for planets, but every selected body has
-          an orbit worth seeing -- and without it the path is drawn off
-          screen, since the camera frames the body itself. */}
       {object && (
         <ToggleGroup<"object" | "orbit">
           label={t("object.view.label")}
@@ -264,8 +217,6 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
             { value: "object", label: t("object.view.object") },
             { value: "orbit", label: t("object.view.orbit") },
           ]}
-          // Falls back to whatever the scene will actually do, or the toggle
-          // reads "Object" while the camera frames the orbit.
           value={params.view ?? defaultViewFor(object.id)}
           onChange={(view) => setParams({ view })}
         />
@@ -288,10 +239,8 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
           <h3 className={styles.unitTitle}>
             {t("object.comparison").replace("%category%", t(label.nameKey))}
           </h3>
-          {/* Semi-major axis is negative for an unbound orbit -- a = q/(1-e)
-              flips sign past e = 1 -- so it is not a distance and cannot be
-              compared against one. Those objects show perihelion instead,
-              which is the distance that means something for them. */}
+          {/* Semi-major axis is negative for an unbound orbit, so it is not
+              a distance and cannot be compared against one. */}
           {object.e < 1 ? (
             <Graph
               label={t("object.sun_graph.title")}
@@ -351,10 +300,6 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
             <OrbitalElement
               symbol="v"
               label={t("object.orbital_elements.anomaly.aria")}
-              // Propagated to the shown date. The legacy printed the epoch
-              // value, which sat next to live distances and a live perihelion
-              // date and disagreed with both -- Earth read 357.55 beside
-              // "113 days" to a perihelion that 357.55 puts two days away.
               value={live ? meanAnomalyAt(live, displayDate).toFixed(2) : ""}
               description={t("object.orbital_elements.anomaly.tooltip")}
               infoLabel={t("object.orbital_elements.info")}
@@ -392,8 +337,6 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
           {sunRange ? (
             <Graph
               label={t("object.how_far.from_sun")}
-              // No detail: the bubble on the track already reads the figure,
-              // where the legacy's head slot repeated it.
               value={sunDistance}
               range={sunRange}
               format={AU}

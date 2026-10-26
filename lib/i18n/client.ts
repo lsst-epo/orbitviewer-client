@@ -18,7 +18,6 @@ import { loadResources } from "./index";
 
 const runsOnServerSide = typeof window === "undefined";
 
-// On the client a normal singleton is fine.
 i18next
   .use(initReactI18next)
   .use(LanguageDetector)

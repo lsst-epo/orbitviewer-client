@@ -15,24 +15,6 @@ import type { OrbitElements } from "@/lib/solar/types";
 import { matchesFilters, type ObjectFilters } from "@/lib/solar/filters";
 import { useSolarData } from "@/contexts/SolarData";
 
-/**
- * Two-tier object search.
- *
- * Ported from `core/data/SearchEngine.ts`, `layers/Search.ts` and the web
- * worker in `assets/js/search.js`.
- *
- * Tier one is local: the dataset is already downloaded for the scene, so a
- * substring match over it is instant and needs no network. The legacy ran
- * this in a web worker; that is not carried over, because the work is a
- * single pass of `String.includes` over an array already in memory and the
- * worker's own postMessage structured-clone of that array costs more than
- * the search does.
- *
- * Tier two queries the full catalogue through /api/search, and is only run
- * when the user explicitly asks -- it is a round trip against millions of
- * rows, not something to fire on every keystroke.
- */
-
 /** Below this, searching is not useful and the catalogue query is refused. */
 export const MIN_QUERY_LENGTH = 2;
 /** Local results are capped; the list is for picking from, not browsing. */
@@ -75,7 +57,6 @@ const SearchProvider: FunctionComponent<
 
   const abortRef = useRef<AbortController | null>(null);
 
-  // Debounced so typing does not re-scan the dataset on every keystroke.
   useEffect(() => {
     const id = setTimeout(
       () => setDebounced(query.trim().toLowerCase()),
@@ -84,7 +65,6 @@ const SearchProvider: FunctionComponent<
     return () => clearTimeout(id);
   }, [query]);
 
-  // A new query invalidates any catalogue results already on screen.
   useEffect(() => {
     setCatalogueResults(null);
     setError(null);
@@ -126,8 +106,6 @@ const SearchProvider: FunctionComponent<
     fetch(`/api/search?${params}`, { signal: controller.signal })
       .then((response) => response.json())
       .then((data: { results: Array<OrbitElements>; message?: string }) => {
-        // Distance is not expressible in the Hasura query, so it is applied
-        // to the response for consistency with the local tier.
         setCatalogueResults(
           (data.results ?? []).filter((element) =>
             matchesFilters(element, filters)
@@ -152,7 +130,6 @@ const SearchProvider: FunctionComponent<
     setSearching(false);
   }, []);
 
-  // Abandon an in-flight request if the panel goes away mid-search.
   useEffect(() => () => abortRef.current?.abort(), []);
 
   const value = useMemo<SearchValue>(

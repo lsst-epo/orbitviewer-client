@@ -21,17 +21,6 @@ import {
   type ExplorerPanel,
 } from "@/lib/explorer/searchParams";
 
-/**
- * Owns everything the explorer's panels and the 3D scene share: the object
- * catalogue from Craft, the orbital data, and the URL-backed view state.
- *
- * Mirrors the rubin-obs-client SummitData pattern -- fetch on the server,
- * hand the result to a provider, consume it from components -- and replaces
- * the legacy singleton `LoadManager` / `GLOBALS` objects.
- */
-
-// Derived from the query functions so they track the generated schema types.
-// Craft unions yield nullable members, which the consumers narrow.
 export type SolarElement = Awaited<ReturnType<typeof getSolarElements>>[number];
 export type Category = Awaited<ReturnType<typeof getCategories>>[number];
 
@@ -109,15 +98,11 @@ const ExplorerProvider: FunctionComponent<
   }, [params]);
 
   const openObject = useCallback(
-    // Passed through verbatim: see the note on ExplorerParamsSchema.object.
     (elementId: string) => setParams({ object: elementId }),
     [setParams]
   );
 
   const closeObject = useCallback(
-    // The camera view belongs to the selection, so it goes with it; a
-    // lingering `view=orbit` would frame the next object's orbit before it
-    // had been asked for.
     () => setParams({ object: undefined, view: undefined }),
     [setParams]
   );
@@ -133,12 +118,7 @@ const ExplorerProvider: FunctionComponent<
     [setParams]
   );
 
-  /**
-   * `types` lists the categories that are ON, and its absence means all of
-   * them -- the inverse of the legacy `ntypes`, which listed the ones that
-   * were off. Listing the inclusions means an unrecognised slug in a share
-   * link drops one category rather than silently enabling it.
-   */
+  /** `types` lists the categories that are ON -- see README. */
   const visibleCategories = useMemo(() => {
     if (!params.types) return new Set(ALL_CATEGORIES);
 
@@ -154,7 +134,6 @@ const ExplorerProvider: FunctionComponent<
       if (next.has(category)) next.delete(category);
       else next.add(category);
 
-      // All on is the default, so it serialises as no param at all.
       setParams({
         types:
           next.size === ALL_CATEGORIES.length

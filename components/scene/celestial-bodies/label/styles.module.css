@@ -1,0 +1,57 @@
+@import url("../../../../styles/variables.css");
+
+.pointer {
+  --pointer-color: var(--color-turquoise-200);
+  --pointer-size: 1.25rem;
+
+  display: inline-flex;
+  gap: 0.125rem;
+  align-items: center;
+  padding: 0;
+  font-family: var(--font-stack);
+  font-size: 1rem;
+  line-height: 1.5;
+  pointer-events: auto;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  transform: translate(calc(-1 * var(--pointer-size) / 2), -50%);
+}
+
+.chip {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--pointer-size);
+  height: var(--pointer-size);
+  color: var(--color-black);
+  background: var(--pointer-color);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.125rem rgb(var(--color-black-rgb) / 20%);
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.text {
+  padding: 0 0.25rem;
+  color: var(--color-link);
+  white-space: nowrap;
+  text-shadow: 1px 1px 0 rgb(var(--color-black-rgb) / 30%);
+  background: rgb(var(--color-black-rgb) / 50%);
+  border-radius: var(--corner-medium);
+  transition: all 0.3s var(--easing-default);
+}
+
+.text::first-letter {
+  text-transform: capitalize;
+}
+
+.pointer:hover .text {
+  color: var(--color-black);
+  text-shadow: none;
+  background: var(--pointer-color);
+}

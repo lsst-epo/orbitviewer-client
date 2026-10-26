@@ -14,25 +14,6 @@ import {
 } from "@/lib/tours";
 import styles from "./styles.module.css";
 
-/**
- * The sortable, searchable tour grid.
- *
- * Ported from `pages/GuidedExperiencesPage.ts`, which did both by mutating
- * the rendered cards rather than the list: it wrote a `--order` custom
- * property onto each card and let flexbox reorder them, and hid non-matching
- * cards with `aria-hidden`.
- *
- * Both are replaced by sorting and filtering the array. The legacy approach
- * left the DOM order -- and so the tab and screen-reader order -- unchanged
- * and disagreeing with what was on screen, and `aria-hidden` on a link
- * removes it from the accessibility tree while leaving it focusable, which
- * strands keyboard users on a control that announces nothing.
- *
- * The legacy also rendered a hard-coded five-item suggestion menu under the
- * search box that was never wired to anything. It is not carried over; the
- * grid filters as you type, which is what it was miming.
- */
-
 const ToursList: FunctionComponent<{
   locale: string;
   tours: Array<TourSummary>;
@@ -77,7 +58,7 @@ const ToursList: FunctionComponent<{
           <input
             id={searchId}
             className={styles.input}
-            type="search"
+            type="text"
             placeholder={t("guides.index.search")}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -86,8 +67,6 @@ const ToursList: FunctionComponent<{
         </div>
       </div>
 
-      {/* Announces how the grid changed as the reader types, which the legacy
-          left entirely silent. */}
       <p className={styles.status} role="status">
         {t("guides.index.count", { count: visible.length })}
       </p>

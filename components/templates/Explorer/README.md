@@ -1,93 +1,86 @@
 # Explorer
 
-The explorer shell and its scene graph. `Scene.tsx` replaces
-`gfx/OrbitViewer.ts`, which owned the renderer, scene, camera, lights and every
-body as one 620-line class; under R3F the Canvas owns the renderer and each
-concern is a component.
+The explorer's chrome: the toolbar, the panels, the object detail dock, the
+time machine and the first-run flow, composed over the shared scene.
 
-Panels mount alongside the canvas rather than inside it, and a tour swaps the
-whole set for its own overlay — see the `overlay` prop.
+The scene itself lives in `components/scene`, and the canvas is mounted above
+this template by `components/templates/Viewer` — see those READMEs. This
+template is mounted once, by the `(explorer)` route group's layout, and
+shared with the tour route; see `app/README.md`.
 
-## Do not set `dpr` on the Canvas
+## Panels
 
-The tier's `maxPixelRatio` is **deliberately not applied**. Measured with both
-apps in the same pane, same CSS size, same display:
+Which one is open lives in the `panel` search param, so the state survives a
+reload and is shareable — the same contract the object detail uses.
 
-```
-production  1024x768 css  ->  2048x1536 buffer   ratio 2.0
-this port   1024x768 css  ->  1536x1152 buffer   ratio 1.5
-```
+**Object detail is driven by the `object` param instead**, so an object stays
+selected, and framed by the camera, while filters or search is open. Outside
+clicks do not dismiss it: a click in the scene is how you pick a different
+object, and the legacy's global document handler would have closed the card on
+the way. It carries its own labelled Back control and is already inset clear
+of the navigation, so a second dismissal in the header would be redundant.
 
-The legacy does call `setPixelRatio(Math.min(devicePixelRatio, maxPixelRatio))`
-and `OrbitViewerPage` even forces the medium tier's 1.5 on desktop — yet
-production renders at the full device ratio regardless. Same shape as
-`GFXTier.maxSamples`. See `components/effects/composite/README.md`.
+Search applies the same filters the scene does, so it cannot surface an object
+that is hidden in the view.
 
-Applying it cost a quarter of the port's linear resolution, which showed up as
-a dimmer particle field: a particle is a sphere one CSS pixel in radius, so at
-1.5 each lands on 1.5 device pixels against production's 2 and is then
-resampled up to the display.
+The panels differ in shape, as they do in the legacy:
 
-R3F's default clamp of `[1, 2]` is what production does on any ordinary
-display, so the prop is simply absent.
+- **Objects** is a full-viewport takeover, not a drawer — the scene dims
+  behind it and the cards run the width of the screen. The toolbar stands
+  down rather than layering a close button over a rail the panel is already
+  covering, so the way back lives inside the panel (see `molecules/Objects`).
+- **Filters** is a small floating card near the top left, not a full-height
+  drawer. It and search sit beside the toolbar and keep the header's close.
 
-## Frame order
+## A tour replaces the chrome
 
-Priorities matter and are spread across components:
+A tour arrives as this template's **children**, filled by the route under the
+`(explorer)` group — see `app/README.md`. A tour drives the scene itself —
+which object is framed, where the clock is — so the toolbar, panels and time
+machine would be competing with it for the same state. The legacy closed them
+all on entering guided mode; here they are simply not rendered.
 
-```
--2  ClockDriver      advance the simulation clock
--1  GPU sim          propagate orbits into the simulation texture
- 0  Body             write each body's position
-0.5 Camera           follow, reading those positions
- 1  CompositorEffect render + glow + blur + composite
-```
+**Which mode to draw is read from the path, not from `children`.** A layout
+always receives the page element, so `children` is truthy on `/explorer` too
+even though that page renders nothing. `Viewer` makes the same kind of check
+for the splash. The alternative — having the tour announce itself from an
+effect — would paint the chrome for one frame before hiding it.
 
-Anything that reads a position a `Body` writes must run after priority 0.
-See `components/celestial-bodies/camera/README.md` for what went wrong when the
-camera ran first.
+**Recentre and zoom sit outside that switch.** They are how a reader looks
+around whatever a tour slide has framed, so they belong in both modes.
 
-## Orbit view
+`Chrome` — the navigation and the share dialog — is also present during a
+tour: a reader still needs a way out and a language switch. The two are one
+component because the menu owns the share trigger and both need the data
+contexts (quality from `SolarData`, params and clock for the link). The
+exploration-mode item is not offered during a tour, since swapping datasets
+mid-tour would reload the scene under the slide.
 
-A selected path is drawn at full opacity and then left off screen if the camera
-is parked a few body-radii away — so before this existed, no orbit was ever
-actually visible while selected. The legacy solved it with an ORBIT/OBJECT
-toggle; this is the same idea with the choice in the URL, so the framing is
-shareable. The pivot is fixed rather than written per frame: an orbit does not
-move.
+The wordmark is positioned by the chrome, which the legacy puts on its own in
+the opposite corner from the navigation — a link at a 1rem inset with 0.75rem
+of padding around a 4.5rem mark. On the explorer the toolbar rail
+tucks in directly beneath it, which is what makes the two read as one panel.
 
-Which framing a selection *defaults* to is decided by the body — see
-`lib/explorer/README.md`.
+## First run
 
-The selected body keeps its label in orbit view and loses it in object view.
-The legacy draws the same distinction in one line:
-`sel.domRef.dom.style.opacity = followOrbit ? 1 : 0`. In orbit view the camera
-is far enough out to take in the whole path and the body is a dot somewhere on
-it, so the label is the only thing marking where — and that matters most for
-the named objects, which have no visible body at that distance at all.
+Onboarding on a first visit, and the performance nudge afterwards. **The two
+are exclusive**: someone still choosing a tier does not need to be told the
+one they have not chosen yet is slow. The nudge comes after onboarding rather
+than alongside it — two overlays explaining the same screen at once is one too
+many.
 
-## Filters are shared on purpose
+Onboarding is first-run only and never over a tour: arriving mid-tour is
+arriving with a purpose already chosen.
 
-The particle field applies them in a shader attribute and the named bodies
-apply them in React. They are built once as a single `ObjectFilters` and passed
-to both, because if they drifted a named object could stay visible after its
-category was switched off — the only one of its kind still on screen.
+Nothing is shown while the dataset is still coming down. `DatasetLoader` is
+over the whole scene saying exactly that, and the two lines were the same
+sentence twice.
 
-Switching "planets-moons" off hides the named bodies and their orbits, not just
-the particles, matching the legacy where `UserFilters.categories` also gated
-`SolarElement`. A focused body stays regardless, so a share link to one still
-shows it.
+## The corner spinner outlasts the loader
 
-## Bodies are rendered larger than life
-
-`BODY_RADIUS_SCALE` is 100, matching `gfx/solar/Planet.ts`. At true scale Earth
-is 4.2e-5 AU across in a scene spanning tens of AU. The planets being sub-pixel
-at system-wide framing is by design — that view is carried by the particle
-field, not by the planets.
-
-Catalogue objects get a nominal radius purely so the camera has something to
-frame and the label something to clear; the MPC dataset carries no size. At
-that radius the body is far below a pixel at system framing, which is the
-legacy's behaviour rather than a shortcoming of it — `SolarElement` had its
-mesh commented out entirely, so a named minor body was an orbit path and a
-label and nothing else.
+The small spinner above the object count runs for the download **and for the
+particles' arrival fade after it** (`FADE_IN_SECONDS`). The full-screen loader
+goes the moment the data lands, but the field is still filling in from the
+camera outwards for another five seconds, and a scene that looks empty with
+nothing saying why reads as broken. It is tied to that constant rather than
+its own timer so the two cannot drift apart.

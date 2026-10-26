@@ -1,10 +1,3 @@
-/**
- * Solar system constants.
- *
- * Algorithms throughout `lib/solar` follow Paul Schlyter's "Computing planetary
- * positions": https://www.stjarnhimlen.se/comp/ppcomp.html
- */
-
 export const DEG_TO_RAD = Math.PI / 180;
 
 /** Gaussian gravitational constant, in radians per day. */

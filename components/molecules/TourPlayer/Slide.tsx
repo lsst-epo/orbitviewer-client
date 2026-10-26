@@ -3,17 +3,6 @@ import Image from "next/image";
 import type { Slide, Tour } from "@/lib/tours";
 import styles from "./styles.module.css";
 
-/**
- * One slide's body.
- *
- * Craft has four block types and the legacy rendered only the fields that
- * `defaultSlide` carries -- `subTitle`, `slideTitle`, `slideContent` -- for
- * every one of them. A fun-fact slide has no title, so it came out as a bare
- * paragraph under an empty heading; a share slide has none of those three
- * fields at all, so it rendered completely blank, losing its title, its body
- * and all four of its links. Each type is handled here.
- */
-
 export interface SlideBodyProps {
   slide: Slide;
   /** Shown on the opening slide only, as in the legacy. */
@@ -53,8 +42,6 @@ const SlideBody: FunctionComponent<SlideBodyProps> = ({
             <ul className={styles.linkList}>
               {links.map(({ url, text }) => (
                 <li key={url}>
-                  {/* Craft-authored and outbound, so opened in a new tab with
-                      the opener severed. */}
                   <a
                     className={styles.link}
                     href={url}
@@ -104,8 +91,6 @@ const SlideBody: FunctionComponent<SlideBodyProps> = ({
         <h3 className={styles.slideTitle}>{slide.slideTitle}</h3>
       )}
       {slide.slideContent && (
-        // Craft stores these as plain text with newlines, so paragraphs are
-        // split out rather than collapsed into one block by HTML whitespace.
         <div className={styles.text}>
           {slide.slideContent
             .split(/\n{2,}|\n/)

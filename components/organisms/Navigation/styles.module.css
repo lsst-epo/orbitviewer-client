@@ -1,9 +1,5 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `components/_navigation.scss` and `_listitem.scss`. The
-   legacy's two-level slide was a transformed track inside an overflow box;
-   only one level exists at a time here, so there is nothing to slide. */
-
 .navigation {
   position: absolute;
   top: var(--site-margin-small);
@@ -14,10 +10,6 @@
   align-items: flex-start;
 }
 
-/* Triggers. Two different components in the legacy, not one with variants:
-   `.button_share` is a filled pill, `.button_icon.secondary.medium` is a
-   glass circle. Both are 3rem tall. */
-
 .share,
 .trigger {
   display: inline-flex;
@@ -27,9 +19,6 @@
   cursor: pointer;
 }
 
-/* `.button_share`: a solid turquoise-700 pill, radius half its height, with
-   a `caption-semi-caps` label -- uppercased in CSS, as the legacy does; the
-   copy deck carries it in sentence case. */
 .share {
   gap: 0.25rem;
   padding: 0 1rem;
@@ -43,8 +32,6 @@
   border-radius: 1.5rem;
 }
 
-/* `.button_icon.secondary.medium`: a circle in the same frozen glass as the
-   toolbar, not a rounded rectangle. */
 .trigger {
   position: relative;
   display: grid;
@@ -71,7 +58,6 @@
   mask-composite: exclude;
 }
 
-/* A ring rather than a fill, which is how the legacy marks both of these. */
 .share:hover,
 .trigger:hover {
   color: var(--color-turquoise-300);
@@ -87,8 +73,6 @@
   width: 1.5rem;
   height: 1.5rem;
 }
-
-/* Dropdown */
 
 .menu {
   position: absolute;
@@ -172,8 +156,6 @@
   color: var(--color-text-low);
 }
 
-/* Exploration tiers carry a second line, so the label column stacks. */
-
 .tier {
   display: grid;
   flex: auto;
@@ -184,8 +166,6 @@
   font-size: 0.75rem;
   color: var(--color-text-low);
 }
-
-/* Second level */
 
 .submenuHead {
   display: flex;

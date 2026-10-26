@@ -7,18 +7,10 @@ import tagStore from "@/lib/api/tags";
 
 const CRAFT_HOMEPAGE_URI = "__home__";
 
-/**
- * Next.js 16 requires a cacheLife profile on revalidateTag. "max" expires the
- * entry outright, matching the previous single-argument behaviour.
- */
+/** Next.js 16 requires a cacheLife profile; "max" expires the entry. */
 const REVALIDATE_PROFILE = "max";
 
-/**
- * Maps a Craft URI to the routes that render it, for every locale.
- *
- * About and How to Use are served by the [...uriSegments] catch-all, so their
- * Craft slug is the path. Landing renders at the locale root.
- */
+/** Maps a Craft URI to the routes that render it, for every locale. */
 const revalidate = (uri: string) => {
   const paths: Array<string> = [];
   const tags = new Set<string>();
@@ -36,7 +28,6 @@ const revalidate = (uri: string) => {
     revalidatePath(path);
   });
 
-  // Section-level tags so list pages pick up the change too.
   const sectionTag = section
     ? tagStore[section as keyof typeof tagStore]
     : undefined;

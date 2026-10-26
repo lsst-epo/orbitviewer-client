@@ -1,21 +1,3 @@
-/**
- * Composes a share image from a snapshot of the scene.
- *
- * Ported from `Share.capture`, which rendered the scene again into a
- * dedicated 1920x1080 WebGLRenderTarget, read the pixels back with
- * `readRenderTargetPixels`, flipped them row by row in JavaScript because
- * WebGL's origin is bottom-left, and wrote them through `putImageData`.
- *
- * None of that is needed: `drawImage` from the live canvas is already
- * upright and is done by the compositor, so there is no second render of a
- * 500,000-object scene and no per-pixel loop.
- *
- * The trade-off is that the source is the viewport rather than a fixed
- * 1920x1080 buffer, so on a small window the snapshot is upscaled. Cropping
- * to cover keeps the framing honest -- the image shows what was on screen,
- * never stretched.
- */
-
 export type ShareLayout = "horizontal" | "vertical" | "square";
 
 export const SHARE_SIZES: Record<
@@ -35,7 +17,6 @@ const loadImage = (src: string): Promise<HTMLImageElement | null> =>
   new Promise((resolve) => {
     const image = new Image();
     image.onload = () => resolve(image);
-    // A missing overlay should cost the branding, not the whole image.
     image.onerror = () => resolve(null);
     image.src = src;
   });
@@ -55,8 +36,6 @@ export async function composeShareImage(
   context.fillStyle = "#000000";
   context.fillRect(0, 0, width, height);
 
-  // Cover, centred: the snapshot's aspect ratio is the viewport's and rarely
-  // matches the target, so the overflow is cropped rather than squashed.
   const scale = Math.max(width / snapshot.width, height / snapshot.height);
   const drawWidth = snapshot.width * scale;
   const drawHeight = snapshot.height * scale;

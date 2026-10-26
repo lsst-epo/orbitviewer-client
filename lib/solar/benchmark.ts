@@ -1,20 +1,5 @@
 import { SIM_QUALITIES, type SimQuality } from "./quality";
 
-/**
- * Recommends a quality tier from how fast the scene actually renders.
- *
- * Ported from the `testRunning` branch of the legacy `App.update` loop and
- * `getRecommendedPerformanceIndex`. It averaged frame deltas over two seconds
- * and mapped the result onto a tier; the thresholds here are the same.
- *
- * The legacy's first ten frames were meant to be dropped -- the line is still
- * there, commented out -- so its average included the cost of the scene
- * warming up: shader compilation, texture upload and the first GPU
- * simulation pass, all of which land in the first frames and none of which
- * say anything about sustained performance. They are skipped here, which is
- * what the commented-out line was reaching for.
- */
-
 /** How long to measure for, in milliseconds. */
 export const BENCHMARK_DURATION = 2000;
 
@@ -43,8 +28,6 @@ export function recommendQuality(
   averageFrameMs: number,
   isMobile: boolean
 ): SimQuality {
-  // Touch devices get the smallest dataset regardless of how fast they
-  // render, because the constraint there is the download, not the GPU.
   if (isMobile) return "low";
 
   return (

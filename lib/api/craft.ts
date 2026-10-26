@@ -3,16 +3,6 @@ import queryAPI from "@/lib/api/client";
 import tagStore from "@/lib/api/tags";
 import { siteIdFromLocale } from "@/lib/i18n/site";
 
-/**
- * Craft CMS query service. Replaces the legacy `data/craft.js`, which was
- * loaded wholesale by the Eleventy config and exposed to every template.
- *
- * Note: the legacy `getAbout()` / `getHowToUse()` helpers queried root fields
- * (`aboutEntries`, `howToUseEntry`) that no longer exist in the schema. The
- * working path is `pagesEntries`, which returns About, How to Use and Landing
- * as a single union -- that is what is ported here.
- */
-
 export const getGlobals = async ({ locale }: { locale: string }) => {
   const Query = graphql(`
     query SiteGlobals($siteId: [QueryArgument]) {
@@ -276,7 +266,6 @@ export const getDataFileUrls = async () => {
     fetchOptions: { next: { tags: [tagStore.dataFiles] } },
   });
 
-  // Keyed by quality tier: low | medium | high | ultra | ultra2
   return Object.fromEntries(
     (data?.mpcDataFilesEntries ?? []).flatMap((entry) =>
       entry && "dataFileQuality" in entry && entry.dataFileQuality

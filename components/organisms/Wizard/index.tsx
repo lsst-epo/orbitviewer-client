@@ -13,16 +13,6 @@ import useClientTranslation from "@/lib/i18n/client";
 import Icon from "@/components/atoms/Icon";
 import styles from "./styles.module.css";
 
-/**
- * First-run walkthrough: spotlights each part of the interface in turn.
- *
- * Ported from `layers/Wizard.ts` and `partials/wizard.njk`. Steps target
- * elements by a `data-wizard-step` attribute, as the legacy did, so the
- * chrome stays unaware of the wizard.
- *
- * All five of the legacy's steps are here, in its order.
- */
-
 const STORAGE_KEY = "wizardSkipped";
 
 /** Padding around the spotlit element, in px. Ported from the legacy. */
@@ -92,12 +82,12 @@ const Wizard: FunctionComponent<{
     });
   }, [step.target]);
 
-  // Re-measured on resize as well as on step change: the toolbar moves to the
-  // bottom below 768px, and the legacy's ResizeObserver watched only the
-  // element, so a layout change that moved it without resizing it was missed.
   useEffect(() => {
     measure();
 
+    // Re-measured on resize as well as on step change: the toolbar moves to the
+    // bottom below 768px, and the legacy's ResizeObserver watched only the
+    // element, so a layout change that moved it without resizing it was missed.
     window.addEventListener("resize", measure);
 
     return () => window.removeEventListener("resize", measure);
@@ -130,11 +120,11 @@ const Wizard: FunctionComponent<{
       aria-labelledby={titleId}
       aria-describedby={bodyId}
     >
-      {/* Four panels around the cut-out rather than one box-shadow: the
-          shadow approach the legacy used still swallows pointer events over
-          the element it is meant to be revealing. */}
       {spotlight && (
         <>
+          {/* Four panels around the cut-out rather than one box-shadow: the
+              shadow approach the legacy used still swallows pointer events
+              over the element it is meant to be revealing. */}
           <div
             className={styles.shade}
             style={
@@ -193,9 +183,6 @@ const Wizard: FunctionComponent<{
         </>
       )}
 
-      {/* Opposite the spotlight, so the card never covers the thing it is
-          describing -- the legacy pinned it to the bottom and sat on top of
-          the time machine for that whole step. */}
       <div
         className={clsx(
           styles.tooltip,

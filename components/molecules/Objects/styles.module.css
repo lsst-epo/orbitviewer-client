@@ -1,18 +1,8 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `components/_objects.scss`. The legacy rail was a transformed
-   div driven by JS; here it is a native scroll container, so the layout is
-   the same but the mechanics are the browser's. */
-
-/* The takeover fills the viewport: heading above, rail below, and the whole
-   thing centred vertically the way `.objects-body`'s grid centres it. */
 .objects {
   position: relative;
   display: grid;
-
-  /* Way out at the top, the heading above the rail, the rail at the bottom:
-     `.objects-body`'s three bands. The middle row takes the slack so the
-     heading sits with the cards rather than drifting up with the pill. */
   grid-template-rows: auto 1fr auto;
   gap: 3rem;
   height: 100%;
@@ -20,14 +10,11 @@
   overflow: hidden;
 }
 
-/* Same column the cards and the heading start in. */
 .actions {
   padding: 0 calc(var(--toolbar-width) + var(--site-margin-small));
   animation: heading-in 1.2s cubic-bezier(0.65, 0, 0.35, 1) backwards;
 }
 
-/* `.button.secondary.medium`, which is what the legacy's `button_back` is
-   here -- bordered and 3rem, not the ghost pill the other back links use. */
 .back {
   display: inline-flex;
   gap: 0.75rem;
@@ -54,17 +41,11 @@
   height: 1.25rem;
 }
 
-/* Inset to the same column the cards start in, so the heading lines up with
-   the first card rather than with the viewport edge, and parked at the
-   bottom of its row so it reads with them. */
 .heading {
   display: grid;
   gap: var(--site-margin-xsmall);
   align-content: end;
   padding: 0 calc(var(--toolbar-width) + var(--site-margin-small));
-
-  /* The title and subtitle rise together as the cards come up --
-     `autoAlpha` and `translateY: 100` on `cubic.inOut` over 1.2s. */
   animation: heading-in 1.2s cubic-bezier(0.65, 0, 0.35, 1) backwards;
 }
 
@@ -75,7 +56,6 @@
   }
 }
 
-/* `subtitle-large-regular` -- the same size the cards' own titles use. */
 .title {
   margin: 0;
   font-size: 1.5rem;
@@ -92,19 +72,11 @@
   color: var(--color-text);
 }
 
-/* Rail */
-
 .rail {
-  /* The toolbar's width plus a margin, which is where `_objects.scss` starts
-     the cards -- the rail runs the full width of the takeover and insets
-     itself rather than being placed beside the toolbar. */
   padding: 0 calc(var(--toolbar-width) + var(--site-margin-small));
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-padding-left: calc(var(--toolbar-width) + var(--site-margin-small));
-
-  /* The legacy hides the bar: the chevrons and the drag are the affordance,
-     and a scrollbar under a row of cards reads as a second control. */
   scrollbar-width: none;
 }
 
@@ -112,11 +84,6 @@
   display: none;
 }
 
-/* Grid rather than flex, so the cards' three bands line up across the whole
-   row: `subgrid` hands each card the same three rows, and a title that wraps
-   to two lines makes every header taller rather than only its own. The
-   legacy avoids the question by truncating titles to one line; wrapping and
-   growing together is this port's call. */
 .track {
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -142,12 +109,8 @@
 
 .item {
   scroll-snap-align: start;
-
-  /* `translateY: 105%` to 0 on `expo.inOut` over 1.5s, 0.1s apart, which is
-     the loop in `ObjectsFiltersPage`. The cards slide up one after another;
-     they are not staggered in place. */
-  animation: card-in 1.5s cubic-bezier(0.87, 0, 0.13, 1) calc(var(--index) * 0.1s)
-    backwards;
+  animation: card-in 1.5s cubic-bezier(0.87, 0, 0.13, 1)
+    calc(var(--index) * 0.1s) backwards;
 }
 
 @keyframes card-in {
@@ -159,8 +122,6 @@
 
 .card {
   overflow: hidden;
-
-  /* `frozen_glass` + `gradient_border`, as every floating surface here. */
   background: var(--surface-glass);
   border: 1px solid var(--color-border);
   border-radius: var(--corner-medium);
@@ -182,7 +143,6 @@
   height: 2.5rem;
 }
 
-/* `subtitle-large-regular`. Wraps rather than truncating -- see `.track`. */
 .name {
   margin: 0;
   font-size: 1.5rem;
@@ -191,10 +151,6 @@
   color: currentcolor;
 }
 
-/* The descriptions vary by several lines. The row is one grid, so every body
-   is as tall as the longest; this one scrolls only if the panel itself is
-   short, and fades at the bottom when it does -- `scroll-mask` in the
-   legacy. */
 .cardBody {
   padding: 1.25rem 1rem;
   overflow-y: auto;
@@ -223,10 +179,6 @@
   letter-spacing: 0.04em;
 }
 
-/* Switch */
-
-/* Centred with the labels close to the control, as `objects_card-foot` has
-   it -- not pushed out to the card's edges. */
 .switch {
   display: flex;
   gap: 1rem;
@@ -234,8 +186,6 @@
   justify-content: center;
 }
 
-/* `body-medium-semi` and sentence case -- the legacy's caps styles are the
-   `overline`/`caption-caps` pair, and the switch uses neither. */
 .switchLabel {
   font-size: 1rem;
   font-weight: var(--font-semibold);
@@ -246,34 +196,20 @@
   color: var(--color-text);
 }
 
-/* The library's switch, themed through its own custom properties rather
-   than overridden selector by selector -- the boundary this port settled on
-   for epo-react-lib (see the Filters reset button).
-
-   Its defaults are a 90x49 pill in `#dce0e3` with a grey knob, which is the
-   light theme again. `_togglegroup.scss` is 4rem x 2rem, grey-800 behind a
-   1px rule, and the knob is turquoise-600 and the full height of the track
-   -- hence no toggle margin. Doubled selector for the usual
-   styled-components reason. */
+/* Selector doubled: the library is styled-components and injects after this
+   stylesheet, so a single class never takes. */
 .switchControl.switchControl {
   --switch-width: 4rem;
   --switch-height: 2rem;
   --toggle-margin: 0px;
 
-  /* Case-sensitive, and the library's own capitalisation. */
+  /* Case-sensitive: the library's own capitalisation. */
   --Switch-background-color: var(--color-grey-800);
   --Switch-Toggle-color: var(--color-turquoise-600);
 
   flex: 0 0 auto;
   border: 1px solid var(--color-border);
 }
-
-/* Controls
-
-   Pinned to the viewport's edges and centred on the card row, not tucked
-   into a corner: `inset: 50% var(--site-margin-small) auto` in
-   `_objects.scss`. The strip itself takes no pointer events so the cards
-   behind it stay draggable between the two buttons. */
 
 .controls {
   position: absolute;
@@ -282,13 +218,9 @@
   justify-content: space-between;
   pointer-events: none;
   transform: translateY(-50%);
-
-  /* Arrives with the cards. */
   animation: heading-in 1.2s cubic-bezier(0.65, 0, 0.35, 1) backwards;
 }
 
-/* `button_icon.secondary.large`: a 4.5rem glass circle, the biggest of the
-   set. */
 .control {
   position: relative;
   display: grid;
@@ -319,8 +251,6 @@
   mask-composite: exclude;
 }
 
-/* Out of the way entirely at each end rather than greyed -- the legacy fades
-   them to nothing. `disabled` keeps the invisible one out of the tab order. */
 .control:disabled {
   pointer-events: none;
   cursor: default;
@@ -337,7 +267,6 @@
   height: 1.5rem;
 }
 
-/* Everything arrives at once for anyone who has asked for less motion. */
 @media (prefers-reduced-motion: reduce) {
   .item,
   .actions,

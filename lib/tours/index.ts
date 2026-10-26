@@ -3,13 +3,7 @@ import type {
   getGuidedExperiences,
 } from "@/lib/api/craft";
 
-/**
- * Tour shapes and the small amount of logic the templates share.
- *
- * Craft models a tour's deck as a matrix of four block types. Narrowing is on
- * `__typename`: the blocks share almost no fields, and `funFactSlide` in
- * particular has only `slideContent`.
- */
+/** Tour shapes. Blocks are narrowed on `__typename` -- see README. */
 
 export type TourSummary = NonNullable<
   Awaited<ReturnType<typeof getGuidedExperiences>>[number]
@@ -69,7 +63,7 @@ export interface TourSortOption {
 }
 
 /**
- * The sort menu, ported from `guided-experiences.njk`.
+ * The sort menu, ported from the legacy.
  *
  * The legacy sorted by writing a `--order` custom property onto each card and
  * letting flexbox reorder them, which leaves the DOM order -- and so the tab

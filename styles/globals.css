@@ -1,45 +1,19 @@
 @import url("./variables.css");
 
-/**
- * Minimal reset. The legacy `_reset.scss` was a full normalize pass applied
- * globally; scoping styles into CSS modules removes most of the need, so this
- * keeps only what a full-viewport WebGL app actually requires.
- */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/**
- * The root font size, and with it every rem in the app.
- *
- * This deliberately overrides epo-react-lib's `--size-font-16-20`, which is
- * `clamp(1rem, 0.913rem + 0.4348vw, 1.25rem)` -- a steep ramp that hits its
- * 20px ceiling at a 1240px viewport and stays there. The legacy sets its own
- * much gentler curve and never reaches its ceiling in practice:
- *
- *   viewport   epo-react-lib   legacy
- *   1280px     20.00px         17.28px
- *   1920px     20.00px         17.92px
- *   2320px     20.00px         18.32px
- *
- * Left alone, every rem in the app renders 9-16% larger than production.
- * epo-react-lib's ramp is tuned for the Rubin marketing site, not for a
- * full-viewport app with its own scale; the library's own components are a
- * handful of small controls here and take the change without trouble.
- */
 html {
   height: 100%;
   font-size: clamp(16px, 1rem + 0.1vw, 24px);
 }
 
-/* `min-height`, not `height`. A sticky element is confined to its parent's
-   box, so a body fixed at one viewport tall let the content pages' sticky
-   header scroll away the moment the page was longer than the screen. Nothing
-   relies on body being exactly 100% -- the explorer and splash set their own
-   height in `dvh`. */
 body {
+  /* `min-height`, not `height`: a sticky element is confined to its parent's
+     box, and a body fixed at one viewport tall loses the sticky header. */
   min-height: 100%;
   margin: 0;
   font-family: var(--font-stack);
@@ -49,37 +23,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/**
- * The epo-react-lib boundary.
- *
- * `@rubin-epo/epo-react-lib/styles.css` is three things in one file:
- *
- *   1. a CSS reset                          -- taken as-is
- *   2. the `:root` design tokens            -- taken as-is, its components read them
- *   3. a page-level typographic theme       -- NOT taken; this is that override
- *
- * Layer 3 is the theme for the Rubin marketing site: a light page, long
- * scrolling articles, headings at weight 900 with margins up to 9rem. This
- * app is a dark full-viewport viewer whose type scale comes from the
- * legacy's `_typography.scss`, so layer 3 is wrong here in every particular
- * -- which is why the `html` rule above and the `body` rule below already
- * override their halves of it.
- *
- * Nothing in this app consumes layer 3 deliberately: every heading we render
- * carries a class with its own module styles, and `RichText` sets its own
- * sizes for CMS copy. The element rules only ever applied where a module
- * happened to omit a property, which made them an invisible fallback that
- * produced wrong answers rather than a design system we were inheriting --
- * the 404's eyebrow silently came out at weight 900 that way, and only a
- * computed-style diff against production caught it.
- *
- * So headings are neutralised to plain inherited text, and the module that
- * renders one is the only thing that styles it. Layers 1 and 2 are
- * untouched, as are the library's components, which bring their own styles.
- *
- * `p`, `ol` and `ul` are deliberately left alone: the library guards those
- * with `:not([class])`, so they already stand aside for anything we render.
- */
 h1,
 h2,
 h3,

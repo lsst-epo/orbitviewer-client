@@ -1,35 +1,16 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `templates/_guide.scss`. `.guide_step` is a left-anchored
-   column inset clear of the header, with the card pinned to its BOTTOM
-   (`justify-content: flex-end`) and sized by its own content -- which is why
-   production's panel shrinks on a slide with no image instead of holding a
-   full-height rail. It shares its geometry with `.object_card`. */
-
 .player {
   position: absolute;
-
-  /* Clears the share button and the menu. Without the top inset the card runs
-     underneath them and the tour title is unreadable. */
   top: var(--panel-dock-top);
   bottom: var(--site-margin-small);
   left: var(--site-margin-small);
   z-index: var(--z-menu);
   display: flex;
-
-  /* Bottom-aligned, so a short slide sits low rather than floating. */
   flex-direction: column;
   justify-content: flex-end;
-
-  /* The same two constraints as the object card -- see Layer's `.dock`. */
-  width: min(
-    40vw - var(--site-margin-small),
-    100% - var(--site-margin-small)
-  );
+  width: min(40vw - var(--site-margin-small), 100% - var(--site-margin-small));
   max-width: var(--panel-width-detail);
-
-  /* The column is only a positioning frame; the scene stays interactive
-     everywhere the card itself is not. */
   pointer-events: none;
 }
 
@@ -44,8 +25,6 @@
   border-radius: var(--corner-large);
   backdrop-filter: blur(var(--backdrop-blur));
 }
-
-/* Head */
 
 .head {
   display: grid;
@@ -84,8 +63,6 @@
   border-radius: 3px;
   transition: width 0.4s var(--easing-default);
 }
-
-/* Body */
 
 .body {
   display: grid;
@@ -132,8 +109,6 @@
   margin-bottom: 0;
 }
 
-/* Share slide links */
-
 .links {
   display: grid;
   gap: var(--site-margin-xsmall);
@@ -163,8 +138,6 @@
   color: var(--color-link);
   text-underline-offset: 0.2em;
 }
-
-/* Foot */
 
 .foot {
   display: flex;
@@ -203,9 +176,6 @@
   border: 1px solid var(--color-border);
 }
 
-/* `.button.primary`: a turquoise-600 fill with a turquoise-100 label. The
-   pale-mint-on-dark this replaces was the pairing inverted -- the same
-   inversion the splash button and the cloud-search button had. */
 .primary {
   color: var(--color-turquoise-100);
   background-color: var(--color-turquoise-600);
@@ -238,16 +208,13 @@
   height: 16px;
 }
 
-/* The scene has nowhere to go on a narrow viewport, so the card sits over the
-   lower half rather than beside it. */
 @media (width <= 768px) {
   .player {
     top: auto;
     left: 0;
     width: 100%;
 
-    /* The 620px desktop cap would otherwise still apply and leave the card
-       narrower than the viewport it is meant to span. */
+    /* The 620px desktop cap would otherwise still apply here. */
     max-width: none;
     max-height: 70%;
     padding: var(--site-margin-small);

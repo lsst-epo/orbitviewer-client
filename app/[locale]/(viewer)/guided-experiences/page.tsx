@@ -34,8 +34,6 @@ const GuidedExperiencesPage: FunctionComponent<
   setRequestLocale(locale);
 
   const entries = await getGuidedExperiences({ locale });
-  // Craft's section union admits nulls and members without a slug; a tour
-  // without one has no URL, so it cannot be listed.
   const tours = entries.filter(
     (entry): entry is TourSummary =>
       entry !== null && "slug" in entry && Boolean(entry.slug)

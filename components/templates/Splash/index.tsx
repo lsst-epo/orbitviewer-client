@@ -4,24 +4,10 @@ import { Link } from "@/lib/i18n/navigation";
 import { serverTranslation } from "@/lib/i18n/server";
 import { languages } from "@/lib/i18n/settings";
 import type { getContentPage } from "@/lib/api/craft";
-import Chrome from "@/components/templates/Explorer/Chrome";
+import Chrome from "@/components/organisms/Chrome";
 import DiscoveryCount from "./DiscoveryCount";
 import LandingClock from "./LandingClock";
 import styles from "./styles.module.css";
-
-/**
- * Landing page.
- *
- * Ported from `partials/splash.njk` and `layers/Splash.ts`. Craft's `landing`
- * entry supplies the logo, headline, eyebrow and button label; the discovery
- * figure comes from Hasura.
- *
- * The legacy drew this over the running viewer and its start button kicked
- * off a performance test and the onboarding dialog. Here it is a page of its
- * own that links to /explorer, and the explorer decides for itself whether a
- * visit is a first one. That keeps a static landing page from having to boot
- * a WebGL context before anyone has asked to see the scene.
- */
 
 type ContentPage = Awaited<ReturnType<typeof getContentPage>>;
 export type LandingEntry = Extract<
@@ -46,9 +32,6 @@ const Splash: FunctionComponent<SplashProps> = async ({
 
   return (
     <main className={styles.splash}>
-      {/* The legacy puts the whole navigation on the splash too, which is
-          what makes the wordmark and the share pill continuous from here
-          into the explorer. */}
       <Chrome locale={locale} tour={false} />
       <LandingClock />
 
@@ -94,9 +77,6 @@ const Splash: FunctionComponent<SplashProps> = async ({
         )}
       </div>
 
-      {/* The legacy called a global `changeLang()` from a `javascript:` href,
-          which is not a link at all -- no middle-click, no new tab, and
-          nothing for a crawler to follow between the two localisations. */}
       <footer className={styles.foot}>
         <ul className={styles.languages}>
           {languages.map((code) => (
