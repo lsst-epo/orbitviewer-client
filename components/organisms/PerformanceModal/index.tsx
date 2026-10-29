@@ -4,17 +4,7 @@ import { useId, type FunctionComponent } from "react";
 import useClientTranslation from "@/lib/i18n/client";
 import styles from "./styles.module.css";
 
-/**
- * Offers to drop to the smallest tier when the scene is struggling.
- *
- * Ported from `components/PerformanceModal.ts`, which identified its own
- * buttons by their CSS class -- `secondary` dismissed, `primary` switched --
- * so restyling either one changed what it did.
- *
- * Shown once per session at most: someone who has declined has said the
- * frame rate is acceptable to them, and asking again is nagging. The legacy
- * had no such guard.
- */
+/** Offers to drop to the smallest tier when the scene is struggling. */
 const PerformanceModal: FunctionComponent<{
   locale: string;
   onAccept: () => void;

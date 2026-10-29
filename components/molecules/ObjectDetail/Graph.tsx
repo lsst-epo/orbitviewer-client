@@ -6,24 +6,6 @@ import Icon, { type IconName } from "@/components/atoms/Icon";
 import type { Range } from "@/lib/solar/categories";
 import styles from "./styles.module.css";
 
-/**
- * One comparison bar.
- *
- * Ported from `components/object_card_graph.njk` plus `ObjectPage.mapSlider`.
- *
- * Two deliberate changes from the legacy:
- *
- * 1. The fill is linear across the range, where the legacy ran the fraction
- *    through `MathUtils.smoothstep`. Smoothstep is an easing curve; applying
- *    it to a measurement misreports it -- a value a quarter of the way along
- *    its range drew at 16%, and one three quarters along drew at 84%. The bar
- *    is the only quantitative comparison on the panel, so it should be linear.
- *
- * 2. The range endpoints are labelled. The legacy drew an icon at each end and
- *    left the actual bounds unstated, so the bar showed a position without a
- *    scale. Icons are still drawn when given.
- */
-
 /** How close to an end the thumb may sit before its bubble is re-aligned. */
 const EDGE_MARGIN = 0.15;
 
@@ -80,9 +62,6 @@ const Graph: FunctionComponent<GraphProps> = ({
             style={{ width: `${fraction * 100}%` }}
           >
             <span className={styles.thumb} aria-hidden>
-              {/* The bubble is centred on the thumb, so near either end it
-                  would hang outside the panel. Past the edges it aligns to
-                  the thumb instead of straddling it. */}
               <span
                 className={clsx(
                   styles.tooltip,

@@ -1,0 +1,15 @@
+@import url("../../../styles/variables.css");
+
+.logo {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: var(--z-logo);
+  display: inline-flex;
+  padding: 0.75rem;
+}
+
+.logo img {
+  width: 4.5rem;
+  height: auto;
+}

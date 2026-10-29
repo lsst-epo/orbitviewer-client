@@ -1,13 +1,11 @@
 @import url("../../../styles/variables.css");
 
-/* 24px between the label row and the control, as `filters_card_field` has
-   it -- a literal, not a margin token. */
+/* Literal 24px, as `filters_card_field` has it, not a margin token. */
 .field {
   display: grid;
   gap: 1.5rem;
 }
 
-/* The control and its bounds, 2px apart: `.rangeslider`'s own gap. */
 .sliderGroup {
   display: grid;
   gap: 2px;
@@ -25,9 +23,6 @@
   color: var(--color-text);
 }
 
-/* `overline-medium-regular`. One of the few labels the legacy really does
-   set in caps -- the casing runs both ways between these two apps, so this
-   one gains uppercase where others lose it. */
 .helper {
   font-size: 0.75rem;
   line-height: 1rem;
@@ -36,7 +31,6 @@
   letter-spacing: 0.05em;
 }
 
-/* `rangeslider-labels`: the bounds, under the track. */
 .bounds {
   display: flex;
   justify-content: space-between;
@@ -46,35 +40,18 @@
   color: var(--color-text);
 }
 
-/* The library's slider, restyled to `_rangeslider.scss`.
-
-   Unlike the time machine's copy of this, almost all of it goes through the
-   component's own custom properties -- it has a full set, which that one
-   was written before finding. Only the two things no property reaches are
-   declarations: the thumb's ring is 3px where the component hard-codes 1px,
-   and the rail is a gradient where the property takes a colour.
-
-   Selectors are doubled because styled-components injects at runtime, after
-   this stylesheet, and wins at equal specificity. */
+/* Every selector is doubled: the library is styled-components, which injects
+   at runtime and wins at equal specificity. */
 .slider.slider {
-  /* The rail: 4px, and transparent because the gradient is painted below. */
   --size-height-slider: 4px;
   --size-border-slider: 0px;
   --color-background-slider: transparent;
   --color-box-shadow: transparent;
-
-  /* The span between the handles, which the legacy fills dark over the
-     bright rail rather than the other way round.
-
-     `--color-background-track-override`, not `--color-background-track`:
-     the component writes the latter inline on this very element
-     (`--color-background-track: var(--color-background-track-override, #313333)`),
-     and an inline custom property beats a stylesheet rule on the same
-     element. The override is the hook it leaves for exactly this. */
   --size-height-track: 4px;
-  --color-background-track-override: var(--color-turquoise-700);
 
-  /* 20px of turquoise-600 inside a turquoise-200 ring. */
+  /* The `-override`, not `--color-background-track`: the component writes that
+     one inline on this element, and inline beats a stylesheet rule. */
+  --color-background-track-override: var(--color-turquoise-700);
   --size-height-thumb: 20px;
   --color-background-thumb: var(--color-turquoise-600);
   --color-border-thumb: var(--color-turquoise-200);
@@ -82,20 +59,14 @@
   --color-background-thumb-label: var(--color-grey-800);
   --color-border-slider: var(--color-border-strong);
   --color-text-slider: var(--color-text);
-
-  /* The library reserves space below for its label; ours is above. */
   --size-padding-slide-block-end: 0;
 
-  /* `.rangeslider_input` is 2.5rem tall with the 4px rail centred in it, so
-     the handles have room above and below and the bounds row below clears
-     them. Without it the labels sit under the handles. */
+  /* Makes the control 2.5rem tall around the 4px rail, so the handles have
+     room and the bounds row clears them. */
   padding-block: 1.125rem;
   padding-inline: 0.75rem;
 }
 
-/* The rail is drawn on a pseudo-element: `clip-path` is not wanted here, but
-   the thumbs are children of this element and a gradient background would
-   sit under them either way. Bright at both ends, dark in the middle. */
 .slider.slider > div::before {
   position: absolute;
   inset: 0;
@@ -109,8 +80,6 @@
   border-radius: 4px;
 }
 
-/* Only the span between the two handles is painted; the library fills from
-   the minimum by default. */
 .slider.slider :global(.track) {
   opacity: 0;
 }
@@ -123,16 +92,10 @@
   border-width: 3px;
 }
 
-/* The library reveals the chip on the handle's own `:focus`, but the
-   tabindex is on the wrapper react-slider renders around it, so that never
-   fires -- a keyboard user moves the handle and sees no number. Production
-   has the same gap; the handles there are not focusable at all. */
 .slider.slider :global(.thumb):focus-within > div {
   --opacity-label-thumb: 1;
 }
 
-/* Above the handle, as `_rangeslider.scss` has it -- the library drops it
-   below, where the bounds row already is. */
 .slider.slider :global(.thumb) span {
   top: auto;
   bottom: calc(100% + var(--size-offset-label));

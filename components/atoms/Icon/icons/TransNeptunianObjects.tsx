@@ -1,6 +1,5 @@
 import type { FunctionComponent, SVGProps } from "react";
 
-/** Ported from the legacy `icons.njk` sprite (symbol id="trans-neptunian-objects"). */
 const TransNeptunianObjects: FunctionComponent<SVGProps<SVGSVGElement>> = (
   props
 ) => (

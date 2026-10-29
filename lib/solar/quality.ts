@@ -22,7 +22,6 @@ export const GPU_SIM_SIZES: Record<SimQuality, SimSize> = {
   low: { width: 128, height: 128 },
   medium: { width: 256, height: 256 },
   high: { width: 512, height: 512 },
-  // Note the asymmetry: ultra is 1024x512, not square.
   ultra: { width: 1024, height: 512 },
   ultra2: { width: 1024, height: 1024 },
 };
@@ -56,9 +55,6 @@ export const hasStoredQuality = (): boolean => {
   try {
     return window.localStorage.getItem(QUALITY_STORAGE_KEY) !== null;
   } catch {
-    // Storage refused. Treating that as "chosen" is the kinder default:
-    // the choice cannot be remembered, so asking on every single visit
-    // would be worse than not asking at all.
     return true;
   }
 };
@@ -67,8 +63,7 @@ export const isSimQuality = (value: string): value is SimQuality =>
   (SIM_QUALITIES as Array<string>).includes(value);
 
 /**
- * Renderer settings per tier. Ported from `QUALITY_TIERS` in
- * `gfx/core/RubinRenderer.ts`.
+ * Renderer settings per tier, ported from the legacy's own tier table.
  *
  * Note glow is off entirely at the low tier -- the bloom pass costs a second
  * full scene render plus several blur passes, which the lowest tier cannot
@@ -125,8 +120,6 @@ export const GFX_TIERS: Record<SimQuality, GFXTier> = {
     blurScale: 1,
     cloudsWidth: 2048,
   },
-  // The legacy table stopped at "ultra"; ultra2 exists as a simulation size
-  // only, so it inherits ultra's renderer settings.
   ultra2: {
     maxPixelRatio: 3,
     maxSamples: 4,

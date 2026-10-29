@@ -1,24 +1,8 @@
-/**
- * Global design tokens, ported 1:1 from the legacy `_variables.scss`.
- *
- * Two changes from the original:
- *  - The `@include media(...)` viewport/touch indicator blocks are rewritten
- *    as plain media queries; `_mixins.scss` is not carried over.
- *  - Breakpoint values are inlined at each query since custom media queries
- *    are not available without PostCSS, and Turbopack uses Lightning CSS.
- *
- * Component CSS modules `@import` this file rather than relying on global
- * class aliases, per the port plan.
- */
 :root {
-  /* Color primitives */
   --color-black: #000;
 
-  /* Space-separated, because they are consumed by `rgb(... / a)`. The
-     legacy wrote `rgba(var(--x-rgb), .1)`, where commas were correct; mixing
-     the two -- `rgb(0, 0, 0 / 60%)` -- is invalid, and the whole declaration
-     is dropped. That is what silently removed every border and backdrop in
-     the app until it was noticed in session 11. */
+  /* Space-separated: consumed by `rgb(... / a)`. Mixing in commas --
+     `rgb(0, 0, 0 / 60%)` -- is invalid and drops the whole declaration. */
   --color-black-rgb: 0 0 0;
   --color-white: #fff;
   --color-white-rgb: 255 255 255;
@@ -44,8 +28,6 @@
   --color-red-medium: #ed4c4c;
   --color-red-dark: #cf4040;
   --color-red-darker: #38110f;
-
-  /* Color tokens */
   --color-bg: var(--color-black);
   --color-text: var(--color-grey-100);
   --color-text-low: var(--color-grey-200);
@@ -57,8 +39,7 @@
   --color-button-text-hover: var(--color-turquoise-200);
   --color-button-bg-hover: var(--color-turquoise-800);
 
-  /* Object category colors. Overwritten at runtime from Craft's objectTypes
-     category group (mainColor), matching the legacy createCategoryColorMap. */
+  /* Overwritten at runtime from Craft's objectTypes group. */
   --color-asteroids: #b1f2ef;
   --color-near-earth-objects: #986ae1;
   --color-centaurs: #ff6eb4;
@@ -68,8 +49,6 @@
   --color-interstellar-objects: #718e3e;
   --color-jupiter-trojans: #e05858;
   --color-sun: #fdda78;
-
-  /* Layers */
   --z-tooltip-dialog: 20;
   --z-loader: 18;
   --z-toast: 17;
@@ -90,71 +69,45 @@
   --z-toolbar: 4;
   --z-pointer: 2;
   --z-canvas: 1;
-
-  /* Every length below is rem, not px, and the figure is the legacy's px
-     divided by 16. The legacy authors in px and its build converts the lot
-     to rem against a 16px base (postcss-pxtorem), so production's whole UI
-     scales with the fluid root font -- `--corner-large: 10px` ships as
-     `0.625rem` and renders 11.45px at a 2320px viewport. Authoring px here
-     would pin the port's chrome at a fixed size while production's grew.
-     See `styles/globals.css` for the root-font curve these resolve against.
-
-     Margins */
   --site-margin-xsmall: 0.5rem;
+
+  /* Every length below is rem, and the figure is the legacy's px / 16.
+     Authoring px here would pin the chrome at a fixed size -- see README. */
   --site-margin-small: 0.75rem;
   --site-margin-large: 1rem;
-
-  /* Sizing */
   --header-height: 4.25rem;
   --timemachine-width: 24rem;
   --timemachine-height: 7.0625rem;
   --toolbar-height: 4rem;
   --toolbar-width: 6rem;
   --panel-width: 26.25rem;
-
-  /* The object detail and tour player cards. 620px in the legacy. */
   --panel-width-detail: 38.75rem;
-
-  /* Clears the share button and the menu, which the detail card sits under. */
   --panel-dock-top: calc(var(--site-margin-large) + 3.5rem);
   --object-grid-frame-small: 75;
   --object-grid-frame-large: 60;
-
-  /* The legacy's `frozen_glass` and `gradient_border` mixins, which together
-     make every floating panel in the viewer -- the toolbar, the time machine,
-     the object card, a tour card. Two stacked gradients rather than a flat
-     tint: a white wash over near-opaque black, so the panel lifts off the
-     scene without the scene showing through as colour. The edge is a
-     masked gradient border, brighter at the top than the bottom, which is
-     what gives the panels their lit-from-above look. */
   --surface-glass:
-    linear-gradient(180deg, rgb(255 255 255 / 12%) 0%, rgb(255 255 255 / 9%) 100%),
+    linear-gradient(
+      180deg,
+      rgb(255 255 255 / 12%) 0%,
+      rgb(255 255 255 / 9%) 100%
+    ),
     linear-gradient(180deg, rgb(0 0 0 / 80%) 0%, rgb(0 0 0 / 80%) 100%);
   --surface-glass-edge: linear-gradient(
     180deg,
     rgb(255 255 255 / 18%) 0%,
     rgb(255 255 255 / 8%) 53%
   );
-
-  /* Styles */
   --corner-medium: 0.3125rem;
   --corner-large: 0.625rem;
   --backdrop-blur: 0.5rem;
-
-  /* Fonts */
   --font-stack: var(--font-source-sans-3), arial, sans-serif;
 
-  /* epo-react-lib reads this for everything it renders, and defaults it to
-     Source Sans Pro -- a different family from the Source Sans 3 this app
-     loads, and one nothing serves, so it fell through to Helvetica. */
+  /* epo-react-lib reads this for everything it renders and defaults it to a
+     family nothing here serves. It must be set. */
   --font-stack-base: var(--font-stack);
   --font-regular: 400;
   --font-semibold: 600;
-
-  /* Transitions */
   --easing-default: cubic-bezier(0.47, 0, 0.23, 1.08);
-
-  /* Devices */
   --viewport: "xsmall";
   --touch: "false";
 }

@@ -19,18 +19,16 @@ import {
 } from "@/lib/solar/quality";
 import { datasetUrlFor, loadMpcDataset } from "@/lib/api/mpcData";
 
-/**
- * Holds the MPC dataset and the visual quality tier that selects it.
- *
- * Follows the rubin-obs-client pattern the port plan points at: fetch, hand
- * the result to a provider, consume it from components. The fetch itself runs
- * in the browser rather than on the server -- see `lib/api/mpcData.ts`.
- */
-
 interface SolarDataValue {
+  /** The tier the reader has chosen. Changes the moment they choose it. */
   quality: SimQuality;
   setQuality: (quality: SimQuality) => void;
   elements: Array<OrbitElements>;
+  /**
+   * The tier `elements` was loaded for, or null before the first load. Lags
+   * `quality` while a download is in flight -- see README.
+   */
+  datasetQuality: SimQuality | null;
   rubinDiscoveryCount: number;
   loading: boolean;
   /** 0-1 while downloading, when the server advertises a length. */
@@ -53,12 +51,13 @@ const SolarDataProvider: FunctionComponent<
     initialQuality ?? DEFAULT_QUALITY
   );
   const [elements, setElements] = useState<Array<OrbitElements>>([]);
+  const [datasetQuality, setDatasetQuality] = useState<SimQuality | null>(null);
   const [rubinDiscoveryCount, setRubinDiscoveryCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<Error | null>(null);
 
-  // Restore the persisted tier after mount. Reading localStorage during
+  // Restore the persisted tier after mount: reading localStorage during
   // render would desync server and client markup.
   useEffect(() => {
     if (initialQuality) return;
@@ -100,7 +99,12 @@ const SolarDataProvider: FunctionComponent<
       onProgress: setProgress,
     })
       .then((dataset) => {
+        // A download that completed after it was abandoned must not land
+        // over the newer tier's data.
+        if (controller.signal.aborted) return;
+
         setElements(dataset.elements);
+        setDatasetQuality(quality);
         setRubinDiscoveryCount(dataset.rubinDiscoveryCount);
         setLoading(false);
       })
@@ -111,8 +115,6 @@ const SolarDataProvider: FunctionComponent<
         setLoading(false);
       });
 
-    // Switching tiers mid-download abandons the in-flight request rather than
-    // letting a stale, much larger response land after the new one.
     return () => controller.abort();
   }, [dataFileUrls, quality]);
 
@@ -121,6 +123,7 @@ const SolarDataProvider: FunctionComponent<
       quality,
       setQuality,
       elements,
+      datasetQuality,
       rubinDiscoveryCount,
       loading,
       progress,
@@ -130,6 +133,7 @@ const SolarDataProvider: FunctionComponent<
       quality,
       setQuality,
       elements,
+      datasetQuality,
       rubinDiscoveryCount,
       loading,
       progress,

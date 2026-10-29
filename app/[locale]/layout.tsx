@@ -1,9 +1,6 @@
-// Vendor base styles first, project styles after. The library sets
-// `--font-stack-base` and a `body` font-family in its own `:root`, and both
-// are plain single-element rules -- so whichever sheet comes last wins. With
-// this the wrong way round the whole app rendered in Helvetica: the library
-// points that token at Source Sans Pro, which nothing here loads.
-// Precompiled by the package; no Sass toolchain is needed to consume it.
+// Vendor base styles first, project styles after: both set a `body`
+// font-family in a plain rule, so whichever sheet comes last wins. The wrong
+// way round renders the whole app in Helvetica -- see styles/README.md.
 import "@rubin-epo/epo-react-lib/styles.css";
 import "@/styles/globals.css";
 import { FunctionComponent, PropsWithChildren } from "react";
@@ -68,10 +65,10 @@ export async function generateMetadata({
 
 export const generateViewport = (): Viewport => ({
   themeColor: "#000000",
-  // The explorer is a full-viewport WebGL canvas; zooming the page fights
-  // the scene's own pinch-to-zoom handling.
   width: "device-width",
   initialScale: 1,
+  // The explorer is a full-viewport WebGL canvas; zooming the page fights
+  // the scene's own pinch-to-zoom handling.
   maximumScale: 1,
 });
 
@@ -85,31 +82,18 @@ const RootLayout: FunctionComponent<PropsWithChildren<RootProps>> = async ({
     notFound();
   }
 
-  // Establishes the next-intl request context for everything below. Without
-  // it, the locale-aware navigation helpers (Link, getPathname) throw
-  // "No intl context found" when rendered from a Server Component.
   setRequestLocale(locale);
 
   return (
     <html lang={locale} className={sourceSans3.variable}>
       <body>
-        {/* Supplies the locale to next-intl's client-side navigation helpers
-            (Link, useRouter, usePathname). Without it those throw
-            "No intl context found" the moment they render.
-
-            Messages are intentionally empty: next-intl is used here only for
-            locale routing. All copy is resolved through i18next, matching the
-            Skyviewer split, and the provider otherwise tries to load its own
-            message catalogue and fails. */}
+        {/* Messages are deliberately empty: next-intl does locale routing
+            only here, and all copy comes from i18next. Without the provider
+            the navigation helpers throw "No intl context found". */}
         <NextIntlClientProvider locale={locale} messages={{}}>
-          {/* epo-react-lib is built on styled-components. In the App Router
-              its styles must be collected during the server render and
-              injected into the streamed HTML, or the client generates class
-              names that do not match and React reports a hydration mismatch.
-              The registry is exported by the library itself, so it uses the
-              library's own styled-components instance -- we must not add
-              styled-components as a dependency of our own, or there would be
-              two copies and the styles would silently stop resolving. */}
+          {/* The registry is the library's own, so it uses the library's
+            styled-components instance. Do NOT add styled-components as a
+            dependency of ours -- two copies and the styles stop resolving. */}
           <StyledComponentsRegistry>
             <I18NextClientProvider locale={locale}>
               {children}

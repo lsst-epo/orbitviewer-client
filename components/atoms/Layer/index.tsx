@@ -10,12 +10,6 @@ import clsx from "clsx/lite";
 import Icon from "@/components/atoms/Icon";
 import styles from "./styles.module.css";
 
-/**
- * A dismissible panel over the explorer, replacing `layers/Layer.ts`. Stays
- * mounted when closed so the CSS transition can run, and is made inert so its
- * contents leave the tab order. See README for the dismissal rules.
- */
-
 export interface LayerProps {
   open: boolean;
   onClose: () => void;
@@ -24,35 +18,23 @@ export interface LayerProps {
   /** Dismiss when a click lands outside the panel. */
   closeOnOutsideClick?: boolean;
   /**
-   * How the panel is placed. `left` and `right` are full-height drawers
-   * bled to that edge. `dock` is the object detail's floating card:
-   * left-anchored, inset clear of the header, every corner rounded, with the
-   * scene still visible and interactive around it. `card` is the filters
-   * panel's: smaller, near the top left, as tall as its contents.
+   * Placement: a full-height drawer (`left`/`right`), the object detail's
+   * floating card (`dock`), or the filters panel's smaller one (`card`).
    */
   side?: "left" | "right" | "dock" | "card";
-  /**
-   * How much of the viewport the panel takes. `wide` is for panels whose
-   * content is a row rather than a column -- the objects rail shows one card
-   * at a time in the default width. `full` is the objects takeover: the
-   * whole viewport, dimmed, with the scene showing through.
-   */
+  /** `wide` for content laid out as a row; `full` is the objects takeover. */
   size?: "default" | "wide" | "full";
   /** Accessible name for the close button. Untranslated in the legacy. */
   closeLabel?: string;
-  /**
-   * Suppresses the header's close button, for content that provides its own.
-   * Two ways out of the same panel is clutter, and on the right-hand side
-   * this one sits underneath the navigation.
-   */
+  /** Suppresses the header's close button, for content that provides its own. */
   showClose?: boolean;
   className?: string;
 }
 
 /**
- * Whether a pointer landed on the control that owns this panel. Such a control
- * is not "outside" it in the sense that matters -- see README. The id may name
- * a wrapper, so containment is tested rather than identity.
+ * Whether a pointer landed on the control that owns this panel, which is not
+ * "outside" it in the sense that matters. The id may name a wrapper, so
+ * containment is tested rather than identity.
  */
 function controlsThisPanel(
   target: Element | null,

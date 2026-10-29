@@ -3,17 +3,7 @@ import { fallbackLng } from "./settings";
 
 type ResourceLoader = () => Promise<{ default: Record<string, unknown> }>;
 
-/**
- * Explicit loader map rather than a template-literal `import()`.
- *
- * Turbopack cannot statically analyse an import specifier with two dynamic
- * segments (`.../${language}/${namespace}.json`) and fails the build with
- * "Module not found". Listing the combinations keeps the graph analysable,
- * and there are only locales x namespaces of them.
- *
- * The `@epo-locale-strings` specifier is aliased in next.config.js -- see the
- * note there about epo-react-lib v3's exports map.
- */
+/** Explicit loader map: Turbopack cannot analyse a two-segment import. */
 const resources: Record<string, Record<string, ResourceLoader>> = {
   en: {
     translation: () => import("./localeStrings/en/translation.json"),

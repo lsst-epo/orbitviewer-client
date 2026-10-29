@@ -2,22 +2,6 @@
 
 import { env } from "@/env";
 
-/**
- * Hasura federated query service. Replaces the ad-hoc fetches in the legacy
- * `src/js/core/data/QueryManager.ts`.
- *
- * Two deliberate changes from the legacy implementation:
- *
- * 1. These run on the server. The legacy client shipped HASURA_SECRET_KEY to
- *    the browser via an esbuild `define` and sent it as an X-Hasura-Admin-Secret
- *    header from page JS. The proxy no longer requires that header, and keeping
- *    these calls server-side means neither the endpoint nor any credential is
- *    exposed in the client bundle.
- * 2. `getA()` and `fetchSolarElements()` are not ported. Both were unreachable
- *    (no callers), and their endpoints -- /api/rest/a-v2 and
- *    /api/rest/orbit-viewer/fetch/:id -- now return 404 on the proxy.
- */
-
 /** Object type codes as stored in Craft's objectTypes category group. */
 export type ObjectTypeCode = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
@@ -171,7 +155,6 @@ export async function getClassificationRanges(): Promise<
   Array<ClassificationRange>
 > {
   const response = await fetch(`${env.HASURA_URL}/classification_ranges`, {
-    // Ranges shift as new observations land; revalidate hourly.
     next: { revalidate: 3600 },
   });
 

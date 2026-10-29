@@ -12,15 +12,6 @@ import {
 } from "react";
 import { dateToMJD } from "@/lib/solar/time";
 
-/**
- * Simulation clock.
- *
- * Replaces the legacy `SolarClock` class. The current date lives in a ref
- * rather than state: the scene reads it every frame from `useFrame`, and
- * re-rendering React 60 times a second to carry a timestamp would be wasteful.
- * A throttled state mirror drives the UI readout instead.
- */
-
 /** Simulation is clamped to the range the MPC elements are valid over. */
 export const CLOCK_RANGE = {
   min: new Date("1900-01-01T00:00:00Z"),
@@ -90,15 +81,8 @@ const SolarClockProvider: FunctionComponent<
   const [paused, setPausedState] = useState(false);
 
   /**
-   * The frame path reads these rather than the state above.
-   *
-   * `advance` runs from `useFrame`, outside React's render cycle, and a
-   * closure over state is a frame or more stale. That is not cosmetic here:
-   * while live, `advance` overwrites the date with `new Date()` every frame,
-   * so a `setDate` committed between two renders was wiped by the next frame
-   * still believing it was live -- the date jumped straight back to now. The
-   * legacy avoided this by reading a mutable `SolarClock` each frame; refs
-   * are the same idea.
+   * The frame path reads these rather than the state above: a closure over
+   * state is a frame or more stale, and while live that wipes a `setDate`.
    */
   const modeRef = useRef({
     isLive,
@@ -116,12 +100,7 @@ const SolarClockProvider: FunctionComponent<
     setIsLiveState(next);
   }, []);
 
-  /**
-   * Setting a rate leaves live mode, because the frame path only tracks the
-   * real clock while the rate is zero. Without this the two disagree: the
-   * simulation scrubs away from now while `isLive` still reports true, and
-   * the UI keeps claiming to be live.
-   */
+  /** Setting a rate leaves live mode -- see README. */
   const setHoursPerSecond = useCallback(
     (hours: number) => {
       modeRef.current.hoursPerSecond = hours;
@@ -149,7 +128,6 @@ const SolarClockProvider: FunctionComponent<
       );
     }
 
-    // Throttled mirror into React state for the UI.
     const now = performance.now();
     if (now - lastSyncRef.current > UI_SYNC_INTERVAL) {
       lastSyncRef.current = now;

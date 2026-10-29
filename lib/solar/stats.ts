@@ -4,18 +4,6 @@ import { calculateOrbit, getMeanAnomaly } from "./orbits";
 import { MJD2JD, JD2Date, dateToMJD } from "./time";
 import type { OrbitElements } from "./types";
 
-/**
- * Derived figures shown in the object detail panel.
- *
- * Ported from `getClosestDateToSun`, `getDistanceFromSunNow` and
- * `getDistanceFromEarthNow` in `core/solar/SolarUtils.ts`.
- *
- * Each takes its reference date as an argument rather than reading a global
- * clock, so the panel can show figures for the simulated date rather than
- * always "now" -- the legacy hardcoded `new Date()` in all three, which meant
- * scrubbing the time machine left these numbers stale.
- */
-
 /** Scratch vectors; these run per render, not per frame, but allocation-free is free. */
 const a = new Vector3();
 const b = new Vector3();

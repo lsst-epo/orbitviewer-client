@@ -1,10 +1,5 @@
 @import url("../../../styles/variables.css");
 
-/**
- * Dev-only viewport indicator, ported from `_debug.scss`. Reads the
- * --viewport and --touch custom properties that variables.css sets per
- * breakpoint, so it reports the same value the CSS is actually resolving.
- */
 .debug {
   position: fixed;
   right: 0;

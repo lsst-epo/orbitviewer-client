@@ -10,15 +10,15 @@ the camera framing, the date and speed, and the filters.
 parsed — an old share link still resolves to `/explorer`, it just opens at
 defaults. The mapping, for anyone tracing an old link:
 
-| legacy | current | note |
-|---|---|---|
-| `d` | `date` | ISO 8601, colons intact |
-| `ts` | `timeScale` | hours per second |
-| `cp`, `cq` | `camera` | was two params, now underscore-joined |
-| `db` | `discovery` | `all` / `rubin` / `other`; was an integer enum |
-| `ntypes` | `types` | comma-joined **included** categories; was `+`-joined **excluded** |
-| `dr` | `distance` | `min,max` AU; was `min-max`, ambiguous for negatives |
-| `id` | `object` | |
+| legacy     | current     | note                                                              |
+| ---------- | ----------- | ----------------------------------------------------------------- |
+| `d`        | `date`      | ISO 8601, colons intact                                           |
+| `ts`       | `timeScale` | hours per second                                                  |
+| `cp`, `cq` | `camera`    | was two params, now underscore-joined                             |
+| `db`       | `discovery` | `all` / `rubin` / `other`; was an integer enum                    |
+| `ntypes`   | `types`     | comma-joined **included** categories; was `+`-joined **excluded** |
+| `dr`       | `distance`  | `min,max` AU; was `min-max`, ambiguous for negatives              |
+| `id`       | `object`    |                                                                   |
 
 Parsing is loose on purpose: an unparseable param falls back to its default
 rather than erroring the page, so a mangled share link still renders the scene.
@@ -34,9 +34,8 @@ have to agree on it**: the scene, and the detail panel's camera-view toggle.
 They did not. The toggle read `params.view ?? "object"` independently and so
 sat on "Object" while the scene framed the orbit.
 
-The rule is the legacy's: `followSolarElementById` calls
-`followSolarElement(el, !el.isPlanet)`, and `isPlanet` is true only for a
-`Planet`, whose `PlanetId` is exactly the eight. Everything else — dwarf
+The rule is the legacy's: it frames a body on its orbit unless the body is a
+planet, and its planet flag is true only for the eight. Everything else — dwarf
 planets included — is framed on its orbit.
 
 That is not arbitrary. Those eight are the only bodies carrying a texture, so
@@ -72,3 +71,12 @@ resolve, and can be removed once none are expected in circulation.
 URL writes happen in an effect on the params object, never inside a state
 updater. Writing history during render produces "Cannot update a component
 (Router) while rendering a different component".
+
+Parsing retries **field by field**, dropping only what failed, so one bad
+param does not discard the rest of a share link.
+
+## The share image
+
+A missing overlay costs the branding, not the whole image. The snapshot's
+aspect ratio is the viewport's and rarely matches the target, so it is drawn
+cover-and-centred — the overflow is cropped rather than the image squashed.

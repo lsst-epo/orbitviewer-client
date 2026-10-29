@@ -7,31 +7,13 @@ import ContentHeader from "@/components/molecules/ContentHeader";
 import DeviceTabs, { type DeviceTier } from "./DeviceTabs";
 import styles from "./styles.module.css";
 
-/**
- * About.
- *
- * Ported from `locale-templates/about.njk`. Five sections: the masthead, an
- * introduction, the quality-tier showcase, the observatory, and credits.
- *
- * The legacy drove its entrance animations from an IntersectionObserver that
- * toggled `intersect_active` / `intersect_no-active` on every section, and
- * re-ran them each time a section left and re-entered the viewport. Those are
- * pure CSS here (`animation-timeline: view()`), so there is no observer, no
- * per-scroll class churn, and they degrade to simply being visible where the
- * timeline is unsupported.
- */
-
 type ContentPage = Awaited<ReturnType<typeof getContentPage>>;
 export type AboutEntry = Extract<
   NonNullable<ContentPage>,
   { __typename: "about_Entry" }
 >;
 
-/**
- * Mask shape per tier, standing in for the device it suits: an ultrawide
- * desktop down to a phone held upright. Ported from the legacy's
- * `ratio-*` classes.
- */
+/** Mask shape per tier, standing in for the device it suits. */
 const TIER_RATIOS: Record<string, string> = {
   ultra: "21 / 9",
   high: "16 / 9",

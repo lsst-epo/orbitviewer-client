@@ -1,6 +1,5 @@
 import type { FunctionComponent, SVGProps } from "react";
 
-/** Ported from the legacy `icons.njk` sprite (symbol id="centaurs"). */
 const Centaurs: FunctionComponent<SVGProps<SVGSVGElement>> = (props) => (
   <svg viewBox="0 0 40 40" fill="currentColor" {...props}>
     <path d="M18.4 29.1001C17.9 29.1001 17.5 28.7001 17.5 28.2001V27.3001C17.5 26.8001 17.9 26.4001 18.4 26.5001C18.9 26.5001 19.2 26.9001 19.2 27.3001V28.2001C19.3 28.7001 18.9 29.1001 18.4 29.1001Z" />

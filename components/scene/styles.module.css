@@ -1,0 +1,7 @@
+@import url("../../styles/variables.css");
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-canvas);
+}

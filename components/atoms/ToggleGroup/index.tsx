@@ -4,18 +4,6 @@ import { useId, type FunctionComponent } from "react";
 import clsx from "clsx/lite";
 import styles from "./styles.module.css";
 
-/**
- * Segmented single-choice control.
- *
- * Ported from `components/ToggleGroup.ts`. epo-react-lib has no equivalent --
- * Select is a dropdown, which is the wrong affordance for two or three
- * always-visible options.
- *
- * Built as a radiogroup rather than a row of buttons, so arrow keys move
- * between options and screen readers announce the selection state. The legacy
- * used plain buttons and conveyed the active option through a class alone.
- */
-
 export interface ToggleOption<T extends string> {
   value: T;
   label: string;

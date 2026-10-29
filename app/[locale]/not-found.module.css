@@ -1,12 +1,5 @@
 @import url("../../styles/variables.css");
 
-/* Ported from `templates/_e404.scss` and `pages/404.njk`.
-
-   The legacy animates the three pieces in from `translateY(100)` with gsap,
-   staggered 0 / 0.2 / 0.5s over 0.8s; that is the `rise` keyframe below.
-   `globals.css` disables it under prefers-reduced-motion along with every
-   other animation in the app. */
-
 @keyframes rise {
   from {
     opacity: 0;
@@ -23,10 +16,6 @@
   position: relative;
   z-index: var(--z-e404);
   min-height: 100dvh;
-
-  /* The legacy lays this over the live scene, so its backdrop is a thin
-     scrim rather than a fill. It stays a scrim here even though the scene is
-     not yet mounted behind it -- see the page component. */
   background: rgb(0 0 0 / 15%);
 }
 
@@ -53,11 +42,6 @@
 .title {
   margin: 0;
   font-size: 1.25rem;
-
-  /* epo-react-lib sets `h1,h2,h3,h4 { font-weight: 900 }` globally. The
-     legacy's `.title` sets no weight and so inherits the body's regular,
-     which is what production renders -- the eyebrow is quiet, and only the
-     subtitle below is heavy. */
   font-weight: var(--font-regular);
   line-height: 1.5rem;
   color: var(--color-text-low);
@@ -67,8 +51,6 @@
   animation: rise 0.8s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
 }
 
-/* Weight 900 and full-bleed: the loudest type in the app. It reads as
-   translucent grey in a screenshot taken mid-transition, but it is solid. */
 .subtitle {
   margin: 0;
   font-size: clamp(2.5rem, 8vw, 8rem);
@@ -80,7 +62,6 @@
   animation: rise 0.8s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s forwards;
 }
 
-/* Spanish is a longer word and needs a smaller floor to stay on one line. */
 .subtitle[lang="es"] {
   font-size: clamp(1.75rem, 8vw, 8rem);
 }
@@ -92,7 +73,6 @@
   padding-bottom: 5.5rem;
 }
 
-/* `.button.primary.medium` in the legacy. */
 .action {
   display: inline-flex;
   gap: 0.75rem;
@@ -102,9 +82,6 @@
   padding-inline: 0.75rem;
   font-size: 1.25rem;
   font-weight: var(--font-semibold);
-
-  /* The legacy's `.button` sets `line-height: var(--height)`, but its
-     `font(subtitle-small)` mixin then overrides it to 24px. */
   line-height: 1.5rem;
   color: var(--color-turquoise-100);
   text-decoration: none;
@@ -119,8 +96,6 @@
   color: var(--color-turquoise-200);
 }
 
-/* Below the legacy's `large` breakpoint the block sits centred with the
-   button pinned low; at and above it, the pair is centred together. */
 @media (width >= 1024px) {
   .content {
     top: 50%;

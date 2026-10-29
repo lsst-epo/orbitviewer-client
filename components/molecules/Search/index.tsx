@@ -10,45 +10,52 @@ import { categoryColorMap } from "@/lib/solar/categoryColors";
 import type { OrbitElements } from "@/lib/solar/types";
 import styles from "./styles.module.css";
 
-/**
- * Object search panel.
- *
- * Ported from `layers/Search.ts` and `partials/search.njk`. Local matches
- * appear as you type; the full catalogue is only queried when asked, since
- * that is a round trip against millions of rows.
- *
- * Selecting a result opens it in the object detail, which is the same
- * `object` search param the legacy's /object/?id= route carried.
- */
-
 const ResultList: FunctionComponent<{
   results: Array<OrbitElements>;
   categoryColors: Map<string, string>;
   onSelect: (id: string) => void;
   labelledBy: string;
-}> = ({ results, categoryColors, onSelect, labelledBy }) => (
-  <ul className={styles.results} aria-labelledby={labelledBy}>
-    {results.map((element) => (
-      <li key={element.id}>
-        <button
-          type="button"
-          className={styles.result}
-          onClick={() => onSelect(element.id)}
-        >
-          <span
-            className={styles.swatch}
-            style={{
-              backgroundColor: categoryColors.get(element.category) ?? "#999",
-            }}
-            aria-hidden="true"
-          />
-          <span className={styles.designation}>{element.fulldesignation}</span>
-          <span className={styles.distance}>{element.a.toFixed(2)} AU</span>
-        </button>
-      </li>
-    ))}
-  </ul>
-);
+  locale: string;
+}> = ({ results, categoryColors, onSelect, labelledBy, locale }) => {
+  const { t } = useClientTranslation(locale);
+
+  return (
+    <ul className={styles.results} aria-labelledby={labelledBy}>
+      {results.map((element) => (
+        <li key={element.id}>
+          <button
+            type="button"
+            className={styles.result}
+            onClick={() => onSelect(element.id)}
+          >
+            <span
+              className={styles.swatch}
+              style={{
+                backgroundColor: categoryColors.get(element.category) ?? "#999",
+              }}
+              aria-hidden="true"
+            />
+            <span className={styles.designation}>
+              {element.fulldesignation}
+            </span>
+            {/* Semi-major axis is negative for an unbound orbit, so it is not
+              a distance. The object detail makes the same substitution. */}
+            <span
+              className={styles.distance}
+              title={t(
+                element.e < 1
+                  ? "object.sun_graph.title"
+                  : "object.perihelion_distance"
+              )}
+            >
+              {(element.e < 1 ? element.a : element.q).toFixed(2)} AU
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { t } = useClientTranslation(locale);
@@ -72,14 +79,6 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const results = catalogueResults ?? localResults;
   const showEmpty = !tooShort && results.length === 0 && !searching;
 
-  /**
-   * The catalogue is offered only once the local tier has come up empty,
-   * which is how the legacy gates it -- `.cloud_search` is `aria-hidden`
-   * until the local search returns nothing, and the `not_found_local`
-   * banner appears with it. Offering it alongside a full list of local
-   * matches would invite a round trip against millions of rows that the
-   * reader almost never needs.
-   */
   const offerCatalogue = showEmpty && !catalogueResults;
 
   return (
@@ -92,24 +91,16 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
         <input
           id={inputId}
           className={styles.input}
-          type="search"
+          type="text"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder={t("search.placeholder")}
           autoComplete="off"
-          // Results appear below as you type; announce them politely rather
-          // than hijacking focus.
           aria-describedby={resultsId}
         />
 
-        {/* The legacy's `.input-actions`: the magnifier and the cloud-search
-            button share one slot at the end of the field and swap, rather
-            than both being on screen at once. */}
         <div className={styles.inputActions}>
           {offerCatalogue ? (
-            /* `primary`, not `secondary`: epo-react-lib's secondary is red,
-               and its primary is `#12726d` -- the same fill the legacy's own
-               `.button.primary` uses here. */
             <Button
               styleAs="primary"
               type="button"
@@ -143,6 +134,7 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
           categoryColors={categoryColors}
           onSelect={openObject}
           labelledBy={resultsId}
+          locale={locale}
         />
       )}
 

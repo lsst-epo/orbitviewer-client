@@ -1,8 +1,5 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `components/_modal.scss`. Not a modal in the blocking sense --
-   it interrupts nothing, so it does not trap focus or cover the scene. */
-
 .modal {
   position: absolute;
   right: var(--site-margin-small);
@@ -58,8 +55,6 @@
   background-color: var(--color-button-bg-hover);
 }
 
-/* `.button.primary`: turquoise-600 fill, turquoise-100 label. Same
-   inversion the splash and tour-player buttons had. */
 .primary {
   color: var(--color-turquoise-100);
   background-color: var(--color-turquoise-600);

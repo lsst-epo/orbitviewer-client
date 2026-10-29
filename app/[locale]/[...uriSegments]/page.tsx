@@ -11,20 +11,10 @@ interface UriSegmentsPageProps {
   params: Promise<{ locale: string; uriSegments: Array<string> }>;
 }
 
-/**
- * Catch-all for the Craft-backed content pages: About and How to Use.
- *
- * The Craft `pages` section returns About, How to Use and Landing as one
- * union, keyed by slug -- so the URI is matched straight against the entry
- * slug. Landing is excluded here: it renders at the locale root instead.
- */
+/** Landing is excluded here: it renders at the locale root instead. */
 const RESERVED_SLUGS = new Set(["landing"]);
 
-/**
- * Prerenders the content pages, which change only when an editor publishes.
- * They are revalidated by tag from /api/revalidate, so this costs nothing in
- * freshness. Anything not listed here still renders on demand.
- */
+/** Prerenders the content pages; they are revalidated by tag. See README. */
 export async function generateStaticParams() {
   const pages = await Promise.all(
     languages.map(async (locale) => {
@@ -73,8 +63,6 @@ const UriSegmentsPage: FunctionComponent<UriSegmentsPageProps> = async ({
 
   const page = await getContentPage({ locale, slug: uri });
 
-  // Narrowed on `__typename`: the page types share no field beyond the
-  // interface, so it is the only thing that identifies which one this is.
   switch (page?.__typename) {
     case "about_Entry":
       return <About locale={locale} page={page} />;

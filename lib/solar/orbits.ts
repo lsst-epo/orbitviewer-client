@@ -9,12 +9,6 @@ import {
 } from "./constants";
 import { OrbitElements, OrbitType } from "./types";
 
-/**
- * Orbit propagators: elements plus a Modified Julian Date to a heliocentric
- * position in scene units. Each writes into a caller-supplied Vector3 so the
- * per-frame loop does not allocate -- see README.
- */
-
 /** Mean anomalies of the perturbing giants, cached per propagation pass. */
 export interface PerturbationContext {
   jupiter?: OrbitElements;
@@ -22,10 +16,7 @@ export interface PerturbationContext {
   uranus?: OrbitElements;
 }
 
-/**
- * Orbital plane to scene-space cartesian. `convert` maps ecliptic z-up to
- * three's y-up, negating y as well as swapping it -- see README.
- */
+/** Orbital plane to scene-space cartesian; y is negated as well as swapped. */
 export function getCartesianCoordinates(
   v: number,
   r: number,
@@ -163,7 +154,6 @@ export function keplerCalc(
   const r = Math.sqrt(xv * xv + yv * yv);
 
   if (PERTURBED.has(el.id)) {
-    // Perturbation maths works in the unconverted z-up frame.
     getCartesianCoordinates(v, r, el, target, false);
     return applyGiantPerturbations(el, d, r, target, ctx);
   }
@@ -231,11 +221,10 @@ export function hyperbolicCalc(
   const a = el.a;
   const dT = el.Tp ?? 0;
 
-  // NOTE: the legacy code used DEG_TO_RAD (0.017453) here where the Gaussian
-  // constant K (0.017202) is expected. The two differ by 1.4%, so this was
-  // most likely a copy/paste slip between two near-identical constants --
-  // but it changes propagation rates for hyperbolic bodies, so it is left as
-  // written rather than silently altered. Flagged for the team to confirm.
+  // TODO: the legacy uses DEG_TO_RAD (0.017453) here where the Gaussian
+  // constant K (0.017202) is expected -- most likely a copy/paste slip, but it
+  // changes hyperbolic propagation rates, so it is left as written until
+  // someone confirms it. See README.
   const M = (DEG_TO_RAD * (d - dT)) / (-a) ** 1.5;
 
   let F0 = M;
@@ -255,12 +244,8 @@ export function hyperbolicCalc(
 
   const F = F1;
 
-  // KNOWN LEGACY BUG, FIXED HERE: the original closed atan() before
-  // multiplying by tanh(F/2) --
-  //   2 * atan( sqrt((e+1)/(e-1)) ) * tanh(F/2)
-  // The true anomaly relation is tan(v/2) = sqrt((e+1)/(e-1)) * tanh(F/2), so
-  // the product belongs inside atan. As written, the legacy version returned a
-  // wrong true anomaly for every hyperbolic body.
+  // The product belongs INSIDE atan; the legacy closed it first and returned
+  // a wrong true anomaly for every hyperbolic body. See README.
   const v = 2 * Math.atan(Math.sqrt((e + 1) / (e - 1)) * Math.tanh(F / 2));
   const r = (a * (1 - e * e)) / (1 + e * Math.cos(v));
 

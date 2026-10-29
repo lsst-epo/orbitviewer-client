@@ -10,22 +10,6 @@ import { closeUpId, slidesOf, type Tour } from "@/lib/tours";
 import SlideBody from "./Slide";
 import styles from "./styles.module.css";
 
-/**
- * The tour player, over the scene.
- *
- * Ported from `pages/GuidedExperiencePage.ts` and
- * `partials/guided-experience.njk`.
- *
- * Which slide is showing lives in the `slide` search param rather than in
- * component state, so a slide is linkable and the browser's back button steps
- * back through the tour. The legacy kept it in a field, which meant Back left
- * the tour entirely from slide twelve of twelve.
- *
- * Each slide with a `closeUp` flies the camera to that object by writing the
- * explorer's `object` param; slides without one release it, which is what the
- * legacy's `goToGuidedExperienceMode` did on the way through.
- */
-
 export interface TourPlayerProps {
   locale: string;
   tour: Tour;
@@ -51,11 +35,6 @@ const TourPlayer: FunctionComponent<TourPlayerProps> = ({
 
   const focusId = current ? closeUpId(current) : undefined;
 
-  /**
-   * The scene follows the deck. `openObject` writes the explorer's `object`
-   * param, which the camera and the detail resolution already key off -- so a
-   * tour needs no scene API of its own.
-   */
   useEffect(() => {
     if (focusId) openObject(focusId);
     else closeObject();
@@ -65,12 +44,6 @@ const TourPlayer: FunctionComponent<TourPlayerProps> = ({
     (next: number) => {
       if (next < 1 || next > total) return;
 
-      // Pushed, so Back steps to the previous slide. The legacy kept the
-      // index in a field, so Back from slide twelve of twelve left the tour
-      // altogether -- twelve slides of reading gone in one keystroke.
-      //
-      // Slide one is the bare path: a tour's canonical URL should not carry
-      // a param that only says "at the beginning".
       router.push(next === 1 ? pathname : `${pathname}?slide=${next}`, {
         scroll: false,
       });

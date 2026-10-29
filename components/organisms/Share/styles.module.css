@@ -1,7 +1,5 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `components/_share.scss`. */
-
 .backdrop {
   position: fixed;
   inset: 0;
@@ -61,15 +59,12 @@
   height: 20px;
 }
 
-/* Tabs */
-
 .tabs {
   display: flex;
   gap: var(--site-margin-small);
   border-bottom: 1px solid var(--color-border);
 }
 
-/* `caption-semi-caps`, as `_tab.scss` has it. */
 .tab {
   padding: 8px 2px;
   font-family: var(--font-stack);
@@ -97,8 +92,6 @@
   display: grid;
   gap: var(--site-margin-large);
 }
-
-/* Link */
 
 .inputGroup {
   display: flex;
@@ -198,8 +191,6 @@
   width: 20px;
   height: 20px;
 }
-
-/* Capture */
 
 .preview {
   display: grid;

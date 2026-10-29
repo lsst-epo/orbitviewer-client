@@ -90,8 +90,6 @@ export function calculateRanges(
     }
   }
 
-  // Planets come from their own dataset, so their range is measured rather
-  // than looked up.
   if (planets.length > 0) {
     const values = planets
       .map((el) => el[property as keyof OrbitElements])
@@ -105,10 +103,6 @@ export function calculateRanges(
     }
   }
 
-  // Bounds are collected independently. The table is not uniformly
-  // populated -- comets report a minimum with no maximum, and interstellar
-  // objects have no rows at all -- so requiring both would silently drop a
-  // whole category from the totals.
   const mins = CATEGORIES.map((c) => map[c].min).filter(Number.isFinite);
   const maxes = CATEGORIES.map((c) => map[c].max).filter(Number.isFinite);
 

@@ -4,14 +4,6 @@ import { cookies, draftMode } from "next/headers";
 
 const PREVIEW_TOKEN_COOKIE = "ov-preview-token";
 
-/**
- * Craft preview tokens are handed to us on the /api/preview round trip and
- * then replayed on every subsequent GraphQL request for the duration of the
- * draft-mode session.
- *
- * Every method is async: `cookies()` and `draftMode()` both return Promises
- * as of Next.js 15, so there is no synchronous way to read the token.
- */
 const previewSession = () => ({
   async start({ previewToken }: { previewToken?: string }) {
     const draft = await draftMode();

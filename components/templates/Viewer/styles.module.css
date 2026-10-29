@@ -1,8 +1,5 @@
 @import url("../../../styles/variables.css");
 
-/* The shell the canvas and every overlay share. `100dvh` and `overflow:
-   hidden` live here now rather than on each route, so the canvas keeps one
-   size as the overlay above it is swapped. */
 .viewer {
   position: relative;
   width: 100%;
@@ -10,10 +7,6 @@
   overflow: hidden;
 }
 
-/* Every child of the shell is an overlay over the canvas, which is absolutely
-   positioned and therefore paints above anything in normal flow. A route that
-   is a scrolling document -- the tours list -- needs to say so, and to own its
-   own scrolling, since the shell clips at the viewport. */
 .overlay {
   position: absolute;
   inset: 0;

@@ -10,19 +10,6 @@ import {
   type PropsWithChildren,
 } from "react";
 
-/**
- * Bridges a capture request from the DOM overlay to the render loop.
- *
- * The share dialog lives outside the Canvas, so it cannot read the drawing
- * buffer itself: without `preserveDrawingBuffer` the canvas is empty by the
- * time any handler outside the frame looks at it, and turning that flag on
- * would cost every frame for a feature used once in a session.
- *
- * Instead a request is parked here and `<SceneCapture>` fulfils it from
- * inside `useFrame`, immediately after the compositor has drawn, when the
- * buffer is still valid.
- */
-
 export interface CaptureRequest {
   resolve: (canvas: HTMLCanvasElement | null) => void;
 }
@@ -44,9 +31,6 @@ const CaptureProvider: FunctionComponent<PropsWithChildren> = ({
   const capture = useCallback(
     () =>
       new Promise<HTMLCanvasElement | null>((resolve) => {
-        // One in flight at a time: a second request supersedes the first
-        // rather than queueing behind it, since both would return the same
-        // frame anyway.
         pending.current?.resolve(null);
         pending.current = { resolve };
       }),

@@ -1,15 +1,7 @@
 import planetElems from "./data/planet_elems.json";
 import dwarfPlanetElems from "./data/dwarf_planet_elems.json";
 
-/**
- * Orbital elements for the planets and dwarf planets.
- *
- * STUB: these are destined for a `planet_orbits` Hasura table with a schema
- * that mirrors `mpc_orbits`. Until that table exists, the hardcoded JSON is
- * returned through an async signature so the call sites do not change when
- * the real query lands -- swap the body for a `hasuraQuery` call and nothing
- * upstream needs to move.
- */
+/** Orbital elements for the planets and dwarf planets. A stub -- see README. */
 
 export interface PlanetOrbitElements {
   id: string;
@@ -36,13 +28,11 @@ export interface PlanetOrbitElements {
 }
 
 export async function getPlanetOrbits(): Promise<Array<PlanetOrbitElements>> {
-  // TODO: replace with a query against the `planet_orbits` table.
   return planetElems as Array<PlanetOrbitElements>;
 }
 
 export async function getDwarfPlanetOrbits(): Promise<
   Array<PlanetOrbitElements>
 > {
-  // TODO: replace with a query against the `planet_orbits` table.
   return dwarfPlanetElems as Array<PlanetOrbitElements>;
 }

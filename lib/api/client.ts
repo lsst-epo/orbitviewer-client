@@ -16,10 +16,7 @@ type APIClient = <Query, Variables extends AnyVariables = AnyVariables>(
   props: QueryProps<Query, Variables>
 ) => Promise<OperationResult<Query, Variables>>;
 
-/**
- * Server-side Craft CMS GraphQL client. The endpoint is read from a
- * non-public env var, so it is never bundled for the browser.
- */
+/** Server-side Craft GraphQL client. The endpoint is never bundled. */
 const queryAPI: APIClient = async ({
   query,
   variables,

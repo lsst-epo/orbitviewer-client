@@ -6,19 +6,6 @@ import { useSceneControls, type ZoomDirection } from "@/contexts/SceneControls";
 import Icon, { type IconName } from "@/components/atoms/Icon";
 import styles from "./styles.module.css";
 
-/**
- * Recentre, zoom and fullscreen, over the scene.
- *
- * Ported from `layers/MapControls.ts` and `partials/mapcontrols.njk`.
- *
- * Zoom is held rather than stepped, as it was there: the legacy's
- * `attachUpDownActions` set `controls.zoom` on press and cleared it on
- * release, and the camera moved a little every frame in between. It bound
- * six listeners per button to do that; a pointer capture covers the same
- * ground, including the case the legacy handled with `mouseleave` -- dragging
- * off the button while still held.
- */
-
 const ZoomButton: FunctionComponent<{
   icon: IconName;
   label: string;
@@ -26,11 +13,6 @@ const ZoomButton: FunctionComponent<{
 }> = ({ icon, label, direction }) => {
   const { setZoom } = useSceneControls();
 
-  /**
-   * Released on pointerup, on cancel, and on unmount. Zoom is a held state,
-   * so anything that ends the press without one of these would leave the
-   * camera travelling on its own.
-   */
   useEffect(() => () => setZoom(0), [setZoom]);
 
   return (
@@ -41,19 +23,12 @@ const ZoomButton: FunctionComponent<{
       onPointerDown={(event) => {
         setZoom(direction);
 
-        // Capture so a pointer that slides off the button still reports its
-        // release here -- the case the legacy covered with a `mouseleave`
-        // listener. Best-effort: it throws for a pointer id the browser does
-        // not recognise, and zooming must not depend on it.
-        try {
-          event.currentTarget.setPointerCapture(event.pointerId);
-        } catch {
-          // Released by pointerup on the document instead.
-        }
+        /* Capture so a pointer that slides off the button still reports its
+           release here, rather than leaving the camera travelling. */
+        event.currentTarget.setPointerCapture(event.pointerId);
       }}
       onPointerUp={() => setZoom(0)}
       onPointerCancel={() => setZoom(0)}
-      // Keyboard sends no pointer events, so a press there is one step.
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") setZoom(direction);
       }}
@@ -70,8 +45,6 @@ const MapControls: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { recenter } = useSceneControls();
   const [fullscreen, setFullscreen] = useState(false);
 
-  // Read from the document, not tracked locally: Escape leaves fullscreen
-  // without firing any click of ours.
   useEffect(() => {
     const sync = () => setFullscreen(Boolean(document.fullscreenElement));
     document.addEventListener("fullscreenchange", sync);
@@ -112,8 +85,6 @@ const MapControls: FunctionComponent<{ locale: string }> = ({ locale }) => {
         direction={1}
       />
 
-      {/* One button that reports its state, rather than the legacy's pair of
-          buttons with one permanently `aria-hidden`. */}
       <button
         type="button"
         className={styles.button}

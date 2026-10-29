@@ -92,17 +92,10 @@ export function resolveNamedObjects(
     if (category && skipCategories.has(category)) continue;
 
     const matched = index.get(designation);
-    // The Sun falls out here without a special case: it has a Craft entry but
-    // no orbital elements, so nothing in the dataset ever matches it. The
-    // legacy reached the same outcome the long way round, building it a
-    // SolarElement and then declining to give it a pointer because it had no
-    // orbit path.
     if (!matched || seen.has(matched.id)) continue;
 
     seen.add(matched.id);
 
-    // Craft's category wins where it has one. Diverges from the legacy's
-    // literal rule but not its effect -- see README.
     const resolved = category ?? matched.category;
 
     named.push({

@@ -1,11 +1,5 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `components/_guides.scss`. */
-
-/* A scrolling document inside the viewer shell, so it scrolls itself and
-   sits above the canvas rather than behind it -- see
-   `components/templates/Viewer`. The scrim lets the scene read through, as
-   the legacy's does. */
 .page {
   position: absolute;
   inset: 0;
@@ -45,8 +39,6 @@
   font-size: 1.0625rem;
   color: var(--color-text-low);
 }
-
-/* Controls */
 
 .filters {
   display: flex;
@@ -97,8 +89,6 @@
   color: var(--color-grey-300);
 }
 
-/* Grid */
-
 .status {
   margin: 0;
   font-size: 0.8125rem;
@@ -121,21 +111,13 @@
   list-style: none;
 }
 
-/* The card has to fill its list item, or cards in a row come out at
-   different heights whenever their titles wrap to a different number of
-   lines -- a 28px step, and very visible against the card's border.
-
-   A grid item stretches to its row, but the item here is the `li` that
-   carries the list semantics, not the card: the card is its child, and a
-   child does not inherit that stretch. The legacy had no such wrapper --
-   `.guide_card` was the grid item itself -- so the question never arose.
-   Making the `li` a grid container of its own passes the stretch down. */
+/* The `li` is the grid item, not the card, and a child does not inherit the
+   row stretch -- so it has to be a grid container of its own or cards in a
+   row come out at different heights. */
 .grid > li {
   display: grid;
 }
 
-/* Visually hidden, but present for screen readers -- the controls are
-   identified by icon and placeholder alone on screen. */
 .srOnly {
   position: absolute;
   width: 1px;

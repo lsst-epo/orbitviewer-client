@@ -5,15 +5,6 @@ import clsx from "clsx/lite";
 import Icon from "@/components/atoms/Icon";
 import styles from "./styles.module.css";
 
-/**
- * Transient message. Ported from `layers/Toast.ts`, which was a thin
- * show/hide wrapper over a static element.
- *
- * Announced politely rather than assertively: these are informational (a date
- * clamped to its range, a filter with no results), not errors demanding that
- * a screen reader interrupt whatever it is reading.
- */
-
 export interface ToastProps {
   open: boolean;
   message: string;

@@ -1,6 +1,5 @@
 import type { FunctionComponent, SVGProps } from "react";
 
-/** Ported from the legacy `icons.njk` sprite (symbol id="planets-moons"). */
 const PlanetsMoons: FunctionComponent<SVGProps<SVGSVGElement>> = (props) => (
   <svg viewBox="0 0 40 40" fill="currentColor" {...props}>
     <path d="M34.4997 19C34.7758 19 34.9997 18.7761 34.9997 18.5C34.9997 18.2238 34.7758 18 34.4997 18C34.2235 18 33.9997 18.2238 33.9997 18.5C33.9997 18.7761 34.2235 19 34.4997 19Z" />

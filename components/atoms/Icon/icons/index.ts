@@ -13,17 +13,7 @@ import TransNeptunianObjects from "./TransNeptunianObjects";
 import InterstellarObjects from "./InterstellarObjects";
 import JupiterTrojans from "./JupiterTrojans";
 
-/**
- * Domain icons the legacy sprite provided and epo-react-lib does not.
- *
- * Everything else -- search, menu, play, pause, close, chevrons, info,
- * language, fullscreen -- routes to the library's own set, so this stays as
- * small as possible rather than re-porting the whole 265-line sprite.
- *
- * The eight object-category glyphs are here because they are the visual key
- * for the whole catalogue: they mark the chip on an object, the rows in the
- * objects list, and the category toggles.
- */
+/** Domain icons the legacy sprite provided and epo-react-lib does not. */
 export const customIcons = {
   Filters,
   Guides,

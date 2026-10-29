@@ -12,13 +12,6 @@ import {
 } from "react";
 import { FrameBenchmark, type BenchmarkResult } from "@/lib/solar/benchmark";
 
-/**
- * Runs the frame-rate benchmark and publishes its verdict.
- *
- * Split the same way as the capture bridge: the measurement can only happen
- * inside the render loop, but the onboarding dialog that acts on it is DOM.
- */
-
 interface BenchmarkValue {
   result: BenchmarkResult | null;
   /** Starts a run; resolves through `result`. Ignored while one is running. */

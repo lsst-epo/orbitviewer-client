@@ -1,35 +1,10 @@
-/**
- * Simulation speed: the mapping between the slider and hours per second, and
- * how a rate is written out.
- *
- * Ported from `CLOCK_SETTINGS`, `SimpleSlider` and
- * `TimeMachine.formatSpeedLabel`.
- */
-
 /** Fastest rate in either direction, in simulated hours per real second. */
 export const MAX_HOURS_PER_SECOND = 1000;
 
-/**
- * Slider travel is cubic in the rate.
- *
- * The legacy mapped the track linearly onto -1000..1000 and rounded to whole
- * hours, which made the useful part of the range unreachable: on a ~300px
- * track one pixel was ~7 hours per second, so a rate below that could not be
- * picked at all -- yet `formatSpeedLabel` has an hours tier and prints one
- * decimal, so fine rates were clearly intended.
- *
- * Cubing gives the slider even resolution across four orders of magnitude:
- * a tenth of the travel reaches 1 hour per second, half reaches 125, and the
- * end reaches 1000.
- */
+/** Slider travel is cubic in the rate -- see README. */
 const CURVE = 3;
 
-/**
- * Travel either side of centre that still means real time.
- *
- * Without it the rate is merely very small rather than zero near the middle,
- * and "live" becomes impossible to hit by dragging.
- */
+/** Travel either side of centre that still means real time. */
 const DEAD_ZONE = 0.04;
 
 /** Slider position (-1..1) to hours per real second. */

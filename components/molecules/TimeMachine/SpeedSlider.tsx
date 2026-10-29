@@ -15,12 +15,6 @@ import {
 import Icon from "@/components/atoms/Icon";
 import styles from "./styles.module.css";
 
-/**
- * Simulation rate control. Its domain is the normalised position, not the
- * rate -- the mapping is cubic (`lib/solar/speed`) and not injective, so the
- * position is held rather than derived. See README.
- */
-
 /** Slider granularity. 400 steps across the track. */
 const STEP = 0.005;
 
@@ -53,8 +47,6 @@ const SpeedSlider: FunctionComponent<SpeedSliderProps> = ({
     sliderFromHoursPerSecond(hoursPerSecond)
   );
 
-  // Re-sync only when the rate no longer matches where the thumb is, so an
-  // external change (Live, a share link) moves it and the user's own does not.
   useEffect(() => {
     setPosition((current) =>
       hoursPerSecondFromSlider(current) === hoursPerSecond
@@ -65,9 +57,6 @@ const SpeedSlider: FunctionComponent<SpeedSliderProps> = ({
 
   return (
     <div className={styles.speed}>
-      {/* Label and reading sit together. Apart -- one flush left, the other
-          flush right -- they read as two unrelated things rather than as a
-          name and its value. */}
       <div className={styles.speedMeta}>
         <span className={styles.speedLabel} id={id}>
           {label}
@@ -78,13 +67,9 @@ const SpeedSlider: FunctionComponent<SpeedSliderProps> = ({
         </output>
       </div>
 
-      {/* The hints are placed against the rail, so they need a box that is
-          the rail's row and nothing else. */}
       <div className={styles.sliderRow}>
         <HorizontalSlider
           {...SLIDER_DEFAULTS}
-          // The raw position is meaningless, whether read aloud or shown in
-          // the thumb's own bubble; the rate is the value in both places.
           ariaValuetext={valueText}
           renderLabel={() => valueText}
           className={styles.slider}
@@ -99,9 +84,6 @@ const SpeedSlider: FunctionComponent<SpeedSliderProps> = ({
           }}
         />
 
-        {/* The legacy's `sliding_hints`: chevrons that pulse either side of
-            the thumb. They track `position` rather than sitting inside the
-            thumb, which is the library's element and takes no children. */}
         <span
           className={styles.hints}
           style={{ "--position": position } as CSSProperties}

@@ -1,7 +1,5 @@
 @import url("../../../styles/variables.css");
 
-/* Ported from `components/_onboarding.scss` and `_exploration_card.scss`. */
-
 .backdrop {
   position: fixed;
   inset: 0;
@@ -35,8 +33,6 @@
   color: var(--color-text-low);
 }
 
-/* Tier picker */
-
 .tiers,
 .tours {
   display: grid;
@@ -46,8 +42,6 @@
   list-style: none;
 }
 
-/* There are exactly four tiers, so the breakpoints are explicit: `auto-fit`
-   settled on three and left the fourth stranded on its own row. */
 @media (width >= 40rem) {
   .tiers {
     grid-template-columns: repeat(2, 1fr);
@@ -58,6 +52,8 @@
   }
 }
 
+/* There are exactly four tiers, so this is explicit: `auto-fit` settled on
+   three and left the fourth stranded on its own row. */
 @media (width >= 64rem) {
   .tiers {
     grid-template-columns: repeat(4, 1fr);
@@ -128,8 +124,6 @@
   color: var(--color-grey-300);
 }
 
-/* Actions */
-
 .launch,
 .primary,
 .secondary {
@@ -157,8 +151,6 @@
   background-color: var(--color-button-bg-hover);
 }
 
-/* `.button.primary`: turquoise-600 fill, turquoise-100 label. Same
-   inversion the splash and tour-player buttons had. */
 .launchRecommended,
 .primary {
   color: var(--color-turquoise-100);

@@ -1,9 +1,5 @@
 @import url("../../../styles/variables.css");
 
-/* Typography for CMS-authored copy. The legacy set these in `_typography.scss`
-   against global element selectors; scoping them here keeps the reset in
-   `globals.css` minimal, as the port plan intends. */
-
 .richText {
   color: var(--color-text-low);
 }

@@ -6,8 +6,6 @@ import { getLocale } from "next-intl/server";
 import { getOptions } from "./settings";
 import { loadResources } from "./index";
 
-// A fresh instance per render: during compilation everything runs in parallel,
-// so a shared singleton would leak language state across requests.
 const initI18next = async (lng: string, ns: string | string[]) => {
   const i18nInstance = createInstance();
   await i18nInstance

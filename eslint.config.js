@@ -223,11 +223,10 @@ export default [
     // constructor arguments and object fields. eslint-plugin-react only
     // knows the HTML property set, so react/no-unknown-property flags every
     // one of them. The rule has no meaning in these files.
-    files: [
-      "components/celestial-bodies/**/*.tsx",
-      "components/effects/**/*.tsx",
-      "components/templates/Explorer/**/*.tsx",
-    ],
+    //
+    // `components/scene` is exactly the set that mounts inside the Canvas,
+    // which is why one glob covers it.
+    files: ["components/scene/**/*.tsx"],
     rules: { "react/no-unknown-property": 0 },
   },
 

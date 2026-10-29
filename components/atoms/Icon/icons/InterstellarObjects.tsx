@@ -1,6 +1,5 @@
 import type { FunctionComponent, SVGProps } from "react";
 
-/** Ported from the legacy `icons.njk` sprite (symbol id="interstellar-objects"). */
 const InterstellarObjects: FunctionComponent<SVGProps<SVGSVGElement>> = (
   props
 ) => (
