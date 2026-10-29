@@ -15,12 +15,12 @@ RUN --mount=type=bind,source=.env,target=/app/.env \
 
 # FOR GCS bucket .next folder versioning
 # FROM scratch AS nextjs-copy
-# COPY --from=yarn-builder /app/.next /
 
 # Production image, copy all the files and run next
 FROM yarn-builder AS runner
 WORKDIR /app
 
+COPY --from=yarn-builder /app/.next /
 RUN apk add --no-cache fontconfig
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
