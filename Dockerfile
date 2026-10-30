@@ -17,15 +17,19 @@ RUN --mount=type=bind,source=.env,target=/app/.env \
 # FROM scratch AS nextjs-copy
 
 # Production image, copy all the files and run next
-FROM yarn-builder AS runner
-WORKDIR /app
+# FROM yarn-builder AS runner
+# WORKDIR /app
 
-COPY --from=yarn-builder /app/.next /
+# COPY --from=yarn-builder /app/.next /
 RUN apk add --no-cache fontconfig
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
-COPY --from=builder --chown=nextjs:nodejs /app/ ./
+# COPY --from=builder --chown=nextjs:nodejs /app/ ./
+RUN chown nextjs:nodejs /app
+
+# temp debug line to see if .next folder is present
+RUN ls -la
 
 USER nextjs
 
