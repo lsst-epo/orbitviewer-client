@@ -15,7 +15,8 @@ RUN --mount=type=bind,source=.env,target=/app/.env \
     npx update-browserslist-db@latest && yarn static:build
 
 # FOR GCS bucket .next folder versioning
-# FROM scratch AS nextjs-copy
+FROM scratch AS nextjs-copy
+COPY --from=yarn-builder /app/.next /
 
 # Production image, copy all the files and run next
 # FROM yarn-builder AS runner
@@ -37,7 +38,7 @@ USER nextjs
 
 EXPOSE 8080
 
-# CMD ["yarn", "start"]
+CMD ["yarn", "start"]
 
 # temp command just to keep the client running so we can SSH in and see what's going on
-CMD ["tail", "-f", "/dev/null"]
+# CMD ["tail", "-f", "/dev/null"]
