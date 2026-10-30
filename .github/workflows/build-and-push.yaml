@@ -46,8 +46,13 @@ jobs:
             environment_name="dev"
             credentials_json='${{ secrets.DEV_SA_KEY }}'
           fi
+          deploymentname="orbitviewer-client"
           echo environment_name=$environment_name >> "$GITHUB_OUTPUT"
           echo credentials_json=$credentials_json >> "$GITHUB_OUTPUT"
+          echo date=$(date +'%Y%m%d') >> $GITHUB_OUTPUT
+          echo project=$project >> "$GITHUB_OUTPUT"
+          echo appname="skyviewer" >> $GITHUB_OUTPUT
+          echo deployment=$deploymentname >> $GITHUB_OUTPUT
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5.7.0
