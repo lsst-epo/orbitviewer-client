@@ -119,8 +119,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-to: |
-            type=gha
+          # cache-to: |
+          #   type=gha
           # cache-from: |
           #   type=gha
           build-args: |
@@ -135,8 +135,8 @@ jobs:
           outputs: type=local,dest=./.next
           build-args: |
             RUN_BUILD=false
-          cache-from: |
-            type=gha
+          # cache-from: |
+          #   type=gha
       -
         name: Upload to GCS bucket
         uses: google-github-actions/upload-cloud-storage@v3
