@@ -10,6 +10,7 @@ RUN npm install -g corepack && corepack enable
 RUN yarn install --immutable
 
 FROM builder AS yarn-builder
+WORKDIR /app
 RUN --mount=type=bind,source=.env,target=/app/.env \
     npx update-browserslist-db@latest && yarn static:build
 
@@ -18,7 +19,6 @@ RUN --mount=type=bind,source=.env,target=/app/.env \
 
 # Production image, copy all the files and run next
 # FROM yarn-builder AS runner
-WORKDIR /app
 
 # COPY --from=yarn-builder /app/.next /
 RUN apk add --no-cache fontconfig
@@ -37,4 +37,7 @@ USER nextjs
 
 EXPOSE 8080
 
-CMD ["yarn", "start"]
+# CMD ["yarn", "start"]
+
+# temp command just to keep the client running so we can SSH in and see what's going on
+CMD ["tail", "-f", "/dev/null"]
