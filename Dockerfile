@@ -18,7 +18,7 @@ RUN --mount=type=bind,source=.env,target=/app/.env \
 
 # Production image, copy all the files and run next
 # FROM yarn-builder AS runner
-# WORKDIR /app
+WORKDIR /app
 
 # COPY --from=yarn-builder /app/.next /
 RUN apk add --no-cache fontconfig
@@ -30,6 +30,7 @@ RUN chown nextjs:nodejs /app
 
 # temp debug line to see if .next folder is present
 RUN ls -la
+RUN pwd
 
 USER nextjs
 
