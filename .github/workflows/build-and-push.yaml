@@ -46,8 +46,13 @@ jobs:
             environment_name="dev"
             credentials_json='${{ secrets.DEV_SA_KEY }}'
           fi
+          deploymentname="orbitviewer-client"
           echo environment_name=$environment_name >> "$GITHUB_OUTPUT"
           echo credentials_json=$credentials_json >> "$GITHUB_OUTPUT"
+          echo date=$(date +'%Y%m%d') >> $GITHUB_OUTPUT
+          echo project=$project >> "$GITHUB_OUTPUT"
+          echo appname="skyviewer" >> $GITHUB_OUTPUT
+          echo deployment=$deploymentname >> $GITHUB_OUTPUT
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5.7.0
@@ -78,11 +83,18 @@ jobs:
           echo image_tag=$(echo "$full_tag" | cut -f2 -d:) >> "$GITHUB_OUTPUT"
           echo image_name=$(echo "$full_tag" | cut -f1 -d:) >> "$GITHUB_OUTPUT"
           echo full_tag=$full_tag >> "$GITHUB_OUTPUT"
+
+          bucket_name=orbitviewer-${{ steps.deploy-info.outputs.environment_name }}
+          bucket_subfolder=$(echo "$full_tag" | cut -f2 -d:)-${{ steps.deploy-info.outputs.date }}
+          echo bucket_name=orbitviewer-${{ steps.deploy-info.outputs.environment_name }} >> "$GITHUB_OUTPUT"
+          echo bucket_subfolder=$(echo "$full_tag" | cut -f2 -d:)-${{ steps.deploy-info.outputs.date }} >> "$GITHUB_OUTPUT"
+          echo "bucket_name: $bucket_name"
+          echo "bucket_subfolder: $bucket_subfolder"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.6.0
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.11.1
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v3.11.1
 
       - name: Login to GCP
         uses: "google-github-actions/auth@v2.1.11"
@@ -112,12 +124,32 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-to: |
-            type=gha
-          cache-from: |
-            type=gha
+          # cache-to: |
+          #   type=gha
+          # cache-from: |
+          #   type=gha
           build-args: |
             RUN_BUILD=true
+      - 
+        name: Run static build in docker container based on .env file
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          push: false
+          target: nextjs-copy
+          outputs: type=local,dest=./.next
+          build-args: |
+            RUN_BUILD=false
+          # cache-from: |
+          #   type=gha
+      -
+        name: Upload to GCS bucket
+        uses: google-github-actions/upload-cloud-storage@v3
+        with:
+          path: '.next'
+          destination: '${{ steps.deploy-tag.outputs.bucket_name }}/${{ steps.deploy-tag.outputs.bucket_subfolder }}${{ github.event.inputs.bucket-subfolder-suffix }}' # bucket_name/prefix
+          gzip: false
+
       -
         name: Install and setup crane
         uses: imjasonh/setup-crane@v0.4

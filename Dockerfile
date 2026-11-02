@@ -10,22 +10,22 @@ RUN npm install -g corepack && corepack enable
 RUN yarn install --immutable
 
 FROM builder AS yarn-builder
+WORKDIR /app
 RUN --mount=type=bind,source=.env,target=/app/.env \
     npx update-browserslist-db@latest && yarn static:build
 
 # FOR GCS bucket .next folder versioning
-# FROM scratch AS nextjs-copy
+FROM scratch AS nextjs-copy
+COPY --from=yarn-builder /app/.next /
 
 # Production image, copy all the files and run next
 FROM yarn-builder AS runner
-WORKDIR /app
 
-COPY --from=yarn-builder /app/.next /
 RUN apk add --no-cache fontconfig
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
-COPY --from=builder --chown=nextjs:nodejs /app/ ./
+RUN chown nextjs:nodejs /app ./ ./.next
 
 USER nextjs
 
