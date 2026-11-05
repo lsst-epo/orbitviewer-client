@@ -2,8 +2,9 @@
 
 .search {
   display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
   gap: var(--site-margin-small);
-  align-content: start;
+  height: 100%;
 }
 
 .label {
@@ -23,14 +24,6 @@
   right: 0.25rem;
   display: flex;
   align-items: center;
-}
-
-.inputIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin: 0 0.5rem;
-  color: var(--color-text-low);
-  pointer-events: none;
 }
 
 .input {
@@ -59,7 +52,7 @@
 .results {
   display: grid;
   gap: 2px;
-  max-height: 46vh;
+  min-height: 0;
   padding: 0;
   margin: 0;
   overflow-y: auto;

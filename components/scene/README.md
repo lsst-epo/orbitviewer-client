@@ -2,8 +2,8 @@
 
 Everything that mounts inside the R3F `<Canvas>`. This folder is the boundary
 between the DOM interface and the WebGL one: `SceneCanvas` owns the context,
-`Scene` is the graph, and `celestial-bodies/` and `effects/` hold what goes
-in it.
+`Scene` is the graph, and `camera/`, `celestial-bodies/` and `effects/` hold
+what goes in it.
 
 **Nothing here renders to the DOM** — with one deliberate exception,
 `celestial-bodies/label`, which uses drei's `<Html>` to project a real DOM
@@ -54,8 +54,8 @@ Priorities matter and are spread across components:
 ```
 
 Anything that reads a position a `Body` writes must run after priority 0.
-See `components/scene/celestial-bodies/camera/README.md` for what went wrong when the
-camera ran first.
+See `components/scene/camera/README.md` for what went wrong when the camera
+ran first.
 
 ## Orbit view
 

@@ -12,7 +12,7 @@ import {
 import { useSolarData } from "@/contexts/SolarData";
 import { useSolarClock } from "@/contexts/SolarClock";
 import { resolveObject, resolveCraftFor } from "@/lib/explorer/resolveObject";
-import { defaultViewFor } from "@/lib/explorer/searchParams";
+import { supportsViewToggle, viewFor } from "@/lib/explorer/searchParams";
 import { fromPlanetElements } from "@/lib/solar/elements";
 import { calculateRanges, type Range } from "@/lib/solar/categories";
 import { CATEGORY_LABELS } from "@/lib/solar/categoryLabels";
@@ -210,14 +210,14 @@ const ObjectDetail: FunctionComponent<{ locale: string }> = ({ locale }) => {
         )}
       </header>
 
-      {object && (
+      {object && supportsViewToggle(object.id) && (
         <ToggleGroup<"object" | "orbit">
           label={t("object.view.label")}
           options={[
             { value: "object", label: t("object.view.object") },
             { value: "orbit", label: t("object.view.orbit") },
           ]}
-          value={params.view ?? defaultViewFor(object.id)}
+          value={viewFor(params.view, object.id)}
           onChange={(view) => setParams({ view })}
         />
       )}

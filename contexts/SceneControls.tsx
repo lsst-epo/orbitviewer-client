@@ -23,7 +23,7 @@ interface SceneControlsValue {
   /**
    * Whether the splash is the current route. The camera frames the system
    * differently there, and needs to know when that stops being true so it
-   * can fly out -- see `celestial-bodies/camera`.
+   * can fly out -- see `components/scene/camera`.
    */
   landing: boolean;
 }

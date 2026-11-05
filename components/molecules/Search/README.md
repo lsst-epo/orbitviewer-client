@@ -7,23 +7,29 @@ only queried when asked, since that is a round trip against millions of rows.
 Selecting a result opens it in the object detail, which is the same `object`
 search param the legacy's `/object/?id=` route carried.
 
-## The catalogue is offered only once local search comes up empty
+## The catalogue is always offered
 
-This is how the legacy gates it: the cloud-search control is `aria-hidden`
-until the local search returns nothing, and the not-found banner appears with
-it.
+The legacy gates this: its cloud-search control is `aria-hidden` until local
+search returns nothing. This does not. The two sources cover different rows —
+local matching sees only the tier that was downloaded — so a local hit is no
+reason to withhold the catalogue, and the reader should not have to produce
+an empty result to reach it.
 
-Offering it alongside a full list of local matches would invite a round trip
-against millions of rows that the reader almost never needs.
+The button is disabled only when it could not run: a query under
+`MIN_QUERY_LENGTH`, or a request already in flight. It stays enabled after a
+search returns, so the same query can be run again.
 
-## The magnifier and the cloud button share one slot
+It reads `query` rather than the debounced value. The debounce paces local
+matching as the reader types; an explicit press must search what is in the
+field at that moment, or a click inside the 150ms window searches the
+previous query.
 
-`.inputActions` is the legacy's input-actions slot: a single slot at the
-trailing edge of the field holding **either** the magnifier **or** the
-cloud-search button, which swap rather than both being on screen at once.
+## The input-actions slot
 
-`.input` reserves trailing room for whichever one is in it; the magnifier is
-the narrower of the two, so the button sets the figure.
+`.inputActions` is the legacy's input-actions slot at the trailing edge of
+the field. The legacy swaps a magnifier and the cloud button through it; here
+the button is always present, so the magnifier is gone and `.input` reserves
+trailing room for the button alone.
 
 The button is `styleAs="primary"`, not `secondary`: epo-react-lib's secondary
 is red, and its primary is `#12726d` — the same fill the legacy's own primary

@@ -3,7 +3,6 @@
 import { useId, type FunctionComponent } from "react";
 import Button from "@rubin-epo/epo-react-lib/Button";
 import useClientTranslation from "@/lib/i18n/client";
-import Icon from "@/components/atoms/Icon";
 import { useExplorer } from "@/contexts/Explorer";
 import { useSearch, MIN_QUERY_LENGTH } from "@/contexts/Search";
 import { categoryColorMap } from "@/lib/solar/categoryColors";
@@ -79,7 +78,8 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const results = catalogueResults ?? localResults;
   const showEmpty = !tooShort && results.length === 0 && !searching;
 
-  const offerCatalogue = showEmpty && !catalogueResults;
+  // To-Do: clean up this logic to require less mental and literal boolean flipping
+  const canSearchCatalogue = !tooShort && !searching;
 
   return (
     <div className={styles.search}>
@@ -100,18 +100,14 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
         />
 
         <div className={styles.inputActions}>
-          {offerCatalogue ? (
-            <Button
-              styleAs="primary"
-              type="button"
-              onClick={runCatalogueSearch}
-              disabled={searching}
-            >
-              {t("search.search_cloud")}
-            </Button>
-          ) : (
-            <Icon name="search" className={styles.inputIcon} />
-          )}
+          <Button
+            styleAs="primary"
+            type="button"
+            onClick={runCatalogueSearch}
+            disabled={!canSearchCatalogue}
+          >
+            {t("search.search_cloud")}
+          </Button>
         </div>
       </div>
 
@@ -142,7 +138,9 @@ const Search: FunctionComponent<{ locale: string }> = ({ locale }) => {
         <p className={styles.empty}>{t("search.not_found", { query })}</p>
       )}
 
-      {error && <p className={styles.error}>{error}</p>}
+      {error === "unavailable" && (
+        <p className={styles.error}>{t("search.unavailable")}</p>
+      )}
     </div>
   );
 };

@@ -63,6 +63,23 @@ const dateFormatters = (locale: string, utc: boolean) => {
   };
 };
 
+/**
+ * The zone in force at `date`, e.g. "PST" or "GMT+1". It takes the date because
+ * the answer moves with daylight saving, and the clock can be set to any date.
+ */
+const zoneName = (
+  locale: string,
+  date: Date,
+  utc: boolean,
+  style: "short" | "long"
+): string | undefined =>
+  new Intl.DateTimeFormat(locale, {
+    timeZone: utc ? "UTC" : undefined,
+    timeZoneName: style,
+  })
+    .formatToParts(date)
+    .find((part) => part.type === "timeZoneName")?.value;
+
 const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const { t } = useClientTranslation(locale);
   const { params, setParams } = useExplorer();
@@ -92,6 +109,15 @@ const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
   const zoneLabel = utc
     ? t("timemachine.zone.utc")
     : t("timemachine.zone.local");
+
+  // Named from the displayed date, so only once mounted: the server and the
+  // client disagree about the date and the viewer's zone.
+  const zoneAbbreviation = mounted
+    ? zoneName(locale, displayDate, utc, "short")
+    : undefined;
+  const zoneFullName = mounted
+    ? zoneName(locale, displayDate, utc, "long")
+    : undefined;
 
   const onDateChange = (value: string) => {
     setDraft(value);
@@ -141,7 +167,7 @@ const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
             ref={dateRef}
             type="datetime-local"
             className={styles.dateInput}
-            aria-label={`${t("timemachine.aria")} (${zoneLabel})`}
+            aria-label={`${t("timemachine.aria")} (${zoneFullName ?? zoneLabel})`}
             min={toInputValue(CLOCK_RANGE.min, utc)}
             max={toInputValue(CLOCK_RANGE.max, utc)}
             value={draft ?? (mounted ? toInputValue(displayDate, utc) : "")}
@@ -162,6 +188,9 @@ const TimeMachine: FunctionComponent<{ locale: string }> = ({ locale }) => {
               {mounted
                 ? `${formatters.day.format(displayDate)} ${formatters.time.format(displayDate)}`
                 : ""}
+              {zoneAbbreviation && (
+                <span className={styles.dateZone}> {zoneAbbreviation}</span>
+              )}
             </span>
           )}
         </div>

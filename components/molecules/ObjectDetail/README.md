@@ -84,12 +84,13 @@ describe the relationship.
 
 ## The orbit toggle
 
-Shown for every body. The legacy showed it only for planets, but every
-selected body has an orbit worth seeing — and without it the path is drawn off
-screen, since the camera frames the body itself.
+Shown for the eight planets only. They are the only bodies carrying a
+texture, so they are the only ones worth flying up to; everything else is
+framed on its orbit and has no second framing to offer — see
+`lib/explorer/README.md`.
 
-Its label falls back to whatever the scene will actually do, or the toggle
-reads "Object" while the camera frames the orbit.
+Its label reflects whatever the scene will actually do, which `viewFor`
+decides for both.
 
 ## The back control
 

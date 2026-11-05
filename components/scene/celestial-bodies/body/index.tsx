@@ -10,7 +10,7 @@ import {
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { Group, Mesh, Vector3, type Texture } from "three";
-import type { CameraTarget } from "@/components/scene/celestial-bodies/camera";
+import type { CameraTarget } from "@/components/scene/camera";
 import { AU2KM, DEG_TO_RAD, KM2AU, PLANET_SCALE } from "@/lib/solar/constants";
 import { calculateOrbit, type PerturbationContext } from "@/lib/solar/orbits";
 import type { OrbitElements } from "@/lib/solar/types";
@@ -145,7 +145,7 @@ const Body: FunctionComponent<BodyProps> = ({
           ref={meshRef}
           scale={radius}
           onClick={onClick ? () => onClick(selectId ?? elements.id) : undefined}
-          // TODO: no-op as written -- drop it, or give bodies a real hit
+          // to-do: no-op as written -- drop it, or give bodies a real hit
           // target. See README.
           raycast={undefined}
         >

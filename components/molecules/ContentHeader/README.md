@@ -5,7 +5,7 @@ The header for the standalone content pages (How to Use, About).
 The legacy put the full navigation — share, the settings menu, the
 language switcher — on every page including these. That menu belongs with the
 explorer chrome and lands in Phase H. What these pages actually need now is a
-way back, which the legacy's own "Orbit viewer" back link provided.
+way back, which the legacy's own "Orbitviewer" back link provided.
 
 It is sticky, because these pages are long: How to Use runs to eight sections
 and About to five, and the legacy's mobile code had to add a `sticky` class by

@@ -49,7 +49,7 @@ between near-identical constants.
 
 **It is left as written rather than silently corrected**, because it changes
 propagation rates for hyperbolic bodies and that is a behavioural change, not
-a cleanup. Marked with a `// TODO:` at the line; it needs someone to confirm
+a cleanup. Marked with a `// to-do:` at the line; it needs someone to confirm
 against the published method before it moves.
 
 ## The iteration cap is enforced here
