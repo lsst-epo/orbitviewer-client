@@ -1,7 +1,7 @@
 # Celestial bodies
 
 Solid bodies and the things attached to them: `body`, `label`, `ring`, `sun`.
-The camera has its own README in `camera/`.
+The camera is not one of them and lives in `components/scene/camera/`.
 
 `Body` is ported from the legacy Eleventy app, where it was a class bound to
 the eight planets; this takes orbital elements plus a radius and renders any solid
@@ -64,7 +64,7 @@ an initializer — a real field here would run after `super()` and wipe the
   frame is the single easiest way to make this scene stutter.
 - React does not dispose materials it did not create, so this does.
 
-## `raycast={undefined}` is a no-op, and is marked TODO
+## `raycast={undefined}` is a no-op, and is marked to-do
 
 The mesh carries `raycast={undefined}`, which a comment described as "a
 slightly generous raycast threshold" making small bodies easier to click.

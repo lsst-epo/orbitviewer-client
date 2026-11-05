@@ -154,6 +154,11 @@
   border: 1px solid transparent;
 }
 
+.dateZone {
+  font-size: 0.75rem;
+  color: var(--color-text-low);
+}
+
 .calendar,
 .zone {
   display: grid;

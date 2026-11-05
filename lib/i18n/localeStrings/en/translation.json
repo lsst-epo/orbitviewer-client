@@ -12,7 +12,7 @@
       }
     },
     "objects": "objects",
-    "back": "Orbit viewer",
+    "back": "Orbitviewer",
     "recommended": "recommended",
     "loading": "Loading... this may take a moment",
     "testing": "Testing performance to optimize your setup...",
@@ -170,7 +170,8 @@
     "not_found": "\"{{query}}\" not found.",
     "recommended_searches": "Recommended searches",
     "placeholder": "Search by planet, object,..",
-    "hint": "Type at least {{count}} characters"
+    "hint": "Type at least {{count}} characters",
+    "unavailable": "Search is unavailable"
   },
   "timemachine": {
     "aria": "Date selector",

@@ -10,7 +10,7 @@ are destined for a `planet_orbits` Hasura table with a schema mirroring
 
 Until that table exists the JSON is returned through an **async signature**,
 so the call sites do not change when the real query lands: swap the body for a
-Hasura query and nothing upstream needs to move. The two `// TODO:` markers in
+Hasura query and nothing upstream needs to move. The two `// to-do:` markers in
 `planetOrbits.ts` mark exactly where.
 
 This is also why the planets are not in the MPC dataset at all, and why their

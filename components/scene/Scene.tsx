@@ -6,19 +6,19 @@ import { Vector3 } from "three";
 import { KM2AU, PLANET_SCALE } from "@/lib/solar/constants";
 import { resolveObject } from "@/lib/explorer/resolveObject";
 import { orbitFraming } from "@/components/scene/effects/orbital-path/buildPath";
-import type { CameraTarget } from "@/components/scene/celestial-bodies/camera";
+import type { CameraTarget } from "@/components/scene/camera";
 import { fromPlanetElements, categoryFromTypeCode } from "@/lib/solar/elements";
 import { categoryColorMap } from "@/lib/solar/categoryColors";
 import { resolveNamedObjects } from "@/lib/solar/solarItems";
 import { matchesFilters, type ObjectFilters } from "@/lib/solar/filters";
 import { ALL_CATEGORIES } from "@/lib/solar/categoryLabels";
 import { PlanetRadiusMap, isPlanetId } from "@/lib/solar/planets";
-import { defaultViewFor } from "@/lib/explorer/searchParams";
+import { viewFor } from "@/lib/explorer/searchParams";
 import type { PerturbationContext } from "@/lib/solar/orbits";
 import type { OrbitElements } from "@/lib/solar/types";
 import { useSolarClock } from "@/contexts/SolarClock";
 import { useExplorer, solarElementEntries } from "@/contexts/Explorer";
-import Camera from "@/components/scene/celestial-bodies/camera";
+import Camera from "@/components/scene/camera";
 import Sun, { SUN_SCENE_RADIUS } from "@/components/scene/celestial-bodies/sun";
 import Body from "@/components/scene/celestial-bodies/body";
 import BodyLabel from "@/components/scene/celestial-bodies/label";
@@ -137,8 +137,7 @@ const Scene: FunctionComponent = () => {
   }, [focusedSun]);
 
   const orbitView =
-    (params.view ?? defaultViewFor(focused?.id)) === "orbit" &&
-    Boolean(focused);
+    viewFor(params.view, focused?.id) === "orbit" && Boolean(focused);
 
   const orbitTarget = useMemo<CameraTarget | null>(() => {
     if (!orbitView || !focused) return null;

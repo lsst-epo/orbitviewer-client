@@ -27,12 +27,14 @@ rather than erroring the page, so a mangled share link still renders the scene.
 not know about — a tour's `slide`, for one — survive a scene update. Rebuilding
 the whole query string instead drops them.
 
-## The default camera framing depends on the body
+## The camera framing depends on the body
 
-`defaultViewFor` lives here, beside the param it defaults, because **two places
-have to agree on it**: the scene, and the detail panel's camera-view toggle.
-They did not. The toggle read `params.view ?? "object"` independently and so
-sat on "Object" while the scene framed the orbit.
+`viewFor` lives here, beside the param it resolves, because **two places have
+to agree on it**: the scene, and the detail panel's camera-view toggle.
+
+It resolves rather than merely defaults: `view` is honoured only where
+`supportsViewToggle` is true, so a selection with no toggle cannot be put
+into the other framing by a URL.
 
 The rule is the legacy's: it frames a body on its orbit unless the body is a
 planet, and its planet flag is true only for the eight. Everything else — dwarf

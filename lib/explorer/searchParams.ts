@@ -60,12 +60,20 @@ export type ExplorerPanel = NonNullable<ExplorerParams["panel"]>;
 /** How the camera frames a selection. */
 export type ExplorerView = NonNullable<ExplorerParams["view"]>;
 
+/** Whether a selection can be framed either way. Only the eight planets can. */
+export const supportsViewToggle = (id: string | undefined): boolean =>
+  Boolean(id && isPlanetId(id.toLowerCase()));
+
 /**
- * The framing a selection falls back to when `view` is absent. Shared by the
- * scene and the detail panel's toggle, which must agree -- see README.
+ * How a selection is framed. Shared by the scene and the detail panel's
+ * toggle, which must agree -- see README. A `view` on a selection that has no
+ * toggle is ignored, so a share link cannot reach a framing the panel offers
+ * no way back from.
  */
-export const defaultViewFor = (id: string | undefined): ExplorerView =>
-  !id || isPlanetId(id.toLowerCase()) ? "object" : "orbit";
+export const viewFor = (
+  view: ExplorerView | undefined,
+  id: string | undefined
+): ExplorerView => (supportsViewToggle(id) ? (view ?? "object") : "orbit");
 
 /**
  * Parses loosely: an unparseable param falls back to its default rather than

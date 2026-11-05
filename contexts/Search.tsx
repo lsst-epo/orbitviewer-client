@@ -21,6 +21,10 @@ export const MIN_QUERY_LENGTH = 2;
 const LOCAL_RESULT_LIMIT = 100;
 const DEBOUNCE_MS = 150;
 
+// to-do: Determine if this should be a key to display bespoke error messages or changed to a boolean if there is only ever going to be one error message
+/** Error states the panel renders; the copy for each lives in the catalog. */
+export type SearchError = "unavailable";
+
 interface SearchValue {
   query: string;
   setQuery: (query: string) => void;
@@ -29,7 +33,7 @@ interface SearchValue {
   /** Matches from the full catalogue, after runCatalogueSearch. */
   catalogueResults: Array<OrbitElements> | null;
   searching: boolean;
-  error: string | null;
+  error: SearchError | null;
   runCatalogueSearch: () => void;
   clear: () => void;
 }
@@ -53,7 +57,7 @@ const SearchProvider: FunctionComponent<
   const [catalogueResults, setCatalogueResults] =
     useState<Array<OrbitElements> | null>(null);
   const [searching, setSearching] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<SearchError | null>(null);
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -85,8 +89,13 @@ const SearchProvider: FunctionComponent<
     return matches;
   }, [debounced, elements, additionalElements, filters]);
 
+  /* Reads `query` rather than `debounced`: the debounce paces local matching
+     as the reader types, but this runs on an explicit press and must search
+     what is in the field at that moment, not what it held 150ms ago. */
   const runCatalogueSearch = useCallback(() => {
-    if (debounced.length < MIN_QUERY_LENGTH) return;
+    const term = query.trim().toLowerCase();
+
+    if (term.length < MIN_QUERY_LENGTH) return;
 
     abortRef.current?.abort();
     const controller = new AbortController();
@@ -95,7 +104,7 @@ const SearchProvider: FunctionComponent<
     setSearching(true);
     setError(null);
 
-    const params = new URLSearchParams({ q: debounced });
+    const params = new URLSearchParams({ q: term });
     if (filters.rubinOnly !== undefined) {
       params.set("discovery", filters.rubinOnly ? "rubin" : "other");
     }
@@ -104,23 +113,26 @@ const SearchProvider: FunctionComponent<
     }
 
     fetch(`/api/search?${params}`, { signal: controller.signal })
-      .then((response) => response.json())
-      .then((data: { results: Array<OrbitElements>; message?: string }) => {
+      .then((response) => {
+        if (!response.ok)
+          throw new Error(`Search responded ${response.status}`);
+        return response.json() as Promise<{ results: Array<OrbitElements> }>;
+      })
+      .then((data) => {
         setCatalogueResults(
           (data.results ?? []).filter((element) =>
             matchesFilters(element, filters)
           )
         );
-        if (data.message) setError(data.message);
         setSearching(false);
       })
       .catch((cause: Error) => {
         if (cause.name === "AbortError") return;
         console.error(cause);
-        setError("Search is unavailable");
+        setError("unavailable");
         setSearching(false);
       });
-  }, [debounced, filters]);
+  }, [query, filters]);
 
   const clear = useCallback(() => {
     abortRef.current?.abort();

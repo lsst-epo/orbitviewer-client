@@ -7,6 +7,17 @@
   gap: calc(var(--site-margin-large) * 3);
   padding: calc(var(--site-margin-large) * 2) var(--site-margin-large)
     calc(var(--site-margin-large) * 4);
+  background-image: url("/images/about/about-header-bg-small.webp");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 768px auto;
+}
+
+@media (width >= 768px) {
+  .howTo {
+    background-image: url("/images/about/about-header-bg-large.webp");
+    background-size: 1440px auto;
+  }
 }
 
 .masthead,

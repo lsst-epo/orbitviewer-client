@@ -116,6 +116,20 @@ it prints the zone in force and switches to the other. **Only the display
 changes.** The simulation's date-to-MJD conversion is UTC-based throughout and
 never sees this.
 
+The button itself stays generic ("Local" / "UTC"): it says what a press does.
+**Which zone is in force is printed after the time**, in the readout, as
+`MST` or `GMT+1`, because "Local" does not tell anyone which zone that is.
+The full name ("Mountain Standard Time") is in the input's accessible label,
+since abbreviations such as `CST` are ambiguous.
+
+The abbreviation is read from the **displayed date**, not today's, because it
+changes with daylight saving and the clock can be set to any date. It is blank
+until mount, for the same hydration reason as the date, and it is whatever
+`Intl` gives for the page's locale, so a Spanish page shows `GMT-7` where an
+English one shows `MST`. It lives in the formatted overlay, so while the field
+is focused for typing the browser's own control shows instead and the zone is
+not repeated there; the button beside it still is.
+
 ## What reaches the URL
 
 The date is written **only on an explicit change**. Mirroring the clock every

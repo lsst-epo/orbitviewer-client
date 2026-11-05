@@ -7,6 +7,28 @@
   gap: calc(var(--site-margin-large) * 3);
   padding: calc(var(--site-margin-large) * 2) var(--site-margin-large)
     calc(var(--site-margin-large) * 4);
+  background-image: url("/images/about/about-header-bg-small.webp"),
+    url("/images/about/about-footer-small.webp");
+  background-repeat: no-repeat;
+  background-position:
+    center top,
+    center bottom;
+  background-size: 768px auto, auto;
+}
+
+@media (width >= 768px) {
+  .about {
+    background-image: url("/images/about/about-header-bg-large.webp"),
+      url("/images/about/about-footer-medium.webp");
+    background-size: 1440px auto, auto;
+  }
+}
+
+@media (width >= 1024px) {
+  .about {
+    background-image: url("/images/about/about-header-bg-large.webp"),
+      url("/images/about/about-footer-large.webp");
+  }
 }
 
 .section,

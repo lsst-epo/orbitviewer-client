@@ -12,7 +12,7 @@
       }
     },
     "objects": "objetos",
-    "back": "Orbit viewer",
+    "back": "Orbitviewer",
     "recommended": "recomendado",
     "loading": "Cargando... esto puede tomar tiempo",
     "testing": "Probando rendimiento para optimizar tus ajustes...",
@@ -170,7 +170,8 @@
     "not_found": "\"{{query}}\" no encontrada",
     "recommended_searches": "Búsquedas recomendadas",
     "placeholder": "Search by planet, object,..",
-    "hint": "Type at least {{count}} characters"
+    "hint": "Type at least {{count}} characters",
+    "unavailable": "Search is unavailable"
   },
   "timemachine": {
     "aria": "Seleccionar fechas",
@@ -195,7 +196,7 @@
     "objects": "Objetos",
     "filters": "Filtros",
     "search": "Buscar",
-    "guides": "Tours",
+    "guides": "Recorridos",
     "aria": "Explorer tools"
   },
   "wizard": {
@@ -304,7 +305,7 @@
     },
     "entry": {
       "navigation": {
-        "guides": "Tours",
+        "guides": "Recorridos",
         "next": "Siguiente",
         "previous": "Anterior"
       },

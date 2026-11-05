@@ -2,7 +2,7 @@
 
 import { Suspense, type FunctionComponent } from "react";
 import { Canvas } from "@react-three/fiber";
-import { CAMERA_CLIP } from "@/components/scene/celestial-bodies/camera";
+import { CAMERA_CLIP } from "@/components/scene/camera";
 import SceneCapture from "@/components/scene/effects/capture";
 import SceneBenchmark from "@/components/scene/effects/benchmark";
 import Scene from "./Scene";

@@ -221,7 +221,7 @@ export function hyperbolicCalc(
   const a = el.a;
   const dT = el.Tp ?? 0;
 
-  // TODO: the legacy uses DEG_TO_RAD (0.017453) here where the Gaussian
+  // to-do: the legacy uses DEG_TO_RAD (0.017453) here where the Gaussian
   // constant K (0.017202) is expected -- most likely a copy/paste slip, but it
   // changes hyperbolic propagation rates, so it is left as written until
   // someone confirms it. See README.
