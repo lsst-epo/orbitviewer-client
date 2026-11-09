@@ -29,6 +29,8 @@ jobs:
       image_tag: ${{ steps.deploy-tag.outputs.image_tag }}
       image_name: ${{ steps.deploy-tag.outputs.image_name }}
       environment_name: ${{ steps.deploy-info.outputs.environment_name }}
+      bucketname: ${{ steps.deploy-tag.outputs.bucket_name }}
+      bucketfolder: ${{ steps.deploy-tag.outputs.bucket_subfolder }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
@@ -183,6 +185,8 @@ jobs:
           PARAMETERS=(
             client.image.tag=${{ needs.build.outputs.image_tag }}
             client.image.repository=${{ needs.build.outputs.image_name }}
+            global.gcsFuse.bucketName=${{ needs.build.outputs.bucketname }}
+            global.gcsFuse.bucketFolder=${{ needs.build.outputs.bucketfolder }}${{ github.event.inputs.bucket-subfolder-suffix }}/.next
           )
           DATA="{
             \"app_name\": \"orbitviewer\",
